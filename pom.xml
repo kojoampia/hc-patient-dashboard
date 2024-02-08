@@ -7,7 +7,7 @@
 
     <groupId>net.jojoaddison.hc</groupId>
     <artifactId>patient-dashboard</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <packaging>jar</packaging>
     <name>Patient Dashboard</name>
     <description>Description for patientDashboard</description>
