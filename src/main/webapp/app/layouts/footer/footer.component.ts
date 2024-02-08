@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'jhi-footer',
+  standalone: true,
+  selector: 'hpd-footer',
   templateUrl: './footer.component.html',
 })
-export class FooterComponent {}
+export default class FooterComponent {}

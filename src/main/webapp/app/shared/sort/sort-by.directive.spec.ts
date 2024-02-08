@@ -4,15 +4,20 @@ import { By } from '@angular/platform-browser';
 import { FaIconComponent, FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { fas, faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 
-import { SortByDirective } from './sort-by.directive';
-import { SortDirective } from './sort.directive';
+import SortByDirective from './sort-by.directive';
+import SortDirective from './sort.directive';
 
 @Component({
   template: `
     <table>
       <thead>
-        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="transition($event)">
-          <th jhiSortBy="name">ID<fa-icon *ngIf="sortAllowed" [icon]="'sort'"></fa-icon></th>
+        <tr hpdSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="transition($event)">
+          <th hpdSortBy="name">
+            ID
+            @if (sortAllowed) {
+              <fa-icon [icon]="'sort'"></fa-icon>
+            }
+          </th>
         </tr>
       </thead>
     </table>
@@ -37,7 +42,8 @@ describe('Directive: SortByDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TestSortByDirectiveComponent, SortDirective, SortByDirective, FaIconComponent],
+      imports: [SortDirective, SortByDirective, FaIconComponent],
+      declarations: [TestSortByDirectiveComponent],
     });
     fixture = TestBed.createComponent(TestSortByDirectiveComponent);
     component = fixture.componentInstance;
@@ -53,7 +59,7 @@ describe('Directive: SortByDirective', () => {
     fixture.detectChanges();
 
     // THEN
-    expect(sortByDirective.jhiSortBy).toEqual('name');
+    expect(sortByDirective.hpdSortBy).toEqual('name');
     expect(component.predicate).toEqual('id');
     expect(sortByDirective.iconComponent?.icon).toEqual('sort');
     expect(component.transition).toHaveBeenCalledTimes(0);
@@ -69,7 +75,7 @@ describe('Directive: SortByDirective', () => {
     fixture.detectChanges();
 
     // THEN
-    expect(sortByDirective.jhiSortBy).toEqual('name');
+    expect(sortByDirective.hpdSortBy).toEqual('name');
     expect(component.predicate).toEqual('name');
     expect(component.ascending).toEqual(true);
     expect(sortByDirective.iconComponent?.icon).toEqual(faSortUp.iconName);

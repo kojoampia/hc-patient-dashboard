@@ -2,13 +2,13 @@ import { Component, DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { SortDirective } from './sort.directive';
+import SortDirective from './sort.directive';
 
 @Component({
   template: `
     <table>
       <thead>
-        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="transition($event)"></tr>
+        <tr hpdSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="transition($event)"></tr>
       </thead>
     </table>
   `,
@@ -26,7 +26,8 @@ describe('Directive: SortDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TestSortDirectiveComponent, SortDirective],
+      imports: [SortDirective],
+      declarations: [TestSortDirectiveComponent],
     });
     fixture = TestBed.createComponent(TestSortDirectiveComponent);
     component = fixture.componentInstance;

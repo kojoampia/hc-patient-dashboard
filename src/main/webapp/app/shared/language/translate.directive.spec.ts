@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
-import { TranslateDirective } from './translate.directive';
+import TranslateDirective from './translate.directive';
 
 @Component({
-  template: ` <div jhiTranslate="test"></div> `,
+  template: ` <div hpdTranslate="test"></div> `,
 })
 class TestTranslateDirectiveComponent {}
 
@@ -15,8 +15,8 @@ describe('TranslateDirective Tests', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot()],
-      declarations: [TranslateDirective, TestTranslateDirectiveComponent],
+      imports: [TranslateModule.forRoot(), TranslateDirective],
+      declarations: [TestTranslateDirectiveComponent],
     });
   }));
 

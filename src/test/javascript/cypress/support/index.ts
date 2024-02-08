@@ -12,8 +12,8 @@
 // You can read more here:
 // https://on.cypress.io/configuration
 // ***********************************************************
-import '@cypress/code-coverage/support';
 
+import './account';
 import './commands';
 import './navbar';
 import './entity';
