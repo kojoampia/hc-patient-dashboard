@@ -1,0 +1,26 @@
+{
+  "changelogDate": "20240206221753",
+  "clientRootFolder": "patientMS",
+  "databaseType": "mongodb",
+  "fields": [
+    {
+      "fieldName": "type",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "userID",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "metadata",
+      "fieldType": "String"
+    }
+  ],
+  "microserviceName": "patientMS",
+  "name": "HCPayOption",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "searchEngine": true,
+  "service": "no"
+}

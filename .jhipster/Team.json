@@ -1,0 +1,26 @@
+{
+  "changelogDate": "20240206215921",
+  "clientRootFolder": "patientMS",
+  "databaseType": "mongodb",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "contact",
+      "fieldType": "String"
+    }
+  ],
+  "microserviceName": "patientMS",
+  "name": "Team",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "searchEngine": true,
+  "service": "no"
+}

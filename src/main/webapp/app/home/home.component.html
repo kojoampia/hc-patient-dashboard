@@ -15,6 +15,7 @@
         <span id="home-logged-message" jhiTranslate="home.logged.message"
           [translateValues]="{ username: account.login }">You are logged in as user &quot;{{ account.login
           }}&quot;.</span>
+        <jhi-dashboard [account]="account"></jhi-dashboard>
         }
       </div>
       } @else {
