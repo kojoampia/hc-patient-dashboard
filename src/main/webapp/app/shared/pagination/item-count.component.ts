@@ -6,8 +6,8 @@ import TranslateDirective from '../language/translate.directive';
  */
 @Component({
   standalone: true,
-  selector: 'hpd-item-count',
-  template: ` <div hpdTranslate="global.item-count" [translateValues]="{ first: first, second: second, total: total }"></div> `,
+  selector: 'jhi-item-count',
+  template: ` <div jhiTranslate="global.item-count" [translateValues]="{ first: first, second: second, total: total }"></div> `,
   imports: [TranslateDirective],
 })
 export default class ItemCountComponent {

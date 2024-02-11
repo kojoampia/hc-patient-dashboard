@@ -11,7 +11,7 @@ import { AlertError } from './alert-error.model';
 
 @Component({
   standalone: true,
-  selector: 'hpd-alert-error',
+  selector: 'jhi-alert-error',
   templateUrl: './alert-error.component.html',
   imports: [CommonModule, NgbModule],
 })
@@ -25,12 +25,12 @@ export class AlertErrorComponent implements OnDestroy {
     private eventManager: EventManager,
     translateService: TranslateService,
   ) {
-    this.errorListener = eventManager.subscribe('patientDashboardApp.error', (response: EventWithContent<unknown> | string) => {
+    this.errorListener = eventManager.subscribe('patientGatewayApp.error', (response: EventWithContent<unknown> | string) => {
       const errorResponse = (response as EventWithContent<AlertError>).content;
       this.addErrorAlert(errorResponse.message, errorResponse.key, errorResponse.params);
     });
 
-    this.httpErrorListener = eventManager.subscribe('patientDashboardApp.httpError', (response: EventWithContent<unknown> | string) => {
+    this.httpErrorListener = eventManager.subscribe('patientGatewayApp.httpError', (response: EventWithContent<unknown> | string) => {
       const httpErrorResponse = (response as EventWithContent<HttpErrorResponse>).content;
       switch (httpErrorResponse.status) {
         // connection refused, server not reachable
@@ -60,9 +60,7 @@ export class AlertErrorComponent implements OnDestroy {
               }
               // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
               const convertedField: string = fieldError.field.replace(/\[\d*\]/g, '[]');
-              const fieldName: string = translateService.instant(
-                `patientDashboardApp.${fieldError.objectName as string}.${convertedField}`,
-              );
+              const fieldName: string = translateService.instant(`patientGatewayApp.${fieldError.objectName as string}.${convertedField}`);
               this.addErrorAlert(`Error on field "${fieldName}"`, `error.${fieldError.message as string}`, { fieldName });
             }
           } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {

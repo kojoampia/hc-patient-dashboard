@@ -8,7 +8,7 @@ import { UserManagementService } from '../service/user-management.service';
 
 @Component({
   standalone: true,
-  selector: 'hpd-user-mgmt-delete-dialog',
+  selector: 'jhi-user-mgmt-delete-dialog',
   templateUrl: './user-management-delete-dialog.component.html',
   imports: [SharedModule, FormsModule],
 })

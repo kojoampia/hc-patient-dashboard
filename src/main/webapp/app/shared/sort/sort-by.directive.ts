@@ -8,10 +8,10 @@ import SortDirective from './sort.directive';
 
 @Directive({
   standalone: true,
-  selector: '[hpdSortBy]',
+  selector: '[jhiSortBy]',
 })
 export default class SortByDirective<T> implements AfterContentInit, OnDestroy {
-  @Input() hpdSortBy!: T;
+  @Input() jhiSortBy!: T;
 
   @ContentChild(FaIconComponent, { static: false })
   iconComponent?: FaIconComponent;
@@ -30,7 +30,7 @@ export default class SortByDirective<T> implements AfterContentInit, OnDestroy {
   @HostListener('click')
   onClick(): void {
     if (this.iconComponent) {
-      this.sort.sort(this.hpdSortBy);
+      this.sort.sort(this.jhiSortBy);
     }
   }
 
@@ -46,7 +46,7 @@ export default class SortByDirective<T> implements AfterContentInit, OnDestroy {
   private updateIconDefinition(): void {
     if (this.iconComponent) {
       let icon: IconDefinition = this.sortIcon;
-      if (this.sort.predicate === this.hpdSortBy) {
+      if (this.sort.predicate === this.jhiSortBy) {
         icon = this.sort.ascending ? this.sortAscIcon : this.sortDescIcon;
       }
       this.iconComponent.icon = icon.iconName;

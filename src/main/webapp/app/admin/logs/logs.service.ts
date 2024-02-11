@@ -12,11 +12,11 @@ export class LogsService {
     private applicationConfigService: ApplicationConfigService,
   ) {}
 
-  changeLevel(name: string, configuredLevel: Level): Observable<{}> {
-    return this.http.post(this.applicationConfigService.getEndpointFor(`management/loggers/${name}`), { configuredLevel });
+  changeLevel(name: string, configuredLevel: Level, service?: string): Observable<{}> {
+    return this.http.post(this.applicationConfigService.getEndpointFor(`management/loggers/${name}`, service), { configuredLevel });
   }
 
-  findAll(): Observable<LoggersResponse> {
-    return this.http.get<LoggersResponse>(this.applicationConfigService.getEndpointFor('management/loggers'));
+  findAll(service?: string): Observable<LoggersResponse> {
+    return this.http.get<LoggersResponse>(this.applicationConfigService.getEndpointFor('management/loggers', service));
   }
 }

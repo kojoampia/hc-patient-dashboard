@@ -16,12 +16,12 @@ h4 {
 
 /* Increase contrast of links to get 100% on Lighthouse Accessibility Audit. Override this color if you want to change the link color, or use a Bootswatch theme */
 a {
-  color: #533f03;
+  color: #37451D;
   font-weight: bold;
 }
 
 a:hover {
-  color: #533f03;
+  color: #37451D;
 }
 
 /* override hover color for dropdown-item forced by bootstrap to all a:not([href]):not([tabindex]) elements in _reboot.scss */
@@ -42,7 +42,9 @@ a:hover {
 .dropdown-item:hover {
   color: $dropdown-link-hover-color;
 }
-
+.text-info {
+  color: #37451D !important;
+}
 /* ==========================================================================
 Browser Upgrade Prompt
 ========================================================================== */
@@ -111,7 +113,7 @@ Generic styles
 }
 
 .hand,
-[hpdsortby] {
+[jhisortby] {
   cursor: pointer;
 }
 
@@ -149,7 +151,15 @@ Custom alerts for notification
       bottom: 55px;
     }
   }
+  .alert-link{
+    color: #37451D;
+  }
 }
+
+.alert-link {
+  color: #37451D;
+}
+
 
 @media screen and (min-width: 480px) {
   .alerts .jhi-toast {

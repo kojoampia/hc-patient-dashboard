@@ -6,7 +6,7 @@ import { User } from '../user-management.model';
 
 @Component({
   standalone: true,
-  selector: 'hpd-user-mgmt-detail',
+  selector: 'jhi-user-mgmt-detail',
   templateUrl: './user-management-detail.component.html',
   imports: [SharedModule],
 })

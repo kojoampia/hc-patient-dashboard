@@ -1,6 +1,6 @@
+const path = require('path');
 const webpack = require('webpack');
 const { merge } = require('webpack-merge');
-const path = require('path');
 const { hashElement } = require('folder-hash');
 const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
@@ -30,7 +30,7 @@ module.exports = async (config, options, targetOptions) => {
         },
       }),
       new WebpackNotifierPlugin({
-        title: 'Patient Dashboard',
+        title: 'Patient Gateway',
         contentImage: path.join(__dirname, 'logo-jhipster.png'),
       }),
     );
@@ -50,7 +50,7 @@ module.exports = async (config, options, targetOptions) => {
           port: 9000,
           https: tls,
           proxy: {
-            target: `http${tls ? 's' : ''}://localhost:${targetOptions.target === 'serve' ? '4200' : '8080'}`,
+            target: `http${tls ? 's' : ''}://localhost:${targetOptions.target === 'serve' ? '4200' : '5055'}`,
             ws: true,
             proxyOptions: {
               changeOrigin: false, //pass the Host header to the backend unchanged  https://github.com/Browsersync/browser-sync/issues/430

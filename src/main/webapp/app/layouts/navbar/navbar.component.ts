@@ -17,7 +17,7 @@ import NavbarItem from './navbar-item.model';
 
 @Component({
   standalone: true,
-  selector: 'hpd-navbar',
+  selector: 'jhi-navbar',
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
   imports: [RouterModule, SharedModule, HasAnyAuthorityDirective, ActiveMenuDirective],

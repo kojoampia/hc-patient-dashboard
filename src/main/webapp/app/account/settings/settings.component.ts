@@ -10,7 +10,7 @@ import { LANGUAGES } from 'app/config/language.constants';
 const initialAccount: Account = {} as Account;
 
 @Component({
-  selector: 'hpd-settings',
+  selector: 'jhi-settings',
   standalone: true,
   imports: [SharedModule, FormsModule, ReactiveFormsModule],
   templateUrl: './settings.component.html',

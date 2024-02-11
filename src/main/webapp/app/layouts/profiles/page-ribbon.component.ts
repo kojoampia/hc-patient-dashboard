@@ -7,11 +7,11 @@ import { ProfileService } from './profile.service';
 
 @Component({
   standalone: true,
-  selector: 'hpd-page-ribbon',
+  selector: 'jhi-page-ribbon',
   template: `
     @if (ribbonEnv$ | async; as ribbonEnv) {
       <div class="ribbon">
-        <a href="" hpdTranslate="global.ribbon.{{ ribbonEnv }}">{{ { dev: 'Development' }[ribbonEnv] || '' }}</a>
+        <a href="" jhiTranslate="global.ribbon.{{ ribbonEnv }}">{{ { dev: 'Development' }[ribbonEnv] || '' }}</a>
       </div>
     }
   `,

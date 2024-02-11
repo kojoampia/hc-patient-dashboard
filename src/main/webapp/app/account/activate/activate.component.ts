@@ -6,7 +6,7 @@ import SharedModule from 'app/shared/shared.module';
 import { ActivateService } from './activate.service';
 
 @Component({
-  selector: 'hpd-activate',
+  selector: 'jhi-activate',
   standalone: true,
   imports: [SharedModule, RouterModule],
   templateUrl: './activate.component.html',

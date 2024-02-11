@@ -1,6 +1,6 @@
 {
   "global": {
-    "title": "PatientDashboard",
+    "title": "Patient Dashboard",
     "browsehappy": "Sie benutzen einen <strong>veralteten</strong> Browser. Bitte <a href=\"http://browsehappy.com/?locale=de/\">aktualisieren Sie Ihren Browser</a>, um die Benutzerfreundlichkeit zu erhöhen.",
     "menu": {
       "home": "Startseite",
@@ -20,6 +20,7 @@
       },
       "admin": {
         "main": "Administration",
+        "gateway": "Gateway",
         "userManagement": "Benutzerverwaltung",
         "tracker": "Benutzer Aktivitäten",
         "metrics": "Metriken",
@@ -47,13 +48,13 @@
     "messages": {
       "info": {
         "authenticated": {
-          "prefix": "Wenn Sie sich ",
+          "prefix": "Bitte ",
           "link": "anmelden",
           "suffix": " möchten, versuchen Sie es mit <br/>- Administrator (Name=\"admin\" und Passwort=\"admin\")<br/>- Benutzer (Name=\"user\" und Passwort=\"user\")."
         },
         "register": {
-          "noaccount": "Sie haben noch keinen Zugang?",
-          "link": "Registrieren Sie sich"
+          "noaccount": "Wir kümmern uns um Ihre Wohlbefinden.",
+          "link": "Registrieren Sie sich!"
         }
       },
       "error": {
@@ -142,5 +143,7 @@
       "not.image": "Es wird erwartet, dass die Datei ein Bild ist. Die Datei ist jedoch vom Typ \"{{ fileType }}\""
     }
   },
-  "footer": "Dies ist Ihre Fußzeile"
+  "footer": {
+    "copyright": "&copy; {{ year }} Health Connect von Jojo Addison Information Systems Consultancy &reg; Alle Rechte vorbehalten."
+  }
 }

@@ -8,7 +8,7 @@ import SortDirective from './sort.directive';
   template: `
     <table>
       <thead>
-        <tr hpdSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="transition($event)"></tr>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="transition($event)"></tr>
       </thead>
     </table>
   `,

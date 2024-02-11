@@ -6,7 +6,7 @@ import { filterNaN } from 'app/core/util/operators';
 
 @Component({
   standalone: true,
-  selector: 'hpd-metrics-datasource',
+  selector: 'jhi-metrics-datasource',
   templateUrl: './metrics-datasource.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [SharedModule],

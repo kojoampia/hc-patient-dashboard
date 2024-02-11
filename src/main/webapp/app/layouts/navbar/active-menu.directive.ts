@@ -3,10 +3,10 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 
 @Directive({
   standalone: true,
-  selector: '[hpdActiveMenu]',
+  selector: '[jhiActiveMenu]',
 })
 export default class ActiveMenuDirective implements OnInit {
-  @Input() hpdActiveMenu?: string;
+  @Input() jhiActiveMenu?: string;
 
   constructor(
     private el: ElementRef,
@@ -23,7 +23,7 @@ export default class ActiveMenuDirective implements OnInit {
   }
 
   updateActiveFlag(selectedLanguage: string): void {
-    if (this.hpdActiveMenu === selectedLanguage) {
+    if (this.jhiActiveMenu === selectedLanguage) {
       this.renderer.addClass(this.el.nativeElement, 'active');
     } else {
       this.renderer.removeClass(this.el.nativeElement, 'active');

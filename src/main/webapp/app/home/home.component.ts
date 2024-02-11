@@ -9,7 +9,7 @@ import { Account } from 'app/core/auth/account.model';
 
 @Component({
   standalone: true,
-  selector: 'hpd-home',
+  selector: 'jhi-home',
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   imports: [SharedModule, RouterModule],

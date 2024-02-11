@@ -1,6 +1,6 @@
 {
   "global": {
-    "title": "PatientDashboard",
+    "title": "Patient Dashboard",
     "browsehappy": "You are using an <strong>outdated</strong> browser. Please <a href=\"http://browsehappy.com/?locale=en\">upgrade your browser</a> to improve your experience.",
     "menu": {
       "home": "Home",
@@ -20,6 +20,7 @@
       },
       "admin": {
         "main": "Administration",
+        "gateway": "Gateway",
         "userManagement": "User management",
         "tracker": "User tracker",
         "metrics": "Metrics",
@@ -47,12 +48,12 @@
     "messages": {
       "info": {
         "authenticated": {
-          "prefix": "If you want to ",
+          "prefix": "Please ",
           "link": "sign in",
           "suffix": ", you can try the default accounts:<br/>- Administrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\")."
         },
         "register": {
-          "noaccount": "You don't have an account yet?",
+          "noaccount": "Let us take care of your wellbeing!",
           "link": "Register a new account"
         }
       },
@@ -143,5 +144,7 @@
       "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
     }
   },
-  "footer": "This is your footer"
+  "footer": {
+    "copyright": "&copy; {{ year }} Health Connect by Jojo Addison Information Systems Consultancy &reg; All rights reserved."
+  }
 }

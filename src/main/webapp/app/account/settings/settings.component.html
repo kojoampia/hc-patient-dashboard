@@ -2,22 +2,22 @@
   <div class="d-flex justify-content-center">
     <div class="col-md-8">
       @if (settingsForm.value.login) {
-        <h2 hpdTranslate="settings.title" [translateValues]="{ username: settingsForm.value.login }">
+        <h2 jhiTranslate="settings.title" [translateValues]="{ username: settingsForm.value.login }">
           User settings for [<strong>{{ settingsForm.value.login }}</strong
           >]
         </h2>
       }
 
       @if (success) {
-        <div class="alert alert-success" hpdTranslate="settings.messages.success"><strong>Settings saved!</strong></div>
+        <div class="alert alert-success" jhiTranslate="settings.messages.success"><strong>Settings saved!</strong></div>
       }
 
-      <hpd-alert-error></hpd-alert-error>
+      <jhi-alert-error></jhi-alert-error>
 
       @if (settingsForm.value.login) {
         <form name="form" role="form" (ngSubmit)="save()" [formGroup]="settingsForm" novalidate>
           <div class="mb-3">
-            <label class="form-label" for="firstName" hpdTranslate="settings.form.firstname">First Name</label>
+            <label class="form-label" for="firstName" jhiTranslate="settings.form.firstname">First Name</label>
             <input
               type="text"
               class="form-control"
@@ -33,19 +33,19 @@
             ) {
               <div>
                 @if (settingsForm.get('firstName')?.errors?.required) {
-                  <small class="form-text text-danger" hpdTranslate="settings.messages.validate.firstname.required"
+                  <small class="form-text text-danger" jhiTranslate="settings.messages.validate.firstname.required"
                     >Your first name is required.</small
                   >
                 }
 
                 @if (settingsForm.get('firstName')?.errors?.minlength) {
-                  <small class="form-text text-danger" hpdTranslate="settings.messages.validate.firstname.minlength"
+                  <small class="form-text text-danger" jhiTranslate="settings.messages.validate.firstname.minlength"
                     >Your first name is required to be at least 1 character</small
                   >
                 }
 
                 @if (settingsForm.get('firstName')?.errors?.maxlength) {
-                  <small class="form-text text-danger" hpdTranslate="settings.messages.validate.firstname.maxlength"
+                  <small class="form-text text-danger" jhiTranslate="settings.messages.validate.firstname.maxlength"
                     >Your first name cannot be longer than 50 characters</small
                   >
                 }
@@ -54,7 +54,7 @@
           </div>
 
           <div class="mb-3">
-            <label class="form-label" for="lastName" hpdTranslate="settings.form.lastname">Last Name</label>
+            <label class="form-label" for="lastName" jhiTranslate="settings.form.lastname">Last Name</label>
             <input
               type="text"
               class="form-control"
@@ -68,19 +68,19 @@
             @if (settingsForm.get('lastName')!.invalid && (settingsForm.get('lastName')!.dirty || settingsForm.get('lastName')!.touched)) {
               <div>
                 @if (settingsForm.get('lastName')?.errors?.required) {
-                  <small class="form-text text-danger" hpdTranslate="settings.messages.validate.lastname.required"
+                  <small class="form-text text-danger" jhiTranslate="settings.messages.validate.lastname.required"
                     >Your last name is required.</small
                   >
                 }
 
                 @if (settingsForm.get('lastName')?.errors?.minlength) {
-                  <small class="form-text text-danger" hpdTranslate="settings.messages.validate.lastname.minlength"
+                  <small class="form-text text-danger" jhiTranslate="settings.messages.validate.lastname.minlength"
                     >Your last name is required to be at least 1 character</small
                   >
                 }
 
                 @if (settingsForm.get('lastName')?.errors?.maxlength) {
-                  <small class="form-text text-danger" hpdTranslate="settings.messages.validate.lastname.maxlength"
+                  <small class="form-text text-danger" jhiTranslate="settings.messages.validate.lastname.maxlength"
                     >Your last name cannot be longer than 50 characters</small
                   >
                 }
@@ -89,7 +89,7 @@
           </div>
 
           <div class="mb-3">
-            <label class="form-label" for="email" hpdTranslate="global.form.email.label">Email</label>
+            <label class="form-label" for="email" jhiTranslate="global.form.email.label">Email</label>
             <input
               type="email"
               class="form-control"
@@ -103,23 +103,23 @@
             @if (settingsForm.get('email')!.invalid && (settingsForm.get('email')!.dirty || settingsForm.get('email')!.touched)) {
               <div>
                 @if (settingsForm.get('email')?.errors?.required) {
-                  <small class="form-text text-danger" hpdTranslate="global.messages.validate.email.required"
+                  <small class="form-text text-danger" jhiTranslate="global.messages.validate.email.required"
                     >Your email is required.</small
                   >
                 }
 
                 @if (settingsForm.get('email')?.errors?.email) {
-                  <small class="form-text text-danger" hpdTranslate="global.messages.validate.email.invalid">Your email is invalid.</small>
+                  <small class="form-text text-danger" jhiTranslate="global.messages.validate.email.invalid">Your email is invalid.</small>
                 }
 
                 @if (settingsForm.get('email')?.errors?.minlength) {
-                  <small class="form-text text-danger" hpdTranslate="global.messages.validate.email.minlength"
+                  <small class="form-text text-danger" jhiTranslate="global.messages.validate.email.minlength"
                     >Your email is required to be at least 5 characters.</small
                   >
                 }
 
                 @if (settingsForm.get('email')?.errors?.maxlength) {
-                  <small class="form-text text-danger" hpdTranslate="global.messages.validate.email.maxlength"
+                  <small class="form-text text-danger" jhiTranslate="global.messages.validate.email.maxlength"
                     >Your email cannot be longer than 50 characters.</small
                   >
                 }
@@ -129,7 +129,7 @@
 
           @if (languages && languages.length > 0) {
             <div class="mb-3">
-              <label for="langKey" hpdTranslate="settings.form.language">Language</label>
+              <label for="langKey" jhiTranslate="settings.form.language">Language</label>
               <select class="form-control" id="langKey" name="langKey" formControlName="langKey" data-cy="langKey">
                 @for (language of languages; track $index) {
                   <option [value]="language">{{ language | findLanguageFromKey }}</option>
@@ -142,7 +142,7 @@
             type="submit"
             [disabled]="settingsForm.invalid"
             class="btn btn-primary"
-            hpdTranslate="settings.form.button"
+            jhiTranslate="settings.form.button"
             data-cy="submit"
           >
             Save

@@ -1,6 +1,6 @@
 {
   "global": {
-    "title": "PatientDashboard",
+    "title": "Patient Dashboard",
     "browsehappy": "Vous utilisez un <strong>ancien</strong> navigateur. Veuillez <a href=\"http://browsehappy.com/?locale=fr\">mettre à jour votre navigateur</a> pour une meilleure expérience.",
     "menu": {
       "home": "Accueil",
@@ -20,6 +20,7 @@
       },
       "admin": {
         "main": "Administration",
+        "gateway": "Gateway",
         "userManagement": "Gestion des utilisateurs",
         "tracker": "Suivi des utilisateurs",
         "metrics": "Métriques",
@@ -47,12 +48,12 @@
     "messages": {
       "info": {
         "authenticated": {
-          "prefix": "Si vous voulez vous ",
+          "prefix": "S'il te plaît ",
           "link": "connecter",
           "suffix": ", vous pouvez utiliser les comptes par défaut : <br/> - Administrateur (nom d'utilisateur=\"admin\" et mot de passe =\"admin\") <br/> - Utilisateur (nom d'utilisateur=\"user\" et mot de passe =\"user\")."
         },
         "register": {
-          "noaccount": "Vous n'avez pas encore de compte ?",
+          "noaccount": "Laissez-nous prendre soin de votre bien-être!",
           "link": "Créer un compte"
         }
       },
@@ -143,5 +144,7 @@
       "not.image": "Le fichier doit être une image et non du type \"{{ fileType }}\""
     }
   },
-  "footer": "Ceci est votre pied de page"
+  "footer": {
+    "copyright": "&copy; {{ year }} Health Connect au Jojo Addison Information Systems Consultancy &reg; Tous droits réservés"
+  }
 }

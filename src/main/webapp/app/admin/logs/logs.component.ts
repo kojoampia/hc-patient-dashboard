@@ -1,16 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { finalize } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 
 import SharedModule from 'app/shared/shared.module';
 import { FormsModule } from '@angular/forms';
 import { SortDirective, SortByDirective } from 'app/shared/sort';
+import { GatewayRoutesService } from '../gateway/gateway-routes.service';
 import { Log, LoggersResponse, Level } from './log.model';
 import { LogsService } from './logs.service';
 
 @Component({
   standalone: true,
-  selector: 'hpd-logs',
+  selector: 'jhi-logs',
   templateUrl: './logs.component.html',
+  providers: [GatewayRoutesService],
   imports: [SharedModule, FormsModule, SortDirective, SortByDirective],
 })
 export default class LogsComponent implements OnInit {
@@ -20,15 +22,26 @@ export default class LogsComponent implements OnInit {
   filter = '';
   orderProp: keyof Log = 'name';
   ascending = true;
+  services: string[] = [];
+  selectedService: string | undefined = undefined;
 
-  constructor(private logsService: LogsService) {}
+  constructor(
+    private logsService: LogsService,
+    private gatewayRoutesService: GatewayRoutesService,
+  ) {}
 
   ngOnInit(): void {
     this.findAndExtractLoggers();
+    this.loadServicesOptions();
   }
 
   changeLevel(name: string, level: Level): void {
-    this.logsService.changeLevel(name, level).subscribe(() => this.findAndExtractLoggers());
+    this.logsService.changeLevel(name, level, this.selectedService).subscribe(() => this.findAndExtractLoggers());
+  }
+
+  changeService(event: any): void {
+    this.selectedService = event.target.value?.replace('Service', '')?.toLowerCase();
+    this.findAndExtractLoggers();
   }
 
   filterAndSort(): void {
@@ -49,7 +62,7 @@ export default class LogsComponent implements OnInit {
   private findAndExtractLoggers(): void {
     this.isLoading = true;
     this.logsService
-      .findAll()
+      .findAll(this.selectedService)
       .pipe(
         finalize(() => {
           this.filterAndSort();
@@ -61,5 +74,13 @@ export default class LogsComponent implements OnInit {
           (this.loggers = Object.entries(response.loggers).map(([key, logger]) => new Log(key, logger.effectiveLevel))),
         error: () => (this.loggers = []),
       });
+  }
+
+  private loadServicesOptions(): void {
+    this.gatewayRoutesService
+      .findAll()
+      .pipe(map(routes => routes.map(route => route.serviceId)))
+      .pipe(map(services => services.filter(service => service.endsWith('Service'))))
+      .subscribe(services => (this.services = services));
   }
 }

@@ -9,7 +9,7 @@ import HealthModalComponent from './modal/health-modal.component';
 
 @Component({
   standalone: true,
-  selector: 'hpd-health',
+  selector: 'jhi-health',
   templateUrl: './health.component.html',
   imports: [SharedModule, HealthModalComponent],
 })
