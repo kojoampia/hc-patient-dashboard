@@ -1,1 +1,9 @@
 <p>dashboard works!</p>
+<div class="alert alert-success">
+    @if (account) {
+    <span id="home-logged-message" jhiTranslate="home.logged.message"
+        [translateValues]="{ username: account.login }">You
+        are logged in as user &quot;{{ account.login
+        }}&quot;.</span>
+    }
+</div>

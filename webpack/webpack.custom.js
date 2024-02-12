@@ -51,6 +51,7 @@ module.exports = async (config, options, targetOptions) => {
           https: tls,
           proxy: {
             target: `http${tls ? 's' : ''}://localhost:${targetOptions.target === 'serve' ? '4200' : '5055'}`,
+            //target: `http://localhost:5055`,
             ws: true,
             proxyOptions: {
               changeOrigin: false, //pass the Host header to the backend unchanged  https://github.com/Browsersync/browser-sync/issues/430
