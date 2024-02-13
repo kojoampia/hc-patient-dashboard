@@ -37,6 +37,11 @@ import {
   faUsers,
   faUsersCog,
   faWrench,
+  faCamera,
+  faCameraAlt,
+  faCameraRetro,
+  faCameraRotate,
+  faVideoCamera,
   // jhipster-needle-add-icon-import
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -79,5 +84,10 @@ export const fontAwesomeIcons = [
   faUsers,
   faUsersCog,
   faWrench,
+  faCamera,
+  faCameraAlt,
+  faCameraRetro,
+  faCameraRotate,
+  faVideoCamera,
   // jhipster-needle-add-icon-import
 ];
