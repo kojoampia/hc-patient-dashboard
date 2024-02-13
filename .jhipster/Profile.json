@@ -17,6 +17,10 @@
       "fieldType": "String"
     },
     {
+      "fieldName": "membership",
+      "fieldType": "String"
+    },
+    {
       "fieldName": "birthDate",
       "fieldType": "LocalDate"
     },
