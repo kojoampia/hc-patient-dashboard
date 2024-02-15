@@ -5,11 +5,12 @@ import SharedModule from 'app/shared/shared.module';
 import { Subject, takeUntil } from 'rxjs';
 import { DashboardService } from './dashboard.service';
 import { HttpResponse } from '@angular/common/http';
+import { WidgetsModule } from 'app/widgets/widgets.module';
 
 @Component({
   selector: 'jhi-dashboard',
   standalone: true,
-  imports: [SharedModule, RouterModule],
+  imports: [SharedModule, RouterModule, WidgetsModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })

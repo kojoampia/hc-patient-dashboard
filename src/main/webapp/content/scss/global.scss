@@ -16,12 +16,12 @@ h4 {
 
 /* Increase contrast of links to get 100% on Lighthouse Accessibility Audit. Override this color if you want to change the link color, or use a Bootswatch theme */
 a {
-  color: #37451D;
+  color: teal;
   font-weight: bold;
 }
 
 a:hover {
-  color: #37451D;
+  color: teal;
 }
 
 /* override hover color for dropdown-item forced by bootstrap to all a:not([href]):not([tabindex]) elements in _reboot.scss */
@@ -43,7 +43,7 @@ a:hover {
   color: $dropdown-link-hover-color;
 }
 .text-info {
-  color: #37451D !important;
+  color: teal !important;
 }
 /* ==========================================================================
 Browser Upgrade Prompt
@@ -152,13 +152,10 @@ Custom alerts for notification
     }
   }
   .alert-link{
-    color: #37451D;
+    color: teal;
   }
 }
 
-.alert-link {
-  color: #37451D;
-}
 
 
 @media screen and (min-width: 480px) {

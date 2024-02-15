@@ -7,9 +7,41 @@
 }
 .round-border {
     border-radius: 5px;
+    border: 1px solid white;
 }
 
-.dashboard {
+.dashboard-component-right {
     background-color: teal;
-    color: green;
+    color: white;
+    text-align: right;
+}
+
+.dashboard-component-left {
+    background-color: teal;
+    color: white;
+    text-align: left;
+}
+
+.dashboard-component-center {
+    background-color: teal;
+    color: white;
+    text-align: center;
+}
+.nav-item:hover {
+    background-color: white;
+    color: teal;
+    border-radius: 5px;
+}
+.nav-item {
+    color: white !important;
+    font-weight: bold;
+    font-size: medium;
+}
+.nav-link {
+    color: white;
+}
+.nav-link:hover {
+    background-color: white;
+    color: teal;
+    border-radius: 5px;
 }

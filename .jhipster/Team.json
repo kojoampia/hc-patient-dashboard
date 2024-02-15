@@ -1,4 +1,7 @@
 {
+  "annotations": {
+    "changelogDate": "20240206215921"
+  },
   "changelogDate": "20240206215921",
   "clientRootFolder": "patientMS",
   "databaseType": "mongodb",

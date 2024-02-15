@@ -1,0 +1,82 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (profile) {
+      <div>
+        <h2 data-cy="profileDetailsHeading"><span hpdTranslate="patientDashboardApp.patientMsProfile.detail.title">Profile</span></h2>
+
+        <hr />
+
+        <hpd-alert-error></hpd-alert-error>
+
+        <hpd-alert></hpd-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span hpdTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ profile.id }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsProfile.firstName">First Name</span></dt>
+          <dd>
+            <span>{{ profile.firstName }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsProfile.middleNames">Middle Names</span></dt>
+          <dd>
+            <span>{{ profile.middleNames }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsProfile.lastName">Last Name</span></dt>
+          <dd>
+            <span>{{ profile.lastName }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsProfile.membership">Membership</span></dt>
+          <dd>
+            <span>{{ profile.membership }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsProfile.birthDate">Birth Date</span></dt>
+          <dd>
+            <span>{{ profile.birthDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsProfile.sex">Sex</span></dt>
+          <dd>
+            <span>{{ profile.sex }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsProfile.mobilePhone">Mobile Phone</span></dt>
+          <dd>
+            <span>{{ profile.mobilePhone }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsProfile.phoneNumber">Phone Number</span></dt>
+          <dd>
+            <span>{{ profile.phoneNumber }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsProfile.email">Email</span></dt>
+          <dd>
+            <span>{{ profile.email }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsProfile.idType">Id Type</span></dt>
+          <dd>
+            <span>{{ profile.idType }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsProfile.idNumber">Id Number</span></dt>
+          <dd>
+            <span>{{ profile.idNumber }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsProfile.contacts">Contacts</span></dt>
+          <dd>
+            <span>{{ profile.contacts }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsProfile.address">Address</span></dt>
+          <dd>
+            <span>{{ profile.address }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span hpdTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/profile', profile.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span hpdTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>
