@@ -1,10 +1,10 @@
 # Stage 0: compile angular frontend
-FROM node:16-alpine3.13 as build
+FROM node:20-alpine3.19 as build
 # Set api url
 ENV SERVER_API_URL=https://admin.abofonsa.com
 ENV ABOFONSA_URL=https://www.abofonsa.com
 
-RUN npm install -g npm@9.6.2
+RUN npm install -g npm@10.4.0
 
 WORKDIR /app
 COPY . .
