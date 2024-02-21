@@ -1,18 +1,20 @@
 @if (account) {
+<!--METRIC-PROFILE-->
 <div class="row">
-    <div class="col-md-2 round-border dashboard-component-left">
-        <div class="ml-auto mr-auto">
-            <div class="profile-button m-0 p-0">
-                <button class="btn btn-primary btn-small">
-                    <fa-icon icon="camera"></fa-icon>
-                </button>
-            </div>
+    <div class="col-md-2 round-border bg-primary">
+        <div class="dashboard-component-center mt-1">
             @if (account.imageUrl) {
             <img [src]="account.imageUrl" alt="profile image">
             } @else {
             <span class="profile-placeholder img-fluid rounded p-1">
             </span>
+            <br />
             }
+        </div>
+        <div class="p-1 dashboard-component-right">
+            <button class="btn btn-primary btn-small">
+                <fa-icon icon="camera"></fa-icon>
+            </button>
         </div>
     </div>
     <div class="col-md-8 round-border dashboard-component-center">
@@ -22,7 +24,7 @@
         <jhi-metric-panel [metricItems]="lowCards"></jhi-metric-panel>
 
     </div>
-    <div class="col-md-2 round-border dashboard-component-right">
+    <div class="col-md-2 round-border p-3 dashboard-component-right">
         <div class="row d-flex justify-content-end">
             <div class="col-md-*">
                 <span>{{account.firstName}} {{account.lastName}}</span>
@@ -47,7 +49,8 @@
         </div>
     </div>
 </div>
-<div class="row d-flex justify-content-end mt-2">
+<!--NAVBAR-->
+<div class="row d-flex justify-content-end mt-1">
     <div class="col-md-12 border border-primary round-border dashboard-component-center">
         <nav class="navbar navbar-expand-lg navbar-primary">
             <div class="container-fluid">
@@ -88,6 +91,7 @@
         </nav>
     </div>
 </div>
+<!--STATUS-GRAPHS-->
 <div class="row d-flex justify-contents-center">
     <jhi-status></jhi-status>
 </div>

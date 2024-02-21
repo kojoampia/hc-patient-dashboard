@@ -14,8 +14,11 @@ export class StatusComponent {
   /* Chart title */
   @Input() chartTitle = 'Service: Last 7 Days';
 
+  /* Chart data : Bar Chart */
+  chartItems: IChartItem[] = [];
+
   /* Chart data : Line Chart */
-  @Input() chartItems?: IChartItem[] = [];
+  chartSeries: IChartItem[] = [];
 
   /* Dimensions of chart [width,height]. When undefined takes the size of parent container  */
   @Input() view = [];
@@ -24,8 +27,8 @@ export class StatusComponent {
   @Input() colorScheme = {
     name: 'default',
     selectable: true,
-    group: ScaleType.Ordinal,
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA'],
+    group: ScaleType.Linear,
+    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA', '#A4A528', '#C0F12F', '#010101'],
   };
 
   /* The color scale type. Can be either 'ordinal' or 'linear' */
@@ -35,7 +38,7 @@ export class StatusComponent {
   @Input() animations = true;
 
   /* Show or hide the legend */
-  @Input() showLegend = false;
+  @Input() showLegend = true;
 
   /* Legend title */
   @Input() legendTitle = 'Legend';
@@ -79,8 +82,12 @@ export class StatusComponent {
   /* Padding between bars in px */
   @Input() barPadding = 8;
 
+  /* Display TimeLine */
+  @Input() showTimeline = true;
+
   constructor(private statusService: StatusService) {
-    this.chartItems = this.statusService.createMockData();
+    this.chartItems = this.statusService.getServicesPerDay();
+    this.chartSeries = this.statusService.getServiceSeries();
   }
 
   /* On component initialization function*/

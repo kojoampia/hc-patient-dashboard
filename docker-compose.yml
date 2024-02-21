@@ -1,0 +1,19 @@
+version: '3.5'
+services:
+  br-dev-admin-dashboard:
+    image: br-admin-dashboard
+    container_name: bedrock-admin-dashboard
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - './bedrock-admin-dashboard:/usr/src/app'
+    ports:
+      - 127.0.0.1:4200:80
+    networks:
+      - devnet
+
+networks:
+  devnet:
+    external:
+      name: devnet

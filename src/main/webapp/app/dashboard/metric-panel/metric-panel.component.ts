@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { IMetricItem } from './metric-item.model';
 import { Router } from '@angular/router';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
 
 @Component({
   standalone: true,
@@ -16,10 +16,13 @@ export class MetricPanelComponent implements OnInit {
   @Input() metricItems?: IMetricItem[];
 
   /* */
-  @Input() view = [];
+  @Input() view: [number, number] = [1000, 120];
 
   /* */
   @Input() colorScheme = {
+    name: 'default',
+    selectable: true,
+    group: ScaleType.Ordinal,
     domain: ['#5AA454', '#E44D25', '#CFC0BB', '#7aa3e5'],
   };
 
