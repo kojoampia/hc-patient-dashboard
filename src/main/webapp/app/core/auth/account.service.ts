@@ -32,6 +32,7 @@ export class AccountService {
     this.authenticationState.next(this.userIdentity);
     if (!identity) {
       this.accountCache$ = null;
+      this.stateStorageService.clearAuthenticationToken();
     }
   }
 

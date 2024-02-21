@@ -15,7 +15,14 @@
             }
         </div>
     </div>
-    <div class="col-md-10 round-border dashboard-component-right">
+    <div class="col-md-8 round-border dashboard-component-center">
+        <!--TEMP, PRESSURE, HEART RATE, SUGAR LEVEL--><!-- Metrics Panel -->
+        <jhi-metric-panel [metricItems]="topCards"></jhi-metric-panel>
+        <!--EMERGENCIES, ALERGIES, DIET PLAN, SERVICE PLAN-->
+        <jhi-metric-panel [metricItems]="lowCards"></jhi-metric-panel>
+
+    </div>
+    <div class="col-md-2 round-border dashboard-component-right">
         <div class="row d-flex justify-content-end">
             <div class="col-md-*">
                 <span>{{account.firstName}} {{account.lastName}}</span>
@@ -24,6 +31,7 @@
         <div class="row">
             <div class="col-md-*">
                 <span>{{phoneNumber}}</span>
+                <span *ngIf="!phoneNumber">Phone number unavailable</span>
             </div>
         </div>
         <div class="row">
@@ -34,6 +42,7 @@
         <div class="row">
             <div class="col-md-*">
                 <span>{{membership}}</span>
+                <span *ngIf="!membership">Membership info unavailable</span>
             </div>
         </div>
     </div>
@@ -50,27 +59,36 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="#">Status</a>
+                            <a class="nav-link" [ngClass]="page === 'status'? 'highlight' : ''"
+                                (click)="openPage('status')" aria-current="page" href="#">Status</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="#">About</a>
+                            <a class="nav-link" [ngClass]="page === 'about'? 'highlight' : ''"
+                                (click)="openPage('about')" aria-current="page" href="#">About</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="#">Address</a>
+                            <a class="nav-link" [ngClass]="page === 'address'? 'highlight' : ''"
+                                (click)="openPage('address')" aria-current="page" href="#">Address</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="#">Membership</a>
+                            <a class="nav-link" [ngClass]="page === 'membership'? 'highlight' : ''"
+                                (click)="openPage('membership')" aria-current="page" href="#">Membership</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="#">Report</a>
+                            <a class="nav-link" [ngClass]="page === 'report'? 'highlight' : ''"
+                                (click)="openPage('report')" aria-current="page" href="#">Report</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="#">Medications</a>
+                            <a class="nav-link" [ngClass]="page === 'medications'? 'highlight' : ''"
+                                (click)="openPage('medications')" aria-current="page" href="#">Medications</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </div>
+</div>
+<div class="row d-flex justify-contents-center">
+    <jhi-status></jhi-status>
 </div>
 }
