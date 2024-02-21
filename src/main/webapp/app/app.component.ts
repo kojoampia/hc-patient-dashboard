@@ -4,7 +4,6 @@ import locale from '@angular/common/locales/en';
 import dayjs from 'dayjs/esm';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
@@ -16,7 +15,6 @@ import MainComponent from './layouts/main/main.component';
   standalone: true,
   template: '<jhi-main></jhi-main>',
   imports: [
-    BrowserAnimationsModule,
     MainComponent,
     // jhipster-needle-angular-add-module JHipster will add new module here
   ],
