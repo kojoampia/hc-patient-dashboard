@@ -9,7 +9,7 @@ RUN npm install -g npm@10.4.0
 WORKDIR /app
 COPY . .
 RUN npm install --legacy-peer-deps
-RUN npm run webpack:prod
+RUN npm run webapp:prod
 
 # Stage 1: serve app with nginx server
 FROM nginx:latest
