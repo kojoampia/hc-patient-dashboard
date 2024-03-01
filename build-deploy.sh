@@ -3,8 +3,8 @@
 args=$#
 
 if [ $args -le 0 ];then
-    echo "version number required eg. 0.0.5"
-    exit 1
+    echo "a random version will be used"
+    
 fi
 
 echo "Synchronising with master on bitbucket"
@@ -13,9 +13,9 @@ git pull -r
 
 # Set the version for the build and deploy
 export version=$1
-echo "Building and Deploying to Bedrock Admin Dashboard version $version"
+echo "Building and Deploying to Health Connect Patient Dashboard version $version"
 
-name=hc-patient-dashboard
+name=patientdashboard
 folder=`pwd`
 
 if [[ "$folder" != *"$name"* ]]; then
@@ -27,7 +27,7 @@ cd $folder
 
 
 echo "building..."
-docker build -t "hc-patient-dashboard" .
+docker build -t "patientdashboard" .
 echo "done."
 
 echo "tagging..."

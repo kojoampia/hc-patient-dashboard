@@ -49,12 +49,5 @@ export class MetricPanelComponent implements OnInit {
 
   onSelect(item: any): void {
     this.selectedItem.emit(item);
-    if ((item as IMetricItem).label === 'customers') {
-      this.router.navigate(['/visitors/customers']);
-    } else if ((item as IMetricItem).label === 'applications') {
-      this.router.navigate(['/sales/application']);
-    } else if ((item as IMetricItem).label === 'claims') {
-      this.router.navigate(['/claims']);
-    }
   }
 }

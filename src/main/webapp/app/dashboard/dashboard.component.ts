@@ -5,7 +5,6 @@ import SharedModule from 'app/shared/shared.module';
 import { Subject, takeUntil } from 'rxjs';
 import { DashboardService } from './dashboard.service';
 import { HttpResponse } from '@angular/common/http';
-import { WidgetsModule } from 'app/widgets/widgets.module';
 import { CommonModule } from '@angular/common';
 import { MetricPanelModule } from './metric-panel/metric-panel.module';
 import { StatusModule } from './status-panel/status.module';
@@ -23,14 +22,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   membership!: string;
   private readonly destroy$ = new Subject<void>();
   page: string = 'status';
-  temp = { id: 1, name: 'temperature', value: 36 };
-  pressure = { id: 2, name: 'pressure', value: 140 };
-  heart = { id: 3, name: 'heart rate', value: 36 };
-  sugar = { id: 4, name: 'sugar', value: 36 };
-  emergencies = { id: 1, name: 'emergencies', value: 1 };
-  alergies = { id: 2, name: 'alergies', value: 0 };
-  service = { id: 3, name: 'services', value: 10 };
-  diet = { id: 4, name: 'diet', value: 3 };
+  temp = { id: 1, name: 'temperature', value: 36, route: 'temperature' };
+  pressure = { id: 2, name: 'pressure', value: 140, route: 'pressure' };
+  heart = { id: 3, name: 'heart rate', value: 36, route: 'heatrate' };
+  sugar = { id: 4, name: 'sugar', value: 36, route: 'sugar' };
+  emergencies = { id: 1, name: 'emergencies', value: 1, route: 'emergencies' };
+  alergies = { id: 2, name: 'allergies', value: 0, route: 'allergies' };
+  service = { id: 3, name: 'services', value: 10, route: 'services' };
+  diet = { id: 4, name: 'diet', value: 3, route: 'diet' };
 
   topCards: any[] = [];
   lowCards: any[] = [];
@@ -41,7 +40,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.topCards = [this.temp, this.pressure, this.heart, this.sugar];
     this.lowCards = [this.emergencies, this.alergies, this.service, this.diet];
 
-    this.fetchInformation(this.account.email);
+    this.fetchProfileInformation(this.account.email);
   }
 
   ngOnDestroy(): void {
@@ -49,7 +48,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  fetchInformation(email: string): void {
+  fetchProfileInformation(email: string): void {
     // phoneNumber = data.phoneNumber
     // membership = data.membership
     this.dashboardService
@@ -66,7 +65,40 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.page = page;
   }
 
-  openStat(stat: any): void {
-    console.log(stat);
+  metricSelected(stat: any): void {
+    switch (stat.route) {
+      case 'temperature':
+        // open temperature modal
+        console.log('temperature');
+        break;
+      case 'pressure':
+        // open pressure modal
+        console.log('pressure');
+        break;
+      case 'heartrate':
+        // open heart-rate modal
+        console.log('heart-rate');
+        break;
+      case 'sugar':
+        // open sugar modal
+        console.log('sugar');
+        break;
+      case 'emergencies':
+        // open emergencies modal
+        console.log('emergencies');
+        break;
+      case 'allergies':
+        // open allergies modal
+        console.log('allergies');
+        break;
+      case 'services':
+        // open services modal
+        console.log('services');
+        break;
+      case 'diet':
+        // open diet modal
+        console.log('diet');
+        break;
+    }
   }
 }

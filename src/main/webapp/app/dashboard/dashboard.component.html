@@ -19,9 +19,9 @@
     </div>
     <div class="col-md-8 round-border dashboard-component-center">
         <!--TEMP, PRESSURE, HEART RATE, SUGAR LEVEL--><!-- Metrics Panel -->
-        <jhi-metric-panel [metricItems]="topCards"></jhi-metric-panel>
+        <jhi-metric-panel [metricItems]="topCards" (selectedItem)="metricSelected($event)"></jhi-metric-panel>
         <!--EMERGENCIES, ALERGIES, DIET PLAN, SERVICE PLAN-->
-        <jhi-metric-panel [metricItems]="lowCards"></jhi-metric-panel>
+        <jhi-metric-panel [metricItems]="lowCards" (selectedItem)="metricSelected($event)"></jhi-metric-panel>
 
     </div>
     <div class="col-md-2 round-border p-3 dashboard-component-right">

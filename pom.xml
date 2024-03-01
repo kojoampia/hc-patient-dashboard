@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.jojoaddison</groupId>
-    <artifactId>patient-dashboard</artifactId>
+    <artifactId>patientdashboard</artifactId>
     <version>0.0.1</version>
     <packaging>jar</packaging>
     <name>Patient Dashboard</name>
-    <description>Description for Patient Dashboard</description>
+    <description>Health Connect - Patient Dashboard</description>
 
     <properties>
         <!--
@@ -449,7 +449,10 @@
                             </platforms>
                         </from>
                         <to>
-                            <image>patientgateway:latest</image>
+                            <image>${build.finalName}:${project.version}</image>
+                        </to>
+                        <to>
+                            <image>docker-registry.jojoaddison.net/hc/${build.finalName}:${project.version}</image>
                         </to>
                         <container>
                             <entrypoint>

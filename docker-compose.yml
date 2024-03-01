@@ -1,13 +1,13 @@
 version: '3.5'
 services:
-  hc-dev-patient-dashboard:
-    image: hc-patient-dashboard
-    container_name: hc-patient-dashboard
+  patientdashboard:
+    image: patientdashboard:0.0.1
+    container_name: patientdashboard
     build:
       context: .
       dockerfile: Dockerfile.dev
     volumes:
-      - './hc-patient-dashboard:/usr/src/app'
+      - './patientdashboard:/usr/src/app'
     ports:
       - 127.0.0.1:5501:80
     networks:
@@ -15,5 +15,5 @@ services:
 
 networks:
   devnet:
-    external:
-      name: devnet
+    external: true
+    name: devnet
