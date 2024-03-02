@@ -1,8 +1,7 @@
 # Stage 0: compile angular frontend
 FROM node:20-alpine3.19 as build
 # Set api url
-ENV SERVER_API_URL=https://admin.abofonsa.com
-ENV HEALTHCONNECT_URL=https://www.abofonsa.com
+ENV SERVER_API_URL=https://patient-gateway.abofonsa.com
 
 RUN npm install -g npm@10.4.0
 

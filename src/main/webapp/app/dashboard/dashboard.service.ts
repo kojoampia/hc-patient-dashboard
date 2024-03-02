@@ -13,6 +13,7 @@ export class DashboardService {
     private http: HttpClient,
     private applicationConfigService: ApplicationConfigService,
   ) {}
+
   fetchInformationByEmail(email: string): Observable<any> {
     return this.http.get<any>(`${this.resourceUrl}/${email}`);
   }
