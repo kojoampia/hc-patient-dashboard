@@ -6,6 +6,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
+    environment:
+      - SERVER_API_URL=http://localhost:5505/
     volumes:
       - './patientdashboard:/usr/src/app'
     ports:

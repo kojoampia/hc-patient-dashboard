@@ -50,7 +50,7 @@ module.exports = async (config, options, targetOptions) => {
           port: 9000,
           https: tls,
           proxy: {
-            target: `http${tls ? 's' : ''}://localhost:${targetOptions.target === 'serve' ? '4200' : '5055'}`,
+            target: `http${tls ? 's' : ''}://localhost:${targetOptions.target === 'serve' ? '4200' : '5505'}`,
             //target: `http://localhost:5055`,
             ws: true,
             proxyOptions: {
@@ -119,8 +119,7 @@ module.exports = async (config, options, targetOptions) => {
       // If this URL is left empty (""), then it will be relative to the current context.
       // If you use an API server, in `prod` mode, you will need to enable CORS
       // (see the `jhipster.cors` common JHipster property in the `application-*.yml` configurations)
-      SERVER_API_URL: JSON.stringify(environment.SERVER_API_URL),
-      HEALTHCONNECT_URL: JSON.stringify(environment.HEALTHCONNECT_URL),
+      SERVER_API_URL: config.mode ==='development' ? JSON.stringify(environment.DEV_SERVER_API_URL) : '/',
     }),
     new MergeJsonWebpackPlugin({
       output: {
