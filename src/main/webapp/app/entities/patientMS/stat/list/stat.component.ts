@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Data, ParamMap, Router, RouterModule } from '@angular/router';
 import { combineLatest, filter, Observable, switchMap, tap } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -15,7 +15,7 @@ import { StatDeleteDialogComponent } from '../delete/stat-delete-dialog.componen
 
 @Component({
   standalone: true,
-  selector: 'hpd-stat',
+  selector: 'jhi-stat',
   templateUrl: './stat.component.html',
   imports: [
     RouterModule,
@@ -33,6 +33,8 @@ export class StatComponent implements OnInit {
 
   stats?: IStat[];
   isLoading = false;
+
+  @Input() type!: string;
 
   predicate = 'id';
   ascending = true;

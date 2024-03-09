@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class DashboardService {
-  private resourceUrl = this.applicationConfigService.getEndpointFor('/api/profiles', 'patientms');
+  private resourceUrl = this.applicationConfigService.getEndpointFor('api/profiles', 'hcpatientservice');
 
   constructor(
     private http: HttpClient,
@@ -15,6 +15,6 @@ export class DashboardService {
   ) {}
 
   fetchInformationByEmail(email: string): Observable<any> {
-    return this.http.get<any>(`${this.resourceUrl}/${email}`);
+    return this.http.get<any>(`${this.resourceUrl}/email/${email}`);
   }
 }

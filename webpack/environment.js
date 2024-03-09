@@ -2,8 +2,8 @@ module.exports = {
   I18N_HASH: 'generated_hash',
   SERVER_API_URL: '',
   DEV_SERVER_API_URL: 'http://localhost:5505/',
-  TEST_SERVER_API_URL: 'https://patient-gateway.jojoaddison.net/',
-  PROD_SERVER_API_URL: 'https://patient-gateway.abofonsa.com/',
+  TEST_SERVER_API_URL: 'https://patient-dashboard.jojoaddison.net/',
+  PROD_SERVER_API_URL: 'https://patient-dashboard.abofonsa.com/',
   __VERSION__: process.env.hasOwnProperty('APP_VERSION') ? process.env.APP_VERSION : 'DEV',
   __DEBUG_INFO_ENABLED__: true,
 };

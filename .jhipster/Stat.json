@@ -7,6 +7,10 @@
   "databaseType": "mongodb",
   "fields": [
     {
+      "fieldName": "type",
+      "fieldType": "String"
+    },
+    {
       "fieldName": "name",
       "fieldType": "String"
     },

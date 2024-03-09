@@ -8,11 +8,20 @@ import { HttpResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { MetricPanelModule } from './metric-panel/metric-panel.module';
 import { StatusModule } from './status-panel/status.module';
+import { Authority } from 'app/config/authority.constants';
+import { FeaturesModule } from 'app/features/features.module';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { TemperatureComponent } from 'app/features/temperature/temperature.component';
+import { BloodPressureComponent } from 'app/features/blood-pressure/blood-pressure.component';
+import { HeartRateComponent } from 'app/features/heart-rate/heart-rate.component';
+import { SugarComponent } from 'app/features/sugar/sugar.component';
+import { AllergyComponent } from 'app/features/allergies/allergy.component';
+import { EmergencyComponent } from 'app/features/emergency/emergency.component';
 
 @Component({
   selector: 'jhi-dashboard',
   standalone: true,
-  imports: [CommonModule, SharedModule, RouterModule, MetricPanelModule, StatusModule],
+  imports: [CommonModule, SharedModule, RouterModule, MetricPanelModule, FeaturesModule, StatusModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
@@ -34,13 +43,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
   topCards: any[] = [];
   lowCards: any[] = [];
 
-  constructor(private dashboardService: DashboardService) {}
+  isUserRole!: boolean;
+
+  isOpen = false;
+
+  constructor(
+    private dashboardService: DashboardService,
+    private modalService: NgbModal,
+  ) {}
 
   ngOnInit(): void {
     this.topCards = [this.temp, this.pressure, this.heart, this.sugar];
     this.lowCards = [this.emergencies, this.alergies, this.service, this.diet];
-
-    this.fetchProfileInformation(this.account.email);
+    if (this.account && this.account.activated) {
+      this.isUserRole = this.account.authorities.indexOf(Authority.USER) > -1;
+      this.fetchProfileInformation(this.account.email);
+    }
   }
 
   ngOnDestroy(): void {
@@ -70,26 +88,61 @@ export class DashboardComponent implements OnInit, OnDestroy {
       case 'temperature':
         // open temperature modal
         console.log('temperature');
+        if (!this.isOpen) {
+          this.isOpen = true;
+          const modalRef: NgbModalRef = this.modalService.open(TemperatureComponent, { size: 'xl', centered: true });
+          modalRef.result.finally(() => (this.isOpen = false));
+        }
         break;
       case 'pressure':
         // open pressure modal
         console.log('pressure');
+        if (!this.isOpen) {
+          this.isOpen = true;
+          const modalRef: NgbModalRef = this.modalService.open(BloodPressureComponent, { size: 'xl', centered: true });
+          modalRef.componentInstance.patient = this.account;
+          modalRef.result.finally(() => (this.isOpen = false));
+        }
         break;
       case 'heartrate':
         // open heart-rate modal
         console.log('heart-rate');
+        if (!this.isOpen) {
+          this.isOpen = true;
+          const modalRef: NgbModalRef = this.modalService.open(HeartRateComponent, { size: 'xl', centered: true });
+          modalRef.componentInstance.patient = this.account;
+          modalRef.result.finally(() => (this.isOpen = false));
+        }
         break;
       case 'sugar':
         // open sugar modal
         console.log('sugar');
+        if (!this.isOpen) {
+          this.isOpen = true;
+          const modalRef: NgbModalRef = this.modalService.open(SugarComponent, { size: 'xl', centered: true });
+          modalRef.componentInstance.patient = this.account;
+          modalRef.result.finally(() => (this.isOpen = false));
+        }
         break;
       case 'emergencies':
         // open emergencies modal
         console.log('emergencies');
+        if (!this.isOpen) {
+          this.isOpen = true;
+          const modalRef: NgbModalRef = this.modalService.open(EmergencyComponent, { size: 'xl', centered: true });
+          modalRef.componentInstance.patient = this.account;
+          modalRef.result.finally(() => (this.isOpen = false));
+        }
         break;
       case 'allergies':
         // open allergies modal
         console.log('allergies');
+        if (!this.isOpen) {
+          this.isOpen = true;
+          const modalRef: NgbModalRef = this.modalService.open(AllergyComponent, { size: 'xl', centered: true });
+          modalRef.componentInstance.patient = this.account;
+          modalRef.result.finally(() => (this.isOpen = false));
+        }
         break;
       case 'services':
         // open services modal
