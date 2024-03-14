@@ -63,10 +63,10 @@ export class StatService {
       .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
-  query(req?: any): Observable<EntityArrayResponseType> {
+  query(type: string, req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<RestStat[]>(this.resourceUrl, { params: options, observe: 'response' })
+      .get<RestStat[]>(`${this.resourceUrl}/${type}`, { params: options, observe: 'response' })
       .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
@@ -74,9 +74,9 @@ export class StatService {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
-  search(req: Search): Observable<EntityArrayResponseType> {
+  search(type: string, req: Search): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
-    return this.http.get<RestStat[]>(this.resourceSearchUrl, { params: options, observe: 'response' }).pipe(
+    return this.http.get<RestStat[]>(`${this.resourceUrl}/${type}`, { params: options, observe: 'response' }).pipe(
       map(res => this.convertResponseArrayFromServer(res)),
       catchError(() => scheduled([new HttpResponse<IStat[]>()], asapScheduler)),
     );

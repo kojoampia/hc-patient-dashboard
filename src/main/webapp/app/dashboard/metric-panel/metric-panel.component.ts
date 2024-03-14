@@ -47,7 +47,8 @@ export class MetricPanelComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onSelect(item: any): void {
-    this.selectedItem.emit(item);
+  onSelect(item: IMetricItem): void {
+    const menuItem = this.metricItems?.find(metric => metric.name === item.name);
+    this.selectedItem.emit(menuItem);
   }
 }

@@ -6,11 +6,12 @@ import SharedModule from 'app/shared/shared.module';
 import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 import { IStat } from '../stat.model';
 import { StatService } from '../service/stat.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   standalone: true,
   templateUrl: './stat-delete-dialog.component.html',
-  imports: [SharedModule, FormsModule],
+  imports: [SharedModule, FormsModule, TranslateModule],
 })
 export class StatDeleteDialogComponent {
   stat?: IStat;

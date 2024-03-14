@@ -31,14 +31,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   membership!: string;
   private readonly destroy$ = new Subject<void>();
   page: string = 'status';
-  temp = { id: 1, name: 'temperature', value: 36, route: 'temperature' };
-  pressure = { id: 2, name: 'pressure', value: 140, route: 'pressure' };
-  heart = { id: 3, name: 'heart rate', value: 36, route: 'heatrate' };
-  sugar = { id: 4, name: 'sugar', value: 36, route: 'sugar' };
-  emergencies = { id: 1, name: 'emergencies', value: 1, route: 'emergencies' };
-  alergies = { id: 2, name: 'allergies', value: 0, route: 'allergies' };
-  service = { id: 3, name: 'services', value: 10, route: 'services' };
-  diet = { id: 4, name: 'diet', value: 3, route: 'diet' };
+  temp = { id: 1, name: 'temperature', label: 'Temperature', value: 36, route: 'temperature', extra: '1' };
+  pressure = { id: 2, name: 'pressure', label: 'Blood pressure', value: 140, route: 'pressure', extra: '2' };
+  heart = { id: 3, name: 'heart rate', label: 'Heart rate', value: 36, route: 'heartrate', extra: '3' };
+  sugar = { id: 4, name: 'sugar', label: 'Sugar', value: 36, route: 'sugar', extra: '4' };
+  emergencies = { id: 1, name: 'emergencies', label: 'Emergencies', value: 1, route: 'emergencies', extra: '1' };
+  alergies = { id: 2, name: 'allergies', label: 'Allergies', value: 0, route: 'allergies', extra: '2' };
+  service = { id: 3, name: 'services', label: 'Services', value: 10, route: 'services', extra: '3' };
+  diet = { id: 4, name: 'diet', label: 'Diet', value: 3, route: 'diet', extra: '4' };
 
   topCards: any[] = [];
   lowCards: any[] = [];
@@ -46,6 +46,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   isUserRole!: boolean;
 
   isOpen = false;
+  isNavbarCollapsed = false;
 
   constructor(
     private dashboardService: DashboardService,
@@ -53,6 +54,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.page = sessionStorage.getItem('page') || 'status';
     this.topCards = [this.temp, this.pressure, this.heart, this.sugar];
     this.lowCards = [this.emergencies, this.alergies, this.service, this.diet];
     if (this.account && this.account.activated) {
@@ -81,6 +83,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
   openPage(page: string): void {
     this.page = page;
+    sessionStorage.setItem('page', page);
   }
 
   metricSelected(stat: any): void {
@@ -153,5 +156,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
         console.log('diet');
         break;
     }
+  }
+
+  toggleNavbar(): void {
+    this.isNavbarCollapsed = !this.isNavbarCollapsed;
   }
 }

@@ -10,12 +10,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IStat } from '../stat.model';
 import { StatService } from '../service/stat.service';
 import { StatFormService, StatFormGroup } from './stat-form.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   standalone: true,
-  selector: 'hpd-stat-update',
+  selector: 'jhi-stat-update',
   templateUrl: './stat-update.component.html',
-  imports: [SharedModule, FormsModule, ReactiveFormsModule],
+  imports: [SharedModule, FormsModule, ReactiveFormsModule, TranslateModule],
 })
 export class StatUpdateComponent implements OnInit {
   isSaving = false;

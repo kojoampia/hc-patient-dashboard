@@ -12,6 +12,8 @@ import { SortService } from 'app/shared/sort/sort.service';
 import { IStat } from '../stat.model';
 import { EntityArrayResponseType, StatService } from '../service/stat.service';
 import { StatDeleteDialogComponent } from '../delete/stat-delete-dialog.component';
+import { StatUpdateComponent } from '../update/stat-update.component';
+import { StatDetailComponent } from '../detail/stat-detail.component';
 
 @Component({
   standalone: true,
@@ -60,6 +62,38 @@ export class StatComponent implements OnInit {
 
   ngOnInit(): void {
     this.load();
+  }
+
+  view(stat: IStat): void {
+    const modalRef = this.modalService.open(StatDetailComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.stat = stat;
+    // unsubscribe not needed because closed completes on modal close
+    modalRef.closed
+      .pipe(
+        filter(reason => reason === ITEM_DELETED_EVENT),
+        switchMap(() => this.loadFromBackendWithRouteInformations()),
+      )
+      .subscribe({
+        next: (res: EntityArrayResponseType) => {
+          this.onResponseSuccess(res);
+        },
+      });
+  }
+
+  edit(stat: IStat): void {
+    const modalRef = this.modalService.open(StatUpdateComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.stat = stat;
+    // unsubscribe not needed because closed completes on modal close
+    modalRef.closed
+      .pipe(
+        filter(reason => reason === ITEM_DELETED_EVENT),
+        switchMap(() => this.loadFromBackendWithRouteInformations()),
+      )
+      .subscribe({
+        next: (res: EntityArrayResponseType) => {
+          this.onResponseSuccess(res);
+        },
+      });
   }
 
   delete(stat: IStat): void {
@@ -129,9 +163,9 @@ export class StatComponent implements OnInit {
       sort: this.getSortQueryParam(predicate, ascending),
     };
     if (this.currentSearch && this.currentSearch !== '') {
-      return this.statService.search(queryObject).pipe(tap(() => (this.isLoading = false)));
+      return this.statService.search(this.type, queryObject).pipe(tap(() => (this.isLoading = false)));
     } else {
-      return this.statService.query(queryObject).pipe(tap(() => (this.isLoading = false)));
+      return this.statService.query(this.type, queryObject).pipe(tap(() => (this.isLoading = false)));
     }
   }
 

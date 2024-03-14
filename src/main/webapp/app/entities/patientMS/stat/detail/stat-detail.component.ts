@@ -7,7 +7,7 @@ import { IStat } from '../stat.model';
 
 @Component({
   standalone: true,
-  selector: 'hpd-stat-detail',
+  selector: 'jhi-stat-detail',
   templateUrl: './stat-detail.component.html',
   imports: [SharedModule, RouterModule, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe],
 })

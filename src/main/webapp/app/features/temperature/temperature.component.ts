@@ -12,9 +12,8 @@ import { StatComponent } from 'app/entities/patientMS/stat/list/stat.component';
   styleUrl: './temperature.component.scss',
 })
 export class TemperatureComponent implements OnDestroy, OnInit {
+  public type = 'temperature';
   private destroyed$ = new Subject<boolean>();
-  private stats!: IStat[];
-  private type = 'temperature';
 
   constructor(private modal: NgbActiveModal) {}
 
@@ -26,6 +25,6 @@ export class TemperatureComponent implements OnDestroy, OnInit {
   }
 
   close(): void {
-    this.modal.close();
+    this.modal.dismiss();
   }
 }
