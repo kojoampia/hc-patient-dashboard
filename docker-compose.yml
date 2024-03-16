@@ -1,11 +1,15 @@
 version: '3.5'
 services:
   patientdashboard:
-    image: patientdashboard:0.0.1
-    container_name: patientdashboard
+    image: hc-patient-dashboard:0.0.1
+    container_name: hc-patient-dashboard
+    hostname: hc-patient-dashboard
     build:
       context: .
       dockerfile: Dockerfile.dev
+      tags:
+        - "hc-patient-dashboard:0.0.1"
+        - "hc-patient-dashboard:latest"
     environment:
       - SERVER_API_URL=http://localhost:5505/
     volumes:

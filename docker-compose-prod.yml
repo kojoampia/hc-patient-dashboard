@@ -1,15 +1,19 @@
 version: '3.5'
 services:
-  hc-dev-patient-dashboard:
-    image: hc-patient-dashboard
+  hc-patient-dashboard:
+    image: hc-patient-dashboard:0.0.1
     container_name: hc-patient-dashboard
+    hostname: hc-patient-dashboard
     build:
       context: .
       dockerfile: Dockerfile.prod
+      tags:
+        - "docker-registry.jojoaddison.net/hc-patient-dashboard:0.0.1"
+        - "docker-registry.jojoaddison.net/hc-patient-dashboard:latest"
     volumes:
       - './hc-patient-dashboard:/usr/src/app'
     ports:
-      - 127.0.0.1:4200:80
+      - 127.0.0.1:5501:80
     networks:
       - hcnet
 
