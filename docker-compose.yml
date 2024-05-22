@@ -8,14 +8,14 @@ services:
       context: .
       dockerfile: Dockerfile.dev
       tags:
-        - "hc-patient-dashboard:0.0.1"
-        - "hc-patient-dashboard:latest"
+        - 'hc-patient-dashboard:0.0.1'
+        - 'hc-patient-dashboard:latest'
     environment:
-      - SERVER_API_URL=http://localhost:5505/
+      - SERVER_API_URL=http://localhost:5506/
     volumes:
       - './patientdashboard:/usr/src/app'
     ports:
-      - 127.0.0.1:5501:80
+      - 127.0.0.1:5503:80
     networks:
       - devnet
 
