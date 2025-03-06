@@ -12,7 +12,7 @@ services:
       - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/patientGateway?waitQueueMultiple=1000
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
     ports:
-      - 127.0.0.1:5055:5055
+      - 127.0.0.1:5501:5501
     healthcheck:
       test:
         - CMD

@@ -1,4 +1,4 @@
-version: '3.5'
+name: health-connect
 services:
   patientdashboard:
     image: hc-patient-dashboard:0.0.1
@@ -11,11 +11,11 @@ services:
         - 'hc-patient-dashboard:0.0.1'
         - 'hc-patient-dashboard:latest'
     environment:
-      - SERVER_API_URL=http://localhost:5506/
+      - SERVER_API_URL=http://localhost:5501/
     volumes:
       - './patientdashboard:/usr/src/app'
     ports:
-      - 127.0.0.1:5503:80
+      - 127.0.0.1:5500:80
     networks:
       - devnet
 
