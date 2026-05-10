@@ -1,0 +1,49 @@
+name: Build & Publish Payment
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 25
+
+      - name: Build and Test
+        run: ./gradlew clean build --no-daemon
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_TOKEN }}
+
+      - name: Get version from Gradle
+        id: gradle-version
+        run: |
+          VERSION=$(./gradlew -q properties | grep "^version:" | awk '{print $2}')          
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Build and push Docker images
+        run: |
+          IMAGE_BASE="ghcr.io/$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')/x-cash-register"
+          VERSION=${{ steps.gradle-version.outputs.version }}
+
+          echo "Building Docker image with version: $VERSION"
+          docker build -t "${IMAGE_BASE}:${VERSION}" -t "${IMAGE_BASE}:latest" .
+
+          echo "Pushing Docker images to GHCR"
+          docker push "${IMAGE_BASE}:${VERSION}"
+          docker push "${IMAGE_BASE}:latest"
