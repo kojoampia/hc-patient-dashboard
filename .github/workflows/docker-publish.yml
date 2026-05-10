@@ -1,4 +1,5 @@
-name: Build & Publish Payment
+name: Build and Publish Patient Dashboard
+
 on:
   push:
     branches:
@@ -6,44 +7,76 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+
 jobs:
-  build-and-push:
+  build-and-publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Set up Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: temurin
-          java-version: 25
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - name: Build and Test
-        run: ./gradlew clean build --no-daemon
+      - name: Read application version
+        id: version
+        shell: bash
+        run: |
+          version="$(grep -m1 '<version>' pom.xml | sed -E 's/.*<version>([^<]+)<\/version>.*/\1/')"
+          if [ -z "$version" ]; then
+            echo "Unable to determine application version from pom.xml" >&2
+            exit 1
+          fi
+
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Prepare image tags
+        id: image
+        shell: bash
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          image="${REGISTRY}/${GITHUB_REPOSITORY,,}"
+
+          {
+            echo "name=$image"
+            echo 'tags<<EOF'
+            echo "${image}:sha-${GITHUB_SHA::7}"
+            if [ "${GITHUB_EVENT_NAME}" = "push" ] && [ "${GITHUB_REF}" = "refs/heads/main" ]; then
+              echo "${image}:${VERSION}"
+              echo "${image}:latest"
+            fi
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
 
       - name: Log in to GitHub Container Registry
+        if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
         with:
-          registry: ghcr.io
+          registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
-          password: ${{ secrets.GHCR_TOKEN }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Get version from Gradle
-        id: gradle-version
-        run: |
-          VERSION=$(./gradlew -q properties | grep "^version:" | awk '{print $2}')          
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-
-      - name: Build and push Docker images
-        run: |
-          IMAGE_BASE="ghcr.io/$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')/x-cash-register"
-          VERSION=${{ steps.gradle-version.outputs.version }}
-
-          echo "Building Docker image with version: $VERSION"
-          docker build -t "${IMAGE_BASE}:${VERSION}" -t "${IMAGE_BASE}:latest" .
-
-          echo "Pushing Docker images to GHCR"
-          docker push "${IMAGE_BASE}:${VERSION}"
-          docker push "${IMAGE_BASE}:latest"
+      - name: Build container image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile.prod
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.image.outputs.tags }}
+          labels: |
+            org.opencontainers.image.title=hc-patient-dashboard
+            org.opencontainers.image.description=Health Connect Patient Dashboard
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.version=${{ steps.version.outputs.version }}
+            org.opencontainers.image.revision=${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
