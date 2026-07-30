@@ -32,5 +32,7 @@ EXPOSE 80
 # Answers "is nginx serving the app shell?" and nothing more. It deliberately does not probe the
 # API: a healthcheck that failed when the gateway was down would have an orchestrator restart a
 # perfectly good web container.
+# 127.0.0.1, not localhost: nginx listens on IPv4 only here, and busybox wget resolves localhost to
+# ::1 first, so the probe failed with "Connection refused" against a container that was serving fine.
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s \
-  CMD wget -qO- http://localhost/index.html >/dev/null || exit 1
+  CMD wget -qO- http://127.0.0.1/index.html >/dev/null || exit 1
