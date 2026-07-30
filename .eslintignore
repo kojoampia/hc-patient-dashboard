@@ -8,3 +8,6 @@ node/
 coverage/
 postcss.config.js
 target/classes/static/
+# The Cypress skeleton under src/test/javascript has no tsconfig and no Cypress dependency, so it can neither be
+# type-checked nor run. Restore this path here and in .eslintrc.json's parserOptions.project when Cypress comes back.
+src/test/javascript/

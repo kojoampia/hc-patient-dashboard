@@ -74,14 +74,15 @@ describe('Stat Service', () => {
       expect(expectedResult).toMatchObject(expected);
     });
 
-    it('should return a list of Stat', () => {
+    it('should return a list of Stat for a metric type', () => {
       const returnedFromService = { ...requireRestSample };
 
       const expected = { ...sampleWithRequiredData };
 
-      service.query().subscribe(resp => (expectedResult = resp.body));
+      // Unlike the generated services, query() takes the metric type: it reads from /api/stats/{type}.
+      service.query('temperature').subscribe(resp => (expectedResult = resp.body));
 
-      const req = httpMock.expectOne({ method: 'GET' });
+      const req = httpMock.expectOne(request => request.method === 'GET' && request.url.endsWith('/temperature'));
       req.flush([returnedFromService]);
       httpMock.verify();
       expect(expectedResult).toMatchObject([expected]);
@@ -104,9 +105,10 @@ describe('Stat Service', () => {
         query: '',
         sort: [],
       };
-      service.search(queryObject).subscribe(() => expectedResult);
+      // search(), like query(), is typed with the metric type as its first argument.
+      service.search('temperature', queryObject).subscribe(() => expectedResult);
 
-      const req = httpMock.expectOne({ method: 'GET' });
+      const req = httpMock.expectOne(request => request.method === 'GET' && request.url.endsWith('/temperature'));
       req.flush(null, { status: 500, statusText: 'Internal Server Error' });
       expect(expectedResult).toBe(null);
     });

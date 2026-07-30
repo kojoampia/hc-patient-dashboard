@@ -35,13 +35,18 @@ Status legend: `[x]` done · `[~]` partial / diverges from plan · `[ ]` not sta
 - `[ ]` Reconcile `angular.json` metadata: project name is still `patient-gateway` and `prefix` is `jhi` while ESLint requires `hpd`.
 - `[ ]` Decide the PWA posture — the service worker is registered with `enabled: false` in `app.config.ts`.
 
-### The test suite is red as checked in
+### Test suite state
 
-Measured on 2026-07-30 (`npx ng test`): **647 of 654 tests pass, 134 of 145 suites pass.** Three independent causes, none of them a regression — all three predate the docs/entity-config work merged into `main`:
+Measured on 2026-07-30 with `npx ng test`: **all 145 suites and 677 tests pass.** Three problems were fixed to get there:
 
-- `[ ]` **`npm test` cannot even start.** Its `pretest` lint step reports 456 errors, all `Parsing error: Cannot read file '.../src/test/javascript/cypress/tsconfig.json'` — ESLint is configured to type-check the Cypress specs, but that `tsconfig.json` was never committed. Fix by adding it, excluding `src/test/javascript` from linting, or removing the skeleton along with the Cypress decision above. Until then use `npx ng test`.
-- `[ ]` **11 suites fail to parse d3.** d3 v7 ships ESM `.js` (`node_modules/d3-selection/src/index.js` starts with `export`), while `jest.conf.js` only exempts `.mjs` and `dayjs/esm` from `transformIgnorePatterns`. Every suite that transitively imports a d3-based widget dies with "Jest encountered an unexpected token" — including `home.component.spec.ts` and the whole `dashboard/` and `features/` area. Fix by widening `transformIgnorePatterns` to cover `d3-*` (and `internmap`/`delaunator`, which d3 pulls in).
-- `[ ]` **7 tests fail with `No provider for NgbActiveModal!`** in `features/*` specs (allergies, blood pressure, emergency, heart rate, sugar, temperature) plus `DashboardService › should be created`. The modal components inject `NgbActiveModal` but the specs never provide it — the same modal-wrapper inconsistency that Phase B item 4 is about, so fix them together.
+- `[x]` d3 v7 and its transitive deps (`internmap`, `delaunator`, `robust-predicates`) publish ESM in plain `.js` files, which Jest could not parse — 11 suites died with "Jest encountered an unexpected token", including `home.component.spec.ts` and everything under `dashboard/` and `features/`. `jest.conf.js` now exempts them in `transformIgnorePatterns`.
+- `[x]` The six `features/*` wrapper specs failed with `No provider for NgbActiveModal!`. They now provide it, plus the HTTP and router doubles that the embedded `StatComponent` needs, and blank out that child's template — these are wrapper smoke tests, and the list has its own spec.
+- `[x]` `dashboard.component.spec.ts`, `dashboard.service.spec.ts` and `status.component.spec.ts` lacked `HttpClientTestingModule` (and animations, for the ngx-charts content). `stat.service.spec.ts` did not compile: this service's `query(type, req?)` and `search(type, req)` take the metric type, because they read `/api/stats/{type}`, and the generated spec still called them without it.
+
+`npm test` **still fails**, but now in its `pretest` lint step rather than on parse errors:
+
+- `[x]` ESLint could not parse _any_ file, because `parserOptions.project` pointed at `src/test/javascript/cypress/tsconfig.json`, which was never committed — 456 identical parse errors. That entry is gone and the un-runnable Cypress skeleton is in `.eslintignore`; both come back with the Cypress decision above.
+- `[ ]` Underneath sat 160 genuine rule violations across 76 files, none of them new: 73 selector-prefix errors (`jhi-*` where ESLint wants `hpd`), 22 `no-console`, 20 `member-ordering`, 15 empty lifecycle methods, 12 missing return types, 11 `use-lifecycle-interface`, and ~16 assorted `@typescript-eslint` rules. The selector ones are decision 2 of Phase B territory — a repo-wide rename is deliberately not something to do in passing. Decide per group whether to fix the code or relax the rule, then put `npm test` back in CI.
 
 ## Phase B — refactoring
 

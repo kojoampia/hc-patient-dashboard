@@ -56,7 +56,7 @@ Do **not** run `./mvnw` here: there is nothing to compile, and `pom.xml` sets `j
 
 Angular CLI rejects camelCase Jest flags (`--testPathPattern` → `Unknown arguments`), so pass kebab-case through `ng test`. Calling `npx jest` directly does not work: `jest.conf.js` carries no transform, since the Angular preset comes from the builder.
 
-The suite is red as checked in — `npm test` cannot get past its lint step, and 11 suites fail to parse d3's ESM. `patient-web.md` Phase A has the details; don't read those failures as something you caused.
+`npx ng test` passes (145 suites, 677 tests). `npm test` runs ESLint first and still fails there on 160 pre-existing rule violations — mostly `jhi-*` selectors against the `hpd` rule — so prefer `npx ng test` while working. `patient-web.md` Phase A tracks the remainder; don't read those lint errors as something you caused.
 
 ## Layout
 

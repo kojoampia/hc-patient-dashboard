@@ -6,7 +6,9 @@ const {
 const environment = require('./webpack/environment');
 
 module.exports = {
-  transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$|dayjs/esm)'],
+  // d3 v7 and its transitive deps (internmap, delaunator, robust-predicates) publish ESM in plain .js files, so
+  // they have to go through the transform or every suite that reaches a d3-based widget fails to parse.
+  transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$|dayjs/esm|d3(-[a-z0-9-]+)?/|internmap/|delaunator/|robust-predicates/)'],
   resolver: 'jest-preset-angular/build/resolvers/ng-jest-resolver.js',
   globals: {
     ...environment,
