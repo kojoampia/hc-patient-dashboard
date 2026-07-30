@@ -1,69 +1,62 @@
-# Project Overview 
+# Project Overview
+
+Standing guidelines for `hc-patient-dashboard` — the **Angular 17 frontend** of the Health Connect patient subsystem. This repo has no backend code (`skipServer: true`).
+
+Read in this order: `CLAUDE.md` for the verified stack, layout, and wiring facts; `patient-web.md` for the plan of record (open decisions, wiring fixes, refactoring order, deployment findings); then this file for the standing expectations. `README.md` covers commands, ports, Docker, and CI.
+
+> Earlier versions of this file described a Spring Boot / PostgreSQL / JPA / Liquibase / MinIO service with an Angular 19 client. None of that applies here: the backends are `hc-patient-gateway` (reactive, MongoDB) and `hc-patient-service` (Spring MVC, MongoDB), and this repo is client-only. Backend guidance belongs in those repos' `AGENTS.md`.
 
 ## Code Quality and Style
-- Follow SOLID principles and clean code practices.
-- Use consistent naming conventions and code formatting.
-- Implement comprehensive unit and integration tests using JUnit 5 and Mockito.
-- Ensure proper documentation of code and APIs using JavaDoc and Swagger/OpenAPI.
-- No null pointer deferences; use Optional where applicable.
-- Handle exceptions gracefully and provide meaningful error messages.
-- Use Lombok for boilerplate code reduction (getters, setters, constructors).
-- Adhere to RESTful API design principles for all endpoints.
-- Use Liquibase for database migrations and version control.
-- Implement logging using SLF4J and Logback for all critical operations and exceptions.
-- Follow resource leak prevention best practices, especially in file handling and database connections.
+
+- Follow SOLID and clean-code practices; keep components thin and push orchestration into services/facades.
+- Formatting is enforced by Prettier and ESLint: `npm run prettier:check|format`, `npm run lint|lint:fix`. `npm test` runs lint first via `pretest`.
+- Indentation is 2 spaces everywhere (`.editorconfig` root `indent_size = 2`; its `[*.md]` section only disables trailing-whitespace trimming). Prettier normalizes Markdown nesting to 2 spaces on commit via lint-staged.
+- ESLint requires the `hpd` selector prefix (kebab-case for components, camelCase for directives). Legacy `jhi-*` selectors still exist — rename only as part of a slice you are already touching, never repo-wide in one pass.
+- Strong typing at every boundary: no `any`, no `Observable<any>`, no `HttpResponse<any>`. Declare explicit interfaces for API payloads.
+- Unit-test with Jest specs colocated next to the code (`*.spec.ts`); use `TestBed` + `HttpTestingController` as the existing specs do.
+- Prefer existing npm scripts over ad-hoc commands.
 
 ## Architecture and Design
-- Use a layered architecture (Controller, Service, Repository) for separation of concerns.
-- Implement domain-driven design principles for modeling the healthcare workforce and related entities.
-- Dependency injection should be used for all services and repositories to promote testability and maintainability.
-- Use Kafka for asynchronous communication between services, especially for telemetry data and alerts.
-- Integrate MinIO for document storage, ensuring secure and efficient handling of professional and vendor documents
-- No static initialization blocks; use dependency injection for all configurations and services.
-- Implement a robust error handling mechanism using `@ControllerAdvice` to return RFC 7807 compliant error responses for all exceptions.
-- Immutable objects for data transfer objects (DTOs) and domain models where appropriate to ensure thread safety and maintainability.
+
+- Source root `src/main/webapp`. Keep responsibilities inside the established folders: `core` (auth, interceptors, `ApplicationConfigService`), `shared` (broadly reused primitives only), `config`, `layouts`, `home`, `dashboard`, `features`, `widgets`, `entities`, `account`, `admin`, `login`.
+- Do not turn `shared` into a dumping ground — feature-specific code stays in its feature folder.
+- **All HTTP URLs go through `ApplicationConfigService.getEndpointFor(api, microservice?)`.** Cross-service calls name the microservice (`'hcpatientservice'`) so the gateway's `/services/{serviceId}/**` routing applies; nothing hardcodes a host or port.
+- Standalone-first for new work; existing NgModules (`features.module.ts`, `widgets.module.ts`, `shared.module.ts`) stay until all consumers move.
+- Route changes must be paired with navbar/menu updates. Note `entities/entity.routes.ts` and `entities/entity-navbar-items.ts` are currently empty, so `entities/patientMS/**` is unreachable — resolve route ownership before treating that code as dead or live.
+- The dashboard is rendered by `HomeComponent` at `/`, not by its own route.
+- Keep DTO/date conversion in services (as the generated entity services do), not in components.
+- Reuse the generated, strongly typed entity services instead of writing generic HTTP helpers.
+- RxJS: reuse the Observable patterns already used in `core/auth` and the entity services; unsubscribe or use `takeUntilDestroyed`/`async` pipe rather than leaking subscriptions.
 
 ## Security Considerations
-- Implement authentication and authorization using Spring Security, with role-based access control for all stakeholders (Professionals, Vendors, Admins).
-- Ensure all sensitive data (e.g., personal information, documents) is encrypted at rest and in transit.
-- Use secure password storage practices (e.g., bcrypt) for any user credentials.
-- Implement input validation and sanitization to prevent common vulnerabilities such as SQL injection and cross-site scripting (XSS).
-- Ensure proper CORS configuration for the Angular frontend to securely interact with the backend APIs.
-- Regularly update dependencies to mitigate known security vulnerabilities.
-- Implement rate limiting and monitoring to prevent abuse of the APIs and ensure system stability under load.
-- Use HTTPS for all communications between the frontend and backend services to ensure data confidentiality and integrity.
-- Ensure logs do not contain sensitive data or PII information and are properly secured to prevent unauthorized access.
-- Implement comprehensive testing for security vulnerabilities, including penetration testing and vulnerability scanning as part of the development lifecycle.
-- Ensure compliance with relevant data protection regulations (e.g., GDPR, HIPAA) in the handling of personal and health-related data.
-- Use secure coding practices and conduct regular code reviews to identify and mitigate potential security issues early in the development process.
-- Implement a secure document upload mechanism that validates file types, sizes, and content to prevent malicious uploads and ensure the integrity of stored documents.
 
-## Performance Optimization
-- Use pagination and filtering for API endpoints that return large datasets to improve response times and reduce memory usage.
-- Implement caching strategies (e.g., using Spring Cache) for frequently accessed data to reduce database load and improve response times.
-- Optimize database queries using indexing and proper query design to ensure efficient data retrieval and manipulation.
-- Use asynchronous processing for long-running tasks (e.g., document uploads, complex matching algorithms) to improve responsiveness and user experience.
-- Monitor application performance using tools like Spring Boot Actuator and implement necessary optimizations based on observed metrics and bottlenecks.
-- Implement connection pooling for database connections to improve performance and resource management.
-- Use efficient data structures and algorithms in the implementation of the matching service and threshold engine to ensure optimal performance under load.
-- Regularly profile the application to identify and address performance bottlenecks, especially in critical paths such as the matching service and Kafka consumer.
-- Ensure that the application can scale horizontally by designing stateless services and using appropriate load balancing strategies to handle increased traffic and workload effectively.
+- Auth is JWT-based and owned by the gateway. The token is attached by the interceptors in `core/interceptor` — do not add ad-hoc header handling.
+- Guard privileged routes with `UserRouteAccessService` plus `data.authorities` (see `admin` route) rather than hiding UI only.
+- Never persist tokens or PII beyond what the existing auth session service does; treat `sessionStorage`/`localStorage` writes in dashboard code as something to consolidate behind a small state helper, not to spread further.
+- Rely on Angular's built-in escaping; avoid `innerHTML`/`bypassSecurityTrust*` for any server- or user-provided content.
+- Health data means GDPR/HIPAA-style obligations: no PII in `console.log`, analytics, or error messages surfaced to third parties.
+- Requests must reach the backend over HTTPS in deployed environments (the Docker images bake an `https://` `SERVER_API_URL`); the dev proxy is plain HTTP against localhost only.
+- Keep dependencies patched; `npm install --legacy-peer-deps` is required by the Docker builds, so audit changes to peer ranges carefully.
+
+## Performance
+
+- Lazy-load feature areas via `loadChildren` (already done for `admin`, `account`, `entities`).
+- Paginate/filter server-side for entity lists; do not fetch whole collections to filter in the browser.
+- Keep d3-based widgets in `widgets/` cheap: avoid recomputing scales on every change-detection pass, and prefer `OnPush` for presentational components.
+- The service worker (PWA) is registered but disabled in `app.config.ts` — enabling it is a deliberate release decision, not a performance tweak.
+- Production builds go through `npm run webapp:prod`; check bundle impact before adding heavyweight dependencies.
+
+## i18n
+
+Translation is enabled for `en`, `fr`, `de` (`src/main/webapp/i18n`). Every user-visible string needs a key in all three bundles, and renaming keys means updating all call sites — check `shared/language` helpers first.
 
 ## Technology Stack
-- Java 26
-- Spring Boot 4
-- Spring Web, Spring Data JPA, Spring Security, Spring Kafka, Spring Cloud AWS
-- PostgreSQL
-- MinIO for document storage
-- Angular 19+ for the frontend
-- Docker and Docker Compose for containerization
-- Liquibase for database migrations
-- JUnit 5 and Mockito for testing
-- SLF4J and Logback for logging
-- Swagger/OpenAPI for API documentation
-- Maven for build and dependency management
-- NPM for frontend package management
-- Nginx for serving the Angular frontend in production
-- Testcontainers for integration testing with PostgreSQL and MinIO
-- Git for version control and collaboration
-- GitHub Actions for CI/CD pipelines to automate testing and deployment processes.
+
+- Angular 17.0.6, TypeScript 5.2.2, RxJS 7.8
+- ng-bootstrap 16 + Bootstrap/SCSS, d3 7 for custom visualizations
+- Angular CLI 17 with `@angular-builders/custom-webpack` (config in `webpack/`)
+- Jest 29 via `@angular-builders/jest` (`jest.conf.js`); Cypress is configured in `.yo-rc.json` but **not installed and has no npm script**
+- Dev server on 4200; API proxied to `http://localhost:5505` by `webpack/proxy.conf.js`
+- Docker: multi-stage node 20 → nginx images (`Dockerfile.dev`, `Dockerfile.prod`), served on port 80
+- CI: `.github/workflows/docker-publish.yml` builds and pushes to GHCR; the image version is read from `pom.xml`
+- `pom.xml`/`mvnw` are generator leftovers — Maven cannot build this repo (no Java sources, and the Enforcer range excludes the installed JDK 26)
