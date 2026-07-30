@@ -116,10 +116,12 @@ npm test                                     # all specs + coverage (runs lint f
 npm test -- --test-path-pattern=dashboard    # one area
 npm test -- --test-name-pattern="should load"
 npm run test:watch
-npx jest --config jest.conf.js --testPathPattern dashboard   # bypass the Angular builder
+npx ng test --coverage=false                 # skip the pretest lint step
 ```
 
-Flags reach Jest through `@angular-builders/jest`, so they must be passed in **kebab-case** (`--test-path-pattern`). Angular CLI rejects the camelCase Jest spellings with `Unknown arguments`; use the direct `npx jest` form if you want raw Jest CLI syntax.
+Flags reach Jest through `@angular-builders/jest`, so they must be passed in **kebab-case** (`--test-path-pattern`); Angular CLI rejects the camelCase Jest spellings with `Unknown arguments`. Calling `npx jest` directly does **not** work — `jest.conf.js` has no transform configured, because the builder supplies the Angular preset.
+
+> **The suite is currently red, before any change of yours.** `npm test` fails in its `pretest` lint step, and `npx ng test` reports 647 of 654 tests passing with 11 of 145 suites failing to parse. See `patient-web.md` (Phase A) for the three separate causes.
 
 There are no Spring Boot tests in this repo — ignore any generated instruction to run `./mvnw verify` here.
 

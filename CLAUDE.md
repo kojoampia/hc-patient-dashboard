@@ -46,7 +46,7 @@ npm install
 npm start                                    # dev server :4200 with HMR
 npm test                                     # Jest + coverage (pretest runs lint)
 npm test -- --test-path-pattern=dashboard    # one area — Jest flags must be kebab-case here
-npx jest --config jest.conf.js --testPathPattern dashboard   # raw Jest CLI instead
+npx ng test --coverage=false                 # skips the pretest lint step, which currently fails
 npm run lint | npm run lint:fix
 npm run webapp:build:dev | npm run webapp:prod
 npm run prettier:check | npm run prettier:format
@@ -54,7 +54,9 @@ npm run prettier:check | npm run prettier:format
 
 Do **not** run `./mvnw` here: there is nothing to compile, and `pom.xml` sets `java.version` 26 while its Enforcer rule allows only `[17,26)`, so Maven goals fail on the installed JDK. The pom survives solely because CI scrapes the image version from its first `<version>`.
 
-Angular CLI rejects camelCase Jest flags (`--testPathPattern` → `Unknown arguments`); pass kebab-case through `ng test`, or call `npx jest` directly.
+Angular CLI rejects camelCase Jest flags (`--testPathPattern` → `Unknown arguments`), so pass kebab-case through `ng test`. Calling `npx jest` directly does not work: `jest.conf.js` carries no transform, since the Angular preset comes from the builder.
+
+The suite is red as checked in — `npm test` cannot get past its lint step, and 11 suites fail to parse d3's ESM. `patient-web.md` Phase A has the details; don't read those failures as something you caused.
 
 ## Layout
 

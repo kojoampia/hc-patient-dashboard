@@ -35,6 +35,14 @@ Status legend: `[x]` done · `[~]` partial / diverges from plan · `[ ]` not sta
 - `[ ]` Reconcile `angular.json` metadata: project name is still `patient-gateway` and `prefix` is `jhi` while ESLint requires `hpd`.
 - `[ ]` Decide the PWA posture — the service worker is registered with `enabled: false` in `app.config.ts`.
 
+### The test suite is red as checked in
+
+Measured on 2026-07-30 (`npx ng test`): **647 of 654 tests pass, 134 of 145 suites pass.** Three independent causes, none of them a regression — all three predate the docs/entity-config work merged into `main`:
+
+- `[ ]` **`npm test` cannot even start.** Its `pretest` lint step reports 456 errors, all `Parsing error: Cannot read file '.../src/test/javascript/cypress/tsconfig.json'` — ESLint is configured to type-check the Cypress specs, but that `tsconfig.json` was never committed. Fix by adding it, excluding `src/test/javascript` from linting, or removing the skeleton along with the Cypress decision above. Until then use `npx ng test`.
+- `[ ]` **11 suites fail to parse d3.** d3 v7 ships ESM `.js` (`node_modules/d3-selection/src/index.js` starts with `export`), while `jest.conf.js` only exempts `.mjs` and `dayjs/esm` from `transformIgnorePatterns`. Every suite that transitively imports a d3-based widget dies with "Jest encountered an unexpected token" — including `home.component.spec.ts` and the whole `dashboard/` and `features/` area. Fix by widening `transformIgnorePatterns` to cover `d3-*` (and `internmap`/`delaunator`, which d3 pulls in).
+- `[ ]` **7 tests fail with `No provider for NgbActiveModal!`** in `features/*` specs (allergies, blood pressure, emergency, heart rate, sugar, temperature) plus `DashboardService › should be created`. The modal components inject `NgbActiveModal` but the specs never provide it — the same modal-wrapper inconsistency that Phase B item 4 is about, so fix them together.
+
 ## Phase B — refactoring
 
 Goals: clearer module/route boundaries, stronger typing at API and component boundaries, thinner components (orchestration separated from presentation), less duplication across modal wrappers, safer reuse of generated entity services, and continued compatibility with JHipster regeneration points.
