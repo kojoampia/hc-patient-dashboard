@@ -1,23 +1,23 @@
 name: health-connect
 services:
   hc-patient-dashboard:
-    image: hc-patient-dashboard:0.0.1
+    image: hc-patient-web:0.0.1
     container_name: hc-patient-dashboard
     hostname: hc-patient-dashboard
     build:
       context: .
       dockerfile: Dockerfile.prod
       tags:
-        - "docker-registry.jojoaddison.net/hc-patient-dashboard:0.0.1"
-        - "docker-registry.jojoaddison.net/hc-patient-dashboard:latest"
-    volumes:
-      - './hc-patient-dashboard:/usr/src/app'
+        - "docker.jojoaddison.net/hc-patient-web:0.0.1"
+        - "docker.jojoaddison.net/hc-patient-web:latest"
     ports:
       - 127.0.0.1:5500:80
     networks:
       - hcnet
 
 networks:
-  devnet:
+  # Key must match the name the service references; it was `devnet` while the service asked for
+  # `hcnet`, which made this file fail to load at all ("refers to undefined network hcnet").
+  hcnet:
     external: true
     name: hcnet

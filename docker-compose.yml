@@ -1,19 +1,18 @@
 name: health-connect
 services:
   patientdashboard:
-    image: hc-patient-dashboard:0.0.1
+    image: hc-patient-web:0.0.1
     container_name: hc-patient-dashboard
     hostname: hc-patient-dashboard
     build:
       context: .
       dockerfile: Dockerfile.dev
       tags:
-        - 'hc-patient-dashboard:0.0.1'
-        - 'hc-patient-dashboard:latest'
-    environment:
-      - SERVER_API_URL=http://localhost:5501/
-    volumes:
-      - './patientdashboard:/usr/src/app'
+        - 'hc-patient-web:0.0.1'
+        - 'hc-patient-web:latest'
+    # No SERVER_API_URL here: the production bundle is built same-origin (see
+    # webpack/webpack.custom.js), so the API base is whatever host serves the page. A runtime value
+    # could not change it anyway — the bundle is already built by the time this container starts.
     ports:
       - 127.0.0.1:5500:80
     networks:

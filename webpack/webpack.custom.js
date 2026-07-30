@@ -119,7 +119,11 @@ module.exports = async (config, options, targetOptions) => {
       // If this URL is left empty (""), then it will be relative to the current context.
       // If you use an API server, in `prod` mode, you will need to enable CORS
       // (see the `jhipster.cors` common JHipster property in the `application-*.yml` configurations)
-      SERVER_API_URL: config.mode ==='development' ? JSON.stringify(environment.DEV_SERVER_API_URL) : '/',
+      // Must be a JSON-encoded string: DefinePlugin substitutes the raw value as code, so a bare '/'
+      // compiled to `setEndpointPrefix(/)` and the production build died with "Unterminated regular
+      // expression". Empty means same-origin — index.html sets <base href="/">, so the relative URLs the
+      // entity services build ('api/profiles') resolve against the serving origin and need no CORS.
+      SERVER_API_URL: JSON.stringify(config.mode === 'development' ? environment.DEV_SERVER_API_URL : ''),
     }),
     new MergeJsonWebpackPlugin({
       output: {
