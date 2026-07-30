@@ -1,24 +1,36 @@
-# Angular 22 SSR (spec AD-5): the site's purpose is discovery, so pages render server-side for
-# crawlable HTML and a fast first paint over Ghanaian mobile networks. That means a Node runtime,
-# not a static nginx image — nginx sits in front of this container in production (Phase 20).
-FROM node:24-alpine AS build
-WORKDIR /src
-COPY package.json package-lock.json ./
-RUN npm ci
-COPY . .
-RUN npm run build
+# Builds the patient dashboard and serves it with nginx.
+#
+# One Dockerfile, not the previous Dockerfile/.dev/.prod trio: those existed only to bake a
+# different SERVER_API_URL per environment, and the bundle is now built same-origin
+# (webpack/webpack.custom.js), so the API base is whatever host serves the page. Nothing else
+# differed between them.
+#
+# There is no SSR in this app. `npm run webapp:prod` emits static files into target/classes/static
+# and nginx.conf serves them with an SPA fallback. The API is reached through the host nginx in
+# front of this container, which routes /api and /services to the gateway (see hc-patient/deploy).
 
-FROM node:24-alpine
-RUN addgroup -S app && adduser -S app -G app
+FROM node:20-alpine AS build
+
 WORKDIR /app
-COPY --from=build /src/dist/patient-web ./dist/patient-web
-USER app
-EXPOSE 5000
-ENV NODE_ENV=production \
-    PORT=5000
-# Deliberately a static asset rather than `/`: rendering the home page calls the content API, so
-# probing it would report this container unhealthy whenever the *API* is down and let an orchestrator
-# restart a perfectly healthy web container. This answers only "is the Node server serving?".
-HEALTHCHECK --interval=30s --timeout=3s --start-period=20s \
-  CMD wget -qO- http://localhost:5000/favicon.ico >/dev/null || exit 1
-CMD ["node", "dist/patient-web/server/server.mjs"]
+
+# Dependencies first, so a source-only change does not re-resolve the tree. --legacy-peer-deps is
+# required: several Angular 17 peers in this tree do not satisfy npm 10's strict resolution.
+COPY package.json package-lock.json ./
+RUN npm ci --legacy-peer-deps
+
+COPY . .
+RUN npm run webapp:prod
+
+FROM nginx:1.27-alpine
+
+# SPA fallback and gzip live in nginx.conf; the host nginx still owns TLS and public routing.
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/target/classes/static/ /usr/share/nginx/html/
+
+EXPOSE 80
+
+# Answers "is nginx serving the app shell?" and nothing more. It deliberately does not probe the
+# API: a healthcheck that failed when the gateway was down would have an orchestrator restart a
+# perfectly good web container.
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s \
+  CMD wget -qO- http://localhost/index.html >/dev/null || exit 1

@@ -1,0 +1,12 @@
+# Without this the build context is ~3.7 GB (node_modules 710 MB + target 3 GB) and the build spends
+# minutes transferring files the image never uses: `npm ci` restores dependencies inside the builder
+# and `npm run webapp:prod` regenerates target/.
+node_modules
+target
+.angular
+.git
+.github
+coverage
+*.log
+src/test
+cypress
