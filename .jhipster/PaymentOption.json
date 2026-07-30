@@ -3,9 +3,14 @@
     "changelogDate": "20240206221753"
   },
   "changelogDate": "20240206221753",
-  "clientRootFolder": "patientMS",
+  "clientRootFolder": "patientService",
   "databaseType": "mongodb",
+  "entityTableName": "payment_option",
   "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "String"
+    },
     {
       "fieldName": "type",
       "fieldType": "String"
@@ -19,11 +24,11 @@
       "fieldType": "String"
     }
   ],
-  "microserviceName": "patientMS",
-  "name": "HCPayOption",
+  "microserviceName": "patientService",
+  "name": "PaymentOption",
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
-  "searchEngine": true,
+  "searchEngine": "no",
   "service": "no"
 }

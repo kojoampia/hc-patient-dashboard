@@ -1,0 +1,21 @@
+{
+  "annotations": {
+    "changelogDate": "20240330234721"
+  },
+  "clientRootFolder": "patientService",
+  "databaseType": "mongodb",
+  "entityTableName": "PersonalDocument",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    }
+  ],
+  "microserviceName": "patientService",
+  "name": "PersonalDocument",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "no"
+}
