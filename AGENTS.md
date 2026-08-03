@@ -57,6 +57,6 @@ Translation is enabled for `en`, `fr`, `de` (`src/main/webapp/i18n`). Every user
 - Angular CLI 17 with `@angular-builders/custom-webpack` (config in `webpack/`)
 - Jest 29 via `@angular-builders/jest` (`jest.conf.js`); Cypress is configured in `.yo-rc.json` but **not installed and has no npm script**
 - Dev server on 4200; API proxied to `http://localhost:5505` by `webpack/proxy.conf.js`
-- Docker: multi-stage node 20 → nginx images (`Dockerfile.dev`, `Dockerfile.prod`), served on port 80
-- CI: `.github/workflows/docker-publish.yml` builds and pushes to GHCR; the image version is read from `pom.xml`
+- Docker: not here — the nginx image is built and shipped by `hc-patient/deploy` (repo `kojoampia/hc-patient-ci`); this repo only produces the bundle
+- CI: `.github/workflows/docker-publish.yml` targets GHCR but has been **failing on every push since 2026-07-30** (it builds a `Dockerfile.prod` that no longer exists), so nothing here is gated — see `patient-web.md` Phase C
 - `pom.xml`/`mvnw` are generator leftovers — Maven cannot build this repo (no Java sources, and the Enforcer range excludes the installed JDK 26)

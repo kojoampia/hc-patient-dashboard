@@ -64,7 +64,7 @@ npm start
 
 API calls are proxied by `webpack/proxy.conf.js`, which forwards `/api`, `/services`, `/management`, `/v3/api-docs`, `/auth`, and `/health` to **`http://localhost:5505`** (`DEV_SERVER_API_URL` in `webpack/environment.js`).
 
-> The gateway's own dev port is **5503**, and `docker-compose.yml` sets `SERVER_API_URL=http://localhost:5501/`. These three values disagree; confirm where the gateway is actually listening and align the proxy target before debugging "API unreachable" errors.
+> The gateway's own dev port is **5503**. These two values disagree; confirm where the gateway is actually listening and align the proxy target before debugging "API unreachable" errors. Production is unaffected — the bundle is built same-origin and the web container's nginx proxies to the gateway.
 
 Run with TLS instead (`ng serve --ssl`):
 
@@ -121,7 +121,7 @@ npx ng test --coverage=false                 # skip the pretest lint step
 
 Flags reach Jest through `@angular-builders/jest`, so they must be passed in **kebab-case** (`--test-path-pattern`); Angular CLI rejects the camelCase Jest spellings with `Unknown arguments`. Calling `npx jest` directly does **not** work — `jest.conf.js` has no transform configured, because the builder supplies the Angular preset.
 
-> `npx ng test` is green — 145 suites, 677 tests. `npm test` additionally runs ESLint first and **still fails there** on 160 pre-existing rule violations (mostly `jhi-*` selectors where the config wants `hpd`), so use `npx ng test` until those are resolved. See `patient-web.md` (Phase A).
+> `npx ng test` is green — 146 suites, 681 tests (~110s, measured 2026-08-03). `npm test` additionally runs ESLint first and **still fails there** on 172 pre-existing problems — 161 errors and 11 warnings across 77 files, mostly `jhi-*` selectors where the config wants `hpd` — so use `npx ng test` until those are resolved. See `patient-web.md` (Phase A).
 
 There are no Spring Boot tests in this repo — ignore any generated instruction to run `./mvnw verify` here.
 
@@ -133,37 +133,41 @@ There are no Spring Boot tests in this repo — ignore any generated instruction
 npm run webapp:prod          # → target/classes/static/
 ```
 
-Serve those static files behind any web server; the images in this repo use nginx with [nginx.conf](nginx.conf) (SPA fallback to `index.html`, gzip on, listening on port 80).
+Serve those static files behind any web server. The production image serves them with nginx, but **that image is not built here** — see below.
 
-### Docker
+### Docker and deployment
 
-| File                             | API base baked in                            | Build script run                   |
-| -------------------------------- | -------------------------------------------- | ---------------------------------- |
-| `Dockerfile.dev`                 | `https://patient-dashboard.jojoaddison.net/` | `npm run webapp:build` (dev build) |
-| `Dockerfile.prod` / `Dockerfile` | `https://patient-dashboard.abofonsa.com/`    | `npm run webapp:prod`              |
+This repo no longer packages or ships itself. `Dockerfile`, `nginx.conf`, `docker-compose.yml`, `docker-compose-prod.yml`, `.dockerignore` and the `docker:*:tag` / `deploy:*` npm scripts were removed in `d5f0bfe`; they live in **`hc-patient/deploy/`** (repo `kojoampia/hc-patient-ci`), which builds and ships all three patient subsystem images together:
 
 ```
-npm run docker:build:dev     # docker compose build (Dockerfile.dev)
-npm run docker:dev:up        # run on 127.0.0.1:5500 → container :80
-npm run docker:dev:logs
-npm run docker:build:prod    # docker compose -f docker-compose-prod.yml build
+cd ../deploy
+cp .env.example .env && docker compose up --build   # local stack: web + gateway + api + mongo
+./deploy.sh                                         # production
 ```
 
-Both compose files expect an **external** Docker network (`devnet` for dev, `hcnet` for prod) to exist already. See `patient-web.md` (Phase C) for the open issues in these files, including the prod compose network mismatch that makes `docker-compose-prod.yml` invalid and the image-name mismatch between `docker-compose*.yml` and the `docker:*:tag`/`deploy:*` scripts — the tag/push scripts do not currently line up with the images the compose files build.
+The dashboard is served at `https://patient.abofonsa.com`. The image is built from `deploy/docker/web.Dockerfile` with `deploy/docker` passed as a named build context, so `web-nginx.conf` never has to live in this repo. Change the image, its nginx config, or the deploy there.
+
+The `src/main/docker/*.yml` files that remain here are JHipster's generated **local dev services** (MongoDB, Kafka, the registry) — they are not deployment.
 
 ## Continuous Integration
 
-[`.github/workflows/docker-publish.yml`](.github/workflows/docker-publish.yml) builds the image and publishes it to **GHCR** (`ghcr.io/<owner>/<repo>`) on pushes to `main`, on PRs, and on manual dispatch. The version tag is scraped from the first `<version>` in `pom.xml` (currently `0.0.1`), which is the one thing `pom.xml` is still used for — keep it in sync with `package.json`'s version.
+`.github/workflows/docker-publish.yml` tries to build an image and publish it to GHCR on pushes to `main`, on PRs, and on manual dispatch.
+
+> **It is broken and has failed on every push since 2026-07-30.** It builds `./Dockerfile.prod`, which was consolidated into `Dockerfile` in `ac2df38` and then removed entirely in `d5f0bfe`, so every run dies in ~25s with `open Dockerfile.prod: no such file or directory`. The workflow has not been touched since 2026-05-10.
+
+It cannot simply be repointed — the real Dockerfile is in another repository and needs a build context this one does not have. `patient-web.md` (decision 3 and Phase C) tracks the choice between retiring it and repurposing it to run `lint` + `test` + `webapp:prod`. Until then, nothing in this repo is gated by CI.
+
+The version tag it scrapes from the first `<version>` in `pom.xml` (currently `0.0.1`) is the only remaining use for that file; keep it in sync with `package.json` for as long as the workflow exists.
 
 ## Repository docs
 
-- `patient-web.md` — **plan of record**: open decisions, wiring fixes, refactoring order and hotspots, deployment/packaging findings, blocked blueprint features.
+- `patient-web.md` — **plan of record**: open decisions, wiring fixes, refactoring order and hotspots, the broken CI workflow, blocked blueprint features.
 - `CLAUDE.md` — verified stack, layout, wiring facts, and constraints.
 - `AGENTS.md` — code quality / architecture / security expectations for the frontend.
 - `.github/copilot-instructions.md` — condensed conventions.
   `AGENT.md`, `code-review.md`, `HC - Patient Blueprint.md`, `HC - Patient Checklist.md`, `.github/todo.md`, and `.github/patient_plan.md` were removed when the plans were consolidated; look in `patient-web.md` (or the sibling repos' plans for backend/mobile work).
 
-Sibling plans: `hc-patient-service/patient-api.md`, `hc-patient-gateway/patient-gateway.md`.
+Sibling plans: `hc-patient-service/patient-api.md`, `hc-patient-gateway/patient-gateway.md`, `hc-patient/deploy/TODO.md` (packaging, the server, monitoring).
 
 ## References
 
