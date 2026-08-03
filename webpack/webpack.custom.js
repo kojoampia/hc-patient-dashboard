@@ -124,6 +124,13 @@ module.exports = async (config, options, targetOptions) => {
       // expression". Empty means same-origin — index.html sets <base href="/">, so the relative URLs the
       // entity services build ('api/profiles') resolve against the serving origin and need no CORS.
       SERVER_API_URL: JSON.stringify(config.mode === 'development' ? environment.DEV_SERVER_API_URL : ''),
+      // Browser telemetry, production builds only. Under `ng serve` there is no collector behind
+      // /v1/traces, so every export would be a 404 in the console and nothing would be gained.
+      // Same JSON.stringify caution as SERVER_API_URL above: DefinePlugin substitutes raw source,
+      // so a bare string would compile as an identifier.
+      __OTEL_ENABLED__: config.mode !== 'development',
+      __OTEL_TRACES_ENDPOINT__: JSON.stringify(environment.__OTEL_TRACES_ENDPOINT__),
+      __OTEL_SAMPLE_RATIO__: environment.__OTEL_SAMPLE_RATIO__,
     }),
     new MergeJsonWebpackPlugin({
       output: {

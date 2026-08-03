@@ -1,4 +1,4 @@
-import { ApplicationConfig, LOCALE_ID, importProvidersFrom } from '@angular/core';
+import { ApplicationConfig, ErrorHandler, LOCALE_ID, importProvidersFrom } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterFeatures, TitleStrategy, provideRouter, withComponentInputBinding, withDebugTracing } from '@angular/router';
@@ -15,6 +15,7 @@ import routes from './app.routes';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import { NgbDateDayjsAdapter } from './config/datepicker-adapter';
 import { AppPageTitleStrategy } from './app-page-title-strategy';
+import { TelemetryErrorHandler } from 'app/core/telemetry/telemetry-error-handler';
 
 const routerFeatures: Array<RouterFeatures> = [withComponentInputBinding()];
 if (DEBUG_INFO_ENABLED) {
@@ -35,6 +36,9 @@ export const appConfig: ApplicationConfig = {
     { provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter },
     httpInterceptorProviders,
     { provide: TitleStrategy, useClass: AppPageTitleStrategy },
+    // Records uncaught errors against the current span before Angular's default handling. A no-op
+    // when telemetry is compiled out, so development behaviour is unchanged.
+    { provide: ErrorHandler, useClass: TelemetryErrorHandler },
     // jhipster-needle-angular-add-module JHipster will add new module here
   ],
 };
