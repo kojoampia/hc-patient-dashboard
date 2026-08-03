@@ -1,0 +1,88 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (professional) {
+      <div>
+        <h2 data-cy="professionalDetailsHeading">
+          <span hpdTranslate="patientDashboardApp.patientMsProfessional.detail.title">Professional</span>
+        </h2>
+
+        <hr />
+
+        <hpd-alert-error></hpd-alert-error>
+
+        <hpd-alert></hpd-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span hpdTranslate="patientDashboardApp.patientMsProfessional.id">Id</span></dt>
+          <dd>
+            <span>{{ professional.id }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsProfessional.firstName">First Name</span></dt>
+          <dd>
+            <span>{{ professional.firstName }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsProfessional.lastName">Last Name</span></dt>
+          <dd>
+            <span>{{ professional.lastName }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsProfessional.role">Role</span></dt>
+          <dd>
+            <span>{{ professional.role }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsProfessional.specialty">Specialty</span></dt>
+          <dd>
+            <span>{{ professional.specialty }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsProfessional.email">Email</span></dt>
+          <dd>
+            <span>{{ professional.email }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsProfessional.phoneNumber">Phone Number</span></dt>
+          <dd>
+            <span>{{ professional.phoneNumber }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsProfessional.imageUrl">Image Url</span></dt>
+          <dd>
+            <span>{{ professional.imageUrl }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsProfessional.initials">Initials</span></dt>
+          <dd>
+            <span>{{ professional.initials }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsProfessional.location">Location</span></dt>
+          <dd>
+            <span>{{ professional.location }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsProfessional.teamId">Team Id</span></dt>
+          <dd>
+            <span>{{ professional.teamId }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsProfessional.createdDate">Created Date</span></dt>
+          <dd>
+            <span>{{ professional.createdDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsProfessional.modifiedDate">Modified Date</span></dt>
+          <dd>
+            <span>{{ professional.modifiedDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsProfessional.createdBy">Created By</span></dt>
+          <dd>
+            <span>{{ professional.createdBy }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsProfessional.modifiedBy">Modified By</span></dt>
+          <dd>
+            <span>{{ professional.modifiedBy }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span hpdTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/professional', professional.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span hpdTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,130 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="hpd-activity-log-heading"
+        data-cy="ActivityLogCreateUpdateHeading"
+        hpdTranslate="patientDashboardApp.patientMsActivityLog.home.createOrEditLabel"
+      >
+        Create or edit a Activity Log
+      </h2>
+
+      <div>
+        <hpd-alert-error></hpd-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" hpdTranslate="patientDashboardApp.patientMsActivityLog.id" for="field_id">Id</label>
+            <input type="text" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsActivityLog.patientId" for="field_patientId"
+            >Patient Id</label
+          >
+          <input type="text" class="form-control" name="patientId" id="field_patientId" data-cy="patientId" formControlName="patientId" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsActivityLog.caseId" for="field_caseId">Case Id</label>
+          <input type="text" class="form-control" name="caseId" id="field_caseId" data-cy="caseId" formControlName="caseId" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsActivityLog.loggedAt" for="field_loggedAt">Logged At</label>
+          <div class="d-flex">
+            <input
+              id="field_loggedAt"
+              data-cy="loggedAt"
+              type="datetime-local"
+              class="form-control"
+              name="loggedAt"
+              formControlName="loggedAt"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsActivityLog.summary" for="field_summary">Summary</label>
+          <input type="text" class="form-control" name="summary" id="field_summary" data-cy="summary" formControlName="summary" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsActivityLog.detail" for="field_detail">Detail</label>
+          <input type="text" class="form-control" name="detail" id="field_detail" data-cy="detail" formControlName="detail" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsActivityLog.kind" for="field_kind">Kind</label>
+          <select class="form-control" name="kind" formControlName="kind" id="field_kind" data-cy="kind">
+            <option [ngValue]="null">{{ 'patientDashboardApp.ActivityKind.null' | translate }}</option>
+            @for (activityKind of activityKindValues; track $index) {
+              <option [value]="activityKind">{{ 'patientDashboardApp.ActivityKind.' + activityKind | translate }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsActivityLog.source" for="field_source">Source</label>
+          <select class="form-control" name="source" formControlName="source" id="field_source" data-cy="source">
+            <option [ngValue]="null">{{ 'patientDashboardApp.ActivitySource.null' | translate }}</option>
+            @for (activitySource of activitySourceValues; track $index) {
+              <option [value]="activitySource">{{ 'patientDashboardApp.ActivitySource.' + activitySource | translate }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsActivityLog.authorId" for="field_authorId">Author Id</label>
+          <input type="text" class="form-control" name="authorId" id="field_authorId" data-cy="authorId" formControlName="authorId" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsActivityLog.createdDate" for="field_createdDate"
+            >Created Date</label
+          >
+          <div class="input-group">
+            <input
+              id="field_createdDate"
+              data-cy="createdDate"
+              type="text"
+              class="form-control"
+              name="createdDate"
+              ngbDatepicker
+              #createdDateDp="ngbDatepicker"
+              formControlName="createdDate"
+            />
+            <button type="button" class="btn btn-secondary" (click)="createdDateDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsActivityLog.createdBy" for="field_createdBy"
+            >Created By</label
+          >
+          <input type="text" class="form-control" name="createdBy" id="field_createdBy" data-cy="createdBy" formControlName="createdBy" />
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span hpdTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span hpdTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

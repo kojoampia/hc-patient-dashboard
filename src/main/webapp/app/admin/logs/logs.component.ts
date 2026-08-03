@@ -10,7 +10,7 @@ import { LogsService } from './logs.service';
 
 @Component({
   standalone: true,
-  selector: 'jhi-logs',
+  selector: 'hpd-logs',
   templateUrl: './logs.component.html',
   providers: [GatewayRoutesService],
   imports: [SharedModule, FormsModule, SortDirective, SortByDirective],

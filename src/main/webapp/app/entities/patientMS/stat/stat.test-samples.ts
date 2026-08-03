@@ -7,21 +7,32 @@ export const sampleWithRequiredData: IStat = {
 };
 
 export const sampleWithPartialData: IStat = {
-  id: '2cb5c08c-b120-4cdb-9c34-65b0ff159e31',
-  name: 'yuck instructor wildly',
-  description: 'notwithstanding hoof phew',
-  value: 29102.36,
-  createdBy: 'finally pungent under',
+  id: 'b120cdbc-3465-4b0f-8f15-9e317e106544',
+  patientId: 'stamina which',
+  type: 'skateboard',
+  name: 'fend silent finally',
+  secondaryValue: 27971.73,
+  unit: 'shy',
+  flag: 'DANGER',
+  recordedAt: dayjs('2024-02-06T20:37'),
 };
 
 export const sampleWithFullData: IStat = {
-  id: '13c4f2b0-39eb-4063-b5e5-3b86f33852ef',
-  name: 'and even',
-  description: 'sweat across since',
-  value: 15005.93,
-  note: 'vaporise alter',
-  createdDate: dayjs('2024-02-06'),
-  createdBy: 'probable supposing',
+  id: 'aad13c4f-2b03-49eb-8063-5e53b86f3385',
+  patientId: 'hike lychee yuck',
+  type: 'amongst exposure secretion',
+  name: 'quicker gosh stormy',
+  description: 'clamp ew underneath',
+  value: 32124.78,
+  secondaryValue: 31536.91,
+  unit: 'now marxism weakness',
+  referenceLow: 6517.12,
+  referenceHigh: 23757.16,
+  flag: 'DANGER',
+  note: 'spread gadzooks yahoo',
+  recordedAt: dayjs('2024-02-06T19:45'),
+  createdDate: dayjs('2024-02-05'),
+  createdBy: 'meh unselfish',
 };
 
 export const sampleWithNewData: NewStat = {

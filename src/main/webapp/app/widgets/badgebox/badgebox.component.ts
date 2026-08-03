@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { OnInit, Input, Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
-  selector: 'jhi-badgebox',
+  selector: 'hpd-badgebox',
   standalone: true,
   templateUrl: './badgebox.component.html',
   styleUrls: ['./badgebox.component.scss'],
@@ -17,7 +17,7 @@ export class BadgeboxComponent implements OnInit {
   @Input() medium = false;
   @Input() large = false;
   @Output() badgeSelected: EventEmitter<any> = new EventEmitter<any>();
-  @Output() onClose: EventEmitter<any> = new EventEmitter<any>();
+  @Output() closed: EventEmitter<any> = new EventEmitter<any>();
 
   constructor() {
     this.config = {
@@ -59,21 +59,14 @@ export class BadgeboxComponent implements OnInit {
     };
   }
 
-  ngOnInit() {
-    console.log('init-badgebox');
-    console.log(this.title);
-    console.log(this.badges);
-  }
-
   toggleSelected(badge: Badge): void {
     this.badges.forEach(item => (item.selected = false));
     badge.selected = !badge.selected;
     this.badgeSelected.emit(badge);
   }
-  closeBadge() {
+  closeBadge(): void {
     // this.badges = null;
-    console.log('closing: ' + this.title);
-    this.onClose.emit('close');
+    this.closed.emit('close');
   }
 }
 

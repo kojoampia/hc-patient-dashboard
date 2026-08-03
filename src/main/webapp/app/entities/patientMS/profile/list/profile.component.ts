@@ -33,28 +33,11 @@ import { ProfileDeleteDialogComponent } from '../delete/profile-delete-dialog.co
   ],
 })
 export class ProfileComponent implements OnInit {
-  private static readonly NOT_SORTABLE_FIELDS_AFTER_SEARCH = [
-    'id',
-    'firstName',
-    'middleNames',
-    'lastName',
-    'membership',
-    'sex',
-    'mobilePhone',
-    'phoneNumber',
-    'email',
-    'idType',
-    'idNumber',
-    'contacts',
-    'address',
-  ];
-
   profiles?: IProfile[];
   isLoading = false;
 
   predicate = 'id';
   ascending = true;
-  currentSearch = '';
 
   itemsPerPage = ITEMS_PER_PAGE;
   totalItems = 0;
@@ -68,15 +51,6 @@ export class ProfileComponent implements OnInit {
   ) {}
 
   trackId = (_index: number, item: IProfile): string => this.profileService.getProfileIdentifier(item);
-
-  search(query: string): void {
-    if (query && ProfileComponent.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(this.predicate)) {
-      this.predicate = '';
-    }
-    this.page = 1;
-    this.currentSearch = query;
-    this.navigateToWithComponentValues();
-  }
 
   ngOnInit(): void {
     this.load();
@@ -107,17 +81,17 @@ export class ProfileComponent implements OnInit {
   }
 
   navigateToWithComponentValues(): void {
-    this.handleNavigation(this.page, this.predicate, this.ascending, this.currentSearch);
+    this.handleNavigation(this.page, this.predicate, this.ascending);
   }
 
   navigateToPage(page = this.page): void {
-    this.handleNavigation(page, this.predicate, this.ascending, this.currentSearch);
+    this.handleNavigation(page, this.predicate, this.ascending);
   }
 
   protected loadFromBackendWithRouteInformations(): Observable<EntityArrayResponseType> {
     return combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data]).pipe(
       tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
-      switchMap(() => this.queryBackend(this.page, this.predicate, this.ascending, this.currentSearch)),
+      switchMap(() => this.queryBackend(this.page, this.predicate, this.ascending)),
     );
   }
 
@@ -127,12 +101,6 @@ export class ProfileComponent implements OnInit {
     const sort = (params.get(SORT) ?? data[DEFAULT_SORT_DATA]).split(',');
     this.predicate = sort[0];
     this.ascending = sort[1] === ASC;
-    if (params.has('search') && params.get('search') !== '') {
-      this.currentSearch = params.get('search') as string;
-      if (ProfileComponent.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(this.predicate)) {
-        this.predicate = '';
-      }
-    }
   }
 
   protected onResponseSuccess(response: EntityArrayResponseType): void {
@@ -149,30 +117,19 @@ export class ProfileComponent implements OnInit {
     this.totalItems = Number(headers.get(TOTAL_COUNT_RESPONSE_HEADER));
   }
 
-  protected queryBackend(
-    page?: number,
-    predicate?: string,
-    ascending?: boolean,
-    currentSearch?: string,
-  ): Observable<EntityArrayResponseType> {
+  protected queryBackend(page?: number, predicate?: string, ascending?: boolean): Observable<EntityArrayResponseType> {
     this.isLoading = true;
     const pageToLoad: number = page ?? 1;
     const queryObject: any = {
       page: pageToLoad - 1,
       size: this.itemsPerPage,
-      query: currentSearch,
       sort: this.getSortQueryParam(predicate, ascending),
     };
-    if (this.currentSearch && this.currentSearch !== '') {
-      return this.profileService.search(queryObject).pipe(tap(() => (this.isLoading = false)));
-    } else {
-      return this.profileService.query(queryObject).pipe(tap(() => (this.isLoading = false)));
-    }
+    return this.profileService.query(queryObject).pipe(tap(() => (this.isLoading = false)));
   }
 
-  protected handleNavigation(page = this.page, predicate?: string, ascending?: boolean, currentSearch?: string): void {
+  protected handleNavigation(page = this.page, predicate?: string, ascending?: boolean): void {
     const queryParamsObj = {
-      search: currentSearch,
       page,
       size: this.itemsPerPage,
       sort: this.getSortQueryParam(predicate, ascending),

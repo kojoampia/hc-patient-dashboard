@@ -7,11 +7,13 @@ import { MetricsModalThreadsComponent } from '../metrics-modal-threads/metrics-m
 
 @Component({
   standalone: true,
-  selector: 'jhi-jvm-threads',
+  selector: 'hpd-jvm-threads',
   templateUrl: './jvm-threads.component.html',
   imports: [SharedModule],
 })
 export class JvmThreadsComponent {
+  private _threads: Thread[] | undefined;
+
   threadStats = {
     threadDumpAll: 0,
     threadDumpRunnable: 0,
@@ -46,8 +48,6 @@ export class JvmThreadsComponent {
   get threads(): Thread[] | undefined {
     return this._threads;
   }
-
-  private _threads: Thread[] | undefined;
 
   constructor(private modalService: NgbModal) {}
 

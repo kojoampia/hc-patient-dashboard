@@ -17,7 +17,7 @@ import UserManagementDeleteDialogComponent from '../delete/user-management-delet
 
 @Component({
   standalone: true,
-  selector: 'jhi-user-mgmt',
+  selector: 'hpd-user-mgmt',
   templateUrl: './user-management.component.html',
   imports: [RouterModule, SharedModule, SortDirective, SortByDirective, UserManagementDeleteDialogComponent, ItemCountComponent],
 })

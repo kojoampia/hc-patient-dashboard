@@ -1,0 +1,52 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="hpd-recommendation-heading"
+        data-cy="RecommendationCreateUpdateHeading"
+        hpdTranslate="patientDashboardApp.patientMsRecommendation.home.createOrEditLabel"
+      >
+        Create or edit a Recommendation
+      </h2>
+
+      <div>
+        <hpd-alert-error></hpd-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" hpdTranslate="patientDashboardApp.patientMsRecommendation.id" for="field_id">Id</label>
+            <input type="text" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsRecommendation.label" for="field_label">Label</label>
+          <input type="text" class="form-control" name="label" id="field_label" data-cy="label" formControlName="label" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsRecommendation.category" for="field_category"
+            >Category</label
+          >
+          <input type="text" class="form-control" name="category" id="field_category" data-cy="category" formControlName="category" />
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span hpdTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span hpdTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

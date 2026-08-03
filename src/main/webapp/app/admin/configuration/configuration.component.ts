@@ -8,7 +8,7 @@ import { Bean, PropertySource } from './configuration.model';
 
 @Component({
   standalone: true,
-  selector: 'jhi-configuration',
+  selector: 'hpd-configuration',
   templateUrl: './configuration.component.html',
   imports: [SharedModule, FormsModule, SortDirective, SortByDirective],
 })

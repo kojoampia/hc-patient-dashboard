@@ -1,101 +1,190 @@
 <div>
   <h2 id="page-heading" data-cy="StatHeading">
+    <span hpdTranslate="patientDashboardApp.patientMsStat.home.title">Stats</span>
 
     <div class="d-flex justify-content-end">
       <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span jhiTranslate="patientDashboardApp.patientMsStat.home.refreshListLabel">Refresh list</span>
+        <span hpdTranslate="patientDashboardApp.patientMsStat.home.refreshListLabel">Refresh list</span>
       </button>
 
-      <button id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary jh-create-entity create-stat"
-        [routerLink]="['/stat/new']">
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-stat"
+        [routerLink]="['/stat/new']"
+      >
         <fa-icon icon="plus"></fa-icon>
-        <span class="hidden-sm-down" jhiTranslate="patientDashboardApp.patientMsStat.home.createLabel">Create a new
-          Stat</span>
+        <span hpdTranslate="patientDashboardApp.patientMsStat.home.createLabel">Create a new Stat</span>
       </button>
     </div>
   </h2>
 
-  <jhi-alert-error></jhi-alert-error>
+  <hpd-alert-error></hpd-alert-error>
 
-  <jhi-alert></jhi-alert>
-
-  <form name="searchForm" class="row row-cols-sm-auto align-items-center">
-    <div class="col-sm-12">
-      <div class="input-group w-100 mt-3">
-        <label class="visually-hidden" for="currentSearch"
-          jhiTranslate="patientDashboardApp.patientMsStat.home.search">Search for Stat</label>
-        <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch"
-          placeholder="{{ 'patientDashboardApp.patientMsStat.home.search' | translate }}" />
-
-        <button class="btn btn-info" (click)="search(currentSearch)">
-          <fa-icon icon="search"></fa-icon>
-        </button>
-
-        @if (currentSearch) {
-        <button class="btn btn-danger" (click)="search('')">
-          <fa-icon icon="trash-alt"></fa-icon>
-        </button>
-        }
-      </div>
-    </div>
-  </form>
+  <hpd-alert></hpd-alert>
 
   @if (stats?.length === 0) {
-  <div class="alert alert-warning" id="no-result">
-    <span jhiTranslate="patientDashboardApp.patientMsStat.home.notFound">No Stats found</span>
-  </div>
+    <div class="alert alert-warning" id="no-result">
+      <span hpdTranslate="patientDashboardApp.patientMsStat.home.notFound">No Stats found</span>
+    </div>
   }
 
   @if (stats && stats.length > 0) {
-  <div class="table-responsive table-entities" id="entities">
-    <table class="table table-striped" aria-describedby="page-heading">
-      <thead>
-        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
-          <th scope="col" jhiSortBy="createdDate">
-            <div class="d-flex">
-              <span jhiTranslate="patientDashboardApp.patientMsStat.createdDate">Created Date</span>
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr hpdSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+            <th scope="col" hpdSortBy="id">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsStat.id">Id</span>
 
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="value">
-            <div class="d-flex">
-              <span jhiTranslate="patientDashboardApp.patientMsStat.value">Value</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="patientId">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsStat.patientId">Patient Id</span>
 
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col"></th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (stat of stats; track trackId) {
-        <tr data-cy="entityTable">
-          <td>{{ stat.createdDate | formatMediumDate }}</td>
-          <td>{{ stat.value }}</td>
-          <td class="text-end">
-            <div class="btn-group">
-              <button type="button" (click)="view(stat)" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
-                <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-              </button>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="type">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsStat.type">Type</span>
 
-              <button type="button" (click)="edit(stat)" class="btn btn-primary btn-sm" data-cy="entityEditButton">
-                <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-              </button>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="name">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsStat.name">Name</span>
 
-              <button type="submit" (click)="delete(stat)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-              </button>
-            </div>
-          </td>
-        </tr>
-        }
-      </tbody>
-    </table>
-  </div>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="description">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsStat.description">Description</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="value">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsStat.value">Value</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="secondaryValue">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsStat.secondaryValue">Secondary Value</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="unit">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsStat.unit">Unit</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="referenceLow">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsStat.referenceLow">Reference Low</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="referenceHigh">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsStat.referenceHigh">Reference High</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="flag">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsStat.flag">Flag</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="note">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsStat.note">Note</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="recordedAt">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsStat.recordedAt">Recorded At</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="createdDate">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsStat.createdDate">Created Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="createdBy">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsStat.createdBy">Created By</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (stat of stats; track trackId) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/stat', stat.id, 'view']">{{ stat.id }}</a>
+              </td>
+              <td>{{ stat.patientId }}</td>
+              <td>{{ stat.type }}</td>
+              <td>{{ stat.name }}</td>
+              <td>{{ stat.description }}</td>
+              <td>{{ stat.value }}</td>
+              <td>{{ stat.secondaryValue }}</td>
+              <td>{{ stat.unit }}</td>
+              <td>{{ stat.referenceLow }}</td>
+              <td>{{ stat.referenceHigh }}</td>
+              <td hpdTranslate="{{ 'patientDashboardApp.StatFlag.' + stat.flag }}">{{ stat.flag }}</td>
+              <td>{{ stat.note }}</td>
+              <td>{{ stat.recordedAt | formatMediumDatetime }}</td>
+              <td>{{ stat.createdDate | formatMediumDate }}</td>
+              <td>{{ stat.createdBy }}</td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/stat', stat.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" hpdTranslate="entity.action.view">View</span>
+                  </a>
+
+                  <a [routerLink]="['/stat', stat.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" hpdTranslate="entity.action.edit">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(stat)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" hpdTranslate="entity.action.delete">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
   }
 </div>

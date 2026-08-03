@@ -3,7 +3,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @Component({
   standalone: true,
-  selector: 'jhi-piechart',
+  selector: 'hpd-piechart',
   templateUrl: './piechart.component.html',
   styleUrls: ['./piechart.component.scss'],
   imports: [NgxChartsModule],
@@ -47,18 +47,14 @@ export class PiechartComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {
-    if (this.data) {
-      this.pieChartData = [];
-      this.data.forEach(item => {
-        this.pieChartData.push(new Piechart(item.name, item.value));
-      });
-    }
+  ngOnInit(): void {
+    this.pieChartData = [];
+    this.data.forEach(item => {
+      this.pieChartData.push(new Piechart(item.name, item.value));
+    });
   }
 
-  onSelect(event: any) {
-    console.log('listen: on-treemap-select');
-    console.log(event);
+  onSelect(event: any): void {
     this.dataSelected.emit(event);
   }
 }

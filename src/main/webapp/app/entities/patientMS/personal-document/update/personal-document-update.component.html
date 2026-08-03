@@ -1,0 +1,102 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="hpd-personal-document-heading"
+        data-cy="PersonalDocumentCreateUpdateHeading"
+        hpdTranslate="patientDashboardApp.patientMsPersonalDocument.home.createOrEditLabel"
+      >
+        Create or edit a Personal Document
+      </h2>
+
+      <div>
+        <hpd-alert-error></hpd-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" hpdTranslate="patientDashboardApp.patientMsPersonalDocument.id" for="field_id">Id</label>
+            <input type="text" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsPersonalDocument.name" for="field_name">Name</label>
+          <input type="text" class="form-control" name="name" id="field_name" data-cy="name" formControlName="name" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsPersonalDocument.category" for="field_category"
+            >Category</label
+          >
+          <input type="text" class="form-control" name="category" id="field_category" data-cy="category" formControlName="category" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsPersonalDocument.url" for="field_url">Url</label>
+          <input type="text" class="form-control" name="url" id="field_url" data-cy="url" formControlName="url" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsPersonalDocument.patientId" for="field_patientId"
+            >Patient Id</label
+          >
+          <input type="text" class="form-control" name="patientId" id="field_patientId" data-cy="patientId" formControlName="patientId" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsPersonalDocument.issuedOn" for="field_issuedOn"
+            >Issued On</label
+          >
+          <div class="input-group">
+            <input
+              id="field_issuedOn"
+              data-cy="issuedOn"
+              type="text"
+              class="form-control"
+              name="issuedOn"
+              ngbDatepicker
+              #issuedOnDp="ngbDatepicker"
+              formControlName="issuedOn"
+            />
+            <button type="button" class="btn btn-secondary" (click)="issuedOnDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsPersonalDocument.expiresOn" for="field_expiresOn"
+            >Expires On</label
+          >
+          <div class="input-group">
+            <input
+              id="field_expiresOn"
+              data-cy="expiresOn"
+              type="text"
+              class="form-control"
+              name="expiresOn"
+              ngbDatepicker
+              #expiresOnDp="ngbDatepicker"
+              formControlName="expiresOn"
+            />
+            <button type="button" class="btn btn-secondary" (click)="expiresOnDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span hpdTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span hpdTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

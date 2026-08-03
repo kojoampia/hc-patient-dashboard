@@ -1,0 +1,55 @@
+<div class="hc-tools">
+  <hpd-search-box inputId="q_reports" placeholderKey="patientPortal.reports.search" [value]="query()" (queryChange)="setQuery($event)" />
+
+  @for (option of categories(); track option) {
+    <button type="button" class="hc-toggle" [class.is-on]="category() === option" (click)="setCategory(option)">
+      {{ option }}
+    </button>
+  }
+</div>
+
+@if (visible().length) {
+  <div class="hc-grid">
+    @for (item of visible(); track item.id) {
+      <article class="hc-card hc-card-pad">
+        <div class="hc-row hc-between hc-gap-12 hc-wrap">
+          <div class="hc-grow">
+            <div class="hc-row hc-gap-8 hc-wrap">
+              <b>{{ item.name }}</b>
+              @if (item.category) {
+                <span class="hc-pill hc-pill--navy">{{ item.category }}</span>
+              }
+            </div>
+            <div class="hc-muted hc-tiny" style="margin-top: 3px">
+              {{ formatDay(item.reportDate ?? item.createdDate) }} · {{ memberOf(item.authorId).name }}
+              @if (caseLabel(item.caseId); as label) {
+                · <a [routerLink]="['/case', item.caseId]">{{ label }}</a>
+              }
+            </div>
+          </div>
+
+          @if (item.url) {
+            <a class="hc-btn hc-btn--ghost hc-btn--sm" [href]="item.url" target="_blank" rel="noopener noreferrer">
+              <hpd-icon name="eye" [size]="15" />
+              <span hpdTranslate="patientPortal.reports.openFile">Open file</span>
+            </a>
+          }
+        </div>
+
+        @if (item.summary ?? item.description; as body) {
+          <div class="hc-prose" style="margin-top: 11px">
+            <p>{{ body }}</p>
+          </div>
+        }
+      </article>
+    }
+  </div>
+
+  <div class="hc-mt-16">
+    <hpd-pager [currentPage]="page()" [totalPages]="totalPages()" (pageChange)="page.set($event)" />
+  </div>
+} @else {
+  <div class="hc-card">
+    <hpd-empty-state icon="report" titleKey="patientPortal.reports.empty" messageKey="patientPortal.reports.emptyHint" />
+  </div>
+}

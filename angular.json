@@ -36,6 +36,9 @@
               "src/main/webapp/robots.txt"
             ],
             "styles": ["src/main/webapp/content/scss/vendor.scss", "src/main/webapp/content/scss/global.scss"],
+            "stylePreprocessorOptions": {
+              "includePaths": ["src/main/webapp/content/scss", "node_modules"]
+            },
             "scripts": [],
             "allowedCommonJsDependencies": ["hammerjs", "sockjs-client", "webstomp-client"]
           },
@@ -58,8 +61,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "8kb",
+                  "maximumError": "16kb"
                 }
               ]
             },

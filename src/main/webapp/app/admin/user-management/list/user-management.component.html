@@ -1,43 +1,43 @@
 <div>
   <h2>
-    <span id="user-management-page-heading" jhiTranslate="userManagement.home.title" data-cy="userManagementPageHeading">Users</span>
+    <span id="user-management-page-heading" hpdTranslate="userManagement.home.title" data-cy="userManagementPageHeading">Users</span>
 
     <div class="d-flex justify-content-end">
       <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span jhiTranslate="userManagement.home.refreshListLabel">Refresh list</span>
+        <span hpdTranslate="userManagement.home.refreshListLabel">Refresh list</span>
       </button>
       <button class="btn btn-primary jh-create-entity" [routerLink]="['./new']">
-        <fa-icon icon="plus"></fa-icon> <span jhiTranslate="userManagement.home.createLabel">Create a new user</span>
+        <fa-icon icon="plus"></fa-icon> <span hpdTranslate="userManagement.home.createLabel">Create a new user</span>
       </button>
     </div>
   </h2>
 
-  <jhi-alert-error></jhi-alert-error>
+  <hpd-alert-error></hpd-alert-error>
 
-  <jhi-alert></jhi-alert>
+  <hpd-alert></hpd-alert>
 
   @if (users) {
     <div class="table-responsive">
       <table class="table table-striped" aria-describedby="user-management-page-heading">
         <thead>
-          <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="transition()">
-            <th scope="col" jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
-            <th scope="col" jhiSortBy="login"><span jhiTranslate="userManagement.login">Login</span> <fa-icon icon="sort"></fa-icon></th>
-            <th scope="col" jhiSortBy="email"><span jhiTranslate="userManagement.email">Email</span> <fa-icon icon="sort"></fa-icon></th>
+          <tr hpdSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="transition()">
+            <th scope="col" hpdSortBy="id"><span hpdTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
+            <th scope="col" hpdSortBy="login"><span hpdTranslate="userManagement.login">Login</span> <fa-icon icon="sort"></fa-icon></th>
+            <th scope="col" hpdSortBy="email"><span hpdTranslate="userManagement.email">Email</span> <fa-icon icon="sort"></fa-icon></th>
             <th scope="col"></th>
-            <th scope="col" jhiSortBy="langKey">
-              <span jhiTranslate="userManagement.langKey">Language</span> <fa-icon icon="sort"></fa-icon>
+            <th scope="col" hpdSortBy="langKey">
+              <span hpdTranslate="userManagement.langKey">Language</span> <fa-icon icon="sort"></fa-icon>
             </th>
-            <th scope="col"><span jhiTranslate="userManagement.profiles">Profiles</span></th>
-            <th scope="col" jhiSortBy="createdDate">
-              <span jhiTranslate="userManagement.createdDate">Created date</span> <fa-icon icon="sort"></fa-icon>
+            <th scope="col"><span hpdTranslate="userManagement.profiles">Profiles</span></th>
+            <th scope="col" hpdSortBy="createdDate">
+              <span hpdTranslate="userManagement.createdDate">Created date</span> <fa-icon icon="sort"></fa-icon>
             </th>
-            <th scope="col" jhiSortBy="lastModifiedBy">
-              <span jhiTranslate="userManagement.lastModifiedBy">Modified by</span> <fa-icon icon="sort"></fa-icon>
+            <th scope="col" hpdSortBy="lastModifiedBy">
+              <span hpdTranslate="userManagement.lastModifiedBy">Modified by</span> <fa-icon icon="sort"></fa-icon>
             </th>
-            <th scope="col" jhiSortBy="lastModifiedDate">
-              <span jhiTranslate="userManagement.lastModifiedDate">Modified date</span> <fa-icon icon="sort"></fa-icon>
+            <th scope="col" hpdSortBy="lastModifiedDate">
+              <span hpdTranslate="userManagement.lastModifiedDate">Modified date</span> <fa-icon icon="sort"></fa-icon>
             </th>
             <th scope="col"></th>
           </tr>
@@ -53,7 +53,7 @@
                 <td>{{ user.email }}</td>
                 <td>
                   @if (!user.activated) {
-                    <button class="btn btn-danger btn-sm" (click)="setActive(user, true)" jhiTranslate="userManagement.deactivated">
+                    <button class="btn btn-danger btn-sm" (click)="setActive(user, true)" hpdTranslate="userManagement.deactivated">
                       Deactivated
                     </button>
                   } @else {
@@ -61,7 +61,7 @@
                       class="btn btn-success btn-sm"
                       (click)="setActive(user, false)"
                       [disabled]="!currentAccount || currentAccount.login === user.login"
-                      jhiTranslate="userManagement.activated"
+                      hpdTranslate="userManagement.activated"
                     >
                       Activated
                     </button>
@@ -82,7 +82,7 @@
                   <div class="btn-group">
                     <button type="submit" [routerLink]="['./', user.login, 'view']" class="btn btn-info btn-sm">
                       <fa-icon icon="eye"></fa-icon>
-                      <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                      <span class="d-none d-md-inline" hpdTranslate="entity.action.view">View</span>
                     </button>
 
                     <button
@@ -92,7 +92,7 @@
                       class="btn btn-primary btn-sm"
                     >
                       <fa-icon icon="pencil-alt"></fa-icon>
-                      <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                      <span class="d-none d-md-inline" hpdTranslate="entity.action.edit">Edit</span>
                     </button>
 
                     <button
@@ -102,7 +102,7 @@
                       [disabled]="!currentAccount || currentAccount.login === user.login"
                     >
                       <fa-icon icon="times"></fa-icon>
-                      <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                      <span class="d-none d-md-inline" hpdTranslate="entity.action.delete">Delete</span>
                     </button>
                   </div>
                 </td>
@@ -117,7 +117,7 @@
   @if (users) {
     <div>
       <div class="d-flex justify-content-center">
-        <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+        <hpd-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></hpd-item-count>
       </div>
 
       <div class="d-flex justify-content-center">

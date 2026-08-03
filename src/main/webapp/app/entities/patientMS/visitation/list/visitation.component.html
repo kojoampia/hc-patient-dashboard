@@ -1,0 +1,185 @@
+<div>
+  <h2 id="page-heading" data-cy="VisitationHeading">
+    <span hpdTranslate="patientDashboardApp.patientMsVisitation.home.title">Visitations</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span hpdTranslate="patientDashboardApp.patientMsVisitation.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-visitation"
+        [routerLink]="['/visitation/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span hpdTranslate="patientDashboardApp.patientMsVisitation.home.createLabel">Create a new Visitation</span>
+      </button>
+    </div>
+  </h2>
+
+  <hpd-alert-error></hpd-alert-error>
+
+  <hpd-alert></hpd-alert>
+
+  @if (visitations?.length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span hpdTranslate="patientDashboardApp.patientMsVisitation.home.notFound">No Visitations found</span>
+    </div>
+  }
+
+  @if (visitations && visitations.length > 0) {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr hpdSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+            <th scope="col" hpdSortBy="id">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsVisitation.id">Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="patientId">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsVisitation.patientId">Patient Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="caseId">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsVisitation.caseId">Case Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="professionalId">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsVisitation.professionalId">Professional Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="visitedAt">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsVisitation.visitedAt">Visited At</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="purpose">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsVisitation.purpose">Purpose</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="location">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsVisitation.location">Location</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="notes">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsVisitation.notes">Notes</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="createdDate">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsVisitation.createdDate">Created Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="modifiedDate">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsVisitation.modifiedDate">Modified Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="createdBy">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsVisitation.createdBy">Created By</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="modifiedBy">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsVisitation.modifiedBy">Modified By</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (visitation of visitations; track trackId) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/visitation', visitation.id, 'view']">{{ visitation.id }}</a>
+              </td>
+              <td>{{ visitation.patientId }}</td>
+              <td>{{ visitation.caseId }}</td>
+              <td>{{ visitation.professionalId }}</td>
+              <td>{{ visitation.visitedAt | formatMediumDatetime }}</td>
+              <td>{{ visitation.purpose }}</td>
+              <td>{{ visitation.location }}</td>
+              <td>{{ visitation.notes }}</td>
+              <td>{{ visitation.createdDate | formatMediumDate }}</td>
+              <td>{{ visitation.modifiedDate | formatMediumDate }}</td>
+              <td>{{ visitation.createdBy }}</td>
+              <td>{{ visitation.modifiedBy }}</td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/visitation', visitation.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" hpdTranslate="entity.action.view">View</span>
+                  </a>
+
+                  <a [routerLink]="['/visitation', visitation.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" hpdTranslate="entity.action.edit">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(visitation)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" hpdTranslate="entity.action.delete">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (visitations && visitations.length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <hpd-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></hpd-item-count>
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

@@ -15,7 +15,7 @@
         [routerLink]="['/report/new']"
       >
         <fa-icon icon="plus"></fa-icon>
-        <span class="hidden-sm-down" hpdTranslate="patientDashboardApp.patientMsReport.home.createLabel">Create a new Report</span>
+        <span hpdTranslate="patientDashboardApp.patientMsReport.home.createLabel">Create a new Report</span>
       </button>
     </div>
   </h2>
@@ -23,34 +23,6 @@
   <hpd-alert-error></hpd-alert-error>
 
   <hpd-alert></hpd-alert>
-
-  <form name="searchForm" class="row row-cols-sm-auto align-items-center">
-    <div class="col-sm-12">
-      <div class="input-group w-100 mt-3">
-        <label class="visually-hidden" for="currentSearch" hpdTranslate="patientDashboardApp.patientMsReport.home.search"
-          >Search for Report</label
-        >
-        <input
-          type="text"
-          class="form-control"
-          [(ngModel)]="currentSearch"
-          id="currentSearch"
-          name="currentSearch"
-          placeholder="{{ 'patientDashboardApp.patientMsReport.home.search' | translate }}"
-        />
-
-        <button class="btn btn-info" (click)="search(currentSearch)">
-          <fa-icon icon="search"></fa-icon>
-        </button>
-
-        @if (currentSearch) {
-          <button class="btn btn-danger" (click)="search('')">
-            <fa-icon icon="trash-alt"></fa-icon>
-          </button>
-        }
-      </div>
-    </div>
-  </form>
 
   @if (reports?.length === 0) {
     <div class="alert alert-warning" id="no-result">
@@ -65,42 +37,72 @@
           <tr hpdSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
             <th scope="col" hpdSortBy="id">
               <div class="d-flex">
-                <span hpdTranslate="global.field.id">ID</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+                <span hpdTranslate="patientDashboardApp.patientMsReport.id">Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" hpdSortBy="category">
               <div class="d-flex">
                 <span hpdTranslate="patientDashboardApp.patientMsReport.category">Category</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" hpdSortBy="description">
               <div class="d-flex">
                 <span hpdTranslate="patientDashboardApp.patientMsReport.description">Description</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="summary">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsReport.summary">Summary</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" hpdSortBy="name">
               <div class="d-flex">
                 <span hpdTranslate="patientDashboardApp.patientMsReport.name">Name</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" hpdSortBy="url">
               <div class="d-flex">
                 <span hpdTranslate="patientDashboardApp.patientMsReport.url">Url</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="patientId">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsReport.patientId">Patient Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="caseId">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsReport.caseId">Case Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="authorId">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsReport.authorId">Author Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="reportDate">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsReport.reportDate">Report Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" hpdSortBy="createdDate">
@@ -120,17 +122,15 @@
             <th scope="col" hpdSortBy="createdBy">
               <div class="d-flex">
                 <span hpdTranslate="patientDashboardApp.patientMsReport.createdBy">Created By</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" hpdSortBy="modifiedBy">
               <div class="d-flex">
                 <span hpdTranslate="patientDashboardApp.patientMsReport.modifiedBy">Modified By</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col"></th>
@@ -144,8 +144,13 @@
               </td>
               <td>{{ report.category }}</td>
               <td>{{ report.description }}</td>
+              <td>{{ report.summary }}</td>
               <td>{{ report.name }}</td>
               <td>{{ report.url }}</td>
+              <td>{{ report.patientId }}</td>
+              <td>{{ report.caseId }}</td>
+              <td>{{ report.authorId }}</td>
+              <td>{{ report.reportDate | formatMediumDate }}</td>
               <td>{{ report.createdDate | formatMediumDate }}</td>
               <td>{{ report.modifiedDate | formatMediumDate }}</td>
               <td>{{ report.createdBy }}</td>
@@ -172,6 +177,25 @@
           }
         </tbody>
       </table>
+    </div>
+  }
+  @if (reports && reports.length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <hpd-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></hpd-item-count>
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
     </div>
   }
 </div>

@@ -1,0 +1,85 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (clinicalCase) {
+      <div>
+        <h2 data-cy="clinicalCaseDetailsHeading">
+          <span hpdTranslate="patientDashboardApp.patientMsClinicalCase.detail.title">Clinical Case</span>
+        </h2>
+
+        <hr />
+
+        <hpd-alert-error></hpd-alert-error>
+
+        <hpd-alert></hpd-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span hpdTranslate="patientDashboardApp.patientMsClinicalCase.id">Id</span></dt>
+          <dd>
+            <span>{{ clinicalCase.id }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsClinicalCase.patientId">Patient Id</span></dt>
+          <dd>
+            <span>{{ clinicalCase.patientId }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsClinicalCase.caseNumber">Case Number</span></dt>
+          <dd>
+            <span>{{ clinicalCase.caseNumber }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsClinicalCase.title">Title</span></dt>
+          <dd>
+            <span>{{ clinicalCase.title }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsClinicalCase.openedAt">Opened At</span></dt>
+          <dd>
+            <span>{{ clinicalCase.openedAt | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsClinicalCase.closedAt">Closed At</span></dt>
+          <dd>
+            <span>{{ clinicalCase.closedAt | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsClinicalCase.brief">Brief</span></dt>
+          <dd>
+            <span>{{ clinicalCase.brief }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsClinicalCase.status">Status</span></dt>
+          <dd>
+            <span hpdTranslate="{{ 'patientDashboardApp.CaseStatus.' + clinicalCase.status }}">{{ clinicalCase.status }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsClinicalCase.symptoms">Symptoms</span></dt>
+          <dd>
+            <span>{{ clinicalCase.symptoms }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsClinicalCase.diagnosis">Diagnosis</span></dt>
+          <dd>
+            <span>{{ clinicalCase.diagnosis }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsClinicalCase.assignedProfessionalId">Assigned Professional Id</span></dt>
+          <dd>
+            <span>{{ clinicalCase.assignedProfessionalId }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsClinicalCase.assignedRosterId">Assigned Roster Id</span></dt>
+          <dd>
+            <span>{{ clinicalCase.assignedRosterId }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsClinicalCase.recommendation">Recommendation</span></dt>
+          <dd>
+            @for (recommendation of clinicalCase.recommendations; track $index; let last = $last) {
+              <span>
+                <a [routerLink]="['/recommendation', recommendation.id, 'view']">{{ recommendation.id }}</a
+                >{{ last ? '' : ', ' }}
+              </span>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span hpdTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/clinical-case', clinicalCase.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span hpdTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

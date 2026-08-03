@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable, asapScheduler, scheduled } from 'rxjs';
+import { Observable } from 'rxjs';
 
-import { catchError, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import dayjs from 'dayjs/esm';
 
@@ -10,13 +10,13 @@ import { isPresent } from 'app/core/util/operators';
 import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
-import { Search } from 'app/core/request/request.model';
 import { ITask, NewTask } from '../task.model';
 
 export type PartialUpdateTask = Partial<ITask> & Pick<ITask, 'id'>;
 
-type RestOf<T extends ITask | NewTask> = Omit<T, 'schedule' | 'createdDate' | 'modifiedDate'> & {
+type RestOf<T extends ITask | NewTask> = Omit<T, 'schedule' | 'scheduledAt' | 'createdDate' | 'modifiedDate'> & {
   schedule?: string | null;
+  scheduledAt?: string | null;
   createdDate?: string | null;
   modifiedDate?: string | null;
 };
@@ -32,8 +32,7 @@ export type EntityArrayResponseType = HttpResponse<ITask[]>;
 
 @Injectable({ providedIn: 'root' })
 export class TaskService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/tasks');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/tasks/_search');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/tasks', 'hcpatientservice');
 
   constructor(
     protected http: HttpClient,
@@ -76,14 +75,6 @@ export class TaskService {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
-  search(req: Search): Observable<EntityArrayResponseType> {
-    const options = createRequestOption(req);
-    return this.http.get<RestTask[]>(this.resourceSearchUrl, { params: options, observe: 'response' }).pipe(
-      map(res => this.convertResponseArrayFromServer(res)),
-      catchError(() => scheduled([new HttpResponse<ITask[]>()], asapScheduler)),
-    );
-  }
-
   getTaskIdentifier(task: Pick<ITask, 'id'>): string {
     return task.id;
   }
@@ -116,6 +107,7 @@ export class TaskService {
     return {
       ...task,
       schedule: task.schedule?.format(DATE_FORMAT) ?? null,
+      scheduledAt: task.scheduledAt?.toJSON() ?? null,
       createdDate: task.createdDate?.format(DATE_FORMAT) ?? null,
       modifiedDate: task.modifiedDate?.format(DATE_FORMAT) ?? null,
     };
@@ -125,6 +117,7 @@ export class TaskService {
     return {
       ...restTask,
       schedule: restTask.schedule ? dayjs(restTask.schedule) : undefined,
+      scheduledAt: restTask.scheduledAt ? dayjs(restTask.scheduledAt) : undefined,
       createdDate: restTask.createdDate ? dayjs(restTask.createdDate) : undefined,
       modifiedDate: restTask.modifiedDate ? dayjs(restTask.modifiedDate) : undefined,
     };

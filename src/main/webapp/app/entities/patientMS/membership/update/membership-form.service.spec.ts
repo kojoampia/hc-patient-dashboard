@@ -20,9 +20,14 @@ describe('Membership Form Service', () => {
         expect(formGroup.controls).toEqual(
           expect.objectContaining({
             id: expect.any(Object),
+            patientId: expect.any(Object),
             name: expect.any(Object),
             description: expect.any(Object),
             status: expect.any(Object),
+            memberNumber: expect.any(Object),
+            plan: expect.any(Object),
+            startDate: expect.any(Object),
+            renewalDate: expect.any(Object),
             createdDate: expect.any(Object),
             modifiedDate: expect.any(Object),
             createdBy: expect.any(Object),
@@ -37,9 +42,14 @@ describe('Membership Form Service', () => {
         expect(formGroup.controls).toEqual(
           expect.objectContaining({
             id: expect.any(Object),
+            patientId: expect.any(Object),
             name: expect.any(Object),
             description: expect.any(Object),
             status: expect.any(Object),
+            memberNumber: expect.any(Object),
+            plan: expect.any(Object),
+            startDate: expect.any(Object),
+            renewalDate: expect.any(Object),
             createdDate: expect.any(Object),
             modifiedDate: expect.any(Object),
             createdBy: expect.any(Object),

@@ -51,7 +51,7 @@
 
 ## Environment Prerequisites
 
-- Local API traffic is proxied by `webpack/proxy.conf.js` to `http://localhost:5505`, while the gateway's dev port is `5503` — verify which one is live before debugging API failures. Production builds same-origin, so this affects `ng serve` only.
+- Local API traffic is proxied by `webpack/proxy.conf.js` to `http://localhost:5505`, which is where the gateway listens (it moved from 5503 on 2026-08-03). Production builds same-origin, so this affects `ng serve` only.
 - The backends (`hc-patient-gateway`, `hc-patient-service`) also require Consul, MongoDB, and Kafka; start them from those repos.
 
 ## Key References

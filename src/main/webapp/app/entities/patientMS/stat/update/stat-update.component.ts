@@ -7,20 +7,21 @@ import { finalize } from 'rxjs/operators';
 import SharedModule from 'app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { StatFlag } from 'app/entities/enumerations/stat-flag.model';
 import { IStat } from '../stat.model';
 import { StatService } from '../service/stat.service';
 import { StatFormService, StatFormGroup } from './stat-form.service';
-import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   standalone: true,
-  selector: 'jhi-stat-update',
+  selector: 'hpd-stat-update',
   templateUrl: './stat-update.component.html',
-  imports: [SharedModule, FormsModule, ReactiveFormsModule, TranslateModule],
+  imports: [SharedModule, FormsModule, ReactiveFormsModule],
 })
 export class StatUpdateComponent implements OnInit {
   isSaving = false;
   stat: IStat | null = null;
+  statFlagValues = Object.keys(StatFlag);
 
   editForm: StatFormGroup = this.statFormService.createStatFormGroup();
 

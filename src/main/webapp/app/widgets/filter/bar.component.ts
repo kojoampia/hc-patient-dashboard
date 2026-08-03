@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import SharedModule from 'app/shared/shared.module';
 
 @Component({
-  selector: 'jhi-filter-bar',
+  selector: 'hpd-filter-bar',
   standalone: true,
   templateUrl: './bar.component.html',
   styleUrls: ['./bar.component.scss'],
@@ -14,8 +14,8 @@ export class BarComponent implements OnInit {
   @Input() itemList?: any[] | [];
   @Output() selectedItem: EventEmitter<any> = new EventEmitter<any>();
 
-  filterSelected?: string | '';
-  searchInput?: string | '';
+  filterSelected?: string;
+  searchInput?: string;
 
   constructor() {}
 

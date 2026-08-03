@@ -1,0 +1,166 @@
+<div>
+  <h2 id="page-heading" data-cy="AllergyHeading">
+    <span hpdTranslate="patientDashboardApp.patientMsAllergy.home.title">Allergies</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span hpdTranslate="patientDashboardApp.patientMsAllergy.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-allergy"
+        [routerLink]="['/allergy/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span hpdTranslate="patientDashboardApp.patientMsAllergy.home.createLabel">Create a new Allergy</span>
+      </button>
+    </div>
+  </h2>
+
+  <hpd-alert-error></hpd-alert-error>
+
+  <hpd-alert></hpd-alert>
+
+  @if (allergies?.length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span hpdTranslate="patientDashboardApp.patientMsAllergy.home.notFound">No Allergies found</span>
+    </div>
+  }
+
+  @if (allergies && allergies.length > 0) {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr hpdSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+            <th scope="col" hpdSortBy="id">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsAllergy.id">Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="patientId">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsAllergy.patientId">Patient Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="name">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsAllergy.name">Name</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="category">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsAllergy.category">Category</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="severity">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsAllergy.severity">Severity</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="reaction">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsAllergy.reaction">Reaction</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="notedOn">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsAllergy.notedOn">Noted On</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="notedById">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsAllergy.notedById">Noted By Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="createdDate">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsAllergy.createdDate">Created Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="modifiedDate">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsAllergy.modifiedDate">Modified Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="createdBy">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsAllergy.createdBy">Created By</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="modifiedBy">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsAllergy.modifiedBy">Modified By</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (allergy of allergies; track trackId) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/allergy', allergy.id, 'view']">{{ allergy.id }}</a>
+              </td>
+              <td>{{ allergy.patientId }}</td>
+              <td>{{ allergy.name }}</td>
+              <td hpdTranslate="{{ 'patientDashboardApp.AllergyCategory.' + allergy.category }}">{{ allergy.category }}</td>
+              <td hpdTranslate="{{ 'patientDashboardApp.AllergySeverity.' + allergy.severity }}">{{ allergy.severity }}</td>
+              <td>{{ allergy.reaction }}</td>
+              <td>{{ allergy.notedOn | formatMediumDate }}</td>
+              <td>{{ allergy.notedById }}</td>
+              <td>{{ allergy.createdDate | formatMediumDate }}</td>
+              <td>{{ allergy.modifiedDate | formatMediumDate }}</td>
+              <td>{{ allergy.createdBy }}</td>
+              <td>{{ allergy.modifiedBy }}</td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/allergy', allergy.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" hpdTranslate="entity.action.view">View</span>
+                  </a>
+
+                  <a [routerLink]="['/allergy', allergy.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" hpdTranslate="entity.action.edit">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(allergy)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" hpdTranslate="entity.action.delete">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

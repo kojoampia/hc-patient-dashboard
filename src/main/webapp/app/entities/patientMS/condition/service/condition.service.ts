@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable, asapScheduler, scheduled } from 'rxjs';
+import { Observable } from 'rxjs';
 
-import { catchError, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import dayjs from 'dayjs/esm';
 
@@ -10,7 +10,6 @@ import { isPresent } from 'app/core/util/operators';
 import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
-import { Search } from 'app/core/request/request.model';
 import { ICondition, NewCondition } from '../condition.model';
 
 export type PartialUpdateCondition = Partial<ICondition> & Pick<ICondition, 'id'>;
@@ -31,8 +30,7 @@ export type EntityArrayResponseType = HttpResponse<ICondition[]>;
 
 @Injectable({ providedIn: 'root' })
 export class ConditionService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/conditions');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/conditions/_search');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/conditions', 'hcpatientservice');
 
   constructor(
     protected http: HttpClient,
@@ -75,14 +73,6 @@ export class ConditionService {
 
   delete(id: string): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
-  }
-
-  search(req: Search): Observable<EntityArrayResponseType> {
-    const options = createRequestOption(req);
-    return this.http.get<RestCondition[]>(this.resourceSearchUrl, { params: options, observe: 'response' }).pipe(
-      map(res => this.convertResponseArrayFromServer(res)),
-      catchError(() => scheduled([new HttpResponse<ICondition[]>()], asapScheduler)),
-    );
   }
 
   getConditionIdentifier(condition: Pick<ICondition, 'id'>): string {

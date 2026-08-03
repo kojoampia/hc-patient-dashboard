@@ -6,7 +6,6 @@
         "refreshListLabel": "Refresh list",
         "createLabel": "Create a new Medication",
         "createOrEditLabel": "Create or edit a Medication",
-        "search": "Search for Medication",
         "notFound": "No Medications found"
       },
       "created": "A new Medication is created with identifier {{ param }}",
@@ -18,10 +17,16 @@
       "detail": {
         "title": "Medication"
       },
-      "id": "ID",
+      "id": "Id",
       "name": "Name",
       "description": "Description",
+      "patientId": "Patient Id",
+      "caseId": "Case Id",
       "prescription": "Prescription",
+      "dosage": "Dosage",
+      "status": "Status",
+      "startedOn": "Started On",
+      "prescribedById": "Prescribed By Id",
       "createdDate": "Created Date",
       "modifiedDate": "Modified Date",
       "createdBy": "Created By",

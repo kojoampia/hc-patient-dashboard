@@ -2,27 +2,83 @@
 @import 'bootstrap/scss/functions';
 @import 'bootstrap/scss/variables';
 
+@import 'tokens';
+@import 'utilities';
+@import 'components';
+
 /* ==============================================================
-Bootstrap tweaks
+Base
 ===============================================================*/
 
-body,
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--hc-sans);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--hc-ink);
+  text-rendering: optimizelegibility;
+  background: var(--hc-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 h1,
 h2,
 h3,
 h4 {
-  font-weight: 300;
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
-/* Increase contrast of links to get 100% on Lighthouse Accessibility Audit. Override this color if you want to change the link color, or use a Bootswatch theme */
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
 a {
-  color: teal;
-  font-weight: bold;
+  color: var(--hc-navy);
+
+  &:hover {
+    /* make sure browsers use the pointer cursor for anchors, even with no href */
+    color: var(--hc-gold);
+    cursor: pointer;
+  }
 }
 
-a:hover {
-  color: teal;
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
 }
+
+::-webkit-scrollbar-thumb {
+  background: #d5d1c6;
+  border: 3px solid var(--hc-bg);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ==============================================================
+Bootstrap tweaks
+===============================================================*/
 
 /* override hover color for dropdown-item forced by bootstrap to all a:not([href]):not([tabindex]) elements in _reboot.scss */
 a:not([href]):not([tabindex]):hover.dropdown-item {
@@ -34,39 +90,44 @@ a:not([href]):not([tabindex]):hover.dropdown-item {
   background-color: mix($dropdown-link-hover-bg, $dropdown-link-active-bg, 50%);
 }
 
-a:hover {
-  /* make sure browsers use the pointer cursor for anchors, even with no href */
-  cursor: pointer;
-}
-
 .dropdown-item:hover {
   color: $dropdown-link-hover-color;
 }
-.text-info {
-  color: teal !important;
+
+.dropdown-menu {
+  padding-left: 0;
+  border-color: var(--hc-line);
+  border-radius: var(--hc-r-sm);
+  box-shadow: var(--hc-sh);
 }
+
+/* Bootstrap buttons on the account/admin/entity screens, matched to the portal's weight. */
+.btn {
+  font-weight: 700;
+}
+
+.card {
+  box-shadow: var(--hc-sh-sm);
+}
+
 /* ==========================================================================
 Browser Upgrade Prompt
 ========================================================================== */
 .browserupgrade {
-  margin: 0.2em 0;
-  background: #ccc;
-  color: #000;
   padding: 0.2em 0;
+  margin: 0.2em 0;
+  color: #000;
+  background: #ccc;
 }
 
 /* ==========================================================================
 Generic styles
 ========================================================================== */
 
-/* Error highlight on input fields */
-.ng-valid[required],
-.ng-valid.required {
-  border-left: 5px solid green;
-}
-
-.ng-invalid:not(form) {
-  border-left: 5px solid red;
+/* Error highlight on input fields. Only once the control has been touched — a form that is red
+   before the user has typed anything reads as broken rather than as guidance. */
+.ng-invalid.ng-touched:not(form) {
+  border-color: var(--hc-danger);
 }
 
 /* other generic styles */
@@ -79,7 +140,7 @@ Generic styles
 
 .error {
   color: white;
-  background-color: red;
+  background-color: var(--hc-danger);
 }
 
 .pad {
@@ -109,12 +170,12 @@ Generic styles
 }
 
 .footer {
-  border-top: 1px solid rgba(0, 0, 0, 0.125);
   font-size: small;
+  border-top: 1px solid var(--hc-line);
 }
 
 .hand,
-[jhisortby] {
+[hpdsortby] {
   cursor: pointer;
 }
 
@@ -124,40 +185,46 @@ Custom alerts for notification
 .alerts {
   .alert {
     text-overflow: ellipsis;
+
     pre {
-      background: none;
-      border: none;
-      font: inherit;
-      color: inherit;
       padding: 0;
       margin: 0;
+      font: inherit;
+      color: inherit;
+      background: none;
+      border: none;
     }
+
     .popover pre {
       font-size: 10px;
     }
   }
+
   .jhi-toast {
     position: fixed;
     width: 100%;
+
     &.left {
       left: 5px;
     }
+
     &.right {
       right: 5px;
     }
+
     &.top {
       top: 55px;
     }
+
     &.bottom {
       bottom: 55px;
     }
   }
-  .alert-link{
-    color: teal;
+
+  .alert-link {
+    color: var(--hc-navy);
   }
 }
-
-
 
 @media screen and (min-width: 480px) {
   .alerts .jhi-toast {
@@ -187,17 +254,18 @@ entity detail page css
   .row-md.jh-entity-details > {
     dt {
       float: left;
-      overflow: hidden;
       clear: left;
+      overflow: hidden;
+      padding: 0.5em 0;
       text-align: right;
       text-overflow: ellipsis;
       white-space: nowrap;
-      padding: 0.5em 0;
     }
+
     dd {
-      border-bottom: 1px solid #eee;
       padding: 0.5em 0;
       margin-left: 0;
+      border-bottom: 1px solid #eee;
     }
   }
 }
@@ -219,20 +287,12 @@ ui bootstrap tweaks
   white-space: nowrap;
 }
 
-.dropdown-menu {
-  padding-left: 0px;
-}
-
 /* ==========================================================================
 angular-cli removes postcss-rtl processed inline css, processed rules must be added here instead
 ========================================================================== */
 /* page-ribbon.component.scss */
 .ribbon {
   left: -3.5em;
-  -moz-transform: rotate(-45deg);
-  -ms-transform: rotate(-45deg);
-  -o-transform: rotate(-45deg);
-  -webkit-transform: rotate(-45deg);
   transform: rotate(-45deg);
 }
 
@@ -244,4 +304,53 @@ angular-cli removes postcss-rtl processed inline css, processed rules must be ad
     }
   }
 }
+
+/* ==========================================================================
+Print
+
+A printed record is a real artefact — patients bring one to an appointment. The shell chrome is
+stripped, the layout collapses to a single column, and cards lose their shadows so they do not
+render as grey boxes.
+========================================================================== */
+@media print {
+  .hc-no-print,
+  .hc-shell__sidebar,
+  .hc-shell__tabbar,
+  .hc-shell__topbar,
+  .hc-shell__scrim,
+  .navbar,
+  .footer,
+  .alerts {
+    display: none !important;
+  }
+
+  body {
+    font-size: 11px;
+    background: #fff;
+  }
+
+  .hc-shell {
+    display: block;
+    grid-template-columns: 1fr;
+  }
+
+  .hc-shell__content {
+    max-width: none;
+    padding: 0;
+  }
+
+  .hc-card,
+  .hc-panel,
+  .hc-chart-card,
+  .hc-rec-head {
+    break-inside: avoid;
+    box-shadow: none;
+  }
+
+  .hc-grid--3,
+  .hc-grid--4 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 /* jhipster-needle-scss-add-main JHipster will add new css style */

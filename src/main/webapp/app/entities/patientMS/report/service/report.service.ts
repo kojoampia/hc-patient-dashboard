@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable, asapScheduler, scheduled } from 'rxjs';
+import { Observable } from 'rxjs';
 
-import { catchError, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import dayjs from 'dayjs/esm';
 
@@ -10,12 +10,12 @@ import { isPresent } from 'app/core/util/operators';
 import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
-import { Search } from 'app/core/request/request.model';
 import { IReport, NewReport } from '../report.model';
 
 export type PartialUpdateReport = Partial<IReport> & Pick<IReport, 'id'>;
 
-type RestOf<T extends IReport | NewReport> = Omit<T, 'createdDate' | 'modifiedDate'> & {
+type RestOf<T extends IReport | NewReport> = Omit<T, 'reportDate' | 'createdDate' | 'modifiedDate'> & {
+  reportDate?: string | null;
   createdDate?: string | null;
   modifiedDate?: string | null;
 };
@@ -31,8 +31,7 @@ export type EntityArrayResponseType = HttpResponse<IReport[]>;
 
 @Injectable({ providedIn: 'root' })
 export class ReportService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/reports');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/reports/_search');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/reports', 'hcpatientservice');
 
   constructor(
     protected http: HttpClient,
@@ -77,14 +76,6 @@ export class ReportService {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
-  search(req: Search): Observable<EntityArrayResponseType> {
-    const options = createRequestOption(req);
-    return this.http.get<RestReport[]>(this.resourceSearchUrl, { params: options, observe: 'response' }).pipe(
-      map(res => this.convertResponseArrayFromServer(res)),
-      catchError(() => scheduled([new HttpResponse<IReport[]>()], asapScheduler)),
-    );
-  }
-
   getReportIdentifier(report: Pick<IReport, 'id'>): string {
     return report.id;
   }
@@ -116,6 +107,7 @@ export class ReportService {
   protected convertDateFromClient<T extends IReport | NewReport | PartialUpdateReport>(report: T): RestOf<T> {
     return {
       ...report,
+      reportDate: report.reportDate?.format(DATE_FORMAT) ?? null,
       createdDate: report.createdDate?.format(DATE_FORMAT) ?? null,
       modifiedDate: report.modifiedDate?.format(DATE_FORMAT) ?? null,
     };
@@ -124,6 +116,7 @@ export class ReportService {
   protected convertDateFromServer(restReport: RestReport): IReport {
     return {
       ...restReport,
+      reportDate: restReport.reportDate ? dayjs(restReport.reportDate) : undefined,
       createdDate: restReport.createdDate ? dayjs(restReport.createdDate) : undefined,
       modifiedDate: restReport.modifiedDate ? dayjs(restReport.modifiedDate) : undefined,
     };

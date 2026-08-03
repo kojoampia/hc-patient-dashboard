@@ -15,7 +15,7 @@
         [routerLink]="['/condition/new']"
       >
         <fa-icon icon="plus"></fa-icon>
-        <span class="hidden-sm-down" hpdTranslate="patientDashboardApp.patientMsCondition.home.createLabel">Create a new Condition</span>
+        <span hpdTranslate="patientDashboardApp.patientMsCondition.home.createLabel">Create a new Condition</span>
       </button>
     </div>
   </h2>
@@ -23,34 +23,6 @@
   <hpd-alert-error></hpd-alert-error>
 
   <hpd-alert></hpd-alert>
-
-  <form name="searchForm" class="row row-cols-sm-auto align-items-center">
-    <div class="col-sm-12">
-      <div class="input-group w-100 mt-3">
-        <label class="visually-hidden" for="currentSearch" hpdTranslate="patientDashboardApp.patientMsCondition.home.search"
-          >Search for Condition</label
-        >
-        <input
-          type="text"
-          class="form-control"
-          [(ngModel)]="currentSearch"
-          id="currentSearch"
-          name="currentSearch"
-          placeholder="{{ 'patientDashboardApp.patientMsCondition.home.search' | translate }}"
-        />
-
-        <button class="btn btn-info" (click)="search(currentSearch)">
-          <fa-icon icon="search"></fa-icon>
-        </button>
-
-        @if (currentSearch) {
-          <button class="btn btn-danger" (click)="search('')">
-            <fa-icon icon="trash-alt"></fa-icon>
-          </button>
-        }
-      </div>
-    </div>
-  </form>
 
   @if (conditions?.length === 0) {
     <div class="alert alert-warning" id="no-result">
@@ -65,26 +37,30 @@
           <tr hpdSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
             <th scope="col" hpdSortBy="id">
               <div class="d-flex">
-                <span hpdTranslate="global.field.id">ID</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+                <span hpdTranslate="patientDashboardApp.patientMsCondition.id">Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" hpdSortBy="name">
               <div class="d-flex">
                 <span hpdTranslate="patientDashboardApp.patientMsCondition.name">Name</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" hpdSortBy="description">
               <div class="d-flex">
                 <span hpdTranslate="patientDashboardApp.patientMsCondition.description">Description</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="patientId">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsCondition.patientId">Patient Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" hpdSortBy="createdDate">
@@ -104,17 +80,15 @@
             <th scope="col" hpdSortBy="createdBy">
               <div class="d-flex">
                 <span hpdTranslate="patientDashboardApp.patientMsCondition.createdBy">Created By</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" hpdSortBy="modifiedBy">
               <div class="d-flex">
                 <span hpdTranslate="patientDashboardApp.patientMsCondition.modifiedBy">Modified By</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col"></th>
@@ -128,6 +102,7 @@
               </td>
               <td>{{ condition.name }}</td>
               <td>{{ condition.description }}</td>
+              <td>{{ condition.patientId }}</td>
               <td>{{ condition.createdDate | formatMediumDate }}</td>
               <td>{{ condition.modifiedDate | formatMediumDate }}</td>
               <td>{{ condition.createdBy }}</td>

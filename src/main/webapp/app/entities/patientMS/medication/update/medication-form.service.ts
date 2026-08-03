@@ -20,7 +20,13 @@ type MedicationFormGroupContent = {
   id: FormControl<IMedication['id'] | NewMedication['id']>;
   name: FormControl<IMedication['name']>;
   description: FormControl<IMedication['description']>;
+  patientId: FormControl<IMedication['patientId']>;
+  caseId: FormControl<IMedication['caseId']>;
   prescription: FormControl<IMedication['prescription']>;
+  dosage: FormControl<IMedication['dosage']>;
+  status: FormControl<IMedication['status']>;
+  startedOn: FormControl<IMedication['startedOn']>;
+  prescribedById: FormControl<IMedication['prescribedById']>;
   createdDate: FormControl<IMedication['createdDate']>;
   modifiedDate: FormControl<IMedication['modifiedDate']>;
   createdBy: FormControl<IMedication['createdBy']>;
@@ -46,7 +52,13 @@ export class MedicationFormService {
       ),
       name: new FormControl(medicationRawValue.name),
       description: new FormControl(medicationRawValue.description),
+      patientId: new FormControl(medicationRawValue.patientId),
+      caseId: new FormControl(medicationRawValue.caseId),
       prescription: new FormControl(medicationRawValue.prescription),
+      dosage: new FormControl(medicationRawValue.dosage),
+      status: new FormControl(medicationRawValue.status),
+      startedOn: new FormControl(medicationRawValue.startedOn),
+      prescribedById: new FormControl(medicationRawValue.prescribedById),
       createdDate: new FormControl(medicationRawValue.createdDate),
       modifiedDate: new FormControl(medicationRawValue.modifiedDate),
       createdBy: new FormControl(medicationRawValue.createdBy),

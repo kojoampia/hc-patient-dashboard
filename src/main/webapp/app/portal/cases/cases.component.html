@@ -1,0 +1,61 @@
+<div class="hc-tools">
+  <hpd-search-box inputId="q_cases" placeholderKey="patientPortal.cases.search" [value]="query()" (queryChange)="setQuery($event)" />
+
+  @for (option of statuses; track option) {
+    <button type="button" class="hc-toggle" [class.is-on]="status() === option" (click)="setStatus(option)">
+      {{ humanise(option) }}
+    </button>
+  }
+</div>
+
+@if (visible().length) {
+  <div class="hc-card hc-tbl-wrap">
+    <table class="hc-tbl">
+      <thead>
+        <tr>
+          <th hpdTranslate="patientPortal.cases.column.number">#</th>
+          <th hpdTranslate="patientPortal.cases.column.title">Case</th>
+          <th hpdTranslate="patientPortal.cases.column.opened">Opened</th>
+          <th hpdTranslate="patientPortal.cases.column.clinician">Clinician</th>
+          <th hpdTranslate="patientPortal.cases.column.status">Status</th>
+          <th><span class="hc-sr-only" hpdTranslate="patientPortal.cases.column.open">Open</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of visible(); track item.id) {
+          <tr>
+            <td class="hc-tbl__date">{{ item.caseNumber ?? '—' }}</td>
+            <td>
+              <div class="hc-tbl__name">{{ item.title ?? item.brief }}</div>
+              @if (item.title && item.brief) {
+                <div class="hc-muted hc-tiny">{{ item.brief }}</div>
+              }
+            </td>
+            <td class="hc-tbl__date">{{ formatDay(item.openedAt) }}</td>
+            <td>{{ memberOf(item.assignedProfessionalId).name }}</td>
+            <td>
+              <span class="hc-pill" [class]="pill(item.status)">{{ humanise(item.status) }}</span>
+            </td>
+            <td class="hc-right">
+              <a
+                class="hc-icon-btn hc-icon-btn--sm"
+                [routerLink]="['/case', item.id]"
+                [attr.aria-label]="'patientPortal.cases.openCase' | translate: { name: item.title ?? item.brief }"
+              >
+                <hpd-icon name="chev" [size]="16" [strokeWidth]="2.2" />
+              </a>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div class="hc-mt-16">
+    <hpd-pager [currentPage]="page()" [totalPages]="totalPages()" (pageChange)="page.set($event)" />
+  </div>
+} @else {
+  <div class="hc-card">
+    <hpd-empty-state icon="case" titleKey="patientPortal.cases.empty" messageKey="patientPortal.cases.emptyHint" />
+  </div>
+}

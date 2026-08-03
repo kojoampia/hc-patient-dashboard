@@ -20,8 +20,13 @@ type ReportFormGroupContent = {
   id: FormControl<IReport['id'] | NewReport['id']>;
   category: FormControl<IReport['category']>;
   description: FormControl<IReport['description']>;
+  summary: FormControl<IReport['summary']>;
   name: FormControl<IReport['name']>;
   url: FormControl<IReport['url']>;
+  patientId: FormControl<IReport['patientId']>;
+  caseId: FormControl<IReport['caseId']>;
+  authorId: FormControl<IReport['authorId']>;
+  reportDate: FormControl<IReport['reportDate']>;
   createdDate: FormControl<IReport['createdDate']>;
   modifiedDate: FormControl<IReport['modifiedDate']>;
   createdBy: FormControl<IReport['createdBy']>;
@@ -47,8 +52,13 @@ export class ReportFormService {
       ),
       category: new FormControl(reportRawValue.category),
       description: new FormControl(reportRawValue.description),
+      summary: new FormControl(reportRawValue.summary),
       name: new FormControl(reportRawValue.name),
       url: new FormControl(reportRawValue.url),
+      patientId: new FormControl(reportRawValue.patientId),
+      caseId: new FormControl(reportRawValue.caseId),
+      authorId: new FormControl(reportRawValue.authorId),
+      reportDate: new FormControl(reportRawValue.reportDate),
       createdDate: new FormControl(reportRawValue.createdDate),
       modifiedDate: new FormControl(reportRawValue.modifiedDate),
       createdBy: new FormControl(reportRawValue.createdBy),

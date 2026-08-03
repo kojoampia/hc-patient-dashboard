@@ -6,7 +6,7 @@ import { FrequentAskedService } from '../../faq/frequent-asked.service';
 import SharedModule from 'app/shared/shared.module';
 
 @Component({
-  selector: 'jhi-chat-faq',
+  selector: 'hpd-chat-faq',
   standalone: true,
   templateUrl: './chat-faq.component.html',
   styleUrls: ['./chat-faq.component.scss'],
@@ -27,16 +27,14 @@ export class ChatFaqComponent implements OnInit {
   ngOnInit(): void {
     this.faqCategoryService.query().subscribe(
       categories => {
-        const tempFaqCategoryList = categories.body || [];
+        const tempFaqCategoryList = categories.body ?? [];
         this.faqService.query().subscribe(
           faqs => {
-            this.faqList = faqs.body || [];
-            if (tempFaqCategoryList) {
-              this.faqCategoryList = [];
-              for (const cat of tempFaqCategoryList) {
-                if (this.getFaqCount(cat) > 0) {
-                  this.faqCategoryList.push(cat);
-                }
+            this.faqList = faqs.body ?? [];
+            this.faqCategoryList = [];
+            for (const cat of tempFaqCategoryList) {
+              if (this.getFaqCount(cat) > 0) {
+                this.faqCategoryList.push(cat);
               }
             }
           },
@@ -64,7 +62,7 @@ export class ChatFaqComponent implements OnInit {
       }
     }).length;
 
-    return count || 0;
+    return count;
   }
 
   public getSelectedCategoryFaqs(): IFrequentAsked[] {
@@ -75,7 +73,7 @@ export class ChatFaqComponent implements OnInit {
         } else {
           return false;
         }
-      }) || []
+      }) ?? []
     );
   }
 }

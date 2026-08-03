@@ -1,0 +1,162 @@
+@if (profile(); as person) {
+  <div class="hc-rec-head">
+    @if (person.imageUrl) {
+      <img class="hc-avatar hc-av-56" [src]="person.imageUrl" alt="" />
+    } @else {
+      <span class="hc-monogram hc-monogram--gold hc-av-56">{{ (person.firstName ?? '?')[0] }}{{ (person.lastName ?? '')[0] }}</span>
+    }
+
+    <div class="hc-grow">
+      <div class="hc-rec-head__who">{{ fullName() }}</div>
+      <div class="hc-rec-head__sub">
+        @if (person.birthDate) {
+          <span>{{ formatDay(person.birthDate) }}</span> ·
+        }
+        @if (person.sex) {
+          <span>{{ person.sex }}</span> ·
+        }
+        @if (person.bloodGroup) {
+          <span>{{ person.bloodGroup }}</span> ·
+        }
+        <span>{{ person.email }}</span>
+      </div>
+    </div>
+
+    <a class="hc-btn hc-btn--ghost hc-btn--sm" routerLink="/profile">
+      <hpd-icon name="user" [size]="15" />
+      <span hpdTranslate="patientPortal.action.viewProfile">Profile</span>
+    </a>
+  </div>
+}
+
+<!-- ============================= vitals ============================= -->
+<div class="hc-sec-head">
+  <div>
+    <h3 hpdTranslate="patientPortal.record.vitals">Vitals</h3>
+    <p hpdTranslate="patientPortal.record.vitalsSub">Pick a reading to see how it has moved.</p>
+  </div>
+</div>
+
+@if (vitals().length) {
+  <div class="hc-grid hc-grid--4">
+    @for (vital of vitals(); track vital.key) {
+      <button
+        type="button"
+        class="hc-vital"
+        [style.border-color]="selected()?.key === vital.key ? 'var(--hc-navy)' : null"
+        [attr.aria-pressed]="selected()?.key === vital.key"
+        (click)="selectedKey.set(vital.key)"
+      >
+        <div class="hc-row hc-between">
+          <span class="hc-vital__label">{{ vital.label }}</span>
+          <span class="hc-pill" [class]="vitalPill(vital.flag)"><span class="hc-pill__dot"></span>{{ humanise(vital.flag) }}</span>
+        </div>
+        <b class="hc-num"
+          >{{ vital.display }} <span class="hc-vital__unit">{{ vital.unit }}</span></b
+        >
+        <div class="hc-vital__delta hc-muted">{{ formatDay(vital.recordedAt) }}</div>
+      </button>
+    }
+  </div>
+
+  @if (selected(); as vital) {
+    <div class="hc-chart-card hc-mt-16">
+      <div class="hc-chart-card__head">
+        <div class="hc-grow">
+          <h4>{{ vital.label }}</h4>
+          <p>{{ vital.band || vital.note }}</p>
+        </div>
+        <button type="button" class="hc-toggle" [class.is-on]="showTable()" (click)="showTable.set(!showTable())">
+          <span hpdTranslate="patientPortal.chart.table">Table</span>
+        </button>
+      </div>
+
+      <div class="hc-chart-card__body">
+        <hpd-trend-chart [data]="vital.trend" [unit]="vital.unit" [showTable]="showTable()" />
+      </div>
+    </div>
+
+    <hpd-panel class="hc-mt-16" titleKey="patientPortal.record.history" icon="clock">
+      @for (row of vital.history; track row.when) {
+        <div class="hc-drow">
+          <span class="hc-drow__date">{{ row.when }}</span>
+          <span class="hc-drow__text hc-num">{{ row.value }}</span>
+        </div>
+      }
+    </hpd-panel>
+  }
+} @else {
+  <div class="hc-card">
+    <hpd-empty-state icon="heart" titleKey="patientPortal.overview.noVitals" messageKey="patientPortal.overview.noVitalsHint" />
+  </div>
+}
+
+<!-- ============================= visits, activity, team ============================= -->
+<div class="hc-grid hc-grid--2 hc-mt-16">
+  <hpd-panel titleKey="patientPortal.record.visits" icon="pin">
+    @if (recentVisits().length) {
+      @for (visit of recentVisits(); track visit.id) {
+        <div class="hc-drow">
+          <span class="hc-drow__date">{{ formatDay(visit.visitedAt) }}</span>
+          <span class="hc-drow__text">
+            {{ visit.purpose }}
+            <span class="hc-drow__sub"
+              >{{ memberOf(visit.professionalId).name }}
+              @if (visit.location) {
+                · {{ visit.location }}
+              }
+            </span>
+          </span>
+        </div>
+      }
+    } @else {
+      <hpd-empty-state icon="pin" titleKey="patientPortal.visitations.empty" />
+    }
+
+    <footer hpdPanelFoot class="hc-panel__foot hc-center">
+      <a class="hc-btn hc-btn--quiet hc-btn--sm" routerLink="/visitations" hpdTranslate="patientPortal.action.seeAll">See all</a>
+    </footer>
+  </hpd-panel>
+
+  <hpd-panel titleKey="patientPortal.record.activity" icon="note">
+    @if (recentActivity().length) {
+      @for (entry of recentActivity(); track entry.id) {
+        <div class="hc-drow">
+          <span class="hc-drow__date">{{ formatDay(entry.loggedAt ?? entry.createdDate) }}</span>
+          <span class="hc-drow__text">{{ entry.summary }}</span>
+        </div>
+      }
+    } @else {
+      <hpd-empty-state icon="note" titleKey="patientPortal.activity.empty" />
+    }
+
+    <footer hpdPanelFoot class="hc-panel__foot hc-center">
+      <a class="hc-btn hc-btn--quiet hc-btn--sm" routerLink="/activity" hpdTranslate="patientPortal.action.seeAll">See all</a>
+    </footer>
+  </hpd-panel>
+</div>
+
+<hpd-panel class="hc-mt-16" titleKey="patientPortal.record.careTeam" icon="user">
+  @if (careTeam().length) {
+    @for (member of careTeam(); track member.id) {
+      <div class="hc-lrow">
+        @if (member.imageUrl) {
+          <img class="hc-avatar hc-av-40" [src]="member.imageUrl" alt="" />
+        } @else {
+          <span class="hc-monogram hc-av-40">{{ member.initials }}</span>
+        }
+        <span class="hc-grow">
+          <span class="hc-lrow__title">{{ member.name }}</span>
+          <span class="hc-lrow__sub"
+            >{{ member.role }}
+            @if (member.location) {
+              · {{ member.location }}
+            }
+          </span>
+        </span>
+      </div>
+    }
+  } @else {
+    <hpd-empty-state icon="user" titleKey="patientPortal.record.noCareTeam" messageKey="patientPortal.record.noCareTeamHint" />
+  }
+</hpd-panel>

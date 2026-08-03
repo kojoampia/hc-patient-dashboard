@@ -6,7 +6,6 @@
         "refreshListLabel": "Actualiser la liste",
         "createLabel": "Créer un nouveau Report",
         "createOrEditLabel": "Créer ou éditer un Report",
-        "search": "Recherche pour Report",
         "notFound": "Aucun Report trouvé"
       },
       "created": "Un nouveau Report a été créé avec l'identifiant {{ param }}",
@@ -18,11 +17,16 @@
       "detail": {
         "title": "Report"
       },
-      "id": "ID",
+      "id": "Id",
       "category": "Category",
       "description": "Description",
+      "summary": "Summary",
       "name": "Name",
       "url": "Url",
+      "patientId": "Patient Id",
+      "caseId": "Case Id",
+      "authorId": "Author Id",
+      "reportDate": "Report Date",
       "createdDate": "Created Date",
       "modifiedDate": "Modified Date",
       "createdBy": "Created By",

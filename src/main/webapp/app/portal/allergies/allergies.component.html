@@ -1,0 +1,54 @@
+@if (allergies().length) {
+  <div class="hc-grid hc-grid--2">
+    @for (item of allergies(); track item.id) {
+      <article class="hc-card hc-card-pad" [style.border-left]="item.severity === 'SEVERE' ? '4px solid var(--hc-danger)' : null">
+        <div class="hc-row hc-between hc-gap-8 hc-wrap">
+          <div class="hc-row hc-gap-8">
+            <hpd-icon name="shield" [size]="18" [strokeWidth]="2" />
+            <b>{{ item.name }}</b>
+          </div>
+          <span class="hc-pill" [class]="pill(item.severity)">{{ humanise(item.severity) }}</span>
+        </div>
+
+        <div class="hc-kv" style="margin-top: 8px">
+          <span class="hc-kv__k" hpdTranslate="patientPortal.allergies.category">Type</span>
+          <span class="hc-kv__v">{{ humanise(item.category) }}</span>
+        </div>
+
+        @if (item.reaction) {
+          <div class="hc-kv">
+            <span class="hc-kv__k" hpdTranslate="patientPortal.allergies.reaction">Reaction</span>
+            <span class="hc-kv__v">{{ item.reaction }}</span>
+          </div>
+        }
+
+        <div class="hc-kv">
+          <span class="hc-kv__k" hpdTranslate="patientPortal.allergies.noted">Noted</span>
+          <span class="hc-kv__v">{{ formatDay(item.notedOn) }} · {{ memberOf(item.notedById).name }}</span>
+        </div>
+      </article>
+    }
+  </div>
+} @else {
+  <div class="hc-card">
+    <hpd-empty-state icon="shield" titleKey="patientPortal.allergies.empty" messageKey="patientPortal.allergies.emptyHint" />
+  </div>
+}
+
+<hpd-panel class="hc-mt-16" titleKey="patientPortal.allergies.conditions" icon="stetho">
+  @if (conditions().length) {
+    @for (item of conditions(); track item.id) {
+      <div class="hc-drow">
+        <span class="hc-drow__date">{{ formatDay(item.createdDate) }}</span>
+        <span class="hc-drow__text">
+          {{ item.name }}
+          @if (item.description) {
+            <span class="hc-drow__sub">{{ item.description }}</span>
+          }
+        </span>
+      </div>
+    }
+  } @else {
+    <hpd-empty-state icon="stetho" titleKey="patientPortal.allergies.noConditions" />
+  }
+</hpd-panel>

@@ -18,19 +18,27 @@ type ProfileFormDefaults = Pick<NewProfile, 'id'>;
 
 type ProfileFormGroupContent = {
   id: FormControl<IProfile['id'] | NewProfile['id']>;
+  patientId: FormControl<IProfile['patientId']>;
   firstName: FormControl<IProfile['firstName']>;
   middleNames: FormControl<IProfile['middleNames']>;
   lastName: FormControl<IProfile['lastName']>;
   membership: FormControl<IProfile['membership']>;
   birthDate: FormControl<IProfile['birthDate']>;
   sex: FormControl<IProfile['sex']>;
+  bloodGroup: FormControl<IProfile['bloodGroup']>;
   mobilePhone: FormControl<IProfile['mobilePhone']>;
   phoneNumber: FormControl<IProfile['phoneNumber']>;
   email: FormControl<IProfile['email']>;
-  idType: FormControl<IProfile['idType']>;
-  idNumber: FormControl<IProfile['idNumber']>;
+  cardType: FormControl<IProfile['cardType']>;
+  cardNumber: FormControl<IProfile['cardNumber']>;
   contacts: FormControl<IProfile['contacts']>;
   address: FormControl<IProfile['address']>;
+  team: FormControl<IProfile['team']>;
+  imageUrl: FormControl<IProfile['imageUrl']>;
+  about: FormControl<IProfile['about']>;
+  socialHandle: FormControl<IProfile['socialHandle']>;
+  careAngelName: FormControl<IProfile['careAngelName']>;
+  careAngelPhone: FormControl<IProfile['careAngelPhone']>;
 };
 
 export type ProfileFormGroup = FormGroup<ProfileFormGroupContent>;
@@ -50,19 +58,27 @@ export class ProfileFormService {
           validators: [Validators.required],
         },
       ),
+      patientId: new FormControl(profileRawValue.patientId),
       firstName: new FormControl(profileRawValue.firstName),
       middleNames: new FormControl(profileRawValue.middleNames),
       lastName: new FormControl(profileRawValue.lastName),
       membership: new FormControl(profileRawValue.membership),
       birthDate: new FormControl(profileRawValue.birthDate),
       sex: new FormControl(profileRawValue.sex),
+      bloodGroup: new FormControl(profileRawValue.bloodGroup),
       mobilePhone: new FormControl(profileRawValue.mobilePhone),
       phoneNumber: new FormControl(profileRawValue.phoneNumber),
       email: new FormControl(profileRawValue.email),
-      idType: new FormControl(profileRawValue.idType),
-      idNumber: new FormControl(profileRawValue.idNumber),
+      cardType: new FormControl(profileRawValue.cardType),
+      cardNumber: new FormControl(profileRawValue.cardNumber),
       contacts: new FormControl(profileRawValue.contacts),
       address: new FormControl(profileRawValue.address),
+      team: new FormControl(profileRawValue.team),
+      imageUrl: new FormControl(profileRawValue.imageUrl),
+      about: new FormControl(profileRawValue.about),
+      socialHandle: new FormControl(profileRawValue.socialHandle),
+      careAngelName: new FormControl(profileRawValue.careAngelName),
+      careAngelPhone: new FormControl(profileRawValue.careAngelPhone),
     });
   }
 

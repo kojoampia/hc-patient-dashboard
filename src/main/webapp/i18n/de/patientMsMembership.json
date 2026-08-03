@@ -6,7 +6,6 @@
         "refreshListLabel": "Liste aktualisieren",
         "createLabel": "Membership erstellen",
         "createOrEditLabel": "Membership erstellen oder bearbeiten",
-        "search": "Suche nach Membership",
         "notFound": "Keine Memberships gefunden"
       },
       "created": "Membership erstellt mit ID {{ param }}",
@@ -18,10 +17,15 @@
       "detail": {
         "title": "Membership"
       },
-      "id": "ID",
+      "id": "Id",
+      "patientId": "Patient Id",
       "name": "Name",
       "description": "Description",
       "status": "Status",
+      "memberNumber": "Member Number",
+      "plan": "Plan",
+      "startDate": "Start Date",
+      "renewalDate": "Renewal Date",
       "createdDate": "Created Date",
       "modifiedDate": "Modified Date",
       "createdBy": "Created By",

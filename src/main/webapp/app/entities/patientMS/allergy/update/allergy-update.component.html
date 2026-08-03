@@ -1,0 +1,158 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="hpd-allergy-heading"
+        data-cy="AllergyCreateUpdateHeading"
+        hpdTranslate="patientDashboardApp.patientMsAllergy.home.createOrEditLabel"
+      >
+        Create or edit a Allergy
+      </h2>
+
+      <div>
+        <hpd-alert-error></hpd-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" hpdTranslate="patientDashboardApp.patientMsAllergy.id" for="field_id">Id</label>
+            <input type="text" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsAllergy.patientId" for="field_patientId">Patient Id</label>
+          <input type="text" class="form-control" name="patientId" id="field_patientId" data-cy="patientId" formControlName="patientId" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsAllergy.name" for="field_name">Name</label>
+          <input type="text" class="form-control" name="name" id="field_name" data-cy="name" formControlName="name" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsAllergy.category" for="field_category">Category</label>
+          <select class="form-control" name="category" formControlName="category" id="field_category" data-cy="category">
+            <option [ngValue]="null">{{ 'patientDashboardApp.AllergyCategory.null' | translate }}</option>
+            @for (allergyCategory of allergyCategoryValues; track $index) {
+              <option [value]="allergyCategory">{{ 'patientDashboardApp.AllergyCategory.' + allergyCategory | translate }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsAllergy.severity" for="field_severity">Severity</label>
+          <select class="form-control" name="severity" formControlName="severity" id="field_severity" data-cy="severity">
+            <option [ngValue]="null">{{ 'patientDashboardApp.AllergySeverity.null' | translate }}</option>
+            @for (allergySeverity of allergySeverityValues; track $index) {
+              <option [value]="allergySeverity">{{ 'patientDashboardApp.AllergySeverity.' + allergySeverity | translate }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsAllergy.reaction" for="field_reaction">Reaction</label>
+          <input type="text" class="form-control" name="reaction" id="field_reaction" data-cy="reaction" formControlName="reaction" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsAllergy.notedOn" for="field_notedOn">Noted On</label>
+          <div class="input-group">
+            <input
+              id="field_notedOn"
+              data-cy="notedOn"
+              type="text"
+              class="form-control"
+              name="notedOn"
+              ngbDatepicker
+              #notedOnDp="ngbDatepicker"
+              formControlName="notedOn"
+            />
+            <button type="button" class="btn btn-secondary" (click)="notedOnDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsAllergy.notedById" for="field_notedById">Noted By Id</label>
+          <input type="text" class="form-control" name="notedById" id="field_notedById" data-cy="notedById" formControlName="notedById" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsAllergy.createdDate" for="field_createdDate"
+            >Created Date</label
+          >
+          <div class="input-group">
+            <input
+              id="field_createdDate"
+              data-cy="createdDate"
+              type="text"
+              class="form-control"
+              name="createdDate"
+              ngbDatepicker
+              #createdDateDp="ngbDatepicker"
+              formControlName="createdDate"
+            />
+            <button type="button" class="btn btn-secondary" (click)="createdDateDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsAllergy.modifiedDate" for="field_modifiedDate"
+            >Modified Date</label
+          >
+          <div class="input-group">
+            <input
+              id="field_modifiedDate"
+              data-cy="modifiedDate"
+              type="text"
+              class="form-control"
+              name="modifiedDate"
+              ngbDatepicker
+              #modifiedDateDp="ngbDatepicker"
+              formControlName="modifiedDate"
+            />
+            <button type="button" class="btn btn-secondary" (click)="modifiedDateDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsAllergy.createdBy" for="field_createdBy">Created By</label>
+          <input type="text" class="form-control" name="createdBy" id="field_createdBy" data-cy="createdBy" formControlName="createdBy" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsAllergy.modifiedBy" for="field_modifiedBy"
+            >Modified By</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="modifiedBy"
+            id="field_modifiedBy"
+            data-cy="modifiedBy"
+            formControlName="modifiedBy"
+          />
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span hpdTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span hpdTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

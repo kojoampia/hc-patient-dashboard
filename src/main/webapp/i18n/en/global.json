@@ -1,13 +1,33 @@
 {
   "global": {
-    "title": "Patient Dashboard",
+    "title": "PatientDashboard",
     "browsehappy": "You are using an <strong>outdated</strong> browser. Please <a href=\"http://browsehappy.com/?locale=en\">upgrade your browser</a> to improve your experience.",
     "menu": {
       "home": "Home",
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "Entities",
-        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
+        "patientMsAddress": "Address",
+        "patientMsCondition": "Condition",
+        "patientMsMedication": "Medication",
+        "patientMsStat": "Stat",
+        "patientMsTeam": "Team",
+        "patientMsTask": "Task",
+        "patientMsMembership": "Membership",
+        "patientMsReport": "Report",
+        "patientMsMetadata": "Metadata",
+        "patientMsProfile": "Profile",
+        "patientMsPaymentOption": "Payment Option",
+        "patientMsPersonalDocument": "Personal Document",
+        "patientMsRecommendation": "Recommendation",
+        "patientMsClinicalCase": "Clinical Case",
+        "patientMsProfessional": "Professional",
+        "patientMsVisitation": "Visitation",
+        "patientMsEmergency": "Emergency",
+        "patientMsActivityLog": "Activity Log",
+        "patientMsCarePlanItem": "Care Plan Item",
+        "patientMsAllergy": "Allergy"
       },
       "account": {
         "main": "Account",
@@ -20,7 +40,6 @@
       },
       "admin": {
         "main": "Administration",
-        "gateway": "Gateway",
         "userManagement": "User management",
         "tracker": "User tracker",
         "metrics": "Metrics",
@@ -48,12 +67,12 @@
     "messages": {
       "info": {
         "authenticated": {
-          "prefix": "Please ",
+          "prefix": "If you want to ",
           "link": "sign in",
           "suffix": ", you can try the default accounts:<br/>- Administrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\")."
         },
         "register": {
-          "noaccount": "Let us take care of your wellbeing!",
+          "noaccount": "You don't have an account yet?",
           "link": "Register a new account"
         }
       },
@@ -144,7 +163,5 @@
       "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
     }
   },
-  "footer": {
-    "copyright": "&copy; {{ year }} Health Connect by Jojo Addison Information Systems Consultancy &reg; All rights reserved."
-  }
+  "footer": "This is your footer"
 }

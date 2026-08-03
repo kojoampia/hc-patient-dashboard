@@ -55,9 +55,13 @@
           "public-static-field",
           "protected-static-field",
           "private-static-field",
+          // Private instance fields come before public ones, which is the reverse of the usual
+          // advice, because `inject()` has to run first: class field initialisers execute before
+          // constructor parameter properties are assigned, so a public field derived from an
+          // injected service can only work if the service field is declared above it.
+          "private-instance-field",
           "public-instance-field",
           "protected-instance-field",
-          "private-instance-field",
           "constructor",
           "public-static-method",
           "protected-static-method",

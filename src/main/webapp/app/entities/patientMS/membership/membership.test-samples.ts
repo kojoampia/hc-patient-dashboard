@@ -7,23 +7,30 @@ export const sampleWithRequiredData: IMembership = {
 };
 
 export const sampleWithPartialData: IMembership = {
-  id: '199286d2-cd9c-4807-b717-73ee2ad735ee',
-  name: 'where innocently',
-  description: 'till yowza injure',
-  status: 'pamper slim',
-  createdDate: dayjs('2024-02-06'),
-  createdBy: 'daily likewise quickly',
+  id: '6d2cd9c8-0771-4773-9ee2-ad735eedab42',
+  patientId: 'versus successfully',
+  name: 'fly geez',
+  description: 'science excepting coo',
+  status: 'suit starchy',
+  plan: 'reinscription whether eradicate',
+  renewalDate: dayjs('2024-02-06'),
+  createdBy: 'blissfully thrifty',
 };
 
 export const sampleWithFullData: IMembership = {
-  id: '189fb433-639d-4c80-9420-465db98040b3',
-  name: 'curiously upon',
-  description: 'fussy arrogantly careful',
-  status: 'unless',
-  createdDate: dayjs('2024-02-05'),
+  id: '9d7284bc-27ea-4dc7-9bbd-5eab9a70e675',
+  patientId: 'bleakly saturate',
+  name: 'fourths haunting sharply',
+  description: 'thigh gee',
+  status: 'mislay heater',
+  memberNumber: 'yuck vapid',
+  plan: 'across',
+  startDate: dayjs('2024-02-06'),
+  renewalDate: dayjs('2024-02-06'),
+  createdDate: dayjs('2024-02-06'),
   modifiedDate: dayjs('2024-02-06'),
-  createdBy: 'phew though sick',
-  modifiedBy: 'aside',
+  createdBy: 'barring brr flimsy',
+  modifiedBy: 'lest oil',
 };
 
 export const sampleWithNewData: NewMembership = {

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable, asapScheduler, scheduled } from 'rxjs';
+import { Observable } from 'rxjs';
 
-import { catchError, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import dayjs from 'dayjs/esm';
 
@@ -10,7 +10,6 @@ import { isPresent } from 'app/core/util/operators';
 import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
-import { Search } from 'app/core/request/request.model';
 import { IMetadata, NewMetadata } from '../metadata.model';
 
 export type PartialUpdateMetadata = Partial<IMetadata> & Pick<IMetadata, 'id'>;
@@ -31,8 +30,7 @@ export type EntityArrayResponseType = HttpResponse<IMetadata[]>;
 
 @Injectable({ providedIn: 'root' })
 export class MetadataService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/metadata');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/metadata/_search');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/metadata', 'hcpatientservice');
 
   constructor(
     protected http: HttpClient,
@@ -75,14 +73,6 @@ export class MetadataService {
 
   delete(id: string): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
-  }
-
-  search(req: Search): Observable<EntityArrayResponseType> {
-    const options = createRequestOption(req);
-    return this.http.get<RestMetadata[]>(this.resourceSearchUrl, { params: options, observe: 'response' }).pipe(
-      map(res => this.convertResponseArrayFromServer(res)),
-      catchError(() => scheduled([new HttpResponse<IMetadata[]>()], asapScheduler)),
-    );
   }
 
   getMetadataIdentifier(metadata: Pick<IMetadata, 'id'>): string {

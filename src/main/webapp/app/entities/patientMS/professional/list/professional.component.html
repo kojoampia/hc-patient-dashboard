@@ -1,0 +1,190 @@
+<div>
+  <h2 id="page-heading" data-cy="ProfessionalHeading">
+    <span hpdTranslate="patientDashboardApp.patientMsProfessional.home.title">Professionals</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span hpdTranslate="patientDashboardApp.patientMsProfessional.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-professional"
+        [routerLink]="['/professional/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span hpdTranslate="patientDashboardApp.patientMsProfessional.home.createLabel">Create a new Professional</span>
+      </button>
+    </div>
+  </h2>
+
+  <hpd-alert-error></hpd-alert-error>
+
+  <hpd-alert></hpd-alert>
+
+  @if (professionals?.length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span hpdTranslate="patientDashboardApp.patientMsProfessional.home.notFound">No Professionals found</span>
+    </div>
+  }
+
+  @if (professionals && professionals.length > 0) {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr hpdSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+            <th scope="col" hpdSortBy="id">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsProfessional.id">Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="firstName">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsProfessional.firstName">First Name</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="lastName">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsProfessional.lastName">Last Name</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="role">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsProfessional.role">Role</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="specialty">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsProfessional.specialty">Specialty</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="email">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsProfessional.email">Email</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="phoneNumber">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsProfessional.phoneNumber">Phone Number</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="imageUrl">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsProfessional.imageUrl">Image Url</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="initials">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsProfessional.initials">Initials</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="location">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsProfessional.location">Location</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="teamId">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsProfessional.teamId">Team Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="createdDate">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsProfessional.createdDate">Created Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="modifiedDate">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsProfessional.modifiedDate">Modified Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="createdBy">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsProfessional.createdBy">Created By</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="modifiedBy">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsProfessional.modifiedBy">Modified By</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (professional of professionals; track trackId) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/professional', professional.id, 'view']">{{ professional.id }}</a>
+              </td>
+              <td>{{ professional.firstName }}</td>
+              <td>{{ professional.lastName }}</td>
+              <td>{{ professional.role }}</td>
+              <td>{{ professional.specialty }}</td>
+              <td>{{ professional.email }}</td>
+              <td>{{ professional.phoneNumber }}</td>
+              <td>{{ professional.imageUrl }}</td>
+              <td>{{ professional.initials }}</td>
+              <td>{{ professional.location }}</td>
+              <td>{{ professional.teamId }}</td>
+              <td>{{ professional.createdDate | formatMediumDate }}</td>
+              <td>{{ professional.modifiedDate | formatMediumDate }}</td>
+              <td>{{ professional.createdBy }}</td>
+              <td>{{ professional.modifiedBy }}</td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/professional', professional.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" hpdTranslate="entity.action.view">View</span>
+                  </a>
+
+                  <a [routerLink]="['/professional', professional.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" hpdTranslate="entity.action.edit">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(professional)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" hpdTranslate="entity.action.delete">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

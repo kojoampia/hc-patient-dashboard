@@ -5,7 +5,7 @@ import { Services } from 'app/admin/metrics/metrics.model';
 
 @Component({
   standalone: true,
-  selector: 'jhi-metrics-endpoints-requests',
+  selector: 'hpd-metrics-endpoints-requests',
   templateUrl: './metrics-endpoints-requests.component.html',
   imports: [SharedModule],
 })

@@ -7,6 +7,7 @@ import { finalize } from 'rxjs/operators';
 import SharedModule from 'app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { ScheduleStatus } from 'app/entities/enumerations/schedule-status.model';
 import { ITask } from '../task.model';
 import { TaskService } from '../service/task.service';
 import { TaskFormService, TaskFormGroup } from './task-form.service';
@@ -20,6 +21,7 @@ import { TaskFormService, TaskFormGroup } from './task-form.service';
 export class TaskUpdateComponent implements OnInit {
   isSaving = false;
   task: ITask | null = null;
+  scheduleStatusValues = Object.keys(ScheduleStatus);
 
   editForm: TaskFormGroup = this.taskFormService.createTaskFormGroup();
 

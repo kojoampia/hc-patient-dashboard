@@ -1,0 +1,171 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="hpd-clinical-case-heading"
+        data-cy="ClinicalCaseCreateUpdateHeading"
+        hpdTranslate="patientDashboardApp.patientMsClinicalCase.home.createOrEditLabel"
+      >
+        Create or edit a Clinical Case
+      </h2>
+
+      <div>
+        <hpd-alert-error></hpd-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" hpdTranslate="patientDashboardApp.patientMsClinicalCase.id" for="field_id">Id</label>
+            <input type="text" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsClinicalCase.patientId" for="field_patientId"
+            >Patient Id</label
+          >
+          <input type="text" class="form-control" name="patientId" id="field_patientId" data-cy="patientId" formControlName="patientId" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsClinicalCase.caseNumber" for="field_caseNumber"
+            >Case Number</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            name="caseNumber"
+            id="field_caseNumber"
+            data-cy="caseNumber"
+            formControlName="caseNumber"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsClinicalCase.title" for="field_title">Title</label>
+          <input type="text" class="form-control" name="title" id="field_title" data-cy="title" formControlName="title" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsClinicalCase.openedAt" for="field_openedAt">Opened At</label>
+          <div class="d-flex">
+            <input
+              id="field_openedAt"
+              data-cy="openedAt"
+              type="datetime-local"
+              class="form-control"
+              name="openedAt"
+              formControlName="openedAt"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsClinicalCase.closedAt" for="field_closedAt">Closed At</label>
+          <div class="d-flex">
+            <input
+              id="field_closedAt"
+              data-cy="closedAt"
+              type="datetime-local"
+              class="form-control"
+              name="closedAt"
+              formControlName="closedAt"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsClinicalCase.brief" for="field_brief">Brief</label>
+          <input type="text" class="form-control" name="brief" id="field_brief" data-cy="brief" formControlName="brief" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsClinicalCase.status" for="field_status">Status</label>
+          <select class="form-control" name="status" formControlName="status" id="field_status" data-cy="status">
+            <option [ngValue]="null">{{ 'patientDashboardApp.CaseStatus.null' | translate }}</option>
+            @for (caseStatus of caseStatusValues; track $index) {
+              <option [value]="caseStatus">{{ 'patientDashboardApp.CaseStatus.' + caseStatus | translate }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsClinicalCase.symptoms" for="field_symptoms">Symptoms</label>
+          <input type="text" class="form-control" name="symptoms" id="field_symptoms" data-cy="symptoms" formControlName="symptoms" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsClinicalCase.diagnosis" for="field_diagnosis"
+            >Diagnosis</label
+          >
+          <input type="text" class="form-control" name="diagnosis" id="field_diagnosis" data-cy="diagnosis" formControlName="diagnosis" />
+        </div>
+
+        <div class="mb-3">
+          <label
+            class="form-label"
+            hpdTranslate="patientDashboardApp.patientMsClinicalCase.assignedProfessionalId"
+            for="field_assignedProfessionalId"
+            >Assigned Professional Id</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="assignedProfessionalId"
+            id="field_assignedProfessionalId"
+            data-cy="assignedProfessionalId"
+            formControlName="assignedProfessionalId"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsClinicalCase.assignedRosterId" for="field_assignedRosterId"
+            >Assigned Roster Id</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="assignedRosterId"
+            id="field_assignedRosterId"
+            data-cy="assignedRosterId"
+            formControlName="assignedRosterId"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label hpdTranslate="patientDashboardApp.patientMsClinicalCase.recommendation" for="field_recommendations">Recommendation</label>
+          <select
+            class="form-control"
+            id="field_recommendations"
+            data-cy="recommendation"
+            multiple
+            name="recommendations"
+            formControlName="recommendations"
+            [compareWith]="compareRecommendation"
+          >
+            @for (recommendationOption of recommendationsSharedCollection; track $index) {
+              <option [ngValue]="recommendationOption">{{ recommendationOption.id }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span hpdTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span hpdTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

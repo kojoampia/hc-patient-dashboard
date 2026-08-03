@@ -4,7 +4,7 @@ Angular web dashboard for the Health Connect **patient** subsystem. Originally g
 
 | Repo                 | Role                                                                                                                       | Dev port |
 | -------------------- | -------------------------------------------------------------------------------------------------------------------------- | -------- |
-| `hc-patient-gateway` | reactive Spring Cloud Gateway; authentication, account/user management, routes `/services/{serviceId}/**` to microservices | 5503     |
+| `hc-patient-gateway` | reactive Spring Cloud Gateway; authentication, account/user management, routes `/services/{serviceId}/**` to microservices | 5505     |
 | `hc-patient-service` | patient data microservice (`hcpatientservice`), MongoDB + Kafka                                                            | 8081     |
 
 The browser never talks to the microservice directly: requests go to the gateway, which relays the JWT downstream. Build URLs with `ApplicationConfigService.getEndpointFor('api/profiles', 'hcpatientservice')` — never hardcode a host or the `/services/...` prefix.
@@ -21,7 +21,7 @@ The browser never talks to the microservice directly: requests go to the gateway
 | i18n             | enabled — `en`, `fr`, `de` under `src/main/webapp/i18n`                                                               |
 | Component prefix | ESLint requires `hpd` (`jhiPrefix`); `angular.json` still says `jhi` and older components still use `jhi-*` selectors |
 
-`pom.xml`, `mvnw`, and `npmw` are leftovers from the JHipster generator. There is nothing for Maven to compile, and `pom.xml` sets `java.version` 26 while its Enforcer rule only allows `[17,26)`, so Maven goals fail outright on a JDK 26 toolchain. **Use npm for everything in this repo.**
+`pom.xml`, `mvnw`, and `npmw` are leftovers from the JHipster generator. There is nothing for Maven to compile. `pom.xml` previously set `java.version` 26 against an Enforcer rule allowing only `[17,26)`, so every Maven goal failed; it now says 25 and agrees with itself, but still builds nothing. **Use npm for everything in this repo.**
 
 ## Project layout
 
@@ -64,7 +64,7 @@ npm start
 
 API calls are proxied by `webpack/proxy.conf.js`, which forwards `/api`, `/services`, `/management`, `/v3/api-docs`, `/auth`, and `/health` to **`http://localhost:5505`** (`DEV_SERVER_API_URL` in `webpack/environment.js`).
 
-> The gateway's own dev port is **5503**. These two values disagree; confirm where the gateway is actually listening and align the proxy target before debugging "API unreachable" errors. Production is unaffected — the bundle is built same-origin and the web container's nginx proxies to the gateway.
+> The gateway listens on **5505** too, so `npm start` reaches it with no further configuration. These two values disagreed until 2026-08-03, when the gateway moved from 5503 to 5505 across dev, prod and the deploy stack. Production is unaffected by the proxy either way — the bundle is built same-origin and the web container's nginx proxies to the gateway.
 
 Run with TLS instead (`ng serve --ssl`):
 

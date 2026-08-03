@@ -5,7 +5,13 @@
   "changelogDate": "20240206205816",
   "clientRootFolder": "patientMS",
   "databaseType": "mongodb",
+  "dto": "no",
+  "entityTableName": "address",
   "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "String"
+    },
     {
       "fieldName": "digitalAddress",
       "fieldType": "String"
@@ -64,6 +70,6 @@
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
-  "searchEngine": true,
+  "searchEngine": "no",
   "service": "no"
 }

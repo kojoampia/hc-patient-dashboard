@@ -6,7 +6,6 @@
         "refreshListLabel": "Actualiser la liste",
         "createLabel": "Créer un nouveau Metadata",
         "createOrEditLabel": "Créer ou éditer un Metadata",
-        "search": "Recherche pour Metadata",
         "notFound": "Aucun Metadata trouvé"
       },
       "created": "Un nouveau Metadata a été créé avec l'identifiant {{ param }}",
@@ -18,7 +17,7 @@
       "detail": {
         "title": "Metadata"
       },
-      "id": "ID",
+      "id": "Id",
       "createdBy": "Created By",
       "modifiedBy": "Modified By",
       "createdDate": "Created Date",

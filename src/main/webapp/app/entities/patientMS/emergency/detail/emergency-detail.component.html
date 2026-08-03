@@ -1,0 +1,94 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (emergency) {
+      <div>
+        <h2 data-cy="emergencyDetailsHeading">
+          <span hpdTranslate="patientDashboardApp.patientMsEmergency.detail.title"
+            >Translation missing for patientDashboardApp.patientMsEmergency.detail.title</span
+          >
+        </h2>
+
+        <hr />
+
+        <hpd-alert-error></hpd-alert-error>
+
+        <hpd-alert></hpd-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span hpdTranslate="patientDashboardApp.patientMsEmergency.id">Id</span></dt>
+          <dd>
+            <span>{{ emergency.id }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsEmergency.patientId">Patient Id</span></dt>
+          <dd>
+            <span>{{ emergency.patientId }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsEmergency.caseId">Case Id</span></dt>
+          <dd>
+            <span>{{ emergency.caseId }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsEmergency.raisedAt">Raised At</span></dt>
+          <dd>
+            <span>{{ emergency.raisedAt | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsEmergency.resolvedAt">Resolved At</span></dt>
+          <dd>
+            <span>{{ emergency.resolvedAt | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsEmergency.brief">Brief</span></dt>
+          <dd>
+            <span>{{ emergency.brief }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsEmergency.detail">Detail</span></dt>
+          <dd>
+            <span>{{ emergency.detail }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsEmergency.severity">Severity</span></dt>
+          <dd>
+            <span hpdTranslate="{{ 'patientDashboardApp.EmergencySeverity.' + emergency.severity }}">{{ emergency.severity }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsEmergency.status">Status</span></dt>
+          <dd>
+            <span hpdTranslate="{{ 'patientDashboardApp.EmergencyStatus.' + emergency.status }}">{{ emergency.status }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsEmergency.outcome">Outcome</span></dt>
+          <dd>
+            <span>{{ emergency.outcome }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsEmergency.location">Location</span></dt>
+          <dd>
+            <span>{{ emergency.location }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsEmergency.respondentId">Respondent Id</span></dt>
+          <dd>
+            <span>{{ emergency.respondentId }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsEmergency.createdDate">Created Date</span></dt>
+          <dd>
+            <span>{{ emergency.createdDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsEmergency.modifiedDate">Modified Date</span></dt>
+          <dd>
+            <span>{{ emergency.modifiedDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsEmergency.createdBy">Created By</span></dt>
+          <dd>
+            <span>{{ emergency.createdBy }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsEmergency.modifiedBy">Modified By</span></dt>
+          <dd>
+            <span>{{ emergency.modifiedBy }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span hpdTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/emergency', emergency.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span hpdTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

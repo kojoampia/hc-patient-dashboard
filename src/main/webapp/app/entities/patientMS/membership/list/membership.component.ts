@@ -29,14 +29,11 @@ import { MembershipDeleteDialogComponent } from '../delete/membership-delete-dia
   ],
 })
 export class MembershipComponent implements OnInit {
-  private static readonly NOT_SORTABLE_FIELDS_AFTER_SEARCH = ['id', 'name', 'description', 'status', 'createdBy', 'modifiedBy'];
-
   memberships?: IMembership[];
   isLoading = false;
 
   predicate = 'id';
   ascending = true;
-  currentSearch = '';
 
   constructor(
     protected membershipService: MembershipService,
@@ -47,14 +44,6 @@ export class MembershipComponent implements OnInit {
   ) {}
 
   trackId = (_index: number, item: IMembership): string => this.membershipService.getMembershipIdentifier(item);
-
-  search(query: string): void {
-    if (query && MembershipComponent.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(this.predicate)) {
-      this.predicate = '';
-    }
-    this.currentSearch = query;
-    this.navigateToWithComponentValues();
-  }
 
   ngOnInit(): void {
     this.load();
@@ -85,13 +74,13 @@ export class MembershipComponent implements OnInit {
   }
 
   navigateToWithComponentValues(): void {
-    this.handleNavigation(this.predicate, this.ascending, this.currentSearch);
+    this.handleNavigation(this.predicate, this.ascending);
   }
 
   protected loadFromBackendWithRouteInformations(): Observable<EntityArrayResponseType> {
     return combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data]).pipe(
       tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
-      switchMap(() => this.queryBackend(this.predicate, this.ascending, this.currentSearch)),
+      switchMap(() => this.queryBackend(this.predicate, this.ascending)),
     );
   }
 
@@ -99,12 +88,6 @@ export class MembershipComponent implements OnInit {
     const sort = (params.get(SORT) ?? data[DEFAULT_SORT_DATA]).split(',');
     this.predicate = sort[0];
     this.ascending = sort[1] === ASC;
-    if (params.has('search') && params.get('search') !== '') {
-      this.currentSearch = params.get('search') as string;
-      if (MembershipComponent.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(this.predicate)) {
-        this.predicate = '';
-      }
-    }
   }
 
   protected onResponseSuccess(response: EntityArrayResponseType): void {
@@ -120,22 +103,16 @@ export class MembershipComponent implements OnInit {
     return data ?? [];
   }
 
-  protected queryBackend(predicate?: string, ascending?: boolean, currentSearch?: string): Observable<EntityArrayResponseType> {
+  protected queryBackend(predicate?: string, ascending?: boolean): Observable<EntityArrayResponseType> {
     this.isLoading = true;
     const queryObject: any = {
-      query: currentSearch,
       sort: this.getSortQueryParam(predicate, ascending),
     };
-    if (this.currentSearch && this.currentSearch !== '') {
-      return this.membershipService.search(queryObject).pipe(tap(() => (this.isLoading = false)));
-    } else {
-      return this.membershipService.query(queryObject).pipe(tap(() => (this.isLoading = false)));
-    }
+    return this.membershipService.query(queryObject).pipe(tap(() => (this.isLoading = false)));
   }
 
-  protected handleNavigation(predicate?: string, ascending?: boolean, currentSearch?: string): void {
+  protected handleNavigation(predicate?: string, ascending?: boolean): void {
     const queryParamsObj = {
-      search: currentSearch,
       sort: this.getSortQueryParam(predicate, ascending),
     };
 

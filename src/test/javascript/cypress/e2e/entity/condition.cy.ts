@@ -157,11 +157,14 @@ describe('Condition e2e test', () => {
     });
 
     it('should create an instance of Condition', () => {
-      cy.get(`[data-cy="name"]`).type('gah');
-      cy.get(`[data-cy="name"]`).should('have.value', 'gah');
+      cy.get(`[data-cy="name"]`).type('when inspection impractical');
+      cy.get(`[data-cy="name"]`).should('have.value', 'when inspection impractical');
 
-      cy.get(`[data-cy="description"]`).type('webinar circulation');
-      cy.get(`[data-cy="description"]`).should('have.value', 'webinar circulation');
+      cy.get(`[data-cy="description"]`).type('between tremendously rough');
+      cy.get(`[data-cy="description"]`).should('have.value', 'between tremendously rough');
+
+      cy.get(`[data-cy="patientId"]`).type('terrorize');
+      cy.get(`[data-cy="patientId"]`).should('have.value', 'terrorize');
 
       cy.get(`[data-cy="createdDate"]`).type('2024-02-06');
       cy.get(`[data-cy="createdDate"]`).blur();
@@ -171,11 +174,11 @@ describe('Condition e2e test', () => {
       cy.get(`[data-cy="modifiedDate"]`).blur();
       cy.get(`[data-cy="modifiedDate"]`).should('have.value', '2024-02-06');
 
-      cy.get(`[data-cy="createdBy"]`).type('shoehorn extroverted terrorize');
-      cy.get(`[data-cy="createdBy"]`).should('have.value', 'shoehorn extroverted terrorize');
+      cy.get(`[data-cy="createdBy"]`).type('fat outrun yawningly');
+      cy.get(`[data-cy="createdBy"]`).should('have.value', 'fat outrun yawningly');
 
-      cy.get(`[data-cy="modifiedBy"]`).type('moon off');
-      cy.get(`[data-cy="modifiedBy"]`).should('have.value', 'moon off');
+      cy.get(`[data-cy="modifiedBy"]`).type('phew cattle');
+      cy.get(`[data-cy="modifiedBy"]`).should('have.value', 'phew cattle');
 
       cy.get(entityCreateSaveButtonSelector).click();
 

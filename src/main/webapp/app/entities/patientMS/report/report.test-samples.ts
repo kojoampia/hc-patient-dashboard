@@ -7,24 +7,32 @@ export const sampleWithRequiredData: IReport = {
 };
 
 export const sampleWithPartialData: IReport = {
-  id: '048c2aa7-7c20-4e50-accd-af7537385448',
-  category: 'silk simplify because',
-  description: 'fooey pinkie vice',
-  name: 'exalted as',
-  url: 'https://sad-landform.info',
-  modifiedDate: dayjs('2024-02-06'),
+  id: 'aa77c20e-50cc-4daf-a753-7385448af023',
+  category: 'underneath after hearten',
+  description: 'provided because honored',
+  summary: 'regal gosh',
+  name: 'commit',
+  patientId: 'roughly and',
+  reportDate: dayjs('2024-02-06'),
+  createdDate: dayjs('2024-02-06'),
+  modifiedBy: 'upset an',
 };
 
 export const sampleWithFullData: IReport = {
-  id: '3298d042-58a8-4813-aa90-142e098aff65',
-  category: 'wont complete and',
-  description: 'woot rug',
-  name: 'leadership',
-  url: 'https://attentive-bagel.net',
+  id: '5addf29d-6590-4095-8ff8-73675b0fac57',
+  category: 'blindly',
+  description: 'since yahoo peel',
+  summary: 'indeed fortunately',
+  name: 'er',
+  url: 'https://prickly-detour.name/',
+  patientId: 'circa',
+  caseId: 'till fiber',
+  authorId: 'tromp when',
+  reportDate: dayjs('2024-02-06'),
   createdDate: dayjs('2024-02-06'),
-  modifiedDate: dayjs('2024-02-05'),
-  createdBy: 'yahoo defog tan',
-  modifiedBy: 'from',
+  modifiedDate: dayjs('2024-02-06'),
+  createdBy: 'melon',
+  modifiedBy: 'ew pish',
 };
 
 export const sampleWithNewData: NewReport = {

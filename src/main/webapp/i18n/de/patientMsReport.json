@@ -6,7 +6,6 @@
         "refreshListLabel": "Liste aktualisieren",
         "createLabel": "Report erstellen",
         "createOrEditLabel": "Report erstellen oder bearbeiten",
-        "search": "Suche nach Report",
         "notFound": "Keine Reports gefunden"
       },
       "created": "Report erstellt mit ID {{ param }}",
@@ -18,11 +17,16 @@
       "detail": {
         "title": "Report"
       },
-      "id": "ID",
+      "id": "Id",
       "category": "Category",
       "description": "Description",
+      "summary": "Summary",
       "name": "Name",
       "url": "Url",
+      "patientId": "Patient Id",
+      "caseId": "Case Id",
+      "authorId": "Author Id",
+      "reportDate": "Report Date",
       "createdDate": "Created Date",
       "modifiedDate": "Modified Date",
       "createdBy": "Created By",

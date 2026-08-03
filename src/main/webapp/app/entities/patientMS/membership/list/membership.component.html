@@ -15,7 +15,7 @@
         [routerLink]="['/membership/new']"
       >
         <fa-icon icon="plus"></fa-icon>
-        <span class="hidden-sm-down" hpdTranslate="patientDashboardApp.patientMsMembership.home.createLabel">Create a new Membership</span>
+        <span hpdTranslate="patientDashboardApp.patientMsMembership.home.createLabel">Create a new Membership</span>
       </button>
     </div>
   </h2>
@@ -23,34 +23,6 @@
   <hpd-alert-error></hpd-alert-error>
 
   <hpd-alert></hpd-alert>
-
-  <form name="searchForm" class="row row-cols-sm-auto align-items-center">
-    <div class="col-sm-12">
-      <div class="input-group w-100 mt-3">
-        <label class="visually-hidden" for="currentSearch" hpdTranslate="patientDashboardApp.patientMsMembership.home.search"
-          >Search for Membership</label
-        >
-        <input
-          type="text"
-          class="form-control"
-          [(ngModel)]="currentSearch"
-          id="currentSearch"
-          name="currentSearch"
-          placeholder="{{ 'patientDashboardApp.patientMsMembership.home.search' | translate }}"
-        />
-
-        <button class="btn btn-info" (click)="search(currentSearch)">
-          <fa-icon icon="search"></fa-icon>
-        </button>
-
-        @if (currentSearch) {
-          <button class="btn btn-danger" (click)="search('')">
-            <fa-icon icon="trash-alt"></fa-icon>
-          </button>
-        }
-      </div>
-    </div>
-  </form>
 
   @if (memberships?.length === 0) {
     <div class="alert alert-warning" id="no-result">
@@ -65,34 +37,65 @@
           <tr hpdSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
             <th scope="col" hpdSortBy="id">
               <div class="d-flex">
-                <span hpdTranslate="global.field.id">ID</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+                <span hpdTranslate="patientDashboardApp.patientMsMembership.id">Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="patientId">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsMembership.patientId">Patient Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" hpdSortBy="name">
               <div class="d-flex">
                 <span hpdTranslate="patientDashboardApp.patientMsMembership.name">Name</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" hpdSortBy="description">
               <div class="d-flex">
                 <span hpdTranslate="patientDashboardApp.patientMsMembership.description">Description</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" hpdSortBy="status">
               <div class="d-flex">
                 <span hpdTranslate="patientDashboardApp.patientMsMembership.status">Status</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="memberNumber">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsMembership.memberNumber">Member Number</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="plan">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsMembership.plan">Plan</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="startDate">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsMembership.startDate">Start Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="renewalDate">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsMembership.renewalDate">Renewal Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" hpdSortBy="createdDate">
@@ -112,17 +115,15 @@
             <th scope="col" hpdSortBy="createdBy">
               <div class="d-flex">
                 <span hpdTranslate="patientDashboardApp.patientMsMembership.createdBy">Created By</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" hpdSortBy="modifiedBy">
               <div class="d-flex">
                 <span hpdTranslate="patientDashboardApp.patientMsMembership.modifiedBy">Modified By</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col"></th>
@@ -134,9 +135,14 @@
               <td>
                 <a [routerLink]="['/membership', membership.id, 'view']">{{ membership.id }}</a>
               </td>
+              <td>{{ membership.patientId }}</td>
               <td>{{ membership.name }}</td>
               <td>{{ membership.description }}</td>
               <td>{{ membership.status }}</td>
+              <td>{{ membership.memberNumber }}</td>
+              <td>{{ membership.plan }}</td>
+              <td>{{ membership.startDate | formatMediumDate }}</td>
+              <td>{{ membership.renewalDate | formatMediumDate }}</td>
               <td>{{ membership.createdDate | formatMediumDate }}</td>
               <td>{{ membership.modifiedDate | formatMediumDate }}</td>
               <td>{{ membership.createdBy }}</td>

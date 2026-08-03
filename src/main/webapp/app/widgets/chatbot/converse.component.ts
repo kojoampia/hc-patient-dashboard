@@ -12,7 +12,7 @@ import SharedModule from 'app/shared/shared.module';
 import { FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
 
 @Component({
-  selector: 'jhi-converse',
+  selector: 'hpd-converse',
   standalone: true,
   templateUrl: './converse.component.html',
   styleUrls: ['./converse.component.scss'],
@@ -20,6 +20,8 @@ import { FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date'
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ConverseComponent implements OnInit, OnDestroy, AfterViewChecked {
+  @ViewChild('chatScreen') private chatScreen: ElementRef = {} as ElementRef;
+
   public isToggleChat = false;
   public notification = '';
   public message = '';
@@ -27,7 +29,6 @@ export class ConverseComponent implements OnInit, OnDestroy, AfterViewChecked {
   @SessionStorage() public client?: IChatUser;
   privateSubscription?: Subscription;
   public success = false;
-  @ViewChild('chatScreen') private chatScreen: ElementRef = {} as ElementRef;
   public autoScrollError = '';
   registrationInvalid = false;
 
@@ -59,10 +60,7 @@ export class ConverseComponent implements OnInit, OnDestroy, AfterViewChecked {
     private languageService: TranslateService,
     private localStorageService: LocalStorageService,
   ) {
-    this.messages = this.localStorageService.retrieve('messages');
-    if (!this.messages) {
-      this.messages = [];
-    }
+    this.messages = this.localStorageService.retrieve('messages') ?? [];
   }
 
   ngAfterViewChecked(): void {
@@ -97,7 +95,7 @@ export class ConverseComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   initMessage(): void {
     this.clear();
-    const name = this.client?.firstName || 'a';
+    const name = this.client?.firstName ?? 'a';
     const fName = name.charAt(0).toUpperCase() + name.slice(1);
     const welcomeMessage = 'Hello ' + fName + ', how may I help you?';
     const serviceName = 'Customer Service';
@@ -144,7 +142,7 @@ export class ConverseComponent implements OnInit, OnDestroy, AfterViewChecked {
         ...new ChatMessage(),
         name: clientName,
         sender: this.client.email,
-        language: this.languageService.currentLang as string,
+        language: this.languageService.currentLang,
         content: this.message,
         recipient: 'customer-service@bedrockinsurancegh.com',
         createdDate: dayjs(new Date(), DATE_TIME_FORMAT),

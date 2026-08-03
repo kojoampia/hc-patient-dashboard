@@ -1,17 +1,17 @@
-import { Component, Input, OnInit, Output, EventEmitter, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, Input, Output, EventEmitter, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { IMetricItem } from './metric-item.model';
 import { Router } from '@angular/router';
 import { NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
 
 @Component({
   standalone: true,
-  selector: 'jhi-metric-panel',
+  selector: 'hpd-metric-panel',
   templateUrl: './metric-panel.component.html',
   styleUrls: ['./metric-panel.component.scss'],
   imports: [NgxChartsModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class MetricPanelComponent implements OnInit {
+export class MetricPanelComponent {
   /* */
   @Input() metricItems?: IMetricItem[];
 
@@ -44,8 +44,6 @@ export class MetricPanelComponent implements OnInit {
   @Output() selectedItem: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(private router: Router) {}
-
-  ngOnInit(): void {}
 
   onSelect(item: IMetricItem): void {
     const menuItem = this.metricItems?.find(metric => metric.name === item.name);

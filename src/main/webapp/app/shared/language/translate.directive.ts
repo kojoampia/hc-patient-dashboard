@@ -10,13 +10,13 @@ import { translationNotFoundMessage } from 'app/config/translation.config';
  */
 @Directive({
   standalone: true,
-  selector: '[jhiTranslate]',
+  selector: '[hpdTranslate]',
 })
 export default class TranslateDirective implements OnChanges, OnInit, OnDestroy {
-  @Input() jhiTranslate!: string;
-  @Input() translateValues?: { [key: string]: unknown };
-
   private readonly directiveDestroyed = new Subject();
+
+  @Input() hpdTranslate!: string;
+  @Input() translateValues?: { [key: string]: unknown };
 
   constructor(
     private el: ElementRef,
@@ -43,13 +43,13 @@ export default class TranslateDirective implements OnChanges, OnInit, OnDestroy 
 
   private getTranslation(): void {
     this.translateService
-      .get(this.jhiTranslate, this.translateValues)
+      .get(this.hpdTranslate, this.translateValues)
       .pipe(takeUntil(this.directiveDestroyed))
       .subscribe({
         next: value => {
           this.el.nativeElement.innerHTML = value;
         },
-        error: () => `${translationNotFoundMessage}[${this.jhiTranslate}]`,
+        error: () => `${translationNotFoundMessage}[${this.hpdTranslate}]`,
       });
   }
 }

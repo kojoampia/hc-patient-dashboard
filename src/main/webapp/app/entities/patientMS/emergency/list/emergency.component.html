@@ -1,0 +1,198 @@
+<div>
+  <h2 id="page-heading" data-cy="EmergencyHeading">
+    <span hpdTranslate="patientDashboardApp.patientMsEmergency.home.title">Emergencies</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span hpdTranslate="patientDashboardApp.patientMsEmergency.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-emergency"
+        [routerLink]="['/emergency/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span hpdTranslate="patientDashboardApp.patientMsEmergency.home.createLabel">Create a new Emergency</span>
+      </button>
+    </div>
+  </h2>
+
+  <hpd-alert-error></hpd-alert-error>
+
+  <hpd-alert></hpd-alert>
+
+  @if (emergencies?.length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span hpdTranslate="patientDashboardApp.patientMsEmergency.home.notFound">No Emergencies found</span>
+    </div>
+  }
+
+  @if (emergencies && emergencies.length > 0) {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr hpdSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+            <th scope="col" hpdSortBy="id">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsEmergency.id">Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="patientId">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsEmergency.patientId">Patient Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="caseId">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsEmergency.caseId">Case Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="raisedAt">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsEmergency.raisedAt">Raised At</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="resolvedAt">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsEmergency.resolvedAt">Resolved At</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="brief">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsEmergency.brief">Brief</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="detail">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsEmergency.detail">Detail</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="severity">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsEmergency.severity">Severity</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="status">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsEmergency.status">Status</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="outcome">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsEmergency.outcome">Outcome</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="location">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsEmergency.location">Location</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="respondentId">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsEmergency.respondentId">Respondent Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="createdDate">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsEmergency.createdDate">Created Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="modifiedDate">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsEmergency.modifiedDate">Modified Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="createdBy">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsEmergency.createdBy">Created By</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="modifiedBy">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsEmergency.modifiedBy">Modified By</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (emergency of emergencies; track trackId) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/emergency', emergency.id, 'view']">{{ emergency.id }}</a>
+              </td>
+              <td>{{ emergency.patientId }}</td>
+              <td>{{ emergency.caseId }}</td>
+              <td>{{ emergency.raisedAt | formatMediumDatetime }}</td>
+              <td>{{ emergency.resolvedAt | formatMediumDatetime }}</td>
+              <td>{{ emergency.brief }}</td>
+              <td>{{ emergency.detail }}</td>
+              <td hpdTranslate="{{ 'patientDashboardApp.EmergencySeverity.' + emergency.severity }}">{{ emergency.severity }}</td>
+              <td hpdTranslate="{{ 'patientDashboardApp.EmergencyStatus.' + emergency.status }}">{{ emergency.status }}</td>
+              <td>{{ emergency.outcome }}</td>
+              <td>{{ emergency.location }}</td>
+              <td>{{ emergency.respondentId }}</td>
+              <td>{{ emergency.createdDate | formatMediumDate }}</td>
+              <td>{{ emergency.modifiedDate | formatMediumDate }}</td>
+              <td>{{ emergency.createdBy }}</td>
+              <td>{{ emergency.modifiedBy }}</td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/emergency', emergency.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" hpdTranslate="entity.action.view">View</span>
+                  </a>
+
+                  <a [routerLink]="['/emergency', emergency.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" hpdTranslate="entity.action.edit">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(emergency)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" hpdTranslate="entity.action.delete">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

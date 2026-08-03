@@ -6,7 +6,6 @@
         "refreshListLabel": "Actualiser la liste",
         "createLabel": "Créer un nouveau Condition",
         "createOrEditLabel": "Créer ou éditer un Condition",
-        "search": "Recherche pour Condition",
         "notFound": "Aucun Condition trouvé"
       },
       "created": "Un nouveau Condition a été créé avec l'identifiant {{ param }}",
@@ -18,9 +17,10 @@
       "detail": {
         "title": "Condition"
       },
-      "id": "ID",
+      "id": "Id",
       "name": "Name",
       "description": "Description",
+      "patientId": "Patient Id",
       "createdDate": "Created Date",
       "modifiedDate": "Modified Date",
       "createdBy": "Created By",

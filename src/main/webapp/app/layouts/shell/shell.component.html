@@ -1,0 +1,107 @@
+<div class="hc-shell">
+  <aside class="hc-shell__sidebar" [class.is-open]="navOpen()" id="portal-nav">
+    <div class="hc-shell__brand">
+      <span class="hc-shell__brand-mark" aria-hidden="true">
+        <hpd-icon name="stetho" [size]="22" />
+      </span>
+      <div>
+        <div class="hc-shell__brand-name">Abofonsa <span hpdTranslate="patientPortal.brand.suffix">BridgeCare</span></div>
+        <div class="hc-shell__brand-sub" hpdTranslate="patientPortal.brand.tagline">Patient portal</div>
+      </div>
+    </div>
+
+    <nav class="hc-shell__nav" [attr.aria-label]="'patientPortal.nav.aria' | translate">
+      @for (group of groups; track group.labelKey) {
+        <div class="hc-shell__nav-label" [hpdTranslate]="group.labelKey"></div>
+        @for (item of group.items; track item.path) {
+          <a
+            [routerLink]="['/', item.path]"
+            [class.is-active]="activeOwner() === item.path"
+            [attr.aria-current]="activeOwner() === item.path ? 'page' : null"
+          >
+            <hpd-icon [name]="item.icon" [size]="18" />
+            <span [hpdTranslate]="item.labelKey"></span>
+            @if (item.badge && item.badge() > 0) {
+              <span class="hc-shell__badge">{{ item.badge() }}</span>
+            }
+          </a>
+        }
+      }
+
+      <div class="hc-shell__nav-label" hpdTranslate="patientPortal.nav.group.session">Session</div>
+      <a href="#" (click)="logout(); $event.preventDefault()">
+        <hpd-icon name="logout" [size]="18" />
+        <span hpdTranslate="patientPortal.nav.signOut">Sign out</span>
+      </a>
+    </nav>
+
+    <div class="hc-shell__side-foot">
+      <a class="hc-shell__side-user" [routerLink]="['/profile']">
+        <span class="hc-monogram hc-monogram--gold hc-shell__side-avatar">{{ initials() }}</span>
+        <span class="hc-grow">
+          <span class="hc-shell__side-name hc-trunc">{{ displayName() }}</span>
+          <span class="hc-shell__side-sub hc-trunc" hpdTranslate="patientPortal.nav.roleLine">Patient</span>
+        </span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Dismisses the drawer on mobile. Hidden from assistive tech: the drawer also closes on
+       Escape and on picking a destination, so nothing here is only reachable by pointer. -->
+  <div class="hc-shell__scrim" [class.is-on]="navOpen()" (click)="closeNav()" aria-hidden="true"></div>
+
+  <div class="hc-shell__main">
+    <header class="hc-shell__topbar">
+      <button
+        type="button"
+        class="hc-icon-btn hc-shell__menu-btn"
+        (click)="openNav()"
+        [attr.aria-label]="'patientPortal.nav.openMenu' | translate"
+        aria-controls="portal-nav"
+        [attr.aria-expanded]="navOpen()"
+      >
+        <hpd-icon name="menu" [size]="19" />
+      </button>
+
+      <div class="hc-grow">
+        <div class="hc-shell__crumb" [hpdTranslate]="title().crumbKey"></div>
+        <h2 class="hc-shell__title" [hpdTranslate]="title().titleKey"></h2>
+      </div>
+
+      <button
+        type="button"
+        class="hc-icon-btn"
+        (click)="print()"
+        [attr.aria-label]="'patientPortal.action.print' | translate"
+        [attr.title]="'patientPortal.action.print' | translate"
+      >
+        <hpd-icon name="print" [size]="19" />
+      </button>
+
+      <a class="hc-btn hc-btn--danger hc-btn--sm" [routerLink]="['/emergencies']">
+        <hpd-icon name="alert" [size]="16" [strokeWidth]="2.2" />
+        <span hpdTranslate="patientPortal.action.careLine">Care line</span>
+      </a>
+    </header>
+
+    <main class="hc-shell__content">
+      <router-outlet />
+    </main>
+  </div>
+
+  <nav class="hc-shell__tabbar" [attr.aria-label]="'patientPortal.nav.ariaPrimary' | translate">
+    @for (item of tabs; track item.path) {
+      <a
+        [routerLink]="['/', item.path]"
+        [class.is-active]="activeOwner() === item.path"
+        [attr.aria-current]="activeOwner() === item.path ? 'page' : null"
+      >
+        <hpd-icon [name]="item.icon" [size]="21" />
+        <span [hpdTranslate]="item.shortLabelKey ?? item.labelKey"></span>
+        @if (item.badge && item.badge() > 0) {
+          <span class="hc-shell__badge hc-shell__badge--tab">{{ item.badge() }}</span>
+        }
+      </a>
+    }
+  </nav>
+</div>

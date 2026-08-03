@@ -7,11 +7,11 @@ export const sampleWithRequiredData: ITask = {
 };
 
 export const sampleWithPartialData: ITask = {
-  id: 'beeccef8-fba5-40ce-804f-2d2dc0bcd57c',
-  description: 'accentuate along badly',
-  duration: 7534.43,
-  createdDate: dayjs('2024-02-06'),
-  createdBy: 'drat dinner',
+  id: '8fba50ce-04f2-4d2d-ac0b-cd57c2cd07ad',
+  description: 'along',
+  scheduledAt: dayjs('2024-02-06T04:31'),
+  status: 'PENDING',
+  caseId: 'nor drat dinner',
 };
 
 export const sampleWithFullData: ITask = {
@@ -19,12 +19,19 @@ export const sampleWithFullData: ITask = {
   name: 'median where huzzah',
   description: 'abaft encroach',
   schedule: dayjs('2024-02-06'),
-  duration: 22846.85,
-  attendant: 'drill',
+  scheduledAt: dayjs('2024-02-06T05:17'),
+  duration: 7605.6,
+  status: 'PENDING',
+  location: 'gah innocent',
+  caseId: 'um cap closely',
+  attendantId: 'that',
+  teamId: 'bah uh-huh cheque',
+  patientId: 'questioningly as alongside',
+  attendant: 'yet beside woot',
   createdDate: dayjs('2024-02-06'),
   modifiedDate: dayjs('2024-02-06'),
-  createdBy: 'transport um cap',
-  modifiedBy: 'happily that',
+  createdBy: 'conga',
+  modifiedBy: 'exude',
 };
 
 export const sampleWithNewData: NewTask = {

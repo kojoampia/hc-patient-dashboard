@@ -1,19 +1,14 @@
 import { Routes } from '@angular/router';
 
-import activateRoute from './activate/activate.route';
 import passwordRoute from './password/password.route';
-import passwordResetFinishRoute from './password-reset/finish/password-reset-finish.route';
-import passwordResetInitRoute from './password-reset/init/password-reset-init.route';
 import settingsRoute from './settings/settings.route';
-import registerRoute from './register/register.route';
 
-const accountRoutes: Routes = [
-  activateRoute,
-  passwordRoute,
-  passwordResetFinishRoute,
-  passwordResetInitRoute,
-  settingsRoute,
-  registerRoute,
-];
+/**
+ * The signed-in half of the account area. These render inside the portal shell.
+ *
+ * Register, activate and password reset are reached *before* signing in, so they live in
+ * {@link ./account-public.route} and render on the auth layout instead.
+ */
+const accountRoutes: Routes = [passwordRoute, settingsRoute];
 
 export default accountRoutes;

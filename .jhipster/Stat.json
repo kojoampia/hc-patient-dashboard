@@ -5,7 +5,18 @@
   "changelogDate": "20240206215832",
   "clientRootFolder": "patientMS",
   "databaseType": "mongodb",
+  "documentation": "A single recorded measurement — this is where vitals live. Blood pressure uses `value` for the systolic reading and `secondaryValue` for the diastolic; every other vital uses `value` alone. referenceLow/referenceHigh carry the normal band the reading is judged against.",
+  "dto": "no",
+  "entityTableName": "stat",
   "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "patientId",
+      "fieldType": "String"
+    },
     {
       "fieldName": "type",
       "fieldType": "String"
@@ -23,8 +34,34 @@
       "fieldType": "Double"
     },
     {
+      "fieldName": "secondaryValue",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "unit",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "referenceLow",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "referenceHigh",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "flag",
+      "fieldType": "StatFlag",
+      "fieldTypeDocumentation": "Where a stat sits against its reference band, as judged when the reading was filed.",
+      "fieldValues": "OK,WARN,DANGER"
+    },
+    {
       "fieldName": "note",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "recordedAt",
+      "fieldType": "Instant"
     },
     {
       "fieldName": "createdDate",
@@ -40,6 +77,6 @@
   "pagination": "no",
   "readOnly": false,
   "relationships": [],
-  "searchEngine": true,
+  "searchEngine": "no",
   "service": "no"
 }

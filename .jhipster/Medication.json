@@ -5,7 +5,14 @@
   "changelogDate": "20240206215539",
   "clientRootFolder": "patientMS",
   "databaseType": "mongodb",
+  "documentation": "A drug prescribed against a case. `dosage` is the instruction as the patient reads it (\"Twice daily with food\"), which is what the medications screen shows.",
+  "dto": "no",
+  "entityTableName": "medication",
   "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "String"
+    },
     {
       "fieldName": "name",
       "fieldType": "String"
@@ -15,7 +22,33 @@
       "fieldType": "String"
     },
     {
+      "fieldName": "patientId",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "caseId",
+      "fieldType": "String"
+    },
+    {
       "fieldName": "prescription",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dosage",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "MedicationStatus",
+      "fieldTypeDocumentation": "Whether a prescription is still being taken. WITHHELD records a drug deliberately not given — the patient record has to be able to show \"Amoxicillin — not given, penicillin allergy\".",
+      "fieldValues": "ACTIVE,COMPLETED,WITHHELD"
+    },
+    {
+      "fieldName": "startedOn",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "prescribedById",
       "fieldType": "String"
     },
     {
@@ -37,9 +70,9 @@
   ],
   "microserviceName": "patientMS",
   "name": "Medication",
-  "pagination": "no",
+  "pagination": "pagination",
   "readOnly": false,
   "relationships": [],
-  "searchEngine": true,
+  "searchEngine": "no",
   "service": "no"
 }

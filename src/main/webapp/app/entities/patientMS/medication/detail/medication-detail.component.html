@@ -13,7 +13,7 @@
         <hpd-alert></hpd-alert>
 
         <dl class="row-md jh-entity-details">
-          <dt><span hpdTranslate="global.field.id">ID</span></dt>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsMedication.id">Id</span></dt>
           <dd>
             <span>{{ medication.id }}</span>
           </dd>
@@ -25,9 +25,33 @@
           <dd>
             <span>{{ medication.description }}</span>
           </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsMedication.patientId">Patient Id</span></dt>
+          <dd>
+            <span>{{ medication.patientId }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsMedication.caseId">Case Id</span></dt>
+          <dd>
+            <span>{{ medication.caseId }}</span>
+          </dd>
           <dt><span hpdTranslate="patientDashboardApp.patientMsMedication.prescription">Prescription</span></dt>
           <dd>
             <span>{{ medication.prescription }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsMedication.dosage">Dosage</span></dt>
+          <dd>
+            <span>{{ medication.dosage }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsMedication.status">Status</span></dt>
+          <dd>
+            <span hpdTranslate="{{ 'patientDashboardApp.MedicationStatus.' + medication.status }}">{{ medication.status }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsMedication.startedOn">Started On</span></dt>
+          <dd>
+            <span>{{ medication.startedOn | formatMediumDate }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsMedication.prescribedById">Prescribed By Id</span></dt>
+          <dd>
+            <span>{{ medication.prescribedById }}</span>
           </dd>
           <dt><span hpdTranslate="patientDashboardApp.patientMsMedication.createdDate">Created Date</span></dt>
           <dd>

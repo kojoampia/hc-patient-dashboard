@@ -1,0 +1,43 @@
+<div class="hc-auth">
+  <div class="hc-auth__brand">
+    <span class="hc-auth__logo" aria-hidden="true">
+      <hpd-icon name="stetho" [size]="54" [strokeWidth]="1.5" />
+    </span>
+
+    <div class="hc-auth__tag" hpdTranslate="patientPortal.auth.eyebrow">Abofonsa BridgeCare · Patient portal</div>
+
+    <h1>
+      <span hpdTranslate="patientPortal.auth.headlineLead">Your whole health record,</span>
+      <span class="hc-auth__accent" hpdTranslate="patientPortal.auth.headlineAccent">in one calm place.</span>
+    </h1>
+
+    <p hpdTranslate="patientPortal.auth.blurb">
+      Every case, visit, medication and report your care team records — visible to you, in plain language, wherever you are.
+    </p>
+
+    <div class="hc-auth__stats">
+      <div>
+        <b hpdTranslate="patientPortal.auth.stat.casesValue">12</b>
+        <span hpdTranslate="patientPortal.auth.stat.cases">Cases on file</span>
+      </div>
+      <div>
+        <b hpdTranslate="patientPortal.auth.stat.visitsValue">41</b>
+        <span hpdTranslate="patientPortal.auth.stat.visits">Visits logged</span>
+      </div>
+      <div>
+        <b hpdTranslate="patientPortal.auth.stat.teamValue">6</b>
+        <span hpdTranslate="patientPortal.auth.stat.team">Professionals</span>
+      </div>
+      <div>
+        <b hpdTranslate="patientPortal.auth.stat.careLineValue">24/7</b>
+        <span hpdTranslate="patientPortal.auth.stat.careLine">Care line</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hc-auth__panel">
+    <div class="hc-auth__card">
+      <router-outlet />
+    </div>
+  </div>
+</div>

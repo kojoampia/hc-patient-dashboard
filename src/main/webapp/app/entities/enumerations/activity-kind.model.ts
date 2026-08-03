@@ -1,0 +1,15 @@
+export enum ActivityKind {
+  CASE = 'CASE',
+
+  VITAL = 'VITAL',
+
+  RECOMMENDATION = 'RECOMMENDATION',
+
+  REPORT = 'REPORT',
+
+  VISIT = 'VISIT',
+
+  MEDICATION = 'MEDICATION',
+
+  NOTE = 'NOTE',
+}

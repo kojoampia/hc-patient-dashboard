@@ -91,6 +91,9 @@ describe('Task e2e test', () => {
             },
             {
               statusCode: 200,
+              headers: {
+                link: '<http://localhost/services/patientms/api/tasks?page=0&size=20>; rel="last",<http://localhost/services/patientms/api/tasks?page=0&size=20>; rel="first"',
+              },
               body: [task],
             },
           ).as('entitiesRequestInternal');
@@ -157,35 +160,56 @@ describe('Task e2e test', () => {
     });
 
     it('should create an instance of Task', () => {
-      cy.get(`[data-cy="name"]`).type('bah uh-huh cheque');
-      cy.get(`[data-cy="name"]`).should('have.value', 'bah uh-huh cheque');
+      cy.get(`[data-cy="name"]`).type('needy berate');
+      cy.get(`[data-cy="name"]`).should('have.value', 'needy berate');
 
-      cy.get(`[data-cy="description"]`).type('questioningly as alongside');
-      cy.get(`[data-cy="description"]`).should('have.value', 'questioningly as alongside');
+      cy.get(`[data-cy="description"]`).type('although phooey');
+      cy.get(`[data-cy="description"]`).should('have.value', 'although phooey');
 
       cy.get(`[data-cy="schedule"]`).type('2024-02-06');
       cy.get(`[data-cy="schedule"]`).blur();
       cy.get(`[data-cy="schedule"]`).should('have.value', '2024-02-06');
 
-      cy.get(`[data-cy="duration"]`).type('20201.8');
-      cy.get(`[data-cy="duration"]`).should('have.value', '20201.8');
+      cy.get(`[data-cy="scheduledAt"]`).type('2024-02-06T00:30');
+      cy.get(`[data-cy="scheduledAt"]`).blur();
+      cy.get(`[data-cy="scheduledAt"]`).should('have.value', '2024-02-06T00:30');
 
-      cy.get(`[data-cy="attendant"]`).type('boo');
-      cy.get(`[data-cy="attendant"]`).should('have.value', 'boo');
+      cy.get(`[data-cy="duration"]`).type('10536.78');
+      cy.get(`[data-cy="duration"]`).should('have.value', '10536.78');
 
-      cy.get(`[data-cy="createdDate"]`).type('2024-02-05');
+      cy.get(`[data-cy="status"]`).select('PENDING');
+
+      cy.get(`[data-cy="location"]`).type('till');
+      cy.get(`[data-cy="location"]`).should('have.value', 'till');
+
+      cy.get(`[data-cy="caseId"]`).type('silver');
+      cy.get(`[data-cy="caseId"]`).should('have.value', 'silver');
+
+      cy.get(`[data-cy="attendantId"]`).type('ha bleak upliftingly');
+      cy.get(`[data-cy="attendantId"]`).should('have.value', 'ha bleak upliftingly');
+
+      cy.get(`[data-cy="teamId"]`).type('midst');
+      cy.get(`[data-cy="teamId"]`).should('have.value', 'midst');
+
+      cy.get(`[data-cy="patientId"]`).type('because tremendously geez');
+      cy.get(`[data-cy="patientId"]`).should('have.value', 'because tremendously geez');
+
+      cy.get(`[data-cy="attendant"]`).type('litigation intuition');
+      cy.get(`[data-cy="attendant"]`).should('have.value', 'litigation intuition');
+
+      cy.get(`[data-cy="createdDate"]`).type('2024-02-06');
       cy.get(`[data-cy="createdDate"]`).blur();
-      cy.get(`[data-cy="createdDate"]`).should('have.value', '2024-02-05');
+      cy.get(`[data-cy="createdDate"]`).should('have.value', '2024-02-06');
 
       cy.get(`[data-cy="modifiedDate"]`).type('2024-02-06');
       cy.get(`[data-cy="modifiedDate"]`).blur();
       cy.get(`[data-cy="modifiedDate"]`).should('have.value', '2024-02-06');
 
-      cy.get(`[data-cy="createdBy"]`).type('hub plagiarism');
-      cy.get(`[data-cy="createdBy"]`).should('have.value', 'hub plagiarism');
+      cy.get(`[data-cy="createdBy"]`).type('reproachfully postpone');
+      cy.get(`[data-cy="createdBy"]`).should('have.value', 'reproachfully postpone');
 
-      cy.get(`[data-cy="modifiedBy"]`).type('aside so');
-      cy.get(`[data-cy="modifiedBy"]`).should('have.value', 'aside so');
+      cy.get(`[data-cy="modifiedBy"]`).type('reliable lucky');
+      cy.get(`[data-cy="modifiedBy"]`).should('have.value', 'reliable lucky');
 
       cy.get(entityCreateSaveButtonSelector).click();
 

@@ -1,0 +1,134 @@
+<div>
+  <h2 id="page-heading" data-cy="PersonalDocumentHeading">
+    <span hpdTranslate="patientDashboardApp.patientMsPersonalDocument.home.title">Personal Documents</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span hpdTranslate="patientDashboardApp.patientMsPersonalDocument.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-personal-document"
+        [routerLink]="['/personal-document/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span hpdTranslate="patientDashboardApp.patientMsPersonalDocument.home.createLabel">Create a new Personal Document</span>
+      </button>
+    </div>
+  </h2>
+
+  <hpd-alert-error></hpd-alert-error>
+
+  <hpd-alert></hpd-alert>
+
+  @if (personalDocuments?.length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span hpdTranslate="patientDashboardApp.patientMsPersonalDocument.home.notFound">No Personal Documents found</span>
+    </div>
+  }
+
+  @if (personalDocuments && personalDocuments.length > 0) {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr hpdSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+            <th scope="col" hpdSortBy="id">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsPersonalDocument.id">Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="name">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsPersonalDocument.name">Name</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="category">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsPersonalDocument.category">Category</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="url">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsPersonalDocument.url">Url</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="patientId">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsPersonalDocument.patientId">Patient Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="issuedOn">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsPersonalDocument.issuedOn">Issued On</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="expiresOn">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsPersonalDocument.expiresOn">Expires On</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (personalDocument of personalDocuments; track trackId) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/personal-document', personalDocument.id, 'view']">{{ personalDocument.id }}</a>
+              </td>
+              <td>{{ personalDocument.name }}</td>
+              <td>{{ personalDocument.category }}</td>
+              <td>{{ personalDocument.url }}</td>
+              <td>{{ personalDocument.patientId }}</td>
+              <td>{{ personalDocument.issuedOn | formatMediumDate }}</td>
+              <td>{{ personalDocument.expiresOn | formatMediumDate }}</td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a
+                    [routerLink]="['/personal-document', personalDocument.id, 'view']"
+                    class="btn btn-info btn-sm"
+                    data-cy="entityDetailsButton"
+                  >
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" hpdTranslate="entity.action.view">View</span>
+                  </a>
+
+                  <a
+                    [routerLink]="['/personal-document', personalDocument.id, 'edit']"
+                    class="btn btn-primary btn-sm"
+                    data-cy="entityEditButton"
+                  >
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" hpdTranslate="entity.action.edit">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(personalDocument)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" hpdTranslate="entity.action.delete">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

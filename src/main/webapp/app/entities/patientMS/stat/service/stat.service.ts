@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable, asapScheduler, scheduled } from 'rxjs';
+import { Observable } from 'rxjs';
 
-import { catchError, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import dayjs from 'dayjs/esm';
 
@@ -10,12 +10,12 @@ import { isPresent } from 'app/core/util/operators';
 import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
-import { Search } from 'app/core/request/request.model';
 import { IStat, NewStat } from '../stat.model';
 
 export type PartialUpdateStat = Partial<IStat> & Pick<IStat, 'id'>;
 
-type RestOf<T extends IStat | NewStat> = Omit<T, 'createdDate'> & {
+type RestOf<T extends IStat | NewStat> = Omit<T, 'recordedAt' | 'createdDate'> & {
+  recordedAt?: string | null;
   createdDate?: string | null;
 };
 
@@ -30,8 +30,7 @@ export type EntityArrayResponseType = HttpResponse<IStat[]>;
 
 @Injectable({ providedIn: 'root' })
 export class StatService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/stats');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/stats/_search');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/stats', 'hcpatientservice');
 
   constructor(
     protected http: HttpClient,
@@ -63,23 +62,15 @@ export class StatService {
       .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
-  query(type: string, req?: any): Observable<EntityArrayResponseType> {
+  query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<RestStat[]>(`${this.resourceUrl}/${type}`, { params: options, observe: 'response' })
+      .get<RestStat[]>(this.resourceUrl, { params: options, observe: 'response' })
       .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
   delete(id: string): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
-  }
-
-  search(type: string, req: Search): Observable<EntityArrayResponseType> {
-    const options = createRequestOption(req);
-    return this.http.get<RestStat[]>(`${this.resourceUrl}/${type}`, { params: options, observe: 'response' }).pipe(
-      map(res => this.convertResponseArrayFromServer(res)),
-      catchError(() => scheduled([new HttpResponse<IStat[]>()], asapScheduler)),
-    );
   }
 
   getStatIdentifier(stat: Pick<IStat, 'id'>): string {
@@ -113,6 +104,7 @@ export class StatService {
   protected convertDateFromClient<T extends IStat | NewStat | PartialUpdateStat>(stat: T): RestOf<T> {
     return {
       ...stat,
+      recordedAt: stat.recordedAt?.toJSON() ?? null,
       createdDate: stat.createdDate?.format(DATE_FORMAT) ?? null,
     };
   }
@@ -120,6 +112,7 @@ export class StatService {
   protected convertDateFromServer(restStat: RestStat): IStat {
     return {
       ...restStat,
+      recordedAt: restStat.recordedAt ? dayjs(restStat.recordedAt) : undefined,
       createdDate: restStat.createdDate ? dayjs(restStat.createdDate) : undefined,
     };
   }

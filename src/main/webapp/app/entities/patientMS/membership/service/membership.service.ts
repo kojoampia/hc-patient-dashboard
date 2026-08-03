@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable, asapScheduler, scheduled } from 'rxjs';
+import { Observable } from 'rxjs';
 
-import { catchError, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import dayjs from 'dayjs/esm';
 
@@ -10,12 +10,13 @@ import { isPresent } from 'app/core/util/operators';
 import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
-import { Search } from 'app/core/request/request.model';
 import { IMembership, NewMembership } from '../membership.model';
 
 export type PartialUpdateMembership = Partial<IMembership> & Pick<IMembership, 'id'>;
 
-type RestOf<T extends IMembership | NewMembership> = Omit<T, 'createdDate' | 'modifiedDate'> & {
+type RestOf<T extends IMembership | NewMembership> = Omit<T, 'startDate' | 'renewalDate' | 'createdDate' | 'modifiedDate'> & {
+  startDate?: string | null;
+  renewalDate?: string | null;
   createdDate?: string | null;
   modifiedDate?: string | null;
 };
@@ -31,8 +32,7 @@ export type EntityArrayResponseType = HttpResponse<IMembership[]>;
 
 @Injectable({ providedIn: 'root' })
 export class MembershipService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/memberships');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/memberships/_search');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/memberships', 'hcpatientservice');
 
   constructor(
     protected http: HttpClient,
@@ -77,14 +77,6 @@ export class MembershipService {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
-  search(req: Search): Observable<EntityArrayResponseType> {
-    const options = createRequestOption(req);
-    return this.http.get<RestMembership[]>(this.resourceSearchUrl, { params: options, observe: 'response' }).pipe(
-      map(res => this.convertResponseArrayFromServer(res)),
-      catchError(() => scheduled([new HttpResponse<IMembership[]>()], asapScheduler)),
-    );
-  }
-
   getMembershipIdentifier(membership: Pick<IMembership, 'id'>): string {
     return membership.id;
   }
@@ -116,6 +108,8 @@ export class MembershipService {
   protected convertDateFromClient<T extends IMembership | NewMembership | PartialUpdateMembership>(membership: T): RestOf<T> {
     return {
       ...membership,
+      startDate: membership.startDate?.format(DATE_FORMAT) ?? null,
+      renewalDate: membership.renewalDate?.format(DATE_FORMAT) ?? null,
       createdDate: membership.createdDate?.format(DATE_FORMAT) ?? null,
       modifiedDate: membership.modifiedDate?.format(DATE_FORMAT) ?? null,
     };
@@ -124,6 +118,8 @@ export class MembershipService {
   protected convertDateFromServer(restMembership: RestMembership): IMembership {
     return {
       ...restMembership,
+      startDate: restMembership.startDate ? dayjs(restMembership.startDate) : undefined,
+      renewalDate: restMembership.renewalDate ? dayjs(restMembership.renewalDate) : undefined,
       createdDate: restMembership.createdDate ? dayjs(restMembership.createdDate) : undefined,
       modifiedDate: restMembership.modifiedDate ? dayjs(restMembership.modifiedDate) : undefined,
     };

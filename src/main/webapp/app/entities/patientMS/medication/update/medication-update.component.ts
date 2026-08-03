@@ -7,6 +7,7 @@ import { finalize } from 'rxjs/operators';
 import SharedModule from 'app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { MedicationStatus } from 'app/entities/enumerations/medication-status.model';
 import { IMedication } from '../medication.model';
 import { MedicationService } from '../service/medication.service';
 import { MedicationFormService, MedicationFormGroup } from './medication-form.service';
@@ -20,6 +21,7 @@ import { MedicationFormService, MedicationFormGroup } from './medication-form.se
 export class MedicationUpdateComponent implements OnInit {
   isSaving = false;
   medication: IMedication | null = null;
+  medicationStatusValues = Object.keys(MedicationStatus);
 
   editForm: MedicationFormGroup = this.medicationFormService.createMedicationFormGroup();
 

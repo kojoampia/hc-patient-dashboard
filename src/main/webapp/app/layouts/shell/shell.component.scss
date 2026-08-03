@@ -1,0 +1,331 @@
+@import 'tokens';
+
+/**
+ * The shell's own layout. Component-scoped so nothing here can leak into a screen; the
+ * `hc-shell__*` names are still global-looking because global.scss's print block has to reach
+ * them, and `::ng-deep` for that would be worse.
+ */
+
+:host {
+  display: block;
+}
+
+.hc-shell {
+  display: grid;
+  grid-template-columns: var(--hc-sidebar-w) 1fr;
+  min-height: 100vh;
+}
+
+/* ============================= sidebar ============================= */
+
+.hc-shell__sidebar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 20px 14px;
+  color: #fff;
+  background: var(--hc-navy);
+}
+
+.hc-shell__brand {
+  display: flex;
+  gap: 11px;
+  align-items: center;
+  padding: 4px 8px 20px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.hc-shell__brand-mark {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  color: var(--hc-navy);
+  background: #fff;
+  border-radius: 50%;
+}
+
+.hc-shell__brand-name {
+  font-size: 14.5px;
+  font-weight: 800;
+  line-height: 1.16;
+  letter-spacing: -0.012em;
+
+  span {
+    color: var(--hc-gold-300);
+  }
+}
+
+.hc-shell__brand-sub {
+  margin-top: 2px;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: #8fa3bc;
+  text-transform: uppercase;
+}
+
+.hc-shell__nav {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 4px;
+  margin: 0 -4px;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
+
+  a {
+    position: relative;
+    display: flex;
+    gap: 11px;
+    align-items: center;
+    padding: 9.5px 11px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #c3d2e4;
+    text-decoration: none;
+    border-radius: 10px;
+    transition:
+      background 0.14s,
+      color 0.14s;
+
+    &:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    &.is-active {
+      color: #fff;
+      background: var(--hc-gold);
+      box-shadow: 0 2px 10px rgba(197, 148, 55, 0.32);
+
+      .hc-shell__badge {
+        background: rgba(255, 255, 255, 0.28);
+      }
+    }
+  }
+}
+
+.hc-shell__nav-label {
+  padding: 16px 10px 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: #7189a6;
+  text-transform: uppercase;
+}
+
+.hc-shell__badge {
+  display: grid;
+  place-items: center;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 5px;
+  margin-left: auto;
+  font-size: 10.5px;
+  font-weight: 800;
+  color: #fff;
+  background: var(--hc-danger);
+  border-radius: 10px;
+}
+
+.hc-shell__side-foot {
+  padding-top: 12px;
+  margin-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.hc-shell__side-user {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+  padding: 8px;
+  text-align: left;
+  text-decoration: none;
+  border-radius: 10px;
+  transition: background 0.14s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.07);
+  }
+}
+
+.hc-shell__side-avatar {
+  width: 34px;
+  height: 34px;
+  font-size: 12.5px;
+  border: 2px solid rgba(255, 255, 255, 0.22);
+}
+
+.hc-shell__side-name {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.hc-shell__side-sub {
+  display: block;
+  font-size: 11px;
+  color: #8fa3bc;
+}
+
+/* ============================= main column ============================= */
+
+.hc-shell__main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--hc-bg);
+}
+
+.hc-shell__topbar {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  min-height: 62px;
+  padding: 13px clamp(18px, 3vw, 34px);
+  background: rgba(242, 240, 234, 0.86);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--hc-line);
+}
+
+.hc-shell__crumb {
+  margin-bottom: 1px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--hc-grey);
+}
+
+.hc-shell__title {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.022em;
+}
+
+.hc-shell__menu-btn {
+  display: none;
+}
+
+.hc-shell__content {
+  flex: 1;
+  width: 100%;
+  max-width: 1240px;
+  padding: clamp(18px, 2.6vw, 30px) clamp(18px, 3vw, 34px) 60px;
+}
+
+.hc-shell__scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  background: rgba(9, 34, 57, 0.5);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+
+  &.is-on {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+.hc-shell__tabbar {
+  display: none;
+}
+
+/* ============================= below the shell breakpoint ============================= */
+
+@media (max-width: $hc-shell-breakpoint) {
+  .hc-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .hc-shell__sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 80;
+    width: 262px;
+    height: 100dvh;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.3);
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateX(-102%);
+
+    &.is-open {
+      transform: none;
+    }
+  }
+
+  .hc-shell__menu-btn {
+    display: grid;
+  }
+
+  .hc-shell__content {
+    padding-bottom: 96px;
+  }
+
+  .hc-shell__tabbar {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 65;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    padding: 7px 4px calc(7px + env(safe-area-inset-bottom));
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(14px);
+    border-top: 1px solid var(--hc-line);
+
+    a {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      align-items: center;
+      padding: 5px 2px;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--hc-grey-400);
+      text-decoration: none;
+      border-radius: 9px;
+      transition: color 0.14s;
+
+      &.is-active {
+        color: var(--hc-navy);
+      }
+    }
+  }
+
+  .hc-shell__badge--tab {
+    position: absolute;
+    top: 1px;
+    right: calc(50% - 18px);
+    min-width: 15px;
+    height: 15px;
+    padding: 0 4px;
+    margin-left: 0;
+    font-size: 9px;
+  }
+}
+
+/* Users who ask for less motion get the drawer without the slide. */
+@media (prefers-reduced-motion: reduce) {
+  .hc-shell__sidebar,
+  .hc-shell__scrim {
+    transition: none;
+  }
+}

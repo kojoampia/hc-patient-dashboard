@@ -7,7 +7,7 @@ import { HttpResponse } from '@angular/common/http';
 import { validatePhoneCode } from '../../shared/util/validators';
 
 @Component({
-  selector: 'jhi-phone-number-verifier',
+  selector: 'hpd-phone-number-verifier',
   standalone: true,
   templateUrl: './phone-number-verifier.component.html',
   styleUrls: ['./phone-number-verifier.component.scss'],
@@ -42,10 +42,8 @@ export class PhoneNumberVerifierComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.registerForm.get('verificationCode')?.setValue('');
     this.registerForm.get('verificationCode')?.enable();
-    if (this.eventSubscriber) {
-      this.eventSubscriber.unsubscribe();
-      this.eventManager.destroy(this.eventSubscriber);
-    }
+    this.eventSubscriber.unsubscribe();
+    this.eventManager.destroy(this.eventSubscriber);
   }
 
   verifyCode(): void {

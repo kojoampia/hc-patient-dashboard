@@ -15,7 +15,7 @@
         [routerLink]="['/medication/new']"
       >
         <fa-icon icon="plus"></fa-icon>
-        <span class="hidden-sm-down" hpdTranslate="patientDashboardApp.patientMsMedication.home.createLabel">Create a new Medication</span>
+        <span hpdTranslate="patientDashboardApp.patientMsMedication.home.createLabel">Create a new Medication</span>
       </button>
     </div>
   </h2>
@@ -23,34 +23,6 @@
   <hpd-alert-error></hpd-alert-error>
 
   <hpd-alert></hpd-alert>
-
-  <form name="searchForm" class="row row-cols-sm-auto align-items-center">
-    <div class="col-sm-12">
-      <div class="input-group w-100 mt-3">
-        <label class="visually-hidden" for="currentSearch" hpdTranslate="patientDashboardApp.patientMsMedication.home.search"
-          >Search for Medication</label
-        >
-        <input
-          type="text"
-          class="form-control"
-          [(ngModel)]="currentSearch"
-          id="currentSearch"
-          name="currentSearch"
-          placeholder="{{ 'patientDashboardApp.patientMsMedication.home.search' | translate }}"
-        />
-
-        <button class="btn btn-info" (click)="search(currentSearch)">
-          <fa-icon icon="search"></fa-icon>
-        </button>
-
-        @if (currentSearch) {
-          <button class="btn btn-danger" (click)="search('')">
-            <fa-icon icon="trash-alt"></fa-icon>
-          </button>
-        }
-      </div>
-    </div>
-  </form>
 
   @if (medications?.length === 0) {
     <div class="alert alert-warning" id="no-result">
@@ -65,34 +37,72 @@
           <tr hpdSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
             <th scope="col" hpdSortBy="id">
               <div class="d-flex">
-                <span hpdTranslate="global.field.id">ID</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+                <span hpdTranslate="patientDashboardApp.patientMsMedication.id">Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" hpdSortBy="name">
               <div class="d-flex">
                 <span hpdTranslate="patientDashboardApp.patientMsMedication.name">Name</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" hpdSortBy="description">
               <div class="d-flex">
                 <span hpdTranslate="patientDashboardApp.patientMsMedication.description">Description</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="patientId">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsMedication.patientId">Patient Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="caseId">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsMedication.caseId">Case Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" hpdSortBy="prescription">
               <div class="d-flex">
                 <span hpdTranslate="patientDashboardApp.patientMsMedication.prescription">Prescription</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="dosage">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsMedication.dosage">Dosage</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="status">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsMedication.status">Status</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="startedOn">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsMedication.startedOn">Started On</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="prescribedById">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsMedication.prescribedById">Prescribed By Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" hpdSortBy="createdDate">
@@ -112,17 +122,15 @@
             <th scope="col" hpdSortBy="createdBy">
               <div class="d-flex">
                 <span hpdTranslate="patientDashboardApp.patientMsMedication.createdBy">Created By</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" hpdSortBy="modifiedBy">
               <div class="d-flex">
                 <span hpdTranslate="patientDashboardApp.patientMsMedication.modifiedBy">Modified By</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col"></th>
@@ -136,7 +144,13 @@
               </td>
               <td>{{ medication.name }}</td>
               <td>{{ medication.description }}</td>
+              <td>{{ medication.patientId }}</td>
+              <td>{{ medication.caseId }}</td>
               <td>{{ medication.prescription }}</td>
+              <td>{{ medication.dosage }}</td>
+              <td hpdTranslate="{{ 'patientDashboardApp.MedicationStatus.' + medication.status }}">{{ medication.status }}</td>
+              <td>{{ medication.startedOn | formatMediumDate }}</td>
+              <td>{{ medication.prescribedById }}</td>
               <td>{{ medication.createdDate | formatMediumDate }}</td>
               <td>{{ medication.modifiedDate | formatMediumDate }}</td>
               <td>{{ medication.createdBy }}</td>
@@ -163,6 +177,25 @@
           }
         </tbody>
       </table>
+    </div>
+  }
+  @if (medications && medications.length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <hpd-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></hpd-item-count>
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
     </div>
   }
 </div>

@@ -5,7 +5,14 @@
   "changelogDate": "20240206220512",
   "clientRootFolder": "patientMS",
   "databaseType": "mongodb",
+  "documentation": "A lab, imaging, clinical or immunisation report filed against a case. `summary` is the plain-language reading shown to the patient; `description` stays free-form clinical text.",
+  "dto": "no",
+  "entityTableName": "report",
   "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "String"
+    },
     {
       "fieldName": "category",
       "fieldType": "String"
@@ -15,12 +22,32 @@
       "fieldType": "String"
     },
     {
+      "fieldName": "summary",
+      "fieldType": "String"
+    },
+    {
       "fieldName": "name",
       "fieldType": "String"
     },
     {
       "fieldName": "url",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "patientId",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "caseId",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "authorId",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "reportDate",
+      "fieldType": "LocalDate"
     },
     {
       "fieldName": "createdDate",
@@ -41,9 +68,9 @@
   ],
   "microserviceName": "patientMS",
   "name": "Report",
-  "pagination": "no",
+  "pagination": "pagination",
   "readOnly": false,
   "relationships": [],
-  "searchEngine": true,
+  "searchEngine": "no",
   "service": "no"
 }

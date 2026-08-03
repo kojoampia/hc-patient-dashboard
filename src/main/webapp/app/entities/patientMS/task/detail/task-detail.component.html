@@ -11,7 +11,7 @@
         <hpd-alert></hpd-alert>
 
         <dl class="row-md jh-entity-details">
-          <dt><span hpdTranslate="global.field.id">ID</span></dt>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsTask.id">Id</span></dt>
           <dd>
             <span>{{ task.id }}</span>
           </dd>
@@ -27,9 +27,37 @@
           <dd>
             <span>{{ task.schedule | formatMediumDate }}</span>
           </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsTask.scheduledAt">Scheduled At</span></dt>
+          <dd>
+            <span>{{ task.scheduledAt | formatMediumDatetime }}</span>
+          </dd>
           <dt><span hpdTranslate="patientDashboardApp.patientMsTask.duration">Duration</span></dt>
           <dd>
             <span>{{ task.duration }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsTask.status">Status</span></dt>
+          <dd>
+            <span hpdTranslate="{{ 'patientDashboardApp.ScheduleStatus.' + task.status }}">{{ task.status }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsTask.location">Location</span></dt>
+          <dd>
+            <span>{{ task.location }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsTask.caseId">Case Id</span></dt>
+          <dd>
+            <span>{{ task.caseId }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsTask.attendantId">Attendant Id</span></dt>
+          <dd>
+            <span>{{ task.attendantId }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsTask.teamId">Team Id</span></dt>
+          <dd>
+            <span>{{ task.teamId }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsTask.patientId">Patient Id</span></dt>
+          <dd>
+            <span>{{ task.patientId }}</span>
           </dd>
           <dt><span hpdTranslate="patientDashboardApp.patientMsTask.attendant">Attendant</span></dt>
           <dd>

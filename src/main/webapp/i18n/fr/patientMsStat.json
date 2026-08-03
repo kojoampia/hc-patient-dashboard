@@ -6,7 +6,6 @@
         "refreshListLabel": "Actualiser la liste",
         "createLabel": "Créer un nouveau Stat",
         "createOrEditLabel": "Créer ou éditer un Stat",
-        "search": "Recherche pour Stat",
         "notFound": "Aucun Stat trouvé"
       },
       "created": "Un nouveau Stat a été créé avec l'identifiant {{ param }}",
@@ -18,11 +17,19 @@
       "detail": {
         "title": "Stat"
       },
-      "id": "ID",
+      "id": "Id",
+      "patientId": "Patient Id",
+      "type": "Type",
       "name": "Name",
       "description": "Description",
       "value": "Value",
+      "secondaryValue": "Secondary Value",
+      "unit": "Unit",
+      "referenceLow": "Reference Low",
+      "referenceHigh": "Reference High",
+      "flag": "Flag",
       "note": "Note",
+      "recordedAt": "Recorded At",
       "createdDate": "Created Date",
       "createdBy": "Created By"
     }

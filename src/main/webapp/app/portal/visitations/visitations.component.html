@@ -1,0 +1,54 @@
+<div class="hc-tools">
+  <hpd-search-box
+    inputId="q_visitations"
+    placeholderKey="patientPortal.visitations.search"
+    [value]="query()"
+    (queryChange)="setQuery($event)"
+  />
+</div>
+
+@if (visible().length) {
+  <div class="hc-card hc-tbl-wrap">
+    <table class="hc-tbl">
+      <thead>
+        <tr>
+          <th hpdTranslate="patientPortal.visitations.column.when">When</th>
+          <th hpdTranslate="patientPortal.visitations.column.purpose">Purpose</th>
+          <th hpdTranslate="patientPortal.visitations.column.who">Seen by</th>
+          <th hpdTranslate="patientPortal.visitations.column.where">Where</th>
+          <th hpdTranslate="patientPortal.visitations.column.case">Case</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of visible(); track item.id) {
+          <tr>
+            <td class="hc-tbl__date">{{ formatDay(item.visitedAt) }}</td>
+            <td>
+              <div class="hc-tbl__name">{{ item.purpose }}</div>
+              @if (item.notes) {
+                <div class="hc-muted hc-tiny">{{ item.notes }}</div>
+              }
+            </td>
+            <td>{{ memberOf(item.professionalId).name }}</td>
+            <td>{{ item.location ?? '—' }}</td>
+            <td>
+              @if (caseLabel(item.caseId); as label) {
+                <a [routerLink]="['/case', item.caseId]">{{ label }}</a>
+              } @else {
+                —
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div class="hc-mt-16">
+    <hpd-pager [currentPage]="page()" [totalPages]="totalPages()" (pageChange)="page.set($event)" />
+  </div>
+} @else {
+  <div class="hc-card">
+    <hpd-empty-state icon="pin" titleKey="patientPortal.visitations.empty" messageKey="patientPortal.visitations.emptyHint" />
+  </div>
+}

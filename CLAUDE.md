@@ -30,13 +30,13 @@ Sibling plans: `hc-patient-service/patient-api.md`, `hc-patient-gateway/patient-
 ## How it reaches the backend
 
 ```
-browser → this app (ng serve :4200, webpack proxy) → hc-patient-gateway :5503
+browser → this app (ng serve :4200, webpack proxy) → hc-patient-gateway :5505
                                                        /services/hcpatientservice/** → hc-patient-service :8081
 ```
 
 - Always build URLs with `ApplicationConfigService.getEndpointFor(api, microservice?)` — pass `'hcpatientservice'` for microservice calls so the gateway's routing applies. Never hardcode a host, port, or `/services/...` prefix.
 - The gateway issues the JWT; `core/interceptor` attaches it. Route protection uses `UserRouteAccessService` with `data.authorities`.
-- `webpack/proxy.conf.js` forwards `/api`, `/services`, `/management`, `/v3/api-docs`, `/auth`, `/health` to **`http://localhost:5505`**, while the gateway's dev port is `5503`. These two disagree — see decision 1 in `patient-web.md` before debugging "API unreachable". Production is unaffected: it builds same-origin (`SERVER_API_URL` empty, `<base href="/">`) and the web container's nginx does the fan-out.
+- `webpack/proxy.conf.js` forwards `/api`, `/services`, `/management`, `/v3/api-docs`, `/auth`, `/health` to **`http://localhost:5505`**, and that is where the gateway listens. These disagreed until 2026-08-03 (the gateway was on 5503); the gateway moved rather than the proxy, in every profile. Production builds same-origin (`SERVER_API_URL` empty, `<base href="/">`) and the web container's nginx does the fan-out.
 - The `Authority` enum knows only `ROLE_ADMIN` and `ROLE_USER`; no `PATIENT`/`ANGEL` role exists anywhere in the subsystem yet.
 
 ## Commands
@@ -52,7 +52,7 @@ npm run webapp:build:dev | npm run webapp:prod
 npm run prettier:check | npm run prettier:format
 ```
 
-Do **not** run `./mvnw` here: there is nothing to compile, and `pom.xml` sets `java.version` 26 while its Enforcer rule allows only `[17,26)`, so Maven goals fail on the installed JDK. The pom survives solely because CI scrapes the image version from its first `<version>`.
+Do **not** run `./mvnw` here: there is nothing to compile. `pom.xml` used to set `java.version` 26 against an Enforcer rule allowing only `[17,26)` — a contradiction that failed every Maven goal outright; it is now 25 and internally consistent, but the pom still builds nothing. It survives solely because CI scrapes the image version from its first `<version>`.
 
 Angular CLI rejects camelCase Jest flags (`--testPathPattern` → `Unknown arguments`), so pass kebab-case through `ng test`. Calling `npx jest` directly does not work: `jest.conf.js` carries no transform, since the Angular preset comes from the builder.
 

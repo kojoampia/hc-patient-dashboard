@@ -15,7 +15,7 @@
         [routerLink]="['/profile/new']"
       >
         <fa-icon icon="plus"></fa-icon>
-        <span class="hidden-sm-down" hpdTranslate="patientDashboardApp.patientMsProfile.home.createLabel">Create a new Profile</span>
+        <span hpdTranslate="patientDashboardApp.patientMsProfile.home.createLabel">Create a new Profile</span>
       </button>
     </div>
   </h2>
@@ -23,34 +23,6 @@
   <hpd-alert-error></hpd-alert-error>
 
   <hpd-alert></hpd-alert>
-
-  <form name="searchForm" class="row row-cols-sm-auto align-items-center">
-    <div class="col-sm-12">
-      <div class="input-group w-100 mt-3">
-        <label class="visually-hidden" for="currentSearch" hpdTranslate="patientDashboardApp.patientMsProfile.home.search"
-          >Search for Profile</label
-        >
-        <input
-          type="text"
-          class="form-control"
-          [(ngModel)]="currentSearch"
-          id="currentSearch"
-          name="currentSearch"
-          placeholder="{{ 'patientDashboardApp.patientMsProfile.home.search' | translate }}"
-        />
-
-        <button class="btn btn-info" (click)="search(currentSearch)">
-          <fa-icon icon="search"></fa-icon>
-        </button>
-
-        @if (currentSearch) {
-          <button class="btn btn-danger" (click)="search('')">
-            <fa-icon icon="trash-alt"></fa-icon>
-          </button>
-        }
-      </div>
-    </div>
-  </form>
 
   @if (profiles?.length === 0) {
     <div class="alert alert-warning" id="no-result">
@@ -65,42 +37,44 @@
           <tr hpdSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
             <th scope="col" hpdSortBy="id">
               <div class="d-flex">
-                <span hpdTranslate="global.field.id">ID</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+                <span hpdTranslate="patientDashboardApp.patientMsProfile.id">Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="patientId">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsProfile.patientId">Patient Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" hpdSortBy="firstName">
               <div class="d-flex">
                 <span hpdTranslate="patientDashboardApp.patientMsProfile.firstName">First Name</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" hpdSortBy="middleNames">
               <div class="d-flex">
                 <span hpdTranslate="patientDashboardApp.patientMsProfile.middleNames">Middle Names</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" hpdSortBy="lastName">
               <div class="d-flex">
                 <span hpdTranslate="patientDashboardApp.patientMsProfile.lastName">Last Name</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" hpdSortBy="membership">
               <div class="d-flex">
                 <span hpdTranslate="patientDashboardApp.patientMsProfile.membership">Membership</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" hpdSortBy="birthDate">
@@ -113,65 +87,106 @@
             <th scope="col" hpdSortBy="sex">
               <div class="d-flex">
                 <span hpdTranslate="patientDashboardApp.patientMsProfile.sex">Sex</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="bloodGroup">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsProfile.bloodGroup">Blood Group</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" hpdSortBy="mobilePhone">
               <div class="d-flex">
                 <span hpdTranslate="patientDashboardApp.patientMsProfile.mobilePhone">Mobile Phone</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" hpdSortBy="phoneNumber">
               <div class="d-flex">
                 <span hpdTranslate="patientDashboardApp.patientMsProfile.phoneNumber">Phone Number</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" hpdSortBy="email">
               <div class="d-flex">
                 <span hpdTranslate="patientDashboardApp.patientMsProfile.email">Email</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
-            <th scope="col" hpdSortBy="idType">
+            <th scope="col" hpdSortBy="cardType">
               <div class="d-flex">
-                <span hpdTranslate="patientDashboardApp.patientMsProfile.idType">Id Type</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+                <span hpdTranslate="patientDashboardApp.patientMsProfile.cardType">Card Type</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
-            <th scope="col" hpdSortBy="idNumber">
+            <th scope="col" hpdSortBy="cardNumber">
               <div class="d-flex">
-                <span hpdTranslate="patientDashboardApp.patientMsProfile.idNumber">Id Number</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+                <span hpdTranslate="patientDashboardApp.patientMsProfile.cardNumber">Card Number</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" hpdSortBy="contacts">
               <div class="d-flex">
                 <span hpdTranslate="patientDashboardApp.patientMsProfile.contacts">Contacts</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" hpdSortBy="address">
               <div class="d-flex">
                 <span hpdTranslate="patientDashboardApp.patientMsProfile.address">Address</span>
-                @if (!currentSearch) {
-                  <fa-icon class="p-1" icon="sort"></fa-icon>
-                }
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="team">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsProfile.team">Team</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="imageUrl">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsProfile.imageUrl">Image Url</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="about">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsProfile.about">About</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="socialHandle">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsProfile.socialHandle">Social Handle</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="careAngelName">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsProfile.careAngelName">Care Angel Name</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="careAngelPhone">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsProfile.careAngelPhone">Care Angel Phone</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col"></th>
@@ -183,19 +198,27 @@
               <td>
                 <a [routerLink]="['/profile', profile.id, 'view']">{{ profile.id }}</a>
               </td>
+              <td>{{ profile.patientId }}</td>
               <td>{{ profile.firstName }}</td>
               <td>{{ profile.middleNames }}</td>
               <td>{{ profile.lastName }}</td>
               <td>{{ profile.membership }}</td>
               <td>{{ profile.birthDate | formatMediumDate }}</td>
               <td>{{ profile.sex }}</td>
+              <td>{{ profile.bloodGroup }}</td>
               <td>{{ profile.mobilePhone }}</td>
               <td>{{ profile.phoneNumber }}</td>
               <td>{{ profile.email }}</td>
-              <td>{{ profile.idType }}</td>
-              <td>{{ profile.idNumber }}</td>
+              <td>{{ profile.cardType }}</td>
+              <td>{{ profile.cardNumber }}</td>
               <td>{{ profile.contacts }}</td>
               <td>{{ profile.address }}</td>
+              <td>{{ profile.team }}</td>
+              <td>{{ profile.imageUrl }}</td>
+              <td>{{ profile.about }}</td>
+              <td>{{ profile.socialHandle }}</td>
+              <td>{{ profile.careAngelName }}</td>
+              <td>{{ profile.careAngelPhone }}</td>
               <td class="text-end">
                 <div class="btn-group">
                   <a [routerLink]="['/profile', profile.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">

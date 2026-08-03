@@ -1,0 +1,74 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (activityLog) {
+      <div>
+        <h2 data-cy="activityLogDetailsHeading">
+          <span hpdTranslate="patientDashboardApp.patientMsActivityLog.detail.title"
+            >Translation missing for patientDashboardApp.patientMsActivityLog.detail.title</span
+          >
+        </h2>
+
+        <hr />
+
+        <hpd-alert-error></hpd-alert-error>
+
+        <hpd-alert></hpd-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span hpdTranslate="patientDashboardApp.patientMsActivityLog.id">Id</span></dt>
+          <dd>
+            <span>{{ activityLog.id }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsActivityLog.patientId">Patient Id</span></dt>
+          <dd>
+            <span>{{ activityLog.patientId }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsActivityLog.caseId">Case Id</span></dt>
+          <dd>
+            <span>{{ activityLog.caseId }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsActivityLog.loggedAt">Logged At</span></dt>
+          <dd>
+            <span>{{ activityLog.loggedAt | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsActivityLog.summary">Summary</span></dt>
+          <dd>
+            <span>{{ activityLog.summary }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsActivityLog.detail">Detail</span></dt>
+          <dd>
+            <span>{{ activityLog.detail }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsActivityLog.kind">Kind</span></dt>
+          <dd>
+            <span hpdTranslate="{{ 'patientDashboardApp.ActivityKind.' + activityLog.kind }}">{{ activityLog.kind }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsActivityLog.source">Source</span></dt>
+          <dd>
+            <span hpdTranslate="{{ 'patientDashboardApp.ActivitySource.' + activityLog.source }}">{{ activityLog.source }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsActivityLog.authorId">Author Id</span></dt>
+          <dd>
+            <span>{{ activityLog.authorId }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsActivityLog.createdDate">Created Date</span></dt>
+          <dd>
+            <span>{{ activityLog.createdDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsActivityLog.createdBy">Created By</span></dt>
+          <dd>
+            <span>{{ activityLog.createdBy }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span hpdTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/activity-log', activityLog.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span hpdTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

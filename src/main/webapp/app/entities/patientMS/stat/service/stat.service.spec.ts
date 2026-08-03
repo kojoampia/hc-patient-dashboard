@@ -9,6 +9,7 @@ import { StatService, RestStat } from './stat.service';
 
 const requireRestSample: RestStat = {
   ...sampleWithRequiredData,
+  recordedAt: sampleWithRequiredData.recordedAt?.toJSON(),
   createdDate: sampleWithRequiredData.createdDate?.format(DATE_FORMAT),
 };
 
@@ -74,15 +75,14 @@ describe('Stat Service', () => {
       expect(expectedResult).toMatchObject(expected);
     });
 
-    it('should return a list of Stat for a metric type', () => {
+    it('should return a list of Stat', () => {
       const returnedFromService = { ...requireRestSample };
 
       const expected = { ...sampleWithRequiredData };
 
-      // Unlike the generated services, query() takes the metric type: it reads from /api/stats/{type}.
-      service.query('temperature').subscribe(resp => (expectedResult = resp.body));
+      service.query().subscribe(resp => (expectedResult = resp.body));
 
-      const req = httpMock.expectOne(request => request.method === 'GET' && request.url.endsWith('/temperature'));
+      const req = httpMock.expectOne({ method: 'GET' });
       req.flush([returnedFromService]);
       httpMock.verify();
       expect(expectedResult).toMatchObject([expected]);
@@ -96,21 +96,6 @@ describe('Stat Service', () => {
       const req = httpMock.expectOne({ method: 'DELETE' });
       req.flush({ status: 200 });
       expect(expectedResult).toBe(expected);
-    });
-
-    it('should handle exceptions for searching a Stat', () => {
-      const queryObject: any = {
-        page: 0,
-        size: 20,
-        query: '',
-        sort: [],
-      };
-      // search(), like query(), is typed with the metric type as its first argument.
-      service.search('temperature', queryObject).subscribe(() => expectedResult);
-
-      const req = httpMock.expectOne(request => request.method === 'GET' && request.url.endsWith('/temperature'));
-      req.flush(null, { status: 500, statusText: 'Internal Server Error' });
-      expect(expectedResult).toBe(null);
     });
 
     describe('addStatToCollectionIfMissing', () => {

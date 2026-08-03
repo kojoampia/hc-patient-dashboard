@@ -1,0 +1,74 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (allergy) {
+      <div>
+        <h2 data-cy="allergyDetailsHeading"><span hpdTranslate="patientDashboardApp.patientMsAllergy.detail.title">Allergy</span></h2>
+
+        <hr />
+
+        <hpd-alert-error></hpd-alert-error>
+
+        <hpd-alert></hpd-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span hpdTranslate="patientDashboardApp.patientMsAllergy.id">Id</span></dt>
+          <dd>
+            <span>{{ allergy.id }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsAllergy.patientId">Patient Id</span></dt>
+          <dd>
+            <span>{{ allergy.patientId }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsAllergy.name">Name</span></dt>
+          <dd>
+            <span>{{ allergy.name }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsAllergy.category">Category</span></dt>
+          <dd>
+            <span hpdTranslate="{{ 'patientDashboardApp.AllergyCategory.' + allergy.category }}">{{ allergy.category }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsAllergy.severity">Severity</span></dt>
+          <dd>
+            <span hpdTranslate="{{ 'patientDashboardApp.AllergySeverity.' + allergy.severity }}">{{ allergy.severity }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsAllergy.reaction">Reaction</span></dt>
+          <dd>
+            <span>{{ allergy.reaction }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsAllergy.notedOn">Noted On</span></dt>
+          <dd>
+            <span>{{ allergy.notedOn | formatMediumDate }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsAllergy.notedById">Noted By Id</span></dt>
+          <dd>
+            <span>{{ allergy.notedById }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsAllergy.createdDate">Created Date</span></dt>
+          <dd>
+            <span>{{ allergy.createdDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsAllergy.modifiedDate">Modified Date</span></dt>
+          <dd>
+            <span>{{ allergy.modifiedDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsAllergy.createdBy">Created By</span></dt>
+          <dd>
+            <span>{{ allergy.createdBy }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsAllergy.modifiedBy">Modified By</span></dt>
+          <dd>
+            <span>{{ allergy.modifiedBy }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span hpdTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/allergy', allergy.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span hpdTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

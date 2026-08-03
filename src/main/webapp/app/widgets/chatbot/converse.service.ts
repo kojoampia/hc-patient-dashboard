@@ -14,10 +14,10 @@ type EntityArrayResponseType = HttpResponse<IChatUser[]>;
 
 @Injectable({ providedIn: 'root' })
 export class ConversationService {
-  public resourceUrl = SERVER_API_URL + 'api/chat-users';
   // Chat connection
   private privateChannelSubscription: Subscription | null = null;
   private privateChannelListenerSubject: Subject<IChatMessage> = new Subject();
+  public resourceUrl = SERVER_API_URL + 'api/chat-users';
 
   constructor(
     private websocketService: WebsocketAuthService,
@@ -50,11 +50,9 @@ export class ConversationService {
     }
     const destination = '/topic/' + email;
     this.privateChannelSubscription = this.websocketService.getConnection().subscribe(() => {
-      if (this.websocketService.stompClient()) {
-        this.websocketService.stompClient().subscribe(destination, (data: Stomp.Message) => {
-          this.privateChannelListenerSubject.next(JSON.parse(data.body));
-        });
-      }
+      this.websocketService.stompClient().subscribe(destination, (data: Stomp.Message) => {
+        this.privateChannelListenerSubject.next(JSON.parse(data.body));
+      });
     });
   }
 

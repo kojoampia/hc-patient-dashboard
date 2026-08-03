@@ -1,0 +1,78 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (carePlanItem) {
+      <div>
+        <h2 data-cy="carePlanItemDetailsHeading">
+          <span hpdTranslate="patientDashboardApp.patientMsCarePlanItem.detail.title"
+            >Translation missing for patientDashboardApp.patientMsCarePlanItem.detail.title</span
+          >
+        </h2>
+
+        <hr />
+
+        <hpd-alert-error></hpd-alert-error>
+
+        <hpd-alert></hpd-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span hpdTranslate="patientDashboardApp.patientMsCarePlanItem.id">Id</span></dt>
+          <dd>
+            <span>{{ carePlanItem.id }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsCarePlanItem.patientId">Patient Id</span></dt>
+          <dd>
+            <span>{{ carePlanItem.patientId }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsCarePlanItem.planType">Plan Type</span></dt>
+          <dd>
+            <span hpdTranslate="{{ 'patientDashboardApp.CarePlanType.' + carePlanItem.planType }}">{{ carePlanItem.planType }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsCarePlanItem.label">Label</span></dt>
+          <dd>
+            <span>{{ carePlanItem.label }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsCarePlanItem.detail">Detail</span></dt>
+          <dd>
+            <span>{{ carePlanItem.detail }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsCarePlanItem.cadence">Cadence</span></dt>
+          <dd>
+            <span>{{ carePlanItem.cadence }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsCarePlanItem.completed">Completed</span></dt>
+          <dd>
+            <span>{{ carePlanItem.completed }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsCarePlanItem.sortOrder">Sort Order</span></dt>
+          <dd>
+            <span>{{ carePlanItem.sortOrder }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsCarePlanItem.createdDate">Created Date</span></dt>
+          <dd>
+            <span>{{ carePlanItem.createdDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsCarePlanItem.modifiedDate">Modified Date</span></dt>
+          <dd>
+            <span>{{ carePlanItem.modifiedDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsCarePlanItem.createdBy">Created By</span></dt>
+          <dd>
+            <span>{{ carePlanItem.createdBy }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsCarePlanItem.modifiedBy">Modified By</span></dt>
+          <dd>
+            <span>{{ carePlanItem.modifiedBy }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span hpdTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/care-plan-item', carePlanItem.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span hpdTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

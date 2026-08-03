@@ -1,0 +1,256 @@
+{
+  "patientPortal": {
+    "brand": {
+      "suffix": "BridgeCare",
+      "tagline": "Patient portal"
+    },
+    "nav": {
+      "aria": "Portal sections",
+      "ariaPrimary": "Main sections",
+      "openMenu": "Open the menu",
+      "signOut": "Sign out",
+      "roleLine": "Patient",
+      "overview": "Overview",
+      "record": "My record",
+      "recordShort": "Record",
+      "schedules": "Schedules",
+      "schedulesShort": "Schedule",
+      "emergencies": "Emergencies",
+      "cases": "Cases",
+      "medications": "Medications",
+      "reports": "Reports",
+      "plans": "Diet & exercise",
+      "allergies": "Allergies",
+      "profile": "Profile",
+      "group": {
+        "overview": "Overview",
+        "health": "My health",
+        "clinical": "Clinical",
+        "account": "Account",
+        "session": "Session"
+      }
+    },
+    "title": {
+      "overview": "Patient context",
+      "record": "My record",
+      "schedules": "Schedules",
+      "emergencies": "Emergencies",
+      "cases": "Cases",
+      "case": "Case detail",
+      "medications": "Medications",
+      "reports": "Reports",
+      "plans": "Diet & exercise plan",
+      "allergies": "Allergies",
+      "visitations": "Visitations",
+      "activity": "Activity trail",
+      "profile": "Profile"
+    },
+    "action": {
+      "print": "Print this screen",
+      "careLine": "Care line",
+      "seeAll": "See all",
+      "viewRecord": "Full record",
+      "viewProfile": "Profile",
+      "backToCases": "All cases"
+    },
+    "auth": {
+      "eyebrow": "Abofonsa BridgeCare · Patient portal",
+      "headlineLead": "Your whole health record,",
+      "headlineAccent": "in one calm place.",
+      "blurb": "Every case, visit, medication and report your care team records — visible to you, in plain language, wherever you are.",
+      "signInLede": "Access your personal health record.",
+      "or": "or",
+      "stat": {
+        "cases": "Cases on file",
+        "casesValue": "12",
+        "visits": "Visits logged",
+        "visitsValue": "41",
+        "team": "Professionals",
+        "teamValue": "6",
+        "careLine": "Care line",
+        "careLineValue": "24/7"
+      }
+    },
+    "pager": {
+      "aria": "Pagination",
+      "prev": "Prev",
+      "next": "Next"
+    },
+    "chart": {
+      "table": "Table",
+      "when": "When"
+    },
+    "overview": {
+      "greeting": "Your health, at a glance",
+      "greetingNamed": "Hello {{ name }}",
+      "heroBlurb": "Everything your care team has recorded — cases, visits, medications and reports — in one place.",
+      "vitals": "Latest readings",
+      "vitalsSub": "The most recent measurement your care team recorded.",
+      "noVitals": "No readings yet",
+      "noVitalsHint": "Vitals appear here once your care team records them.",
+      "nextUp": "Coming up",
+      "openCases": "Recent cases",
+      "activity": "Recent activity",
+      "lastAlert": "Most recent alert",
+      "tile": {
+        "openCases": "Open cases",
+        "upcoming": "Upcoming visits",
+        "activeMeds": "Active medications",
+        "reports": "Reports on file"
+      }
+    },
+    "record": {
+      "vitals": "Vitals",
+      "vitalsSub": "Pick a reading to see how it has moved.",
+      "history": "Reading history",
+      "visits": "Recent visits",
+      "activity": "Recent activity",
+      "careTeam": "Your care team",
+      "noCareTeam": "No care team on file",
+      "noCareTeamHint": "The professionals looking after you will be listed here."
+    },
+    "cases": {
+      "search": "Search cases",
+      "empty": "No cases on file",
+      "emptyHint": "A case is opened whenever your care team looks into something.",
+      "openCase": "Open the case {{ name }}",
+      "column": {
+        "number": "#",
+        "title": "Case",
+        "opened": "Opened",
+        "clinician": "Clinician",
+        "status": "Status",
+        "open": "Open"
+      }
+    },
+    "case": {
+      "openedOn": "Opened {{ date }}",
+      "symptoms": "What was reported",
+      "noSymptoms": "No symptoms were recorded for this case.",
+      "diagnosis": "What was found",
+      "noDiagnosis": "No diagnosis has been recorded yet.",
+      "recommendations": "Recommendations",
+      "noRecommendations": "No recommendations recorded for this case.",
+      "visits": "Visits",
+      "noVisits": "No visits recorded against this case",
+      "medications": "Medications",
+      "noMedications": "No medications prescribed for this case",
+      "reports": "Reports",
+      "noReports": "No reports filed against this case",
+      "timeline": "Timeline",
+      "noTimeline": "Nothing has been logged against this case",
+      "notFound": "Case not found",
+      "notFoundHint": "It may have been closed, or the link may be out of date."
+    },
+    "schedules": {
+      "search": "Search appointments",
+      "upcoming": "Coming up",
+      "upcomingSub": "Appointments still to attend.",
+      "past": "Already attended",
+      "pastSub": "Appointments that have been and gone.",
+      "empty": "Nothing scheduled",
+      "emptyHint": "New appointments appear here as your care team books them.",
+      "emptyPast": "No past appointments yet",
+      "column": {
+        "when": "When",
+        "what": "Appointment",
+        "who": "With",
+        "where": "Where",
+        "status": "Status"
+      }
+    },
+    "emergencies": {
+      "search": "Search alerts",
+      "careLineTitle": "Need help now?",
+      "careLineBlurb": "The care line is staffed around the clock. If this is life-threatening, call your local emergency number first.",
+      "callCareLine": "Call the care line",
+      "outcome": "Outcome",
+      "empty": "No emergencies on record",
+      "emptyHint": "Alerts raised on your record appear here, with what came of them."
+    },
+    "medications": {
+      "search": "Search medications",
+      "empty": "No medications on file",
+      "emptyHint": "Anything prescribed to you appears here, current and past.",
+      "column": {
+        "started": "Started",
+        "name": "Medication",
+        "dosage": "How to take it",
+        "prescriber": "Prescribed by",
+        "status": "Status"
+      }
+    },
+    "reports": {
+      "search": "Search reports",
+      "openFile": "Open file",
+      "empty": "No reports on file",
+      "emptyHint": "Lab, imaging and clinical reports appear here once filed."
+    },
+    "plans": {
+      "diet": "Diet plan",
+      "exercise": "Exercise plan",
+      "progress": "{{ done }} of {{ total }} done",
+      "emptyDiet": "No diet plan yet",
+      "emptyExercise": "No exercise plan yet",
+      "emptyHint": "Your care team can set one up at your next appointment."
+    },
+    "allergies": {
+      "category": "Type",
+      "reaction": "Reaction",
+      "noted": "Noted",
+      "conditions": "Ongoing conditions",
+      "noConditions": "No conditions on file",
+      "empty": "No allergies on file",
+      "emptyHint": "Tell your care team about any reaction so it can be recorded here."
+    },
+    "visitations": {
+      "search": "Search visits",
+      "empty": "No visits recorded",
+      "emptyHint": "Every visit your care team logs will appear here.",
+      "column": {
+        "when": "When",
+        "purpose": "Purpose",
+        "who": "Seen by",
+        "where": "Where",
+        "case": "Case"
+      }
+    },
+    "activity": {
+      "search": "Search the trail",
+      "empty": "Nothing logged yet",
+      "emptyHint": "Everything filed on your record shows up here, newest first."
+    },
+    "profile": {
+      "editAccount": "Account settings",
+      "noProfile": "No profile on file",
+      "noProfileHint": "Your care team creates this when you register.",
+      "noMembership": "No membership on file",
+      "noMembershipHint": "Speak to your care team about joining a plan.",
+      "tab": {
+        "about": "About",
+        "contact": "Contact",
+        "membership": "Membership",
+        "careTeam": "Care team"
+      },
+      "field": {
+        "birthDate": "Born",
+        "sex": "Sex",
+        "bloodGroup": "Blood group",
+        "cardType": "Card",
+        "cardNumber": "Card number",
+        "social": "Social",
+        "email": "Email",
+        "mobile": "Mobile",
+        "phone": "Phone",
+        "address": "Address",
+        "careAngel": "Care angel",
+        "careAngelPhone": "Angel phone",
+        "plan": "Plan",
+        "memberNumber": "Member number",
+        "status": "Status",
+        "since": "Member since",
+        "renews": "Renews"
+      }
+    }
+  }
+}

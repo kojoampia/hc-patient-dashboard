@@ -1,13 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable, asapScheduler, scheduled } from 'rxjs';
-
-import { catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
-import { Search } from 'app/core/request/request.model';
 import { ITeam, NewTeam } from '../team.model';
 
 export type PartialUpdateTeam = Partial<ITeam> & Pick<ITeam, 'id'>;
@@ -17,8 +14,7 @@ export type EntityArrayResponseType = HttpResponse<ITeam[]>;
 
 @Injectable({ providedIn: 'root' })
 export class TeamService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/teams');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/teams/_search');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/teams', 'hcpatientservice');
 
   constructor(
     protected http: HttpClient,
@@ -48,13 +44,6 @@ export class TeamService {
 
   delete(id: string): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
-  }
-
-  search(req: Search): Observable<EntityArrayResponseType> {
-    const options = createRequestOption(req);
-    return this.http
-      .get<ITeam[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
-      .pipe(catchError(() => scheduled([new HttpResponse<ITeam[]>()], asapScheduler)));
   }
 
   getTeamIdentifier(team: Pick<ITeam, 'id'>): string {

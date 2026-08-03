@@ -98,20 +98,6 @@ describe('Metadata Service', () => {
       expect(expectedResult).toBe(expected);
     });
 
-    it('should handle exceptions for searching a Metadata', () => {
-      const queryObject: any = {
-        page: 0,
-        size: 20,
-        query: '',
-        sort: [],
-      };
-      service.search(queryObject).subscribe(() => expectedResult);
-
-      const req = httpMock.expectOne({ method: 'GET' });
-      req.flush(null, { status: 500, statusText: 'Internal Server Error' });
-      expect(expectedResult).toBe(null);
-    });
-
     describe('addMetadataToCollectionIfMissing', () => {
       it('should add a Metadata to an empty array', () => {
         const metadata: IMetadata = sampleWithRequiredData;

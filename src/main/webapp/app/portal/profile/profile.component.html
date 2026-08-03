@@ -1,0 +1,186 @@
+@if (profile(); as person) {
+  <div class="hc-rec-head">
+    @if (person.imageUrl) {
+      <img class="hc-avatar hc-av-72" [src]="person.imageUrl" alt="" />
+    } @else {
+      <span class="hc-monogram hc-monogram--gold hc-av-72" style="font-size: 24px">{{ initials() }}</span>
+    }
+
+    <div class="hc-grow">
+      <div class="hc-rec-head__who">{{ fullName() }}</div>
+      <div class="hc-rec-head__sub">{{ person.email }}</div>
+    </div>
+
+    <a class="hc-btn hc-btn--ghost hc-btn--sm" routerLink="/account/settings">
+      <hpd-icon name="save" [size]="15" />
+      <span hpdTranslate="patientPortal.profile.editAccount">Account settings</span>
+    </a>
+  </div>
+
+  <div class="hc-card hc-mt-16" style="overflow: hidden">
+    <div class="hc-tabs" role="tablist">
+      @for (tab of tabs; track tab.id) {
+        <button
+          type="button"
+          role="tab"
+          class="hc-tab"
+          [class.is-active]="activeTab() === tab.id"
+          [attr.aria-selected]="activeTab() === tab.id"
+          (click)="activeTab.set(tab.id)"
+          [hpdTranslate]="tab.labelKey"
+        ></button>
+      }
+    </div>
+
+    <div class="hc-card-pad" role="tabpanel">
+      @switch (activeTab()) {
+        @case ('about') {
+          @if (person.about) {
+            <div class="hc-prose" style="margin-bottom: 14px">
+              <p>{{ person.about }}</p>
+            </div>
+          }
+          <div class="hc-grid hc-grid--2" style="gap: 0 24px">
+            <div>
+              <div class="hc-kv">
+                <span class="hc-kv__k" hpdTranslate="patientPortal.profile.field.birthDate">Born</span>
+                <span class="hc-kv__v">{{ formatDay(person.birthDate) }}</span>
+              </div>
+              <div class="hc-kv">
+                <span class="hc-kv__k" hpdTranslate="patientPortal.profile.field.sex">Sex</span>
+                <span class="hc-kv__v">{{ person.sex ?? '—' }}</span>
+              </div>
+              <div class="hc-kv">
+                <span class="hc-kv__k" hpdTranslate="patientPortal.profile.field.bloodGroup">Blood group</span>
+                <span class="hc-kv__v">{{ person.bloodGroup ?? '—' }}</span>
+              </div>
+            </div>
+            <div>
+              <div class="hc-kv">
+                <span class="hc-kv__k" hpdTranslate="patientPortal.profile.field.cardType">Card</span>
+                <span class="hc-kv__v">{{ person.cardType ?? '—' }}</span>
+              </div>
+              <div class="hc-kv">
+                <span class="hc-kv__k" hpdTranslate="patientPortal.profile.field.cardNumber">Card number</span>
+                <span class="hc-kv__v hc-num">{{ person.cardNumber ?? '—' }}</span>
+              </div>
+              <div class="hc-kv">
+                <span class="hc-kv__k" hpdTranslate="patientPortal.profile.field.social">Social</span>
+                <span class="hc-kv__v">{{ person.socialHandle ?? '—' }}</span>
+              </div>
+            </div>
+          </div>
+        }
+
+        @case ('contact') {
+          <div class="hc-grid hc-grid--2" style="gap: 0 24px">
+            <div>
+              <div class="hc-kv">
+                <span class="hc-kv__k" hpdTranslate="patientPortal.profile.field.email">Email</span>
+                <span class="hc-kv__v">{{ person.email ?? '—' }}</span>
+              </div>
+              <div class="hc-kv">
+                <span class="hc-kv__k" hpdTranslate="patientPortal.profile.field.mobile">Mobile</span>
+                <span class="hc-kv__v hc-num">{{ person.mobilePhone ?? '—' }}</span>
+              </div>
+              <div class="hc-kv">
+                <span class="hc-kv__k" hpdTranslate="patientPortal.profile.field.phone">Phone</span>
+                <span class="hc-kv__v hc-num">{{ person.phoneNumber ?? '—' }}</span>
+              </div>
+            </div>
+            <div>
+              <div class="hc-kv">
+                <span class="hc-kv__k" hpdTranslate="patientPortal.profile.field.address">Address</span>
+                <span class="hc-kv__v">{{ person.address ?? '—' }}</span>
+              </div>
+              <div class="hc-kv">
+                <span class="hc-kv__k" hpdTranslate="patientPortal.profile.field.careAngel">Care angel</span>
+                <span class="hc-kv__v">{{ person.careAngelName ?? '—' }}</span>
+              </div>
+              <div class="hc-kv">
+                <span class="hc-kv__k" hpdTranslate="patientPortal.profile.field.careAngelPhone">Angel phone</span>
+                <span class="hc-kv__v hc-num">{{ person.careAngelPhone ?? '—' }}</span>
+              </div>
+            </div>
+          </div>
+        }
+
+        @case ('membership') {
+          @if (membership(); as plan) {
+            <div class="hc-grid hc-grid--2" style="gap: 0 24px">
+              <div>
+                <div class="hc-kv">
+                  <span class="hc-kv__k" hpdTranslate="patientPortal.profile.field.plan">Plan</span>
+                  <span class="hc-kv__v">{{ plan.plan ?? plan.name ?? '—' }}</span>
+                </div>
+                <div class="hc-kv">
+                  <span class="hc-kv__k" hpdTranslate="patientPortal.profile.field.memberNumber">Member number</span>
+                  <span class="hc-kv__v hc-num">{{ plan.memberNumber ?? '—' }}</span>
+                </div>
+                <div class="hc-kv">
+                  <span class="hc-kv__k" hpdTranslate="patientPortal.profile.field.status">Status</span>
+                  <span class="hc-kv__v"
+                    ><span class="hc-pill hc-pill--ok">{{ humanise(plan.status) }}</span></span
+                  >
+                </div>
+              </div>
+              <div>
+                <div class="hc-kv">
+                  <span class="hc-kv__k" hpdTranslate="patientPortal.profile.field.since">Member since</span>
+                  <span class="hc-kv__v">{{ formatDay(plan.startDate) }}</span>
+                </div>
+                <div class="hc-kv">
+                  <span class="hc-kv__k" hpdTranslate="patientPortal.profile.field.renews">Renews</span>
+                  <span class="hc-kv__v">{{ formatDay(plan.renewalDate) }}</span>
+                </div>
+              </div>
+            </div>
+
+            @if (plan.description) {
+              <div class="hc-prose" style="margin-top: 14px">
+                <p>{{ plan.description }}</p>
+              </div>
+            }
+          } @else {
+            <hpd-empty-state
+              icon="card"
+              titleKey="patientPortal.profile.noMembership"
+              messageKey="patientPortal.profile.noMembershipHint"
+            />
+          }
+        }
+
+        @case ('careTeam') {
+          @if (careTeam().length) {
+            <div class="hc-grid hc-grid--2">
+              @for (member of careTeam(); track member.id) {
+                <div class="hc-row hc-gap-12">
+                  @if (member.imageUrl) {
+                    <img class="hc-avatar hc-av-48" [src]="member.imageUrl" alt="" />
+                  } @else {
+                    <span class="hc-monogram hc-av-48">{{ member.initials }}</span>
+                  }
+                  <span class="hc-grow">
+                    <span class="hc-lrow__title">{{ member.name }}</span>
+                    <span class="hc-lrow__sub"
+                      >{{ member.role }}
+                      @if (member.location) {
+                        · {{ member.location }}
+                      }
+                    </span>
+                  </span>
+                </div>
+              }
+            </div>
+          } @else {
+            <hpd-empty-state icon="user" titleKey="patientPortal.record.noCareTeam" messageKey="patientPortal.record.noCareTeamHint" />
+          }
+        }
+      }
+    </div>
+  </div>
+} @else {
+  <div class="hc-card">
+    <hpd-empty-state icon="user" titleKey="patientPortal.profile.noProfile" messageKey="patientPortal.profile.noProfileHint" />
+  </div>
+}

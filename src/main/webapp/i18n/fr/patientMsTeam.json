@@ -6,7 +6,6 @@
         "refreshListLabel": "Actualiser la liste",
         "createLabel": "Créer un nouveau Team",
         "createOrEditLabel": "Créer ou éditer un Team",
-        "search": "Recherche pour Team",
         "notFound": "Aucun Team trouvé"
       },
       "created": "Un nouveau Team a été créé avec l'identifiant {{ param }}",
@@ -18,7 +17,7 @@
       "detail": {
         "title": "Team"
       },
-      "id": "ID",
+      "id": "Id",
       "name": "Name",
       "description": "Description",
       "contact": "Contact"

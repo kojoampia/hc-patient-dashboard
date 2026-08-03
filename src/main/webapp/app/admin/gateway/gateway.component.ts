@@ -6,7 +6,7 @@ import { GatewayRoute } from './gateway-route.model';
 
 @Component({
   standalone: true,
-  selector: 'jhi-gateway',
+  selector: 'hpd-gateway',
   templateUrl: './gateway.component.html',
   providers: [GatewayRoutesService],
   imports: [SharedModule],

@@ -2,19 +2,27 @@ import dayjs from 'dayjs/esm';
 
 export interface IProfile {
   id: string;
+  patientId?: string | null;
   firstName?: string | null;
   middleNames?: string | null;
   lastName?: string | null;
   membership?: string | null;
   birthDate?: dayjs.Dayjs | null;
   sex?: string | null;
+  bloodGroup?: string | null;
   mobilePhone?: string | null;
   phoneNumber?: string | null;
   email?: string | null;
-  idType?: string | null;
-  idNumber?: string | null;
+  cardType?: string | null;
+  cardNumber?: string | null;
   contacts?: string | null;
   address?: string | null;
+  team?: string | null;
+  imageUrl?: string | null;
+  about?: string | null;
+  socialHandle?: string | null;
+  careAngelName?: string | null;
+  careAngelPhone?: string | null;
 }
 
 export type NewProfile = Omit<IProfile, 'id'> & { id: null };

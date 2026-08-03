@@ -14,10 +14,15 @@
 
         @if (editForm.controls.id.value !== null) {
           <div class="mb-3">
-            <label class="form-label" hpdTranslate="global.field.id" for="field_id">ID</label>
+            <label class="form-label" hpdTranslate="patientDashboardApp.patientMsProfile.id" for="field_id">Id</label>
             <input type="text" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
           </div>
         }
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsProfile.patientId" for="field_patientId">Patient Id</label>
+          <input type="text" class="form-control" name="patientId" id="field_patientId" data-cy="patientId" formControlName="patientId" />
+        </div>
 
         <div class="mb-3">
           <label class="form-label" hpdTranslate="patientDashboardApp.patientMsProfile.firstName" for="field_firstName">First Name</label>
@@ -78,6 +83,20 @@
         </div>
 
         <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsProfile.bloodGroup" for="field_bloodGroup"
+            >Blood Group</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="bloodGroup"
+            id="field_bloodGroup"
+            data-cy="bloodGroup"
+            formControlName="bloodGroup"
+          />
+        </div>
+
+        <div class="mb-3">
           <label class="form-label" hpdTranslate="patientDashboardApp.patientMsProfile.mobilePhone" for="field_mobilePhone"
             >Mobile Phone</label
           >
@@ -111,13 +130,22 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsProfile.idType" for="field_idType">Id Type</label>
-          <input type="text" class="form-control" name="idType" id="field_idType" data-cy="idType" formControlName="idType" />
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsProfile.cardType" for="field_cardType">Card Type</label>
+          <input type="text" class="form-control" name="cardType" id="field_cardType" data-cy="cardType" formControlName="cardType" />
         </div>
 
         <div class="mb-3">
-          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsProfile.idNumber" for="field_idNumber">Id Number</label>
-          <input type="text" class="form-control" name="idNumber" id="field_idNumber" data-cy="idNumber" formControlName="idNumber" />
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsProfile.cardNumber" for="field_cardNumber"
+            >Card Number</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="cardNumber"
+            id="field_cardNumber"
+            data-cy="cardNumber"
+            formControlName="cardNumber"
+          />
         </div>
 
         <div class="mb-3">
@@ -128,6 +156,63 @@
         <div class="mb-3">
           <label class="form-label" hpdTranslate="patientDashboardApp.patientMsProfile.address" for="field_address">Address</label>
           <input type="text" class="form-control" name="address" id="field_address" data-cy="address" formControlName="address" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsProfile.team" for="field_team">Team</label>
+          <input type="text" class="form-control" name="team" id="field_team" data-cy="team" formControlName="team" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsProfile.imageUrl" for="field_imageUrl">Image Url</label>
+          <input type="text" class="form-control" name="imageUrl" id="field_imageUrl" data-cy="imageUrl" formControlName="imageUrl" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsProfile.about" for="field_about">About</label>
+          <input type="text" class="form-control" name="about" id="field_about" data-cy="about" formControlName="about" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsProfile.socialHandle" for="field_socialHandle"
+            >Social Handle</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="socialHandle"
+            id="field_socialHandle"
+            data-cy="socialHandle"
+            formControlName="socialHandle"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsProfile.careAngelName" for="field_careAngelName"
+            >Care Angel Name</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="careAngelName"
+            id="field_careAngelName"
+            data-cy="careAngelName"
+            formControlName="careAngelName"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsProfile.careAngelPhone" for="field_careAngelPhone"
+            >Care Angel Phone</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="careAngelPhone"
+            id="field_careAngelPhone"
+            data-cy="careAngelPhone"
+            formControlName="careAngelPhone"
+          />
         </div>
       </div>
 

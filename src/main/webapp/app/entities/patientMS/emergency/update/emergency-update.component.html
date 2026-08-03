@@ -1,0 +1,197 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="hpd-emergency-heading"
+        data-cy="EmergencyCreateUpdateHeading"
+        hpdTranslate="patientDashboardApp.patientMsEmergency.home.createOrEditLabel"
+      >
+        Create or edit a Emergency
+      </h2>
+
+      <div>
+        <hpd-alert-error></hpd-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" hpdTranslate="patientDashboardApp.patientMsEmergency.id" for="field_id">Id</label>
+            <input type="text" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsEmergency.patientId" for="field_patientId">Patient Id</label>
+          <input type="text" class="form-control" name="patientId" id="field_patientId" data-cy="patientId" formControlName="patientId" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsEmergency.caseId" for="field_caseId">Case Id</label>
+          <input type="text" class="form-control" name="caseId" id="field_caseId" data-cy="caseId" formControlName="caseId" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsEmergency.raisedAt" for="field_raisedAt">Raised At</label>
+          <div class="d-flex">
+            <input
+              id="field_raisedAt"
+              data-cy="raisedAt"
+              type="datetime-local"
+              class="form-control"
+              name="raisedAt"
+              formControlName="raisedAt"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsEmergency.resolvedAt" for="field_resolvedAt"
+            >Resolved At</label
+          >
+          <div class="d-flex">
+            <input
+              id="field_resolvedAt"
+              data-cy="resolvedAt"
+              type="datetime-local"
+              class="form-control"
+              name="resolvedAt"
+              formControlName="resolvedAt"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsEmergency.brief" for="field_brief">Brief</label>
+          <input type="text" class="form-control" name="brief" id="field_brief" data-cy="brief" formControlName="brief" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsEmergency.detail" for="field_detail">Detail</label>
+          <input type="text" class="form-control" name="detail" id="field_detail" data-cy="detail" formControlName="detail" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsEmergency.severity" for="field_severity">Severity</label>
+          <select class="form-control" name="severity" formControlName="severity" id="field_severity" data-cy="severity">
+            <option [ngValue]="null">{{ 'patientDashboardApp.EmergencySeverity.null' | translate }}</option>
+            @for (emergencySeverity of emergencySeverityValues; track $index) {
+              <option [value]="emergencySeverity">{{ 'patientDashboardApp.EmergencySeverity.' + emergencySeverity | translate }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsEmergency.status" for="field_status">Status</label>
+          <select class="form-control" name="status" formControlName="status" id="field_status" data-cy="status">
+            <option [ngValue]="null">{{ 'patientDashboardApp.EmergencyStatus.null' | translate }}</option>
+            @for (emergencyStatus of emergencyStatusValues; track $index) {
+              <option [value]="emergencyStatus">{{ 'patientDashboardApp.EmergencyStatus.' + emergencyStatus | translate }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsEmergency.outcome" for="field_outcome">Outcome</label>
+          <input type="text" class="form-control" name="outcome" id="field_outcome" data-cy="outcome" formControlName="outcome" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsEmergency.location" for="field_location">Location</label>
+          <input type="text" class="form-control" name="location" id="field_location" data-cy="location" formControlName="location" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsEmergency.respondentId" for="field_respondentId"
+            >Respondent Id</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="respondentId"
+            id="field_respondentId"
+            data-cy="respondentId"
+            formControlName="respondentId"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsEmergency.createdDate" for="field_createdDate"
+            >Created Date</label
+          >
+          <div class="input-group">
+            <input
+              id="field_createdDate"
+              data-cy="createdDate"
+              type="text"
+              class="form-control"
+              name="createdDate"
+              ngbDatepicker
+              #createdDateDp="ngbDatepicker"
+              formControlName="createdDate"
+            />
+            <button type="button" class="btn btn-secondary" (click)="createdDateDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsEmergency.modifiedDate" for="field_modifiedDate"
+            >Modified Date</label
+          >
+          <div class="input-group">
+            <input
+              id="field_modifiedDate"
+              data-cy="modifiedDate"
+              type="text"
+              class="form-control"
+              name="modifiedDate"
+              ngbDatepicker
+              #modifiedDateDp="ngbDatepicker"
+              formControlName="modifiedDate"
+            />
+            <button type="button" class="btn btn-secondary" (click)="modifiedDateDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsEmergency.createdBy" for="field_createdBy">Created By</label>
+          <input type="text" class="form-control" name="createdBy" id="field_createdBy" data-cy="createdBy" formControlName="createdBy" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsEmergency.modifiedBy" for="field_modifiedBy"
+            >Modified By</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="modifiedBy"
+            id="field_modifiedBy"
+            data-cy="modifiedBy"
+            formControlName="modifiedBy"
+          />
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span hpdTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span hpdTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

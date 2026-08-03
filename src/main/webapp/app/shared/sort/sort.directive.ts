@@ -2,9 +2,12 @@ import { Directive, EventEmitter, Input, Output } from '@angular/core';
 
 @Directive({
   standalone: true,
-  selector: '[jhiSort]',
+  selector: '[hpdSort]',
 })
 export default class SortDirective<T> {
+  private _predicate?: T;
+  private _ascending?: boolean;
+
   @Input()
   get predicate(): T | undefined {
     return this._predicate;
@@ -26,9 +29,6 @@ export default class SortDirective<T> {
   @Output() predicateChange = new EventEmitter<T>();
   @Output() ascendingChange = new EventEmitter<boolean>();
   @Output() sortChange = new EventEmitter<{ predicate: T; ascending: boolean }>();
-
-  private _predicate?: T;
-  private _ascending?: boolean;
 
   sort(field: T): void {
     this.ascending = field !== this.predicate ? true : !this.ascending;

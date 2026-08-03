@@ -1,52 +1,144 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="jhi-stat-heading" data-cy="StatCreateUpdateHeading"
-        jhiTranslate="patientDashboardApp.patientMsStat.home.createOrEditLabel">
+      <h2 id="hpd-stat-heading" data-cy="StatCreateUpdateHeading" hpdTranslate="patientDashboardApp.patientMsStat.home.createOrEditLabel">
         Create or edit a Stat
       </h2>
 
       <div>
-        <jhi-alert-error></jhi-alert-error>
+        <hpd-alert-error></hpd-alert-error>
 
         @if (editForm.controls.id.value !== null) {
-        <div class="mb-3">
-          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
-          <input type="text" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id"
-            [readonly]="true" />
-        </div>
+          <div class="mb-3">
+            <label class="form-label" hpdTranslate="patientDashboardApp.patientMsStat.id" for="field_id">Id</label>
+            <input type="text" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
         }
 
         <div class="mb-3">
-          <label class="form-label" jhiTranslate="patientDashboardApp.patientMsStat.name" for="field_name">Name</label>
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsStat.patientId" for="field_patientId">Patient Id</label>
+          <input type="text" class="form-control" name="patientId" id="field_patientId" data-cy="patientId" formControlName="patientId" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsStat.type" for="field_type">Type</label>
+          <input type="text" class="form-control" name="type" id="field_type" data-cy="type" formControlName="type" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsStat.name" for="field_name">Name</label>
           <input type="text" class="form-control" name="name" id="field_name" data-cy="name" formControlName="name" />
         </div>
 
         <div class="mb-3">
-          <label class="form-label" jhiTranslate="patientDashboardApp.patientMsStat.description"
-            for="field_description">Description</label>
-          <input type="text" class="form-control" name="description" id="field_description" data-cy="description"
-            formControlName="description" />
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsStat.description" for="field_description">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          />
         </div>
 
         <div class="mb-3">
-          <label class="form-label" jhiTranslate="patientDashboardApp.patientMsStat.value"
-            for="field_value">Value</label>
-          <input type="number" class="form-control" name="value" id="field_value" data-cy="value"
-            formControlName="value" />
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsStat.value" for="field_value">Value</label>
+          <input type="number" class="form-control" name="value" id="field_value" data-cy="value" formControlName="value" />
         </div>
 
         <div class="mb-3">
-          <label class="form-label" jhiTranslate="patientDashboardApp.patientMsStat.note" for="field_note">Note</label>
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsStat.secondaryValue" for="field_secondaryValue"
+            >Secondary Value</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            name="secondaryValue"
+            id="field_secondaryValue"
+            data-cy="secondaryValue"
+            formControlName="secondaryValue"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsStat.unit" for="field_unit">Unit</label>
+          <input type="text" class="form-control" name="unit" id="field_unit" data-cy="unit" formControlName="unit" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsStat.referenceLow" for="field_referenceLow"
+            >Reference Low</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            name="referenceLow"
+            id="field_referenceLow"
+            data-cy="referenceLow"
+            formControlName="referenceLow"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsStat.referenceHigh" for="field_referenceHigh"
+            >Reference High</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            name="referenceHigh"
+            id="field_referenceHigh"
+            data-cy="referenceHigh"
+            formControlName="referenceHigh"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsStat.flag" for="field_flag">Flag</label>
+          <select class="form-control" name="flag" formControlName="flag" id="field_flag" data-cy="flag">
+            <option [ngValue]="null">{{ 'patientDashboardApp.StatFlag.null' | translate }}</option>
+            @for (statFlag of statFlagValues; track $index) {
+              <option [value]="statFlag">{{ 'patientDashboardApp.StatFlag.' + statFlag | translate }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsStat.note" for="field_note">Note</label>
           <input type="text" class="form-control" name="note" id="field_note" data-cy="note" formControlName="note" />
         </div>
 
         <div class="mb-3">
-          <label class="form-label" jhiTranslate="patientDashboardApp.patientMsStat.createdDate"
-            for="field_createdDate">Created Date</label>
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsStat.recordedAt" for="field_recordedAt">Recorded At</label>
+          <div class="d-flex">
+            <input
+              id="field_recordedAt"
+              data-cy="recordedAt"
+              type="datetime-local"
+              class="form-control"
+              name="recordedAt"
+              formControlName="recordedAt"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsStat.createdDate" for="field_createdDate"
+            >Created Date</label
+          >
           <div class="input-group">
-            <input id="field_createdDate" data-cy="createdDate" type="text" class="form-control" name="createdDate"
-              ngbDatepicker #createdDateDp="ngbDatepicker" formControlName="createdDate" />
+            <input
+              id="field_createdDate"
+              data-cy="createdDate"
+              type="text"
+              class="form-control"
+              name="createdDate"
+              ngbDatepicker
+              #createdDateDp="ngbDatepicker"
+              formControlName="createdDate"
+            />
             <button type="button" class="btn btn-secondary" (click)="createdDateDp.toggle()">
               <fa-icon icon="calendar-alt"></fa-icon>
             </button>
@@ -54,22 +146,24 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label" jhiTranslate="patientDashboardApp.patientMsStat.createdBy"
-            for="field_createdBy">Created By</label>
-          <input type="text" class="form-control" name="createdBy" id="field_createdBy" data-cy="createdBy"
-            formControlName="createdBy" />
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsStat.createdBy" for="field_createdBy">Created By</label>
+          <input type="text" class="form-control" name="createdBy" id="field_createdBy" data-cy="createdBy" formControlName="createdBy" />
         </div>
       </div>
 
       <div>
-        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary"
-          (click)="previousState()">
-          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span hpdTranslate="entity.action.cancel">Cancel</span>
         </button>
 
-        <button type="submit" id="save-entity" data-cy="entityCreateSaveButton"
-          [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
-          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span hpdTranslate="entity.action.save">Save</span>
         </button>
       </div>
     </form>

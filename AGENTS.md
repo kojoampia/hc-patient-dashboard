@@ -59,4 +59,4 @@ Translation is enabled for `en`, `fr`, `de` (`src/main/webapp/i18n`). Every user
 - Dev server on 4200; API proxied to `http://localhost:5505` by `webpack/proxy.conf.js`
 - Docker: not here — the nginx image is built and shipped by `hc-patient/deploy` (repo `kojoampia/hc-patient-ci`); this repo only produces the bundle
 - CI: `.github/workflows/docker-publish.yml` targets GHCR but has been **failing on every push since 2026-07-30** (it builds a `Dockerfile.prod` that no longer exists), so nothing here is gated — see `patient-web.md` Phase C
-- `pom.xml`/`mvnw` are generator leftovers — Maven cannot build this repo (no Java sources, and the Enforcer range excludes the installed JDK 26)
+- `pom.xml`/`mvnw` are generator leftovers — there are no Java sources for Maven to build. Its `java.version` is 25, which its Enforcer range `[17,26)` allows; the two used to contradict each other

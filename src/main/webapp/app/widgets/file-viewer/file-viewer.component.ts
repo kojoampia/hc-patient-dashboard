@@ -4,16 +4,16 @@ import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'jhi-file-viewer',
+  selector: 'hpd-file-viewer',
   standalone: true,
   templateUrl: './file-viewer.component.html',
   styleUrls: ['./file-viewer.component.scss'],
 })
 export class FileViewerComponent implements OnInit, OnDestroy {
+  private destroyed$ = new Subject<boolean>();
   url?: string;
   title?: string;
   safeUrl?: SafeHtml;
-  private destroyed$ = new Subject<boolean>();
 
   constructor(
     private sanitizer: DomSanitizer,

@@ -157,14 +157,31 @@ describe('Membership e2e test', () => {
     });
 
     it('should create an instance of Membership', () => {
-      cy.get(`[data-cy="name"]`).type('that');
-      cy.get(`[data-cy="name"]`).should('have.value', 'that');
+      cy.get(`[data-cy="patientId"]`).type('oof diligently ambitious');
+      cy.get(`[data-cy="patientId"]`).should('have.value', 'oof diligently ambitious');
 
-      cy.get(`[data-cy="description"]`).type('immediately');
-      cy.get(`[data-cy="description"]`).should('have.value', 'immediately');
+      cy.get(`[data-cy="name"]`).type('refuse lest hasten');
+      cy.get(`[data-cy="name"]`).should('have.value', 'refuse lest hasten');
 
-      cy.get(`[data-cy="status"]`).type('underscore');
-      cy.get(`[data-cy="status"]`).should('have.value', 'underscore');
+      cy.get(`[data-cy="description"]`).type('meh provided');
+      cy.get(`[data-cy="description"]`).should('have.value', 'meh provided');
+
+      cy.get(`[data-cy="status"]`).type('reboot blah though');
+      cy.get(`[data-cy="status"]`).should('have.value', 'reboot blah though');
+
+      cy.get(`[data-cy="memberNumber"]`).type('recall contradict');
+      cy.get(`[data-cy="memberNumber"]`).should('have.value', 'recall contradict');
+
+      cy.get(`[data-cy="plan"]`).type('fully satirise');
+      cy.get(`[data-cy="plan"]`).should('have.value', 'fully satirise');
+
+      cy.get(`[data-cy="startDate"]`).type('2024-02-06');
+      cy.get(`[data-cy="startDate"]`).blur();
+      cy.get(`[data-cy="startDate"]`).should('have.value', '2024-02-06');
+
+      cy.get(`[data-cy="renewalDate"]`).type('2024-02-06');
+      cy.get(`[data-cy="renewalDate"]`).blur();
+      cy.get(`[data-cy="renewalDate"]`).should('have.value', '2024-02-06');
 
       cy.get(`[data-cy="createdDate"]`).type('2024-02-06');
       cy.get(`[data-cy="createdDate"]`).blur();
@@ -174,11 +191,11 @@ describe('Membership e2e test', () => {
       cy.get(`[data-cy="modifiedDate"]`).blur();
       cy.get(`[data-cy="modifiedDate"]`).should('have.value', '2024-02-06');
 
-      cy.get(`[data-cy="createdBy"]`).type('kindheartedly false across');
-      cy.get(`[data-cy="createdBy"]`).should('have.value', 'kindheartedly false across');
+      cy.get(`[data-cy="createdBy"]`).type('oversimplify tea where');
+      cy.get(`[data-cy="createdBy"]`).should('have.value', 'oversimplify tea where');
 
-      cy.get(`[data-cy="modifiedBy"]`).type('very yippee until');
-      cy.get(`[data-cy="modifiedBy"]`).should('have.value', 'very yippee until');
+      cy.get(`[data-cy="modifiedBy"]`).type('continually');
+      cy.get(`[data-cy="modifiedBy"]`).should('have.value', 'continually');
 
       cy.get(entityCreateSaveButtonSelector).click();
 

@@ -16,7 +16,7 @@ const newUser: IUser = {
 
 @Component({
   standalone: true,
-  selector: 'jhi-user-mgmt-update',
+  selector: 'hpd-user-mgmt-update',
   templateUrl: './user-management-update.component.html',
   imports: [SharedModule, FormsModule, ReactiveFormsModule],
 })

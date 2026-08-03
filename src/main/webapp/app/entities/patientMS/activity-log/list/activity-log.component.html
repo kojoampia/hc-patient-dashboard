@@ -1,0 +1,177 @@
+<div>
+  <h2 id="page-heading" data-cy="ActivityLogHeading">
+    <span hpdTranslate="patientDashboardApp.patientMsActivityLog.home.title">Activity Logs</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span hpdTranslate="patientDashboardApp.patientMsActivityLog.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-activity-log"
+        [routerLink]="['/activity-log/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span hpdTranslate="patientDashboardApp.patientMsActivityLog.home.createLabel">Create a new Activity Log</span>
+      </button>
+    </div>
+  </h2>
+
+  <hpd-alert-error></hpd-alert-error>
+
+  <hpd-alert></hpd-alert>
+
+  @if (activityLogs?.length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span hpdTranslate="patientDashboardApp.patientMsActivityLog.home.notFound">No Activity Logs found</span>
+    </div>
+  }
+
+  @if (activityLogs && activityLogs.length > 0) {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr hpdSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+            <th scope="col" hpdSortBy="id">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsActivityLog.id">Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="patientId">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsActivityLog.patientId">Patient Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="caseId">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsActivityLog.caseId">Case Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="loggedAt">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsActivityLog.loggedAt">Logged At</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="summary">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsActivityLog.summary">Summary</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="detail">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsActivityLog.detail">Detail</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="kind">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsActivityLog.kind">Kind</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="source">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsActivityLog.source">Source</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="authorId">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsActivityLog.authorId">Author Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="createdDate">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsActivityLog.createdDate">Created Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="createdBy">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsActivityLog.createdBy">Created By</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (activityLog of activityLogs; track trackId) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/activity-log', activityLog.id, 'view']">{{ activityLog.id }}</a>
+              </td>
+              <td>{{ activityLog.patientId }}</td>
+              <td>{{ activityLog.caseId }}</td>
+              <td>{{ activityLog.loggedAt | formatMediumDatetime }}</td>
+              <td>{{ activityLog.summary }}</td>
+              <td>{{ activityLog.detail }}</td>
+              <td hpdTranslate="{{ 'patientDashboardApp.ActivityKind.' + activityLog.kind }}">{{ activityLog.kind }}</td>
+              <td hpdTranslate="{{ 'patientDashboardApp.ActivitySource.' + activityLog.source }}">{{ activityLog.source }}</td>
+              <td>{{ activityLog.authorId }}</td>
+              <td>{{ activityLog.createdDate | formatMediumDate }}</td>
+              <td>{{ activityLog.createdBy }}</td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/activity-log', activityLog.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" hpdTranslate="entity.action.view">View</span>
+                  </a>
+
+                  <a [routerLink]="['/activity-log', activityLog.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" hpdTranslate="entity.action.edit">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(activityLog)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" hpdTranslate="entity.action.delete">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (activityLogs && activityLogs.length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <hpd-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></hpd-item-count>
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

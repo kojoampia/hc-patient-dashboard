@@ -11,7 +11,7 @@
         <hpd-alert></hpd-alert>
 
         <dl class="row-md jh-entity-details">
-          <dt><span hpdTranslate="global.field.id">ID</span></dt>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsReport.id">Id</span></dt>
           <dd>
             <span>{{ report.id }}</span>
           </dd>
@@ -23,6 +23,10 @@
           <dd>
             <span>{{ report.description }}</span>
           </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsReport.summary">Summary</span></dt>
+          <dd>
+            <span>{{ report.summary }}</span>
+          </dd>
           <dt><span hpdTranslate="patientDashboardApp.patientMsReport.name">Name</span></dt>
           <dd>
             <span>{{ report.name }}</span>
@@ -30,6 +34,22 @@
           <dt><span hpdTranslate="patientDashboardApp.patientMsReport.url">Url</span></dt>
           <dd>
             <span>{{ report.url }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsReport.patientId">Patient Id</span></dt>
+          <dd>
+            <span>{{ report.patientId }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsReport.caseId">Case Id</span></dt>
+          <dd>
+            <span>{{ report.caseId }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsReport.authorId">Author Id</span></dt>
+          <dd>
+            <span>{{ report.authorId }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsReport.reportDate">Report Date</span></dt>
+          <dd>
+            <span>{{ report.reportDate | formatMediumDate }}</span>
           </dd>
           <dt><span hpdTranslate="patientDashboardApp.patientMsReport.createdDate">Created Date</span></dt>
           <dd>

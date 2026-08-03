@@ -13,9 +13,13 @@
         <hpd-alert></hpd-alert>
 
         <dl class="row-md jh-entity-details">
-          <dt><span hpdTranslate="global.field.id">ID</span></dt>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsMembership.id">Id</span></dt>
           <dd>
             <span>{{ membership.id }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsMembership.patientId">Patient Id</span></dt>
+          <dd>
+            <span>{{ membership.patientId }}</span>
           </dd>
           <dt><span hpdTranslate="patientDashboardApp.patientMsMembership.name">Name</span></dt>
           <dd>
@@ -28,6 +32,22 @@
           <dt><span hpdTranslate="patientDashboardApp.patientMsMembership.status">Status</span></dt>
           <dd>
             <span>{{ membership.status }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsMembership.memberNumber">Member Number</span></dt>
+          <dd>
+            <span>{{ membership.memberNumber }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsMembership.plan">Plan</span></dt>
+          <dd>
+            <span>{{ membership.plan }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsMembership.startDate">Start Date</span></dt>
+          <dd>
+            <span>{{ membership.startDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsMembership.renewalDate">Renewal Date</span></dt>
+          <dd>
+            <span>{{ membership.renewalDate | formatMediumDate }}</span>
           </dd>
           <dt><span hpdTranslate="patientDashboardApp.patientMsMembership.createdDate">Created Date</span></dt>
           <dd>

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable, asapScheduler, scheduled } from 'rxjs';
+import { Observable } from 'rxjs';
 
-import { catchError, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import dayjs from 'dayjs/esm';
 
@@ -10,7 +10,6 @@ import { isPresent } from 'app/core/util/operators';
 import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
-import { SearchWithPagination } from 'app/core/request/request.model';
 import { IProfile, NewProfile } from '../profile.model';
 
 export type PartialUpdateProfile = Partial<IProfile> & Pick<IProfile, 'id'>;
@@ -30,8 +29,7 @@ export type EntityArrayResponseType = HttpResponse<IProfile[]>;
 
 @Injectable({ providedIn: 'root' })
 export class ProfileService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/profiles');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/profiles/_search');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/profiles', 'hcpatientservice');
 
   constructor(
     protected http: HttpClient,
@@ -74,14 +72,6 @@ export class ProfileService {
 
   delete(id: string): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
-  }
-
-  search(req: SearchWithPagination): Observable<EntityArrayResponseType> {
-    const options = createRequestOption(req);
-    return this.http.get<RestProfile[]>(this.resourceSearchUrl, { params: options, observe: 'response' }).pipe(
-      map(res => this.convertResponseArrayFromServer(res)),
-      catchError(() => scheduled([new HttpResponse<IProfile[]>()], asapScheduler)),
-    );
   }
 
   getProfileIdentifier(profile: Pick<IProfile, 'id'>): string {

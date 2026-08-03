@@ -1,0 +1,69 @@
+<section class="hc-card hc-card-pad" style="border-left: 4px solid var(--hc-danger)">
+  <div class="hc-row hc-between hc-gap-12 hc-wrap">
+    <div class="hc-grow">
+      <b hpdTranslate="patientPortal.emergencies.careLineTitle">Need help now?</b>
+      <p class="hc-muted hc-sm" style="margin: 4px 0 0" hpdTranslate="patientPortal.emergencies.careLineBlurb">
+        The care line is staffed around the clock. If this is life-threatening, call your local emergency number first.
+      </p>
+    </div>
+    <a class="hc-btn hc-btn--danger" href="tel:+233302000000">
+      <hpd-icon name="phone" [size]="16" [strokeWidth]="2.2" />
+      <span hpdTranslate="patientPortal.emergencies.callCareLine">Call the care line</span>
+    </a>
+  </div>
+</section>
+
+<div class="hc-tools hc-mt-16">
+  <hpd-search-box
+    inputId="q_emergencies"
+    placeholderKey="patientPortal.emergencies.search"
+    [value]="query()"
+    (queryChange)="query.set($event)"
+  />
+</div>
+
+@if (filtered().length) {
+  <div class="hc-grid">
+    @for (item of filtered(); track item.id) {
+      <article class="hc-card hc-card-pad">
+        <div class="hc-row hc-between hc-gap-8 hc-wrap">
+          <b class="hc-grow">{{ item.brief }}</b>
+          <span class="hc-pill" [class]="severityPill(item.severity)">{{ humanise(item.severity) }}</span>
+          <span class="hc-pill" [class]="statusPill(item.status)">{{ humanise(item.status) }}</span>
+        </div>
+
+        <div class="hc-row hc-gap-8 hc-muted hc-tiny hc-wrap" style="margin-top: 5px">
+          <span class="hc-num">{{ formatDayTime(item.raisedAt) }}</span>
+          @if (item.location) {
+            <span>· {{ item.location }}</span>
+          }
+          @if (item.respondentId) {
+            <span>· {{ memberOf(item.respondentId).name }}</span>
+          }
+          @if (caseLabel(item.caseId); as label) {
+            <span
+              >· <a [routerLink]="['/case', item.caseId]">{{ label }}</a></span
+            >
+          }
+        </div>
+
+        @if (item.detail) {
+          <div class="hc-prose" style="margin-top: 11px">
+            <p>{{ item.detail }}</p>
+          </div>
+        }
+
+        @if (item.outcome) {
+          <div class="hc-kv" style="margin-top: 9px">
+            <span class="hc-kv__k" hpdTranslate="patientPortal.emergencies.outcome">Outcome</span>
+            <span class="hc-kv__v">{{ item.outcome }}</span>
+          </div>
+        }
+      </article>
+    }
+  </div>
+} @else {
+  <div class="hc-card">
+    <hpd-empty-state icon="shield" titleKey="patientPortal.emergencies.empty" messageKey="patientPortal.emergencies.emptyHint" />
+  </div>
+}

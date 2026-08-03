@@ -1,0 +1,256 @@
+{
+  "patientPortal": {
+    "brand": {
+      "suffix": "BridgeCare",
+      "tagline": "Patientenportal"
+    },
+    "nav": {
+      "aria": "Portalbereiche",
+      "ariaPrimary": "Hauptbereiche",
+      "openMenu": "Menü öffnen",
+      "signOut": "Abmelden",
+      "roleLine": "Patient",
+      "overview": "Übersicht",
+      "record": "Meine Akte",
+      "recordShort": "Akte",
+      "schedules": "Termine",
+      "schedulesShort": "Termine",
+      "emergencies": "Notfälle",
+      "cases": "Fälle",
+      "medications": "Medikamente",
+      "reports": "Befunde",
+      "plans": "Ernährung & Bewegung",
+      "allergies": "Allergien",
+      "profile": "Profil",
+      "group": {
+        "overview": "Übersicht",
+        "health": "Meine Gesundheit",
+        "clinical": "Klinisch",
+        "account": "Konto",
+        "session": "Sitzung"
+      }
+    },
+    "title": {
+      "overview": "Patientenkontext",
+      "record": "Meine Akte",
+      "schedules": "Termine",
+      "emergencies": "Notfälle",
+      "cases": "Fälle",
+      "case": "Falldetails",
+      "medications": "Medikamente",
+      "reports": "Befunde",
+      "plans": "Ernährungs- und Bewegungsplan",
+      "allergies": "Allergien",
+      "visitations": "Besuche",
+      "activity": "Aktivitätsverlauf",
+      "profile": "Profil"
+    },
+    "action": {
+      "print": "Diese Ansicht drucken",
+      "careLine": "Notfallnummer",
+      "seeAll": "Alle anzeigen",
+      "viewRecord": "Vollständige Akte",
+      "viewProfile": "Profil",
+      "backToCases": "Alle Fälle"
+    },
+    "auth": {
+      "eyebrow": "Abofonsa BridgeCare · Patientenportal",
+      "headlineLead": "Ihre gesamte Gesundheitsakte,",
+      "headlineAccent": "an einem ruhigen Ort.",
+      "blurb": "Jeder Fall, Besuch, jedes Medikament und jeder Befund, den Ihr Behandlungsteam erfasst — für Sie sichtbar, in verständlicher Sprache, wo immer Sie sind.",
+      "signInLede": "Zugang zu Ihrer persönlichen Gesundheitsakte.",
+      "or": "oder",
+      "stat": {
+        "cases": "Erfasste Fälle",
+        "casesValue": "12",
+        "visits": "Erfasste Besuche",
+        "visitsValue": "41",
+        "team": "Fachkräfte",
+        "teamValue": "6",
+        "careLine": "Notfallnummer",
+        "careLineValue": "24/7"
+      }
+    },
+    "pager": {
+      "aria": "Seitennavigation",
+      "prev": "Zurück",
+      "next": "Weiter"
+    },
+    "chart": {
+      "table": "Tabelle",
+      "when": "Wann"
+    },
+    "overview": {
+      "greeting": "Ihre Gesundheit auf einen Blick",
+      "greetingNamed": "Hallo {{ name }}",
+      "heroBlurb": "Alles, was Ihr Behandlungsteam erfasst hat — Fälle, Besuche, Medikamente und Befunde — an einem Ort.",
+      "vitals": "Neueste Messwerte",
+      "vitalsSub": "Der zuletzt von Ihrem Behandlungsteam erfasste Messwert.",
+      "noVitals": "Noch keine Messwerte",
+      "noVitalsHint": "Vitalwerte erscheinen hier, sobald Ihr Behandlungsteam sie erfasst.",
+      "nextUp": "Als Nächstes",
+      "openCases": "Aktuelle Fälle",
+      "activity": "Letzte Aktivität",
+      "lastAlert": "Letzte Meldung",
+      "tile": {
+        "openCases": "Offene Fälle",
+        "upcoming": "Anstehende Besuche",
+        "activeMeds": "Laufende Medikamente",
+        "reports": "Vorliegende Befunde"
+      }
+    },
+    "record": {
+      "vitals": "Vitalwerte",
+      "vitalsSub": "Wählen Sie einen Messwert, um seinen Verlauf zu sehen.",
+      "history": "Messwertverlauf",
+      "visits": "Letzte Besuche",
+      "activity": "Letzte Aktivität",
+      "careTeam": "Ihr Behandlungsteam",
+      "noCareTeam": "Kein Behandlungsteam hinterlegt",
+      "noCareTeamHint": "Die Fachkräfte, die Sie betreuen, werden hier aufgeführt."
+    },
+    "cases": {
+      "search": "Fälle durchsuchen",
+      "empty": "Keine Fälle hinterlegt",
+      "emptyHint": "Ein Fall wird eröffnet, sobald Ihr Behandlungsteam etwas untersucht.",
+      "openCase": "Fall {{ name }} öffnen",
+      "column": {
+        "number": "Nr.",
+        "title": "Fall",
+        "opened": "Eröffnet",
+        "clinician": "Behandelnde Person",
+        "status": "Status",
+        "open": "Öffnen"
+      }
+    },
+    "case": {
+      "openedOn": "Eröffnet am {{ date }}",
+      "symptoms": "Was berichtet wurde",
+      "noSymptoms": "Für diesen Fall wurden keine Symptome erfasst.",
+      "diagnosis": "Was festgestellt wurde",
+      "noDiagnosis": "Es wurde noch keine Diagnose erfasst.",
+      "recommendations": "Empfehlungen",
+      "noRecommendations": "Für diesen Fall wurden keine Empfehlungen erfasst.",
+      "visits": "Besuche",
+      "noVisits": "Zu diesem Fall wurden keine Besuche erfasst",
+      "medications": "Medikamente",
+      "noMedications": "Für diesen Fall wurden keine Medikamente verordnet",
+      "reports": "Befunde",
+      "noReports": "Zu diesem Fall liegen keine Befunde vor",
+      "timeline": "Verlauf",
+      "noTimeline": "Zu diesem Fall wurde nichts erfasst",
+      "notFound": "Fall nicht gefunden",
+      "notFoundHint": "Er wurde möglicherweise geschlossen oder der Link ist veraltet."
+    },
+    "schedules": {
+      "search": "Termine durchsuchen",
+      "upcoming": "Als Nächstes",
+      "upcomingSub": "Termine, die noch anstehen.",
+      "past": "Bereits wahrgenommen",
+      "pastSub": "Termine, die bereits stattgefunden haben.",
+      "empty": "Nichts geplant",
+      "emptyHint": "Neue Termine erscheinen hier, sobald Ihr Behandlungsteam sie einträgt.",
+      "emptyPast": "Noch keine vergangenen Termine",
+      "column": {
+        "when": "Wann",
+        "what": "Termin",
+        "who": "Mit",
+        "where": "Wo",
+        "status": "Status"
+      }
+    },
+    "emergencies": {
+      "search": "Meldungen durchsuchen",
+      "careLineTitle": "Brauchen Sie jetzt Hilfe?",
+      "careLineBlurb": "Die Notfallnummer ist rund um die Uhr besetzt. Bei Lebensgefahr wählen Sie zuerst den örtlichen Notruf.",
+      "callCareLine": "Notfallnummer anrufen",
+      "outcome": "Ergebnis",
+      "empty": "Keine Notfälle erfasst",
+      "emptyHint": "In Ihrer Akte ausgelöste Meldungen erscheinen hier samt Ergebnis."
+    },
+    "medications": {
+      "search": "Medikamente durchsuchen",
+      "empty": "Keine Medikamente hinterlegt",
+      "emptyHint": "Alles, was Ihnen verordnet wird, erscheint hier — laufend wie abgeschlossen.",
+      "column": {
+        "started": "Begonnen",
+        "name": "Medikament",
+        "dosage": "Einnahme",
+        "prescriber": "Verordnet von",
+        "status": "Status"
+      }
+    },
+    "reports": {
+      "search": "Befunde durchsuchen",
+      "openFile": "Datei öffnen",
+      "empty": "Keine Befunde hinterlegt",
+      "emptyHint": "Labor-, Bildgebungs- und klinische Befunde erscheinen hier, sobald sie vorliegen."
+    },
+    "plans": {
+      "diet": "Ernährungsplan",
+      "exercise": "Bewegungsplan",
+      "progress": "{{ done }} von {{ total }} erledigt",
+      "emptyDiet": "Noch kein Ernährungsplan",
+      "emptyExercise": "Noch kein Bewegungsplan",
+      "emptyHint": "Ihr Behandlungsteam kann beim nächsten Termin einen einrichten."
+    },
+    "allergies": {
+      "category": "Art",
+      "reaction": "Reaktion",
+      "noted": "Erfasst",
+      "conditions": "Bestehende Erkrankungen",
+      "noConditions": "Keine Erkrankungen hinterlegt",
+      "empty": "Keine Allergien hinterlegt",
+      "emptyHint": "Melden Sie jede Reaktion Ihrem Behandlungsteam, damit sie hier erfasst wird."
+    },
+    "visitations": {
+      "search": "Besuche durchsuchen",
+      "empty": "Keine Besuche erfasst",
+      "emptyHint": "Jeder von Ihrem Behandlungsteam erfasste Besuch erscheint hier.",
+      "column": {
+        "when": "Wann",
+        "purpose": "Anlass",
+        "who": "Gesehen von",
+        "where": "Wo",
+        "case": "Fall"
+      }
+    },
+    "activity": {
+      "search": "Verlauf durchsuchen",
+      "empty": "Noch nichts erfasst",
+      "emptyHint": "Alles, was in Ihrer Akte abgelegt wird, erscheint hier — das Neueste zuerst."
+    },
+    "profile": {
+      "editAccount": "Kontoeinstellungen",
+      "noProfile": "Kein Profil hinterlegt",
+      "noProfileHint": "Ihr Behandlungsteam legt es bei der Registrierung an.",
+      "noMembership": "Keine Mitgliedschaft hinterlegt",
+      "noMembershipHint": "Sprechen Sie Ihr Behandlungsteam auf einen Tarif an.",
+      "tab": {
+        "about": "Über",
+        "contact": "Kontakt",
+        "membership": "Mitgliedschaft",
+        "careTeam": "Behandlungsteam"
+      },
+      "field": {
+        "birthDate": "Geboren",
+        "sex": "Geschlecht",
+        "bloodGroup": "Blutgruppe",
+        "cardType": "Karte",
+        "cardNumber": "Kartennummer",
+        "social": "Soziale Medien",
+        "email": "E-Mail",
+        "mobile": "Mobil",
+        "phone": "Telefon",
+        "address": "Adresse",
+        "careAngel": "Betreuungsperson",
+        "careAngelPhone": "Telefon der Betreuungsperson",
+        "plan": "Tarif",
+        "memberNumber": "Mitgliedsnummer",
+        "status": "Status",
+        "since": "Mitglied seit",
+        "renews": "Verlängerung"
+      }
+    }
+  }
+}

@@ -9,6 +9,7 @@ import { MedicationService, RestMedication } from './medication.service';
 
 const requireRestSample: RestMedication = {
   ...sampleWithRequiredData,
+  startedOn: sampleWithRequiredData.startedOn?.format(DATE_FORMAT),
   createdDate: sampleWithRequiredData.createdDate?.format(DATE_FORMAT),
   modifiedDate: sampleWithRequiredData.modifiedDate?.format(DATE_FORMAT),
 };
@@ -96,20 +97,6 @@ describe('Medication Service', () => {
       const req = httpMock.expectOne({ method: 'DELETE' });
       req.flush({ status: 200 });
       expect(expectedResult).toBe(expected);
-    });
-
-    it('should handle exceptions for searching a Medication', () => {
-      const queryObject: any = {
-        page: 0,
-        size: 20,
-        query: '',
-        sort: [],
-      };
-      service.search(queryObject).subscribe(() => expectedResult);
-
-      const req = httpMock.expectOne({ method: 'GET' });
-      req.flush(null, { status: 500, statusText: 'Internal Server Error' });
-      expect(expectedResult).toBe(null);
     });
 
     describe('addMedicationToCollectionIfMissing', () => {

@@ -1,0 +1,56 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (personalDocument) {
+      <div>
+        <h2 data-cy="personalDocumentDetailsHeading">
+          <span hpdTranslate="patientDashboardApp.patientMsPersonalDocument.detail.title">Personal Document</span>
+        </h2>
+
+        <hr />
+
+        <hpd-alert-error></hpd-alert-error>
+
+        <hpd-alert></hpd-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span hpdTranslate="patientDashboardApp.patientMsPersonalDocument.id">Id</span></dt>
+          <dd>
+            <span>{{ personalDocument.id }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsPersonalDocument.name">Name</span></dt>
+          <dd>
+            <span>{{ personalDocument.name }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsPersonalDocument.category">Category</span></dt>
+          <dd>
+            <span>{{ personalDocument.category }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsPersonalDocument.url">Url</span></dt>
+          <dd>
+            <span>{{ personalDocument.url }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsPersonalDocument.patientId">Patient Id</span></dt>
+          <dd>
+            <span>{{ personalDocument.patientId }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsPersonalDocument.issuedOn">Issued On</span></dt>
+          <dd>
+            <span>{{ personalDocument.issuedOn | formatMediumDate }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsPersonalDocument.expiresOn">Expires On</span></dt>
+          <dd>
+            <span>{{ personalDocument.expiresOn | formatMediumDate }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span hpdTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/personal-document', personalDocument.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span hpdTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

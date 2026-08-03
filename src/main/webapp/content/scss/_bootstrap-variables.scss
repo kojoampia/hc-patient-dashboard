@@ -3,16 +3,26 @@
  * All values defined in bootstrap source
  * https://github.com/twbs/bootstrap/blob/v5.1.3/scss/_variables.scss can be overwritten here
  * Make sure not to add !default to values here
+ *
+ * This file is the bridge between the portal's design tokens and Bootstrap. The portal screens
+ * do not use Bootstrap components, but the account, admin and entity CRUD screens still do —
+ * pointing Bootstrap's own variables at the same tokens is what stops those screens from looking
+ * like a different product.
  */
+
+@import 'tokens';
 
 // Colors:
 // Grayscale and brand colors for use across Bootstrap.
 
-$primary: teal;
-$success: #28a745;
-$info: #17a2b8;
-$warning: #ffc107;
-$danger: #dc3545;
+$primary: $hc-navy;
+$secondary: $hc-gold;
+$success: $hc-ok;
+$info: $hc-navy-700;
+$warning: $hc-warn;
+$danger: $hc-danger;
+$light: $hc-cream;
+$dark: $hc-navy-900;
 
 // Options:
 // Quickly modify global styling by enabling or disabling optional features.
@@ -27,21 +37,48 @@ $enable-print-styles: true;
 // Components:
 // Define common padding and border radius sizes and more.
 
-$border-radius: 0.15rem;
-$border-radius-lg: 0.125rem;
-$border-radius-sm: 0.1rem;
+$border-radius: $hc-radius-sm;
+$border-radius-lg: $hc-radius;
+$border-radius-sm: 6px;
+
+$border-color: $hc-line;
 
 // Body:
 // Settings for the `<body>` element.
 
-$body-bg: #ffffff;
+$body-bg: $hc-bg;
+$body-color: $hc-ink;
 
 // Typography:
 // Font, line-height, and color for body text, headings, and more.
 
-$font-size-base: 1rem;
+$font-family-sans-serif: $hc-font-sans;
+$font-size-base: 0.9375rem; // 15px, matching the portal's base size
+$headings-font-weight: 800;
 
-$dropdown-link-hover-color: #CBFF70;
-$dropdown-link-hover-bg: teal;
+$link-color: $hc-navy;
+$link-hover-color: $hc-gold;
 
-$navbar-brand-color: teal;
+// Components used by the account/admin/entity screens.
+
+$card-bg: $hc-card;
+$card-border-color: $hc-line;
+$card-border-radius: $hc-radius;
+
+$input-bg: #fff;
+$input-border-color: $hc-line;
+$input-border-width: 1.5px;
+$input-focus-border-color: $hc-navy;
+$input-focus-box-shadow: 0 0 0 3.5px rgba(13, 48, 88, 0.1);
+
+$table-border-color: #f1eee7;
+$table-hover-bg: #faf9f5;
+
+$dropdown-link-hover-color: #ffffff;
+$dropdown-link-hover-bg: $hc-navy;
+$dropdown-link-active-bg: $hc-navy;
+
+$navbar-brand-color: $hc-navy;
+
+$modal-content-border-radius: $hc-radius-lg;
+$modal-content-border-color: $hc-line;

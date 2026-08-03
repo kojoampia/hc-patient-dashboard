@@ -11,7 +11,7 @@ export class PhoneNumberVerifierService {
 
   constructor(protected http: HttpClient) {}
 
-  sendPhoneNumberVerification(destinationNumber: Object): Observable<HttpResponse<any>> {
+  sendPhoneNumberVerification(destinationNumber: unknown): Observable<HttpResponse<any>> {
     return this.http.post<any>(`${this.resourceUrl}/number/verification/`, destinationNumber, { observe: 'response' });
   }
 

@@ -1,14 +1,14 @@
-import { OnInit, Component, Input, EventEmitter, Output, TemplateRef, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, Input, EventEmitter, Output, TemplateRef, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { LegendPosition, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
 
 @Component({
   standalone: true,
-  selector: 'jhi-histogram',
+  selector: 'hpd-histogram',
   templateUrl: './histogram.component.html',
   imports: [NgxChartsModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class HistogramComponent implements OnInit {
+export class HistogramComponent {
   @Output() dataSelected: EventEmitter<any> = new EventEmitter<any>();
   @Input() view: number[] = [1720, 600];
   @Input() data!: HistogramData[];
@@ -49,11 +49,7 @@ export class HistogramComponent implements OnInit {
   @Input() yScale!: number;
   @Input() roundEdges!: boolean;
 
-  ngOnInit() {}
-
-  onSelect(event: any) {
-    console.log('listen: on-histogram-select');
-    console.log(event);
+  onSelect(event: any): void {
     this.dataSelected.emit(event);
   }
 }

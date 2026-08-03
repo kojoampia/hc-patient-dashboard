@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpHeaders } from '@angular/common/http';
 import { ActivatedRoute, Data, ParamMap, Router, RouterModule } from '@angular/router';
 import { combineLatest, filter, Observable, switchMap, tap } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -6,9 +7,11 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import SharedModule from 'app/shared/shared.module';
 import { SortDirective, SortByDirective } from 'app/shared/sort';
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
+import { ItemCountComponent } from 'app/shared/pagination';
 import { FormsModule } from '@angular/forms';
+
+import { ITEMS_PER_PAGE, PAGE_HEADER, TOTAL_COUNT_RESPONSE_HEADER } from 'app/config/pagination.constants';
 import { ASC, DESC, SORT, ITEM_DELETED_EVENT, DEFAULT_SORT_DATA } from 'app/config/navigation.constants';
-import { SortService } from 'app/shared/sort/sort.service';
 import { ITask } from '../task.model';
 import { EntityArrayResponseType, TaskService } from '../service/task.service';
 import { TaskDeleteDialogComponent } from '../delete/task-delete-dialog.component';
@@ -26,35 +29,28 @@ import { TaskDeleteDialogComponent } from '../delete/task-delete-dialog.componen
     DurationPipe,
     FormatMediumDatetimePipe,
     FormatMediumDatePipe,
+    ItemCountComponent,
   ],
 })
 export class TaskComponent implements OnInit {
-  private static readonly NOT_SORTABLE_FIELDS_AFTER_SEARCH = ['id', 'name', 'description', 'attendant', 'createdBy', 'modifiedBy'];
-
   tasks?: ITask[];
   isLoading = false;
 
   predicate = 'id';
   ascending = true;
-  currentSearch = '';
+
+  itemsPerPage = ITEMS_PER_PAGE;
+  totalItems = 0;
+  page = 1;
 
   constructor(
     protected taskService: TaskService,
     protected activatedRoute: ActivatedRoute,
     public router: Router,
-    protected sortService: SortService,
     protected modalService: NgbModal,
   ) {}
 
   trackId = (_index: number, item: ITask): string => this.taskService.getTaskIdentifier(item);
-
-  search(query: string): void {
-    if (query && TaskComponent.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(this.predicate)) {
-      this.predicate = '';
-    }
-    this.currentSearch = query;
-    this.navigateToWithComponentValues();
-  }
 
   ngOnInit(): void {
     this.load();
@@ -85,57 +81,57 @@ export class TaskComponent implements OnInit {
   }
 
   navigateToWithComponentValues(): void {
-    this.handleNavigation(this.predicate, this.ascending, this.currentSearch);
+    this.handleNavigation(this.page, this.predicate, this.ascending);
+  }
+
+  navigateToPage(page = this.page): void {
+    this.handleNavigation(page, this.predicate, this.ascending);
   }
 
   protected loadFromBackendWithRouteInformations(): Observable<EntityArrayResponseType> {
     return combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data]).pipe(
       tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
-      switchMap(() => this.queryBackend(this.predicate, this.ascending, this.currentSearch)),
+      switchMap(() => this.queryBackend(this.page, this.predicate, this.ascending)),
     );
   }
 
   protected fillComponentAttributeFromRoute(params: ParamMap, data: Data): void {
+    const page = params.get(PAGE_HEADER);
+    this.page = +(page ?? 1);
     const sort = (params.get(SORT) ?? data[DEFAULT_SORT_DATA]).split(',');
     this.predicate = sort[0];
     this.ascending = sort[1] === ASC;
-    if (params.has('search') && params.get('search') !== '') {
-      this.currentSearch = params.get('search') as string;
-      if (TaskComponent.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(this.predicate)) {
-        this.predicate = '';
-      }
-    }
   }
 
   protected onResponseSuccess(response: EntityArrayResponseType): void {
+    this.fillComponentAttributesFromResponseHeader(response.headers);
     const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
-    this.tasks = this.refineData(dataFromBody);
-  }
-
-  protected refineData(data: ITask[]): ITask[] {
-    return data.sort(this.sortService.startSort(this.predicate, this.ascending ? 1 : -1));
+    this.tasks = dataFromBody;
   }
 
   protected fillComponentAttributesFromResponseBody(data: ITask[] | null): ITask[] {
     return data ?? [];
   }
 
-  protected queryBackend(predicate?: string, ascending?: boolean, currentSearch?: string): Observable<EntityArrayResponseType> {
-    this.isLoading = true;
-    const queryObject: any = {
-      query: currentSearch,
-      sort: this.getSortQueryParam(predicate, ascending),
-    };
-    if (this.currentSearch && this.currentSearch !== '') {
-      return this.taskService.search(queryObject).pipe(tap(() => (this.isLoading = false)));
-    } else {
-      return this.taskService.query(queryObject).pipe(tap(() => (this.isLoading = false)));
-    }
+  protected fillComponentAttributesFromResponseHeader(headers: HttpHeaders): void {
+    this.totalItems = Number(headers.get(TOTAL_COUNT_RESPONSE_HEADER));
   }
 
-  protected handleNavigation(predicate?: string, ascending?: boolean, currentSearch?: string): void {
+  protected queryBackend(page?: number, predicate?: string, ascending?: boolean): Observable<EntityArrayResponseType> {
+    this.isLoading = true;
+    const pageToLoad: number = page ?? 1;
+    const queryObject: any = {
+      page: pageToLoad - 1,
+      size: this.itemsPerPage,
+      sort: this.getSortQueryParam(predicate, ascending),
+    };
+    return this.taskService.query(queryObject).pipe(tap(() => (this.isLoading = false)));
+  }
+
+  protected handleNavigation(page = this.page, predicate?: string, ascending?: boolean): void {
     const queryParamsObj = {
-      search: currentSearch,
+      page,
+      size: this.itemsPerPage,
       sort: this.getSortQueryParam(predicate, ascending),
     };
 

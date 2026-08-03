@@ -14,10 +14,17 @@
 
         @if (editForm.controls.id.value !== null) {
           <div class="mb-3">
-            <label class="form-label" hpdTranslate="global.field.id" for="field_id">ID</label>
+            <label class="form-label" hpdTranslate="patientDashboardApp.patientMsMembership.id" for="field_id">Id</label>
             <input type="text" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
           </div>
         }
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsMembership.patientId" for="field_patientId"
+            >Patient Id</label
+          >
+          <input type="text" class="form-control" name="patientId" id="field_patientId" data-cy="patientId" formControlName="patientId" />
+        </div>
 
         <div class="mb-3">
           <label class="form-label" hpdTranslate="patientDashboardApp.patientMsMembership.name" for="field_name">Name</label>
@@ -41,6 +48,65 @@
         <div class="mb-3">
           <label class="form-label" hpdTranslate="patientDashboardApp.patientMsMembership.status" for="field_status">Status</label>
           <input type="text" class="form-control" name="status" id="field_status" data-cy="status" formControlName="status" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsMembership.memberNumber" for="field_memberNumber"
+            >Member Number</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="memberNumber"
+            id="field_memberNumber"
+            data-cy="memberNumber"
+            formControlName="memberNumber"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsMembership.plan" for="field_plan">Plan</label>
+          <input type="text" class="form-control" name="plan" id="field_plan" data-cy="plan" formControlName="plan" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsMembership.startDate" for="field_startDate"
+            >Start Date</label
+          >
+          <div class="input-group">
+            <input
+              id="field_startDate"
+              data-cy="startDate"
+              type="text"
+              class="form-control"
+              name="startDate"
+              ngbDatepicker
+              #startDateDp="ngbDatepicker"
+              formControlName="startDate"
+            />
+            <button type="button" class="btn btn-secondary" (click)="startDateDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsMembership.renewalDate" for="field_renewalDate"
+            >Renewal Date</label
+          >
+          <div class="input-group">
+            <input
+              id="field_renewalDate"
+              data-cy="renewalDate"
+              type="text"
+              class="form-control"
+              name="renewalDate"
+              ngbDatepicker
+              #renewalDateDp="ngbDatepicker"
+              formControlName="renewalDate"
+            />
+            <button type="button" class="btn btn-secondary" (click)="renewalDateDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
         </div>
 
         <div class="mb-3">

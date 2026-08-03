@@ -1,0 +1,126 @@
+@if (item(); as record) {
+  <div class="hc-rec-head">
+    <span class="hc-monogram hc-av-48">{{ record.caseNumber ?? '—' }}</span>
+    <div class="hc-grow">
+      <div class="hc-rec-head__who">{{ record.title ?? record.brief }}</div>
+      <div class="hc-rec-head__sub">
+        {{ 'patientPortal.case.openedOn' | translate: { date: formatDay(record.openedAt) } }}
+        · {{ clinician().name }} · {{ clinician().role }}
+      </div>
+    </div>
+    <span class="hc-pill" [class]="pill(record.status)">{{ humanise(record.status) }}</span>
+    <a class="hc-btn hc-btn--ghost hc-btn--sm" routerLink="/cases">
+      <hpd-icon name="chev" [size]="14" [strokeWidth]="2.2" />
+      <span hpdTranslate="patientPortal.action.backToCases">All cases</span>
+    </a>
+  </div>
+
+  <div class="hc-grid hc-grid--2 hc-mt-16">
+    <hpd-panel titleKey="patientPortal.case.symptoms" icon="note" [padded]="true">
+      <div class="hc-prose">
+        <p>{{ record.symptoms || ('patientPortal.case.noSymptoms' | translate) }}</p>
+      </div>
+    </hpd-panel>
+
+    <hpd-panel titleKey="patientPortal.case.diagnosis" icon="stetho" [padded]="true">
+      <div class="hc-prose">
+        <p>{{ record.diagnosis || ('patientPortal.case.noDiagnosis' | translate) }}</p>
+      </div>
+    </hpd-panel>
+  </div>
+
+  <hpd-panel class="hc-mt-16" titleKey="patientPortal.case.recommendations" icon="check" [padded]="true">
+    @if (recommendations().length) {
+      <div class="hc-chips">
+        @for (rec of recommendations(); track rec.id) {
+          <span class="hc-chip"><span class="hc-chip__dot"></span>{{ rec.label }}</span>
+        }
+      </div>
+    } @else {
+      <p class="hc-muted hc-sm" style="margin: 0" hpdTranslate="patientPortal.case.noRecommendations">
+        No recommendations recorded for this case.
+      </p>
+    }
+  </hpd-panel>
+
+  <div class="hc-grid hc-grid--2 hc-mt-16">
+    <hpd-panel titleKey="patientPortal.case.visits" icon="pin">
+      @if (caseVisits().length) {
+        @for (visit of caseVisits(); track visit.id) {
+          <div class="hc-drow">
+            <span class="hc-drow__date">{{ formatDay(visit.visitedAt) }}</span>
+            <span class="hc-drow__text">
+              {{ visit.purpose }}
+              <span class="hc-drow__sub"
+                >{{ memberOf(visit.professionalId).name }}
+                @if (visit.location) {
+                  · {{ visit.location }}
+                }
+              </span>
+            </span>
+          </div>
+        }
+      } @else {
+        <hpd-empty-state icon="pin" titleKey="patientPortal.case.noVisits" />
+      }
+    </hpd-panel>
+
+    <hpd-panel titleKey="patientPortal.case.medications" icon="pill">
+      @if (caseMedications().length) {
+        @for (med of caseMedications(); track med.id) {
+          <div class="hc-drow">
+            <span class="hc-drow__date">{{ formatDay(med.startedOn ?? med.createdDate) }}</span>
+            <span class="hc-drow__text">
+              {{ med.name }}
+              <span class="hc-drow__sub">{{ med.dosage ?? med.prescription }}</span>
+            </span>
+          </div>
+        }
+      } @else {
+        <hpd-empty-state icon="pill" titleKey="patientPortal.case.noMedications" />
+      }
+    </hpd-panel>
+  </div>
+
+  <div class="hc-grid hc-grid--2 hc-mt-16">
+    <hpd-panel titleKey="patientPortal.case.reports" icon="report">
+      @if (caseReports().length) {
+        @for (report of caseReports(); track report.id) {
+          <div class="hc-drow">
+            <span class="hc-drow__date">{{ formatDay(report.reportDate ?? report.createdDate) }}</span>
+            <span class="hc-drow__text">
+              {{ report.name }}
+              <span class="hc-drow__sub">{{ report.summary ?? report.description }}</span>
+            </span>
+          </div>
+        }
+      } @else {
+        <hpd-empty-state icon="report" titleKey="patientPortal.case.noReports" />
+      }
+    </hpd-panel>
+
+    <hpd-panel titleKey="patientPortal.case.timeline" icon="clock">
+      @if (caseActivity().length) {
+        @for (entry of caseActivity(); track entry.id) {
+          <div class="hc-drow">
+            <span class="hc-drow__date">{{ formatDay(entry.loggedAt ?? entry.createdDate) }}</span>
+            <span class="hc-drow__text">
+              {{ entry.summary }}
+              <span class="hc-drow__sub">{{ memberOf(entry.authorId).name }}</span>
+            </span>
+          </div>
+        }
+      } @else {
+        <hpd-empty-state icon="clock" titleKey="patientPortal.case.noTimeline" />
+      }
+    </hpd-panel>
+  </div>
+} @else if (missing()) {
+  <div class="hc-card">
+    <hpd-empty-state icon="case" titleKey="patientPortal.case.notFound" messageKey="patientPortal.case.notFoundHint">
+      <a class="hc-btn hc-btn--ghost hc-btn--sm hc-mt-16" routerLink="/cases" hpdTranslate="patientPortal.action.backToCases">
+        All cases
+      </a>
+    </hpd-empty-state>
+  </div>
+}

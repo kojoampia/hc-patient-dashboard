@@ -20,6 +20,7 @@ type ConditionFormGroupContent = {
   id: FormControl<ICondition['id'] | NewCondition['id']>;
   name: FormControl<ICondition['name']>;
   description: FormControl<ICondition['description']>;
+  patientId: FormControl<ICondition['patientId']>;
   createdDate: FormControl<ICondition['createdDate']>;
   modifiedDate: FormControl<ICondition['modifiedDate']>;
   createdBy: FormControl<ICondition['createdBy']>;
@@ -45,6 +46,7 @@ export class ConditionFormService {
       ),
       name: new FormControl(conditionRawValue.name),
       description: new FormControl(conditionRawValue.description),
+      patientId: new FormControl(conditionRawValue.patientId),
       createdDate: new FormControl(conditionRawValue.createdDate),
       modifiedDate: new FormControl(conditionRawValue.modifiedDate),
       createdBy: new FormControl(conditionRawValue.createdBy),

@@ -91,6 +91,9 @@ describe('Medication e2e test', () => {
             },
             {
               statusCode: 200,
+              headers: {
+                link: '<http://localhost/services/patientms/api/medications?page=0&size=20>; rel="last",<http://localhost/services/patientms/api/medications?page=0&size=20>; rel="first"',
+              },
               body: [medication],
             },
           ).as('entitiesRequestInternal');
@@ -157,14 +160,32 @@ describe('Medication e2e test', () => {
     });
 
     it('should create an instance of Medication', () => {
-      cy.get(`[data-cy="name"]`).type('rapidly');
-      cy.get(`[data-cy="name"]`).should('have.value', 'rapidly');
+      cy.get(`[data-cy="name"]`).type('downsize');
+      cy.get(`[data-cy="name"]`).should('have.value', 'downsize');
 
-      cy.get(`[data-cy="description"]`).type('silhouette above');
-      cy.get(`[data-cy="description"]`).should('have.value', 'silhouette above');
+      cy.get(`[data-cy="description"]`).type('until mmm');
+      cy.get(`[data-cy="description"]`).should('have.value', 'until mmm');
 
-      cy.get(`[data-cy="prescription"]`).type('incidentally draft amid');
-      cy.get(`[data-cy="prescription"]`).should('have.value', 'incidentally draft amid');
+      cy.get(`[data-cy="patientId"]`).type('aha');
+      cy.get(`[data-cy="patientId"]`).should('have.value', 'aha');
+
+      cy.get(`[data-cy="caseId"]`).type('while yippee truthfully');
+      cy.get(`[data-cy="caseId"]`).should('have.value', 'while yippee truthfully');
+
+      cy.get(`[data-cy="prescription"]`).type('cabinet');
+      cy.get(`[data-cy="prescription"]`).should('have.value', 'cabinet');
+
+      cy.get(`[data-cy="dosage"]`).type('roar purify concerning');
+      cy.get(`[data-cy="dosage"]`).should('have.value', 'roar purify concerning');
+
+      cy.get(`[data-cy="status"]`).select('ACTIVE');
+
+      cy.get(`[data-cy="startedOn"]`).type('2024-02-06');
+      cy.get(`[data-cy="startedOn"]`).blur();
+      cy.get(`[data-cy="startedOn"]`).should('have.value', '2024-02-06');
+
+      cy.get(`[data-cy="prescribedById"]`).type('faithfully repeatedly');
+      cy.get(`[data-cy="prescribedById"]`).should('have.value', 'faithfully repeatedly');
 
       cy.get(`[data-cy="createdDate"]`).type('2024-02-06');
       cy.get(`[data-cy="createdDate"]`).blur();
@@ -174,11 +195,11 @@ describe('Medication e2e test', () => {
       cy.get(`[data-cy="modifiedDate"]`).blur();
       cy.get(`[data-cy="modifiedDate"]`).should('have.value', '2024-02-06');
 
-      cy.get(`[data-cy="createdBy"]`).type('mostly gosh');
-      cy.get(`[data-cy="createdBy"]`).should('have.value', 'mostly gosh');
+      cy.get(`[data-cy="createdBy"]`).type('mint frightfully');
+      cy.get(`[data-cy="createdBy"]`).should('have.value', 'mint frightfully');
 
-      cy.get(`[data-cy="modifiedBy"]`).type('anxiously');
-      cy.get(`[data-cy="modifiedBy"]`).should('have.value', 'anxiously');
+      cy.get(`[data-cy="modifiedBy"]`).type('zowie novel');
+      cy.get(`[data-cy="modifiedBy"]`).should('have.value', 'zowie novel');
 
       cy.get(entityCreateSaveButtonSelector).click();
 

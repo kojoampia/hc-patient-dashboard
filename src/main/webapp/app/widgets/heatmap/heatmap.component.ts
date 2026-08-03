@@ -1,15 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { OnInit, Component, Input, EventEmitter, Output, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, Input, EventEmitter, Output, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
 
 @Component({
-  selector: 'jhi-heatmap',
+  selector: 'hpd-heatmap',
   standalone: true,
   templateUrl: './heatmap.component.html',
   imports: [NgxChartsModule, CommonModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class HeatmapComponent implements OnInit {
+export class HeatmapComponent {
   @Output() dataSelected: EventEmitter<any> = new EventEmitter<any>();
   @Input() heatmapData!: HeatmapData[];
   @Input() view: number[] = [880, 300];
@@ -31,11 +31,7 @@ export class HeatmapComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {}
-
-  onSelect(event: any) {
-    console.log('listen: on-heatmap-select');
-    console.log(event);
+  onSelect(event: any): void {
     this.dataSelected.emit(event);
   }
 }

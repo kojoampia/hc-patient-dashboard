@@ -160,45 +160,69 @@ describe('Profile e2e test', () => {
     });
 
     it('should create an instance of Profile', () => {
-      cy.get(`[data-cy="firstName"]`).type('Paula');
-      cy.get(`[data-cy="firstName"]`).should('have.value', 'Paula');
+      cy.get(`[data-cy="patientId"]`).type('pronoun');
+      cy.get(`[data-cy="patientId"]`).should('have.value', 'pronoun');
 
-      cy.get(`[data-cy="middleNames"]`).type('palatable');
-      cy.get(`[data-cy="middleNames"]`).should('have.value', 'palatable');
+      cy.get(`[data-cy="firstName"]`).type('Osborne');
+      cy.get(`[data-cy="firstName"]`).should('have.value', 'Osborne');
 
-      cy.get(`[data-cy="lastName"]`).type('Crist');
-      cy.get(`[data-cy="lastName"]`).should('have.value', 'Crist');
+      cy.get(`[data-cy="middleNames"]`).type('utilized unlike');
+      cy.get(`[data-cy="middleNames"]`).should('have.value', 'utilized unlike');
 
-      cy.get(`[data-cy="membership"]`).type('yahoo');
-      cy.get(`[data-cy="membership"]`).should('have.value', 'yahoo');
+      cy.get(`[data-cy="lastName"]`).type('Rowe');
+      cy.get(`[data-cy="lastName"]`).should('have.value', 'Rowe');
+
+      cy.get(`[data-cy="membership"]`).type('among unwilling anenst');
+      cy.get(`[data-cy="membership"]`).should('have.value', 'among unwilling anenst');
 
       cy.get(`[data-cy="birthDate"]`).type('2024-02-06');
       cy.get(`[data-cy="birthDate"]`).blur();
       cy.get(`[data-cy="birthDate"]`).should('have.value', '2024-02-06');
 
-      cy.get(`[data-cy="sex"]`).type('sturdy elegantly beyond');
-      cy.get(`[data-cy="sex"]`).should('have.value', 'sturdy elegantly beyond');
+      cy.get(`[data-cy="sex"]`).type('woot kissingly absentmindedly');
+      cy.get(`[data-cy="sex"]`).should('have.value', 'woot kissingly absentmindedly');
 
-      cy.get(`[data-cy="mobilePhone"]`).type('whereas plus');
-      cy.get(`[data-cy="mobilePhone"]`).should('have.value', 'whereas plus');
+      cy.get(`[data-cy="bloodGroup"]`).type('meh next semicolon');
+      cy.get(`[data-cy="bloodGroup"]`).should('have.value', 'meh next semicolon');
 
-      cy.get(`[data-cy="phoneNumber"]`).type('gee');
-      cy.get(`[data-cy="phoneNumber"]`).should('have.value', 'gee');
+      cy.get(`[data-cy="mobilePhone"]`).type('barring');
+      cy.get(`[data-cy="mobilePhone"]`).should('have.value', 'barring');
 
-      cy.get(`[data-cy="email"]`).type('Anika.Borer@hotmail.com');
-      cy.get(`[data-cy="email"]`).should('have.value', 'Anika.Borer@hotmail.com');
+      cy.get(`[data-cy="phoneNumber"]`).type('righteously');
+      cy.get(`[data-cy="phoneNumber"]`).should('have.value', 'righteously');
 
-      cy.get(`[data-cy="idType"]`).type('what');
-      cy.get(`[data-cy="idType"]`).should('have.value', 'what');
+      cy.get(`[data-cy="email"]`).type('Toy.Wehner@hotmail.com');
+      cy.get(`[data-cy="email"]`).should('have.value', 'Toy.Wehner@hotmail.com');
 
-      cy.get(`[data-cy="idNumber"]`).type('cuff-link civilisation');
-      cy.get(`[data-cy="idNumber"]`).should('have.value', 'cuff-link civilisation');
+      cy.get(`[data-cy="cardType"]`).type('excepting sleep caterwaul');
+      cy.get(`[data-cy="cardType"]`).should('have.value', 'excepting sleep caterwaul');
 
-      cy.get(`[data-cy="contacts"]`).type('miserably after');
-      cy.get(`[data-cy="contacts"]`).should('have.value', 'miserably after');
+      cy.get(`[data-cy="cardNumber"]`).type('but delightfully rally');
+      cy.get(`[data-cy="cardNumber"]`).should('have.value', 'but delightfully rally');
 
-      cy.get(`[data-cy="address"]`).type('dismal stunt acclimatise');
-      cy.get(`[data-cy="address"]`).should('have.value', 'dismal stunt acclimatise');
+      cy.get(`[data-cy="contacts"]`).type('painfully vaguely');
+      cy.get(`[data-cy="contacts"]`).should('have.value', 'painfully vaguely');
+
+      cy.get(`[data-cy="address"]`).type('furthermore through bountiful');
+      cy.get(`[data-cy="address"]`).should('have.value', 'furthermore through bountiful');
+
+      cy.get(`[data-cy="team"]`).type('inverse huzzah');
+      cy.get(`[data-cy="team"]`).should('have.value', 'inverse huzzah');
+
+      cy.get(`[data-cy="imageUrl"]`).type('incidentally shakily tomorrow');
+      cy.get(`[data-cy="imageUrl"]`).should('have.value', 'incidentally shakily tomorrow');
+
+      cy.get(`[data-cy="about"]`).type('ick yawning gah');
+      cy.get(`[data-cy="about"]`).should('have.value', 'ick yawning gah');
+
+      cy.get(`[data-cy="socialHandle"]`).type('toward');
+      cy.get(`[data-cy="socialHandle"]`).should('have.value', 'toward');
+
+      cy.get(`[data-cy="careAngelName"]`).type('female convert');
+      cy.get(`[data-cy="careAngelName"]`).should('have.value', 'female convert');
+
+      cy.get(`[data-cy="careAngelPhone"]`).type('apud dreamily');
+      cy.get(`[data-cy="careAngelPhone"]`).should('have.value', 'apud dreamily');
 
       cy.get(entityCreateSaveButtonSelector).click();
 

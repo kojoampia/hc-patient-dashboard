@@ -1,13 +1,33 @@
 {
   "global": {
-    "title": "Patient Dashboard",
+    "title": "PatientDashboard",
     "browsehappy": "Sie benutzen einen <strong>veralteten</strong> Browser. Bitte <a href=\"http://browsehappy.com/?locale=de/\">aktualisieren Sie Ihren Browser</a>, um die Benutzerfreundlichkeit zu erhöhen.",
     "menu": {
       "home": "Startseite",
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "Entitäten",
-        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
+        "patientMsAddress": "Address",
+        "patientMsCondition": "Condition",
+        "patientMsMedication": "Medication",
+        "patientMsStat": "Stat",
+        "patientMsTeam": "Team",
+        "patientMsTask": "Task",
+        "patientMsMembership": "Membership",
+        "patientMsReport": "Report",
+        "patientMsMetadata": "Metadata",
+        "patientMsProfile": "Profile",
+        "patientMsPaymentOption": "Payment Option",
+        "patientMsPersonalDocument": "Personal Document",
+        "patientMsRecommendation": "Recommendation",
+        "patientMsClinicalCase": "Clinical Case",
+        "patientMsProfessional": "Professional",
+        "patientMsVisitation": "Visitation",
+        "patientMsEmergency": "Emergency",
+        "patientMsActivityLog": "Activity Log",
+        "patientMsCarePlanItem": "Care Plan Item",
+        "patientMsAllergy": "Allergy"
       },
       "account": {
         "main": "Zugang",
@@ -20,7 +40,6 @@
       },
       "admin": {
         "main": "Administration",
-        "gateway": "Gateway",
         "userManagement": "Benutzerverwaltung",
         "tracker": "Benutzer Aktivitäten",
         "metrics": "Metriken",
@@ -48,13 +67,13 @@
     "messages": {
       "info": {
         "authenticated": {
-          "prefix": "Bitte ",
+          "prefix": "Wenn Sie sich ",
           "link": "anmelden",
           "suffix": " möchten, versuchen Sie es mit <br/>- Administrator (Name=\"admin\" und Passwort=\"admin\")<br/>- Benutzer (Name=\"user\" und Passwort=\"user\")."
         },
         "register": {
-          "noaccount": "Wir kümmern uns um Ihre Wohlbefinden.",
-          "link": "Registrieren Sie sich!"
+          "noaccount": "Sie haben noch keinen Zugang?",
+          "link": "Registrieren Sie sich"
         }
       },
       "error": {
@@ -143,7 +162,5 @@
       "not.image": "Es wird erwartet, dass die Datei ein Bild ist. Die Datei ist jedoch vom Typ \"{{ fileType }}\""
     }
   },
-  "footer": {
-    "copyright": "&copy; {{ year }} Health Connect von Jojo Addison Information Systems Consultancy &reg; Alle Rechte vorbehalten."
-  }
+  "footer": "Dies ist Ihre Fußzeile"
 }

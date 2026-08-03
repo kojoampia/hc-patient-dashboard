@@ -29,14 +29,11 @@ import { MetadataDeleteDialogComponent } from '../delete/metadata-delete-dialog.
   ],
 })
 export class MetadataComponent implements OnInit {
-  private static readonly NOT_SORTABLE_FIELDS_AFTER_SEARCH = ['id', 'createdBy', 'modifiedBy', 'data'];
-
   metadata?: IMetadata[];
   isLoading = false;
 
   predicate = 'id';
   ascending = true;
-  currentSearch = '';
 
   constructor(
     protected metadataService: MetadataService,
@@ -47,14 +44,6 @@ export class MetadataComponent implements OnInit {
   ) {}
 
   trackId = (_index: number, item: IMetadata): string => this.metadataService.getMetadataIdentifier(item);
-
-  search(query: string): void {
-    if (query && MetadataComponent.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(this.predicate)) {
-      this.predicate = '';
-    }
-    this.currentSearch = query;
-    this.navigateToWithComponentValues();
-  }
 
   ngOnInit(): void {
     this.load();
@@ -85,13 +74,13 @@ export class MetadataComponent implements OnInit {
   }
 
   navigateToWithComponentValues(): void {
-    this.handleNavigation(this.predicate, this.ascending, this.currentSearch);
+    this.handleNavigation(this.predicate, this.ascending);
   }
 
   protected loadFromBackendWithRouteInformations(): Observable<EntityArrayResponseType> {
     return combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data]).pipe(
       tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
-      switchMap(() => this.queryBackend(this.predicate, this.ascending, this.currentSearch)),
+      switchMap(() => this.queryBackend(this.predicate, this.ascending)),
     );
   }
 
@@ -99,12 +88,6 @@ export class MetadataComponent implements OnInit {
     const sort = (params.get(SORT) ?? data[DEFAULT_SORT_DATA]).split(',');
     this.predicate = sort[0];
     this.ascending = sort[1] === ASC;
-    if (params.has('search') && params.get('search') !== '') {
-      this.currentSearch = params.get('search') as string;
-      if (MetadataComponent.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(this.predicate)) {
-        this.predicate = '';
-      }
-    }
   }
 
   protected onResponseSuccess(response: EntityArrayResponseType): void {
@@ -120,22 +103,16 @@ export class MetadataComponent implements OnInit {
     return data ?? [];
   }
 
-  protected queryBackend(predicate?: string, ascending?: boolean, currentSearch?: string): Observable<EntityArrayResponseType> {
+  protected queryBackend(predicate?: string, ascending?: boolean): Observable<EntityArrayResponseType> {
     this.isLoading = true;
     const queryObject: any = {
-      query: currentSearch,
       sort: this.getSortQueryParam(predicate, ascending),
     };
-    if (this.currentSearch && this.currentSearch !== '') {
-      return this.metadataService.search(queryObject).pipe(tap(() => (this.isLoading = false)));
-    } else {
-      return this.metadataService.query(queryObject).pipe(tap(() => (this.isLoading = false)));
-    }
+    return this.metadataService.query(queryObject).pipe(tap(() => (this.isLoading = false)));
   }
 
-  protected handleNavigation(predicate?: string, ascending?: boolean, currentSearch?: string): void {
+  protected handleNavigation(predicate?: string, ascending?: boolean): void {
     const queryParamsObj = {
-      search: currentSearch,
       sort: this.getSortQueryParam(predicate, ascending),
     };
 

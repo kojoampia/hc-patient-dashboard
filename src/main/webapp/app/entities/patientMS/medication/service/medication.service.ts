@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable, asapScheduler, scheduled } from 'rxjs';
+import { Observable } from 'rxjs';
 
-import { catchError, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import dayjs from 'dayjs/esm';
 
@@ -10,12 +10,12 @@ import { isPresent } from 'app/core/util/operators';
 import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
-import { Search } from 'app/core/request/request.model';
 import { IMedication, NewMedication } from '../medication.model';
 
 export type PartialUpdateMedication = Partial<IMedication> & Pick<IMedication, 'id'>;
 
-type RestOf<T extends IMedication | NewMedication> = Omit<T, 'createdDate' | 'modifiedDate'> & {
+type RestOf<T extends IMedication | NewMedication> = Omit<T, 'startedOn' | 'createdDate' | 'modifiedDate'> & {
+  startedOn?: string | null;
   createdDate?: string | null;
   modifiedDate?: string | null;
 };
@@ -31,8 +31,7 @@ export type EntityArrayResponseType = HttpResponse<IMedication[]>;
 
 @Injectable({ providedIn: 'root' })
 export class MedicationService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/medications');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/medications/_search');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/medications', 'hcpatientservice');
 
   constructor(
     protected http: HttpClient,
@@ -77,14 +76,6 @@ export class MedicationService {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
-  search(req: Search): Observable<EntityArrayResponseType> {
-    const options = createRequestOption(req);
-    return this.http.get<RestMedication[]>(this.resourceSearchUrl, { params: options, observe: 'response' }).pipe(
-      map(res => this.convertResponseArrayFromServer(res)),
-      catchError(() => scheduled([new HttpResponse<IMedication[]>()], asapScheduler)),
-    );
-  }
-
   getMedicationIdentifier(medication: Pick<IMedication, 'id'>): string {
     return medication.id;
   }
@@ -116,6 +107,7 @@ export class MedicationService {
   protected convertDateFromClient<T extends IMedication | NewMedication | PartialUpdateMedication>(medication: T): RestOf<T> {
     return {
       ...medication,
+      startedOn: medication.startedOn?.format(DATE_FORMAT) ?? null,
       createdDate: medication.createdDate?.format(DATE_FORMAT) ?? null,
       modifiedDate: medication.modifiedDate?.format(DATE_FORMAT) ?? null,
     };
@@ -124,6 +116,7 @@ export class MedicationService {
   protected convertDateFromServer(restMedication: RestMedication): IMedication {
     return {
       ...restMedication,
+      startedOn: restMedication.startedOn ? dayjs(restMedication.startedOn) : undefined,
       createdDate: restMedication.createdDate ? dayjs(restMedication.createdDate) : undefined,
       modifiedDate: restMedication.modifiedDate ? dayjs(restMedication.modifiedDate) : undefined,
     };

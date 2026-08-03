@@ -1,0 +1,171 @@
+<div>
+  <h2 id="page-heading" data-cy="ClinicalCaseHeading">
+    <span hpdTranslate="patientDashboardApp.patientMsClinicalCase.home.title">Clinical Cases</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span hpdTranslate="patientDashboardApp.patientMsClinicalCase.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-clinical-case"
+        [routerLink]="['/clinical-case/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span hpdTranslate="patientDashboardApp.patientMsClinicalCase.home.createLabel">Create a new Clinical Case</span>
+      </button>
+    </div>
+  </h2>
+
+  <hpd-alert-error></hpd-alert-error>
+
+  <hpd-alert></hpd-alert>
+
+  @if (clinicalCases?.length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span hpdTranslate="patientDashboardApp.patientMsClinicalCase.home.notFound">No Clinical Cases found</span>
+    </div>
+  }
+
+  @if (clinicalCases && clinicalCases.length > 0) {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr hpdSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+            <th scope="col" hpdSortBy="id">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsClinicalCase.id">Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="patientId">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsClinicalCase.patientId">Patient Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="caseNumber">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsClinicalCase.caseNumber">Case Number</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="title">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsClinicalCase.title">Title</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="openedAt">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsClinicalCase.openedAt">Opened At</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="closedAt">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsClinicalCase.closedAt">Closed At</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="brief">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsClinicalCase.brief">Brief</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="status">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsClinicalCase.status">Status</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="symptoms">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsClinicalCase.symptoms">Symptoms</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="diagnosis">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsClinicalCase.diagnosis">Diagnosis</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="assignedProfessionalId">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsClinicalCase.assignedProfessionalId">Assigned Professional Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="assignedRosterId">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsClinicalCase.assignedRosterId">Assigned Roster Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody
+          infinite-scroll
+          (scrolled)="loadPage(page + 1)"
+          [infiniteScrollDisabled]="page - 1 >= links['last']"
+          [infiniteScrollDistance]="0"
+        >
+          @for (clinicalCase of clinicalCases; track trackId) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/clinical-case', clinicalCase.id, 'view']">{{ clinicalCase.id }}</a>
+              </td>
+              <td>{{ clinicalCase.patientId }}</td>
+              <td>{{ clinicalCase.caseNumber }}</td>
+              <td>{{ clinicalCase.title }}</td>
+              <td>{{ clinicalCase.openedAt | formatMediumDatetime }}</td>
+              <td>{{ clinicalCase.closedAt | formatMediumDatetime }}</td>
+              <td>{{ clinicalCase.brief }}</td>
+              <td hpdTranslate="{{ 'patientDashboardApp.CaseStatus.' + clinicalCase.status }}">{{ clinicalCase.status }}</td>
+              <td>{{ clinicalCase.symptoms }}</td>
+              <td>{{ clinicalCase.diagnosis }}</td>
+              <td>{{ clinicalCase.assignedProfessionalId }}</td>
+              <td>{{ clinicalCase.assignedRosterId }}</td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/clinical-case', clinicalCase.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" hpdTranslate="entity.action.view">View</span>
+                  </a>
+
+                  <a [routerLink]="['/clinical-case', clinicalCase.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" hpdTranslate="entity.action.edit">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(clinicalCase)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" hpdTranslate="entity.action.delete">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

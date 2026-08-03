@@ -6,7 +6,6 @@
         "refreshListLabel": "Actualiser la liste",
         "createLabel": "Créer un nouveau Address",
         "createOrEditLabel": "Créer ou éditer un Address",
-        "search": "Recherche pour Address",
         "notFound": "Aucun Address trouvé"
       },
       "created": "Un nouveau Address a été créé avec l'identifiant {{ param }}",
@@ -18,7 +17,7 @@
       "detail": {
         "title": "Address"
       },
-      "id": "ID",
+      "id": "Id",
       "digitalAddress": "Digital Address",
       "streetAddress": "Street Address",
       "areaCode": "Area Code",

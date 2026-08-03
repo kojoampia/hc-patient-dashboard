@@ -1,21 +1,21 @@
 <div>
   <h2>
-    <span id="gateway-page-heading" jhiTranslate="gateway.title">Gateway</span>
+    <span id="gateway-page-heading" hpdTranslate="gateway.title">Gateway</span>
 
     <button class="btn btn-primary float-end" (click)="refresh()" (disabled)="(updatingRoutes)">
-      <fa-icon icon="sync"></fa-icon> <span jhiTranslate="gateway.refresh.button">Refresh</span>
+      <fa-icon icon="sync"></fa-icon> <span hpdTranslate="gateway.refresh.button">Refresh</span>
     </button>
   </h2>
 
-  <h3 jhiTranslate="gateway.routes.title">Current routes</h3>
+  <h3 hpdTranslate="gateway.routes.title">Current routes</h3>
 
   <div class="table-responsive">
     <table class="table table-striped" aria-describedby="gateway-page-heading">
       <thead>
         <tr>
-          <th scope="col" jhiTranslate="gateway.routes.url">URL</th>
-          <th scope="col" jhiTranslate="gateway.routes.service">Service</th>
-          <th scope="col" jhiTranslate="gateway.routes.servers">Available servers</th>
+          <th scope="col" hpdTranslate="gateway.routes.url">URL</th>
+          <th scope="col" hpdTranslate="gateway.routes.service">Service</th>
+          <th scope="col" hpdTranslate="gateway.routes.servers">Available servers</th>
         </tr>
       </thead>
       <tbody>
@@ -25,7 +25,7 @@
             <td>{{ route.serviceId }}</td>
             <td>
               @if (route.serviceInstances.length === 0) {
-                <div class="label label-danger" jhiTranslate="gateway.routes.error">Warning: no server available!</div>
+                <div class="label label-danger" hpdTranslate="gateway.routes.error">Warning: no server available!</div>
               }
 
               <div class="table-responsive">

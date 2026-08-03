@@ -7,19 +7,20 @@ export const sampleWithRequiredData: ICondition = {
 };
 
 export const sampleWithPartialData: ICondition = {
-  id: 'a4ea1a17-4d91-40a4-9b1e-45e2a597b273',
-  description: 'anti uh-huh gibber',
-  createdBy: 'whoa instead sadly',
+  id: '4ea1a174-d910-4a4b-b1e4-5e2a597b2736',
+  description: 'fiercely hair',
+  modifiedDate: dayjs('2024-02-06'),
 };
 
 export const sampleWithFullData: ICondition = {
-  id: 'd8518079-cbaf-46fa-92a1-ae03786210a2',
-  name: 'why brr foolish',
-  description: 'sweaty legal biosphere',
+  id: 'cd816de4-d5c4-424c-8fca-25c7db53bd85',
+  name: 'utilise rap',
+  description: 'blah organization handmaiden',
+  patientId: 'including',
   createdDate: dayjs('2024-02-06'),
   modifiedDate: dayjs('2024-02-06'),
-  createdBy: 'favorable onto',
-  modifiedBy: 'well-off',
+  createdBy: 'hostess yahoo per',
+  modifiedBy: 'which lour commercial',
 };
 
 export const sampleWithNewData: NewCondition = {

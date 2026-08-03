@@ -1,0 +1,166 @@
+<div>
+  <h2 id="page-heading" data-cy="CarePlanItemHeading">
+    <span hpdTranslate="patientDashboardApp.patientMsCarePlanItem.home.title">Care Plan Items</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span hpdTranslate="patientDashboardApp.patientMsCarePlanItem.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-care-plan-item"
+        [routerLink]="['/care-plan-item/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span hpdTranslate="patientDashboardApp.patientMsCarePlanItem.home.createLabel">Create a new Care Plan Item</span>
+      </button>
+    </div>
+  </h2>
+
+  <hpd-alert-error></hpd-alert-error>
+
+  <hpd-alert></hpd-alert>
+
+  @if (carePlanItems?.length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span hpdTranslate="patientDashboardApp.patientMsCarePlanItem.home.notFound">No Care Plan Items found</span>
+    </div>
+  }
+
+  @if (carePlanItems && carePlanItems.length > 0) {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr hpdSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+            <th scope="col" hpdSortBy="id">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsCarePlanItem.id">Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="patientId">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsCarePlanItem.patientId">Patient Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="planType">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsCarePlanItem.planType">Plan Type</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="label">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsCarePlanItem.label">Label</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="detail">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsCarePlanItem.detail">Detail</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="cadence">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsCarePlanItem.cadence">Cadence</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="completed">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsCarePlanItem.completed">Completed</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="sortOrder">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsCarePlanItem.sortOrder">Sort Order</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="createdDate">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsCarePlanItem.createdDate">Created Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="modifiedDate">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsCarePlanItem.modifiedDate">Modified Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="createdBy">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsCarePlanItem.createdBy">Created By</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" hpdSortBy="modifiedBy">
+              <div class="d-flex">
+                <span hpdTranslate="patientDashboardApp.patientMsCarePlanItem.modifiedBy">Modified By</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (carePlanItem of carePlanItems; track trackId) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/care-plan-item', carePlanItem.id, 'view']">{{ carePlanItem.id }}</a>
+              </td>
+              <td>{{ carePlanItem.patientId }}</td>
+              <td hpdTranslate="{{ 'patientDashboardApp.CarePlanType.' + carePlanItem.planType }}">{{ carePlanItem.planType }}</td>
+              <td>{{ carePlanItem.label }}</td>
+              <td>{{ carePlanItem.detail }}</td>
+              <td>{{ carePlanItem.cadence }}</td>
+              <td>{{ carePlanItem.completed }}</td>
+              <td>{{ carePlanItem.sortOrder }}</td>
+              <td>{{ carePlanItem.createdDate | formatMediumDate }}</td>
+              <td>{{ carePlanItem.modifiedDate | formatMediumDate }}</td>
+              <td>{{ carePlanItem.createdBy }}</td>
+              <td>{{ carePlanItem.modifiedBy }}</td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/care-plan-item', carePlanItem.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" hpdTranslate="entity.action.view">View</span>
+                  </a>
+
+                  <a [routerLink]="['/care-plan-item', carePlanItem.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" hpdTranslate="entity.action.edit">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(carePlanItem)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" hpdTranslate="entity.action.delete">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

@@ -10,7 +10,7 @@
 
         @if (editForm.controls.id.value !== null) {
           <div class="mb-3">
-            <label class="form-label" hpdTranslate="global.field.id" for="field_id">ID</label>
+            <label class="form-label" hpdTranslate="patientDashboardApp.patientMsTask.id" for="field_id">Id</label>
             <input type="text" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
           </div>
         }
@@ -50,8 +50,69 @@
         </div>
 
         <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsTask.scheduledAt" for="field_scheduledAt"
+            >Scheduled At</label
+          >
+          <div class="d-flex">
+            <input
+              id="field_scheduledAt"
+              data-cy="scheduledAt"
+              type="datetime-local"
+              class="form-control"
+              name="scheduledAt"
+              formControlName="scheduledAt"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
           <label class="form-label" hpdTranslate="patientDashboardApp.patientMsTask.duration" for="field_duration">Duration</label>
           <input type="number" class="form-control" name="duration" id="field_duration" data-cy="duration" formControlName="duration" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsTask.status" for="field_status">Status</label>
+          <select class="form-control" name="status" formControlName="status" id="field_status" data-cy="status">
+            <option [ngValue]="null">{{ 'patientDashboardApp.ScheduleStatus.null' | translate }}</option>
+            @for (scheduleStatus of scheduleStatusValues; track $index) {
+              <option [value]="scheduleStatus">{{ 'patientDashboardApp.ScheduleStatus.' + scheduleStatus | translate }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsTask.location" for="field_location">Location</label>
+          <input type="text" class="form-control" name="location" id="field_location" data-cy="location" formControlName="location" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsTask.caseId" for="field_caseId">Case Id</label>
+          <input type="text" class="form-control" name="caseId" id="field_caseId" data-cy="caseId" formControlName="caseId" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsTask.attendantId" for="field_attendantId"
+            >Attendant Id</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="attendantId"
+            id="field_attendantId"
+            data-cy="attendantId"
+            formControlName="attendantId"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsTask.teamId" for="field_teamId">Team Id</label>
+          <input type="text" class="form-control" name="teamId" id="field_teamId" data-cy="teamId" formControlName="teamId" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsTask.patientId" for="field_patientId">Patient Id</label>
+          <input type="text" class="form-control" name="patientId" id="field_patientId" data-cy="patientId" formControlName="patientId" />
         </div>
 
         <div class="mb-3">

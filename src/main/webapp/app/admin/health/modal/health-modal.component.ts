@@ -6,7 +6,7 @@ import { HealthKey, HealthDetails } from '../health.model';
 
 @Component({
   standalone: true,
-  selector: 'jhi-health-modal',
+  selector: 'hpd-health-modal',
   templateUrl: './health-modal.component.html',
   imports: [SharedModule],
 })

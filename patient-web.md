@@ -15,16 +15,64 @@ Two things moved the ground under this plan, and most of the edits below follow 
 - **Deployment left this repo.** `d5f0bfe` deleted `Dockerfile`, `nginx.conf`, `docker-compose.yml`, `docker-compose-prod.yml`, `.dockerignore` and the `docker:*:tag` / `deploy:*` npm scripts. They live in `hc-patient/deploy/` (repo `kojoampia/hc-patient-ci`), which builds all three subsystem images and ships them. Phase C was almost entirely about those files; it is rewritten below rather than carried forward.
 - **The app is in production.** `https://patient.abofonsa.com` has served this dashboard since 2026-07-31, with browser telemetry since 2026-08-03. Items that were theoretical when written now have a live deployment to be true of.
 
+### The user-interface refactor (branch `feature/ui-refactor`, 2026-08-03)
+
+The dashboard was rebuilt against the design in `patient-web-demo.html`. This is the largest change
+the repo has taken and it settles several items below.
+
+- **Design system.** `content/scss/_tokens.scss` (navy/gold/cream palette, radii, shadows, data-viz
+  colour roles), `_components.scss` and `_utilities.scss`, all namespaced `hc-`. The namespace is
+  load-bearing: Bootstrap and ng-bootstrap are still on the page for the account, admin and entity
+  screens, and the design uses bare `.row`, `.card`, `.modal` and `.tabs`. `_bootstrap-variables.scss`
+  now points Bootstrap's own variables at the same tokens, so those screens inherit the palette.
+- **Two layouts.** `layouts/shell/` is the portal frame (navy sidebar, sticky topbar, mobile drawer
+  and bottom tab bar); `layouts/auth-shell/` is the signed-out split brand/form screen shared by
+  sign-in, register, activate and password reset. Both are empty-path route parents, so `app.routes.ts`
+  redirects `/` to `overview` explicitly — without that the router resolves `/` to whichever parent is
+  declared first and renders it with an empty outlet.
+- **13 portal screens** under `app/portal/`: overview, record, cases, case detail, schedules,
+  emergencies, medications, reports, plans, allergies, visitations, activity, profile. They read
+  through `portal/data/portal-data.service.ts`, which scopes every collection to the signed-in
+  patient in one place and shares each fetch across the screens that need it.
+- **`jhi` → `hpd` selector migration, completed.** `.yo-rc.json` has said `jhiPrefix: hpd` since the
+  app was generated, but the scaffold was emitted with `jhi`. Regenerating the entities produced
+  templates referencing `hpd-alert-error`/`hpdSort`/`hpdTranslate` against shared components still
+  declaring `jhi-*`, so the two halves no longer compiled together. All 139 affected files were
+  migrated. This also cleared the 161 pre-existing lint errors that came from the same mismatch.
+- **Lint is clean.** `npm run lint` reports zero problems, down from 172. Getting there needed one
+  config change: `member-ordering` now expects private instance fields *before* public ones, because
+  class field initialisers run before constructor parameter properties are assigned — so a public
+  field derived from an `inject()`ed service only works if the service is declared above it.
+- **Entity model extended.** See `hc-patient-service/patient.jdl`, now the model of record for both
+  repos. Six entities were added (Professional, Visitation, Emergency, ActivityLog, CarePlanItem,
+  Allergy) and eight extended. Vitals are `Stat`, by decision — there is no separate Vital entity.
+- **Verified:** `npx ng test` 202 suites / 978 tests, `npm run lint` clean, `npm run webapp:prod`
+  clean, and the built bundle loaded in a real browser (per the rule below, a production build alone
+  does not prove the SPA boots).
+
 ## Open decisions
 
-1. **Dev API port.** `webpack/proxy.conf.js` + `webpack/environment.js` target `http://localhost:5505`; the gateway's dev port is `5503`. Pick one and make the other follow. (This was a three-way disagreement until `docker-compose.yml` — the source of the third value, `5501` — left the repo. Production is unaffected either way: it builds same-origin and the web container's nginx does the fan-out.)
-2. **Entity screens: route them or retire them.** `entities/entity.routes.ts` and `entities/entity-navbar-items.ts` are empty, so all of `entities/patientMS/**` is unreachable. Either register the routes and menu items, or delete the screens deliberately — do not leave them in limbo. The backend has since moved further away: `api` replaced `MedCase` with `ClinicalCase` and added `Recommendation`, and this app has screens for neither, so "route them" now means generating two more first.
-3. **What should CI do?** The registry question is settled — `docker.jojoaddison.net` is authoritative, and `deploy/` pushes there. But `.github/workflows/docker-publish.yml` still tries to build and publish to GHCR, and **has failed on every push since 2026-07-30** (see Phase C). The image is now built from `deploy/docker/web.Dockerfile` with a named build context this repo cannot reproduce alone, so CI cannot simply be repointed. Decide between: retire the workflow entirely, or replace image publishing with what a client repo actually needs — `lint`, `test`, `webapp:prod`. Recommended: the latter, since `npm test` is not gated anywhere today.
-4. **Mobile app baseline.** The blueprint calls for a fresh Angular 19+ Ionic workspace in the separate (currently empty) `hc-patient-app` repo. Decide whether it starts there or reuses this app's Angular 17 baseline and shared models. Tracked here only as a boundary note — the work itself belongs in that repo.
+1. **What should CI do?** The registry question is settled — `docker.jojoaddison.net` is authoritative, and `deploy/` pushes there. But `.github/workflows/docker-publish.yml` still tries to build and publish to GHCR, and **has failed on every push since 2026-07-30** (see Phase C). The image is now built from `deploy/docker/web.Dockerfile` with a named build context this repo cannot reproduce alone, so CI cannot simply be repointed. Decide between: retire the workflow entirely, or replace image publishing with what a client repo actually needs — `lint`, `test`, `webapp:prod`. Recommended: the latter, since `npm test` is not gated anywhere today.
+2. **Mobile app baseline.** The blueprint calls for a fresh Angular 19+ Ionic workspace in the separate (currently empty) `hc-patient-app` repo. Decide whether it starts there or reuses this app's Angular 17 baseline and shared models. Tracked here only as a boundary note — the work itself belongs in that repo.
 
 Resolved since the last baseline, kept so the numbering change is traceable:
 
-- ~~**Registry strategy.**~~ Settled by `deploy/`: `docker.jojoaddison.net`. What remains is decision 3 above — the dead GHCR path in this repo.
+- ~~**Dev API port.**~~ Settled 2026-08-03: the **gateway moved to 5505**, matching what
+  `webpack/proxy.conf.js` and `webpack/environment.js` already targeted, so `npm start` reaches it
+  with no further configuration. The move is across *every* profile — `application-dev.yml`,
+  `application-prod.yml`, the Jib container port, `.yo-rc.json`, `package.json` — plus `deploy/`'s
+  nginx upstreams, compose port map, Dockerfile `EXPOSE` and both health checks, so there is one
+  port for the whole subsystem rather than a dev/prod split waiting to be tripped over.
+  **It needs a `./deploy.sh` to take effect on `patient.abofonsa.com`** — until then the running
+  stack's nginx still proxies to 5503.
+
+- ~~**Entity screens: route them or retire them.**~~ Settled by the UI refactor: routed, behind
+  `ROLE_ADMIN`. `entities/entity.routes.ts` and `entities/entity-navbar-items.ts` are populated,
+  and CRUD now exists for all twenty entities including `ClinicalCase` and `Recommendation`. They
+  are an administrative surface — they edit any patient's records — so they sit under `/entities`
+  with an authority guard rather than in the patient's own navigation.
+
+- ~~**Registry strategy.**~~ Settled by `deploy/`: `docker.jojoaddison.net`. What remains is decision 1 above — the dead GHCR path in this repo.
 - ~~**Runtime vs build-time API base.**~~ Settled: the bundle is built **same-origin** (`SERVER_API_URL` empty, `<base href="/">`), so there is nothing to substitute at runtime and the gateway needs no CORS. The compose env var that could never take effect is gone with the compose file.
 
 ## Baseline — already in place
@@ -46,7 +94,7 @@ Resolved since the last baseline, kept so the numbering change is traceable:
   builds. Four things to keep in mind before changing it:
   - **Query strings are stripped before export.** This is a patient application and Tempo is shared
     with every other app on the host. If an endpoint is ever added that puts something identifying in
-    the *path*, `scrubUrl` has to cover that too.
+    the _path_, `scrubUrl` has to cover that too.
   - **Sampling is 10%, decided in the browser.** The constraint is the shared monitoring stack's
     disk, not the client. Raise it while investigating something specific, then put it back.
   - **`__OTEL_ENABLED__` is declared in `webpack/environment.js` as well as in the webpack config.**
@@ -135,7 +183,7 @@ These come from the subsystem blueprint's Phase 3 and are largely blocked on bac
 
 - `[ ]` Subscription plan selection / display (Pear, Melon, Pawpaw) — blocked on `patient-api.md` Phase B, including the unresolved plan-price contradiction.
 - `[ ]` Onboarding wizard (basic info → identification → plan) — blocked on a unified onboarding endpoint.
-- `[ ]` Historical telemetry views — blocked on `patient-api.md` Phase C; the current metric panels read from `Stat`. Note this means *patient* telemetry (vitals over time), which is unrelated to the OpenTelemetry instrumentation added in 2026-08-03.
+- `[ ]` Historical telemetry views — blocked on `patient-api.md` Phase C; the current metric panels read from `Stat`. Note this means _patient_ telemetry (vitals over time), which is unrelated to the OpenTelemetry instrumentation added in 2026-08-03.
 - `[ ]` Calendar / upcoming visits — no scheduling entity exists in any backend.
 - `[ ]` Assigned professionals directory — needs a contract with the professional subsystem.
 - `[ ]` Time-bound record sharing toggles — no sharing/consent model exists.

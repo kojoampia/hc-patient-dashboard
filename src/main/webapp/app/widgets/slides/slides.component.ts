@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, OnDestroy, CUSTOM_ELEMENTS_SCHE
 import SharedModule from 'app/shared/shared.module';
 
 @Component({
-  selector: 'jhi-slider',
+  selector: 'hpd-slider',
   standalone: true,
   imports: [SharedModule],
   templateUrl: './slides.component.html',
@@ -32,7 +32,7 @@ export class SlidesComponent implements OnDestroy {
     this.slideSelected.emit(item);
   }
 
-  trackId(index: number, item: any): number {
+  trackId(index: number, item: any): unknown {
     return item.id;
   }
 }

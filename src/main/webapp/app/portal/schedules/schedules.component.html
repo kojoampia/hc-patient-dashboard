@@ -1,0 +1,92 @@
+<div class="hc-tools">
+  <hpd-search-box
+    inputId="q_schedules"
+    placeholderKey="patientPortal.schedules.search"
+    [value]="query()"
+    (queryChange)="query.set($event)"
+  />
+</div>
+
+<div class="hc-sec-head">
+  <div>
+    <h3 hpdTranslate="patientPortal.schedules.upcoming">Coming up</h3>
+    <p hpdTranslate="patientPortal.schedules.upcomingSub">Appointments still to attend.</p>
+  </div>
+</div>
+
+@if (upcoming().length) {
+  <div class="hc-grid hc-grid--2">
+    @for (item of upcoming(); track item.id) {
+      <article class="hc-card hc-card-pad">
+        <div class="hc-row hc-between hc-gap-8">
+          <b>{{ item.name }}</b>
+          <span class="hc-pill" [class]="pill(item.status)">{{ humanise(item.status) }}</span>
+        </div>
+
+        <div class="hc-row hc-gap-8 hc-muted hc-sm" style="margin-top: 6px">
+          <hpd-icon name="cal" [size]="15" />
+          <span class="hc-num">{{ formatDay(item.scheduledAt ?? item.schedule) }}</span>
+          @if (item.scheduledAt) {
+            <span class="hc-num">· {{ formatTime(item.scheduledAt) }}</span>
+          }
+        </div>
+
+        <div class="hc-row hc-gap-8 hc-muted hc-sm" style="margin-top: 4px">
+          <hpd-icon name="user" [size]="15" />
+          <span>{{ memberOf(item.attendantId).name }}</span>
+          @if (item.location) {
+            <span>· {{ item.location }}</span>
+          }
+        </div>
+
+        @if (caseLabel(item.caseId); as label) {
+          <a class="hc-btn hc-btn--quiet hc-btn--sm" style="padding-left: 0" [routerLink]="['/case', item.caseId]">{{ label }}</a>
+        }
+      </article>
+    }
+  </div>
+} @else {
+  <div class="hc-card">
+    <hpd-empty-state icon="cal" titleKey="patientPortal.schedules.empty" messageKey="patientPortal.schedules.emptyHint" />
+  </div>
+}
+
+<div class="hc-sec-head">
+  <div>
+    <h3 hpdTranslate="patientPortal.schedules.past">Already attended</h3>
+    <p hpdTranslate="patientPortal.schedules.pastSub">Appointments that have been and gone.</p>
+  </div>
+</div>
+
+@if (past().length) {
+  <div class="hc-card hc-tbl-wrap">
+    <table class="hc-tbl">
+      <thead>
+        <tr>
+          <th hpdTranslate="patientPortal.schedules.column.when">When</th>
+          <th hpdTranslate="patientPortal.schedules.column.what">Appointment</th>
+          <th hpdTranslate="patientPortal.schedules.column.who">With</th>
+          <th hpdTranslate="patientPortal.schedules.column.where">Where</th>
+          <th hpdTranslate="patientPortal.schedules.column.status">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of past(); track item.id) {
+          <tr>
+            <td class="hc-tbl__date">{{ formatDay(item.scheduledAt ?? item.schedule) }}</td>
+            <td class="hc-tbl__name">{{ item.name }}</td>
+            <td>{{ memberOf(item.attendantId).name }}</td>
+            <td>{{ item.location ?? '—' }}</td>
+            <td>
+              <span class="hc-pill" [class]="pill(item.status)">{{ humanise(item.status) }}</span>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+} @else {
+  <div class="hc-card">
+    <hpd-empty-state icon="clock" titleKey="patientPortal.schedules.emptyPast" />
+  </div>
+}

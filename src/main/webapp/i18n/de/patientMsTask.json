@@ -6,7 +6,6 @@
         "refreshListLabel": "Liste aktualisieren",
         "createLabel": "Task erstellen",
         "createOrEditLabel": "Task erstellen oder bearbeiten",
-        "search": "Suche nach Task",
         "notFound": "Keine Tasks gefunden"
       },
       "created": "Task erstellt mit ID {{ param }}",
@@ -18,11 +17,18 @@
       "detail": {
         "title": "Task"
       },
-      "id": "ID",
+      "id": "Id",
       "name": "Name",
       "description": "Description",
       "schedule": "Schedule",
+      "scheduledAt": "Scheduled At",
       "duration": "Duration",
+      "status": "Status",
+      "location": "Location",
+      "caseId": "Case Id",
+      "attendantId": "Attendant Id",
+      "teamId": "Team Id",
+      "patientId": "Patient Id",
       "attendant": "Attendant",
       "createdDate": "Created Date",
       "modifiedDate": "Modified Date",

@@ -1,0 +1,76 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (visitation) {
+      <div>
+        <h2 data-cy="visitationDetailsHeading">
+          <span hpdTranslate="patientDashboardApp.patientMsVisitation.detail.title">Visitation</span>
+        </h2>
+
+        <hr />
+
+        <hpd-alert-error></hpd-alert-error>
+
+        <hpd-alert></hpd-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span hpdTranslate="patientDashboardApp.patientMsVisitation.id">Id</span></dt>
+          <dd>
+            <span>{{ visitation.id }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsVisitation.patientId">Patient Id</span></dt>
+          <dd>
+            <span>{{ visitation.patientId }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsVisitation.caseId">Case Id</span></dt>
+          <dd>
+            <span>{{ visitation.caseId }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsVisitation.professionalId">Professional Id</span></dt>
+          <dd>
+            <span>{{ visitation.professionalId }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsVisitation.visitedAt">Visited At</span></dt>
+          <dd>
+            <span>{{ visitation.visitedAt | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsVisitation.purpose">Purpose</span></dt>
+          <dd>
+            <span>{{ visitation.purpose }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsVisitation.location">Location</span></dt>
+          <dd>
+            <span>{{ visitation.location }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsVisitation.notes">Notes</span></dt>
+          <dd>
+            <span>{{ visitation.notes }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsVisitation.createdDate">Created Date</span></dt>
+          <dd>
+            <span>{{ visitation.createdDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsVisitation.modifiedDate">Modified Date</span></dt>
+          <dd>
+            <span>{{ visitation.modifiedDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsVisitation.createdBy">Created By</span></dt>
+          <dd>
+            <span>{{ visitation.createdBy }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsVisitation.modifiedBy">Modified By</span></dt>
+          <dd>
+            <span>{{ visitation.modifiedBy }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span hpdTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/visitation', visitation.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span hpdTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

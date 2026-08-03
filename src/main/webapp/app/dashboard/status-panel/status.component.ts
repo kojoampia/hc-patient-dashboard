@@ -4,7 +4,7 @@ import { IChartItem } from './chart-item-model';
 import { StatusService } from './status.service';
 
 @Component({
-  selector: 'jhi-status',
+  selector: 'hpd-status',
   standalone: true,
   imports: [NgxChartsModule],
   templateUrl: './status.component.html',
@@ -91,7 +91,6 @@ export class StatusComponent {
   }
 
   /* On component initialization function*/
-  ngOnInit(): void {}
 
   /* Click event */
   onSelect(): void {

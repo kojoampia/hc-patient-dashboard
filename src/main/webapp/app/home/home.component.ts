@@ -10,15 +10,14 @@ import { DashboardComponent } from 'app/dashboard/dashboard.component';
 
 @Component({
   standalone: true,
-  selector: 'jhi-home',
+  selector: 'hpd-home',
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   imports: [SharedModule, RouterModule, DashboardComponent],
 })
 export default class HomeComponent implements OnInit, OnDestroy {
-  account: Account | null = null;
-
   private readonly destroy$ = new Subject<void>();
+  account: Account | null = null;
 
   constructor(
     private accountService: AccountService,

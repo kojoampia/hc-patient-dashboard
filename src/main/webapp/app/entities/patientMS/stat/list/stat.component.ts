@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Data, ParamMap, Router, RouterModule } from '@angular/router';
 import { combineLatest, filter, Observable, switchMap, tap } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -12,12 +12,10 @@ import { SortService } from 'app/shared/sort/sort.service';
 import { IStat } from '../stat.model';
 import { EntityArrayResponseType, StatService } from '../service/stat.service';
 import { StatDeleteDialogComponent } from '../delete/stat-delete-dialog.component';
-import { StatUpdateComponent } from '../update/stat-update.component';
-import { StatDetailComponent } from '../detail/stat-detail.component';
 
 @Component({
   standalone: true,
-  selector: 'jhi-stat',
+  selector: 'hpd-stat',
   templateUrl: './stat.component.html',
   imports: [
     RouterModule,
@@ -31,16 +29,11 @@ import { StatDetailComponent } from '../detail/stat-detail.component';
   ],
 })
 export class StatComponent implements OnInit {
-  private static readonly NOT_SORTABLE_FIELDS_AFTER_SEARCH = ['id', 'name', 'description', 'note', 'createdBy'];
-
   stats?: IStat[];
   isLoading = false;
 
-  @Input() type!: string;
-
   predicate = 'id';
   ascending = true;
-  currentSearch = '';
 
   constructor(
     protected statService: StatService,
@@ -52,48 +45,8 @@ export class StatComponent implements OnInit {
 
   trackId = (_index: number, item: IStat): string => this.statService.getStatIdentifier(item);
 
-  search(query: string): void {
-    if (query && StatComponent.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(this.predicate)) {
-      this.predicate = '';
-    }
-    this.currentSearch = query;
-    this.navigateToWithComponentValues();
-  }
-
   ngOnInit(): void {
     this.load();
-  }
-
-  view(stat: IStat): void {
-    const modalRef = this.modalService.open(StatDetailComponent, { size: 'lg', backdrop: 'static' });
-    modalRef.componentInstance.stat = stat;
-    // unsubscribe not needed because closed completes on modal close
-    modalRef.closed
-      .pipe(
-        filter(reason => reason === ITEM_DELETED_EVENT),
-        switchMap(() => this.loadFromBackendWithRouteInformations()),
-      )
-      .subscribe({
-        next: (res: EntityArrayResponseType) => {
-          this.onResponseSuccess(res);
-        },
-      });
-  }
-
-  edit(stat: IStat): void {
-    const modalRef = this.modalService.open(StatUpdateComponent, { size: 'lg', backdrop: 'static' });
-    modalRef.componentInstance.stat = stat;
-    // unsubscribe not needed because closed completes on modal close
-    modalRef.closed
-      .pipe(
-        filter(reason => reason === ITEM_DELETED_EVENT),
-        switchMap(() => this.loadFromBackendWithRouteInformations()),
-      )
-      .subscribe({
-        next: (res: EntityArrayResponseType) => {
-          this.onResponseSuccess(res);
-        },
-      });
   }
 
   delete(stat: IStat): void {
@@ -121,13 +74,13 @@ export class StatComponent implements OnInit {
   }
 
   navigateToWithComponentValues(): void {
-    this.handleNavigation(this.predicate, this.ascending, this.currentSearch);
+    this.handleNavigation(this.predicate, this.ascending);
   }
 
   protected loadFromBackendWithRouteInformations(): Observable<EntityArrayResponseType> {
     return combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data]).pipe(
       tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
-      switchMap(() => this.queryBackend(this.predicate, this.ascending, this.currentSearch)),
+      switchMap(() => this.queryBackend(this.predicate, this.ascending)),
     );
   }
 
@@ -135,12 +88,6 @@ export class StatComponent implements OnInit {
     const sort = (params.get(SORT) ?? data[DEFAULT_SORT_DATA]).split(',');
     this.predicate = sort[0];
     this.ascending = sort[1] === ASC;
-    if (params.has('search') && params.get('search') !== '') {
-      this.currentSearch = params.get('search') as string;
-      if (StatComponent.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(this.predicate)) {
-        this.predicate = '';
-      }
-    }
   }
 
   protected onResponseSuccess(response: EntityArrayResponseType): void {
@@ -156,22 +103,16 @@ export class StatComponent implements OnInit {
     return data ?? [];
   }
 
-  protected queryBackend(predicate?: string, ascending?: boolean, currentSearch?: string): Observable<EntityArrayResponseType> {
+  protected queryBackend(predicate?: string, ascending?: boolean): Observable<EntityArrayResponseType> {
     this.isLoading = true;
     const queryObject: any = {
-      query: currentSearch,
       sort: this.getSortQueryParam(predicate, ascending),
     };
-    if (this.currentSearch && this.currentSearch !== '') {
-      return this.statService.search(this.type, queryObject).pipe(tap(() => (this.isLoading = false)));
-    } else {
-      return this.statService.query(this.type, queryObject).pipe(tap(() => (this.isLoading = false)));
-    }
+    return this.statService.query(queryObject).pipe(tap(() => (this.isLoading = false)));
   }
 
-  protected handleNavigation(predicate?: string, ascending?: boolean, currentSearch?: string): void {
+  protected handleNavigation(predicate?: string, ascending?: boolean): void {
     const queryParamsObj = {
-      search: currentSearch,
       sort: this.getSortQueryParam(predicate, ascending),
     };
 

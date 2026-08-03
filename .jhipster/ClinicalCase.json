@@ -1,0 +1,77 @@
+{
+  "annotations": {
+    "changelogDate": "20260730120000"
+  },
+  "clientRootFolder": "patientMS",
+  "databaseType": "mongodb",
+  "documentation": "A clinical episode: what the patient reported, what was found, and what was recommended. caseNumber is the human-facing reference (\"Case 12\"); brief is the one-line summary shown under the title.",
+  "dto": "no",
+  "entityTableName": "clinicalcase",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "patientId",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "caseNumber",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "title",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "openedAt",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "closedAt",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "brief",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "CaseStatus",
+      "fieldTypeDocumentation": "Lifecycle of a clinical case: raised, assessed, under treatment, then closed.",
+      "fieldValues": "URGENT,OPEN,TREATMENT,CLOSED"
+    },
+    {
+      "fieldName": "symptoms",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "diagnosis",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "assignedProfessionalId",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "assignedRosterId",
+      "fieldType": "String"
+    }
+  ],
+  "microserviceName": "patientMS",
+  "name": "ClinicalCase",
+  "pagination": "infinite-scroll",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "recommendation",
+      "otherEntityRelationshipName": "clinicalCase",
+      "relationshipName": "recommendation",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

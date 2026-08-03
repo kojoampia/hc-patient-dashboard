@@ -1,0 +1,44 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (paymentOption) {
+      <div>
+        <h2 data-cy="paymentOptionDetailsHeading">
+          <span hpdTranslate="patientDashboardApp.patientMsPaymentOption.detail.title">Payment Option</span>
+        </h2>
+
+        <hr />
+
+        <hpd-alert-error></hpd-alert-error>
+
+        <hpd-alert></hpd-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span hpdTranslate="patientDashboardApp.patientMsPaymentOption.id">Id</span></dt>
+          <dd>
+            <span>{{ paymentOption.id }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsPaymentOption.type">Type</span></dt>
+          <dd>
+            <span>{{ paymentOption.type }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsPaymentOption.userID">User ID</span></dt>
+          <dd>
+            <span>{{ paymentOption.userID }}</span>
+          </dd>
+          <dt><span hpdTranslate="patientDashboardApp.patientMsPaymentOption.metadata">Metadata</span></dt>
+          <dd>
+            <span>{{ paymentOption.metadata }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span hpdTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/payment-option', paymentOption.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span hpdTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

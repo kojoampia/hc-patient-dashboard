@@ -1,0 +1,256 @@
+{
+  "patientPortal": {
+    "brand": {
+      "suffix": "BridgeCare",
+      "tagline": "Portail patient"
+    },
+    "nav": {
+      "aria": "Sections du portail",
+      "ariaPrimary": "Sections principales",
+      "openMenu": "Ouvrir le menu",
+      "signOut": "Se déconnecter",
+      "roleLine": "Patient",
+      "overview": "Vue d'ensemble",
+      "record": "Mon dossier",
+      "recordShort": "Dossier",
+      "schedules": "Rendez-vous",
+      "schedulesShort": "Agenda",
+      "emergencies": "Urgences",
+      "cases": "Dossiers cliniques",
+      "medications": "Médicaments",
+      "reports": "Comptes rendus",
+      "plans": "Régime et exercice",
+      "allergies": "Allergies",
+      "profile": "Profil",
+      "group": {
+        "overview": "Vue d'ensemble",
+        "health": "Ma santé",
+        "clinical": "Clinique",
+        "account": "Compte",
+        "session": "Session"
+      }
+    },
+    "title": {
+      "overview": "Contexte patient",
+      "record": "Mon dossier",
+      "schedules": "Rendez-vous",
+      "emergencies": "Urgences",
+      "cases": "Dossiers cliniques",
+      "case": "Détail du dossier",
+      "medications": "Médicaments",
+      "reports": "Comptes rendus",
+      "plans": "Plan de régime et d'exercice",
+      "allergies": "Allergies",
+      "visitations": "Visites",
+      "activity": "Journal d'activité",
+      "profile": "Profil"
+    },
+    "action": {
+      "print": "Imprimer cet écran",
+      "careLine": "Ligne d'assistance",
+      "seeAll": "Tout voir",
+      "viewRecord": "Dossier complet",
+      "viewProfile": "Profil",
+      "backToCases": "Tous les dossiers"
+    },
+    "auth": {
+      "eyebrow": "Abofonsa BridgeCare · Portail patient",
+      "headlineLead": "Tout votre dossier de santé,",
+      "headlineAccent": "en un seul endroit serein.",
+      "blurb": "Chaque dossier, visite, médicament et compte rendu enregistré par votre équipe soignante — visible par vous, en langage clair, où que vous soyez.",
+      "signInLede": "Accédez à votre dossier de santé personnel.",
+      "or": "ou",
+      "stat": {
+        "cases": "Dossiers enregistrés",
+        "casesValue": "12",
+        "visits": "Visites consignées",
+        "visitsValue": "41",
+        "team": "Professionnels",
+        "teamValue": "6",
+        "careLine": "Ligne d'assistance",
+        "careLineValue": "24/7"
+      }
+    },
+    "pager": {
+      "aria": "Pagination",
+      "prev": "Précédent",
+      "next": "Suivant"
+    },
+    "chart": {
+      "table": "Tableau",
+      "when": "Quand"
+    },
+    "overview": {
+      "greeting": "Votre santé, en un coup d'œil",
+      "greetingNamed": "Bonjour {{ name }}",
+      "heroBlurb": "Tout ce que votre équipe soignante a enregistré — dossiers, visites, médicaments et comptes rendus — au même endroit.",
+      "vitals": "Dernières mesures",
+      "vitalsSub": "La mesure la plus récente enregistrée par votre équipe soignante.",
+      "noVitals": "Aucune mesure pour l'instant",
+      "noVitalsHint": "Les constantes apparaissent ici dès que votre équipe soignante les enregistre.",
+      "nextUp": "À venir",
+      "openCases": "Dossiers récents",
+      "activity": "Activité récente",
+      "lastAlert": "Alerte la plus récente",
+      "tile": {
+        "openCases": "Dossiers ouverts",
+        "upcoming": "Visites à venir",
+        "activeMeds": "Médicaments en cours",
+        "reports": "Comptes rendus"
+      }
+    },
+    "record": {
+      "vitals": "Constantes",
+      "vitalsSub": "Choisissez une mesure pour voir son évolution.",
+      "history": "Historique des mesures",
+      "visits": "Visites récentes",
+      "activity": "Activité récente",
+      "careTeam": "Votre équipe soignante",
+      "noCareTeam": "Aucune équipe soignante enregistrée",
+      "noCareTeamHint": "Les professionnels qui vous suivent seront listés ici."
+    },
+    "cases": {
+      "search": "Rechercher un dossier",
+      "empty": "Aucun dossier enregistré",
+      "emptyHint": "Un dossier est ouvert chaque fois que votre équipe soignante examine quelque chose.",
+      "openCase": "Ouvrir le dossier {{ name }}",
+      "column": {
+        "number": "N°",
+        "title": "Dossier",
+        "opened": "Ouvert le",
+        "clinician": "Clinicien",
+        "status": "Statut",
+        "open": "Ouvrir"
+      }
+    },
+    "case": {
+      "openedOn": "Ouvert le {{ date }}",
+      "symptoms": "Ce qui a été signalé",
+      "noSymptoms": "Aucun symptôme n'a été consigné pour ce dossier.",
+      "diagnosis": "Ce qui a été constaté",
+      "noDiagnosis": "Aucun diagnostic n'a encore été consigné.",
+      "recommendations": "Recommandations",
+      "noRecommendations": "Aucune recommandation consignée pour ce dossier.",
+      "visits": "Visites",
+      "noVisits": "Aucune visite consignée pour ce dossier",
+      "medications": "Médicaments",
+      "noMedications": "Aucun médicament prescrit pour ce dossier",
+      "reports": "Comptes rendus",
+      "noReports": "Aucun compte rendu déposé pour ce dossier",
+      "timeline": "Chronologie",
+      "noTimeline": "Rien n'a été consigné pour ce dossier",
+      "notFound": "Dossier introuvable",
+      "notFoundHint": "Il a peut-être été clôturé, ou le lien n'est plus à jour."
+    },
+    "schedules": {
+      "search": "Rechercher un rendez-vous",
+      "upcoming": "À venir",
+      "upcomingSub": "Rendez-vous encore à honorer.",
+      "past": "Déjà honorés",
+      "pastSub": "Rendez-vous qui ont déjà eu lieu.",
+      "empty": "Aucun rendez-vous prévu",
+      "emptyHint": "Les nouveaux rendez-vous apparaissent ici dès que votre équipe soignante les planifie.",
+      "emptyPast": "Aucun rendez-vous passé pour l'instant",
+      "column": {
+        "when": "Quand",
+        "what": "Rendez-vous",
+        "who": "Avec",
+        "where": "Où",
+        "status": "Statut"
+      }
+    },
+    "emergencies": {
+      "search": "Rechercher une alerte",
+      "careLineTitle": "Besoin d'aide maintenant ?",
+      "careLineBlurb": "La ligne d'assistance est ouverte 24 h/24. En cas de danger vital, appelez d'abord le numéro d'urgence local.",
+      "callCareLine": "Appeler la ligne d'assistance",
+      "outcome": "Issue",
+      "empty": "Aucune urgence enregistrée",
+      "emptyHint": "Les alertes déclenchées sur votre dossier apparaissent ici, avec leur issue."
+    },
+    "medications": {
+      "search": "Rechercher un médicament",
+      "empty": "Aucun médicament enregistré",
+      "emptyHint": "Tout ce qui vous est prescrit apparaît ici, en cours comme passé.",
+      "column": {
+        "started": "Débuté le",
+        "name": "Médicament",
+        "dosage": "Comment le prendre",
+        "prescriber": "Prescrit par",
+        "status": "Statut"
+      }
+    },
+    "reports": {
+      "search": "Rechercher un compte rendu",
+      "openFile": "Ouvrir le fichier",
+      "empty": "Aucun compte rendu enregistré",
+      "emptyHint": "Les comptes rendus de laboratoire, d'imagerie et cliniques apparaissent ici une fois déposés."
+    },
+    "plans": {
+      "diet": "Plan alimentaire",
+      "exercise": "Plan d'exercice",
+      "progress": "{{ done }} sur {{ total }} effectués",
+      "emptyDiet": "Aucun plan alimentaire pour l'instant",
+      "emptyExercise": "Aucun plan d'exercice pour l'instant",
+      "emptyHint": "Votre équipe soignante pourra en mettre un en place à votre prochain rendez-vous."
+    },
+    "allergies": {
+      "category": "Type",
+      "reaction": "Réaction",
+      "noted": "Consignée",
+      "conditions": "Affections en cours",
+      "noConditions": "Aucune affection enregistrée",
+      "empty": "Aucune allergie enregistrée",
+      "emptyHint": "Signalez toute réaction à votre équipe soignante afin qu'elle soit consignée ici."
+    },
+    "visitations": {
+      "search": "Rechercher une visite",
+      "empty": "Aucune visite consignée",
+      "emptyHint": "Chaque visite consignée par votre équipe soignante apparaîtra ici.",
+      "column": {
+        "when": "Quand",
+        "purpose": "Motif",
+        "who": "Vu par",
+        "where": "Où",
+        "case": "Dossier"
+      }
+    },
+    "activity": {
+      "search": "Rechercher dans le journal",
+      "empty": "Rien de consigné pour l'instant",
+      "emptyHint": "Tout ce qui est déposé sur votre dossier apparaît ici, du plus récent au plus ancien."
+    },
+    "profile": {
+      "editAccount": "Paramètres du compte",
+      "noProfile": "Aucun profil enregistré",
+      "noProfileHint": "Votre équipe soignante le crée lors de votre inscription.",
+      "noMembership": "Aucune adhésion enregistrée",
+      "noMembershipHint": "Parlez-en à votre équipe soignante pour rejoindre un forfait.",
+      "tab": {
+        "about": "À propos",
+        "contact": "Contact",
+        "membership": "Adhésion",
+        "careTeam": "Équipe soignante"
+      },
+      "field": {
+        "birthDate": "Né(e) le",
+        "sex": "Sexe",
+        "bloodGroup": "Groupe sanguin",
+        "cardType": "Carte",
+        "cardNumber": "Numéro de carte",
+        "social": "Réseaux sociaux",
+        "email": "E-mail",
+        "mobile": "Mobile",
+        "phone": "Téléphone",
+        "address": "Adresse",
+        "careAngel": "Ange gardien",
+        "careAngelPhone": "Téléphone de l'ange",
+        "plan": "Forfait",
+        "memberNumber": "Numéro d'adhérent",
+        "status": "Statut",
+        "since": "Adhérent depuis",
+        "renews": "Renouvellement"
+      }
+    }
+  }
+}

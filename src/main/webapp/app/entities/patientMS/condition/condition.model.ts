@@ -4,6 +4,7 @@ export interface ICondition {
   id: string;
   name?: string | null;
   description?: string | null;
+  patientId?: string | null;
   createdDate?: dayjs.Dayjs | null;
   modifiedDate?: dayjs.Dayjs | null;
   createdBy?: string | null;

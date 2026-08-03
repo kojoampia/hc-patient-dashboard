@@ -5,7 +5,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import TranslateDirective from './translate.directive';
 
 @Component({
-  template: ` <div jhiTranslate="test"></div> `,
+  template: ` <div hpdTranslate="test"></div> `,
 })
 class TestTranslateDirectiveComponent {}
 

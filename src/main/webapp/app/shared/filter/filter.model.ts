@@ -67,8 +67,9 @@ export class FilterOption implements IFilterOption {
 }
 
 export class FilterOptions implements IFilterOptions {
-  readonly filterChanges: Subject<FilterOption[]> = new Subject();
   private _filterOptions: FilterOption[];
+
+  readonly filterChanges: Subject<FilterOption[]> = new Subject();
 
   constructor(filterOptions: FilterOption[] = []) {
     this._filterOptions = filterOptions;

@@ -1,13 +1,5 @@
-<jhi-page-ribbon></jhi-page-ribbon>
+<hpd-page-ribbon></hpd-page-ribbon>
 
-<div>
-  <router-outlet name="navbar"></router-outlet>
-</div>
-
-<div class="container-fluid">
-  <div>
-    <router-outlet></router-outlet>
-  </div>
-
-  <jhi-footer></jhi-footer>
-</div>
+<!-- The layout is chosen by the route: the auth screen and the portal shell each bring their own
+     chrome, so this is only the mount point. -->
+<router-outlet></router-outlet>

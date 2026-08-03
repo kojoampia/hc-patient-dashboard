@@ -19,17 +19,22 @@ import { AllergyComponent } from 'app/features/allergies/allergy.component';
 import { EmergencyComponent } from 'app/features/emergency/emergency.component';
 
 @Component({
-  selector: 'jhi-dashboard',
+  selector: 'hpd-dashboard',
   standalone: true,
   imports: [CommonModule, SharedModule, RouterModule, MetricPanelModule, FeaturesModule, StatusModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
 export class DashboardComponent implements OnInit, OnDestroy {
-  @Input() account!: Account;
+  private readonly destroy$ = new Subject<void>();
+  /**
+   * Optional, and typed that way deliberately: the template already guards on it, and until this
+   * was corrected the non-null assertion made a guard on `account` look like dead code to the
+   * linter while it was still undefined at runtime.
+   */
+  @Input() account?: Account;
   phoneNumber!: string;
   membership!: string;
-  private readonly destroy$ = new Subject<void>();
   page: string = 'status';
   temp = { id: 1, name: 'temperature', label: 'Temperature', value: 36, route: 'temperature', extra: '1' };
   pressure = { id: 2, name: 'pressure', label: 'Blood pressure', value: 140, route: 'pressure', extra: '2' };
@@ -54,11 +59,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.page = sessionStorage.getItem('page') || 'status';
+    this.page = sessionStorage.getItem('page') ?? 'status';
     this.topCards = [this.temp, this.pressure, this.heart, this.sugar];
     this.lowCards = [this.emergencies, this.alergies, this.service, this.diet];
-    if (this.account && this.account.activated) {
-      this.isUserRole = this.account.authorities.indexOf(Authority.USER) > -1;
+    if (this.account?.activated) {
+      this.isUserRole = this.account.authorities.includes(Authority.USER);
       this.fetchProfileInformation(this.account.email);
     }
   }
@@ -90,7 +95,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     switch (stat.route) {
       case 'temperature':
         // open temperature modal
-        console.log('temperature');
         if (!this.isOpen) {
           this.isOpen = true;
           const modalRef: NgbModalRef = this.modalService.open(TemperatureComponent, { size: 'xl', centered: true });
@@ -99,7 +103,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         break;
       case 'pressure':
         // open pressure modal
-        console.log('pressure');
         if (!this.isOpen) {
           this.isOpen = true;
           const modalRef: NgbModalRef = this.modalService.open(BloodPressureComponent, { size: 'xl', centered: true });
@@ -109,7 +112,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         break;
       case 'heartrate':
         // open heart-rate modal
-        console.log('heart-rate');
         if (!this.isOpen) {
           this.isOpen = true;
           const modalRef: NgbModalRef = this.modalService.open(HeartRateComponent, { size: 'xl', centered: true });
@@ -119,7 +121,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         break;
       case 'sugar':
         // open sugar modal
-        console.log('sugar');
         if (!this.isOpen) {
           this.isOpen = true;
           const modalRef: NgbModalRef = this.modalService.open(SugarComponent, { size: 'xl', centered: true });
@@ -129,7 +130,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         break;
       case 'emergencies':
         // open emergencies modal
-        console.log('emergencies');
         if (!this.isOpen) {
           this.isOpen = true;
           const modalRef: NgbModalRef = this.modalService.open(EmergencyComponent, { size: 'xl', centered: true });
@@ -139,7 +139,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         break;
       case 'allergies':
         // open allergies modal
-        console.log('allergies');
         if (!this.isOpen) {
           this.isOpen = true;
           const modalRef: NgbModalRef = this.modalService.open(AllergyComponent, { size: 'xl', centered: true });
@@ -149,11 +148,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
         break;
       case 'services':
         // open services modal
-        console.log('services');
         break;
       case 'diet':
         // open diet modal
-        console.log('diet');
         break;
     }
   }

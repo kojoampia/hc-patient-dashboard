@@ -14,7 +14,7 @@
 
         @if (editForm.controls.id.value !== null) {
           <div class="mb-3">
-            <label class="form-label" hpdTranslate="global.field.id" for="field_id">ID</label>
+            <label class="form-label" hpdTranslate="patientDashboardApp.patientMsReport.id" for="field_id">Id</label>
             <input type="text" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
           </div>
         }
@@ -39,6 +39,11 @@
         </div>
 
         <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsReport.summary" for="field_summary">Summary</label>
+          <input type="text" class="form-control" name="summary" id="field_summary" data-cy="summary" formControlName="summary" />
+        </div>
+
+        <div class="mb-3">
           <label class="form-label" hpdTranslate="patientDashboardApp.patientMsReport.name" for="field_name">Name</label>
           <input type="text" class="form-control" name="name" id="field_name" data-cy="name" formControlName="name" />
         </div>
@@ -46,6 +51,38 @@
         <div class="mb-3">
           <label class="form-label" hpdTranslate="patientDashboardApp.patientMsReport.url" for="field_url">Url</label>
           <input type="text" class="form-control" name="url" id="field_url" data-cy="url" formControlName="url" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsReport.patientId" for="field_patientId">Patient Id</label>
+          <input type="text" class="form-control" name="patientId" id="field_patientId" data-cy="patientId" formControlName="patientId" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsReport.caseId" for="field_caseId">Case Id</label>
+          <input type="text" class="form-control" name="caseId" id="field_caseId" data-cy="caseId" formControlName="caseId" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsReport.authorId" for="field_authorId">Author Id</label>
+          <input type="text" class="form-control" name="authorId" id="field_authorId" data-cy="authorId" formControlName="authorId" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" hpdTranslate="patientDashboardApp.patientMsReport.reportDate" for="field_reportDate">Report Date</label>
+          <div class="input-group">
+            <input
+              id="field_reportDate"
+              data-cy="reportDate"
+              type="text"
+              class="form-control"
+              name="reportDate"
+              ngbDatepicker
+              #reportDateDp="ngbDatepicker"
+              formControlName="reportDate"
+            />
+            <button type="button" class="btn btn-secondary" (click)="reportDateDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
+          </div>
         </div>
 
         <div class="mb-3">
