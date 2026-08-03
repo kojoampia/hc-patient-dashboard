@@ -15,7 +15,9 @@ module.exports = {
   },
   roots: ['<rootDir>', `<rootDir>/${baseUrl}`],
   modulePaths: [`<rootDir>/${baseUrl}`],
-  setupFiles: ['jest-date-mock'],
+  // jest.setup.js polyfills TextEncoder/TextDecoder, which jsdom lacks and the OpenTelemetry
+  // browser packages read at module scope — without it those imports throw before any test runs.
+  setupFiles: ['jest-date-mock', '<rootDir>/jest.setup.js'],
   cacheDirectory: '<rootDir>/target/jest-cache',
   coverageDirectory: '<rootDir>/target/test-results/',
   moduleNameMapper: pathsToModuleNameMapper(paths, { prefix: `<rootDir>/${baseUrl}/` }),

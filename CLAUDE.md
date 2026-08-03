@@ -65,6 +65,7 @@ Source root is `src/main/webapp` (`angular.json` `sourceRoot`).
 ```
 src/main/webapp/app/
   core/          auth, interceptors, ApplicationConfigService, request utilities
+                 telemetry/  OpenTelemetry browser SDK setup + the global ErrorHandler
   shared/        shared module, i18n helpers, alerts, common UI plumbing
   config/        constants, authorities, dayjs/datepicker configuration
   layouts/       navbar, footer, main shell, profile info, error pages

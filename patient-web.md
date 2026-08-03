@@ -25,6 +25,21 @@ Status legend: `[x]` done · `[~]` partial / diverges from plan · `[ ]` not sta
 - `[x]` d3-based widget library (linechart, piechart, heatmap, treemap, histogram, tilebox, info-box, slides, file-viewer, chatbot, faq, …).
 - `[x]` Generated CRUD screens for the patient entities under `entities/patientMS/**` (present but unrouted — decision 2).
 - `[x]` Jest unit tests colocated with the code (145 spec files); CI builds and publishes an nginx image to GHCR.
+- `[x]` **Browser telemetry** (2026-08-03) — `core/telemetry/` initialises the OpenTelemetry web SDK
+  from `bootstrap.ts`, tracing document load, XHR and fetch, and reporting uncaught errors through a
+  `TelemetryErrorHandler`. Spans POST to the same-origin `/v1/traces`, which nginx forwards to the
+  host's shared collector, and W3C `traceparent` on same-origin requests puts a click in the same
+  Tempo trace as the gateway, the microservice and the MongoDB query. Compiled out of development
+  builds. Three things to keep in mind before changing it:
+  - **Query strings are stripped before export.** This is a patient application and Tempo is shared
+    with every other app on the host. If an endpoint is ever added that puts something identifying in
+    the *path*, `scrubUrl` has to cover that too.
+  - **Sampling is 10%, decided in the browser.** The constraint is the shared monitoring stack's
+    disk, not the client. Raise it while investigating something specific, then put it back.
+  - **`__OTEL_ENABLED__` is declared in `webpack/environment.js` as well as in the webpack config.**
+    `jest.conf.js` spreads that file into its `globals` and Jest does not run DefinePlugin, so a
+    constant defined only in `webpack.custom.js` is undefined under test and every suite that
+    transitively imports `app.constants.ts` dies with a `ReferenceError`.
 
 ## Phase A — wiring and correctness
 

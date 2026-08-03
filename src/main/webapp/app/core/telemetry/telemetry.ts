@@ -66,6 +66,39 @@ export const initTelemetry = (): void => {
   if (!OTEL_ENABLED) {
     return;
   }
+  // NOTHING IN HERE MAY BREAK THE APPLICATION. This runs during module evaluation of the bootstrap
+  // chunk, before bootstrapApplication, so an exception escaping it means Angular never starts and
+  // the user gets JHipster's static "An error has occurred" page instead of the dashboard — the
+  // whole SPA taken down by its own monitoring.
+  //
+  // That is not hypothetical. It happened in production on 2026-08-03: OTLPTraceExporter validates
+  // its `url` with the URL constructor and threw "Could not parse user-provided export URL" on the
+  // relative '/v1/traces', main.ts caught it, and the site served the fallback page for about
+  // twelve minutes. The URL is absolute now (below), and this catch is here so that the next
+  // mistake of that shape costs telemetry rather than the application.
+  try {
+    initTelemetryUnsafe();
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Telemetry disabled: initialisation failed', error);
+  }
+};
+
+/**
+ * Resolves the configured export path to an absolute URL.
+ *
+ * MUST BE ABSOLUTE. `OTLPTraceExporter` validates its `url` with the URL constructor and throws
+ * "Could not parse user-provided export URL" on a bare path — which is what broke the production
+ * SPA on 2026-08-03. The configured value stays relative so that one build works on any host;
+ * resolving it against the current origin keeps the request same-origin, so there is no preflight
+ * and no CORS to configure.
+ *
+ * Exported for the regression test.
+ */
+export const resolveExporterUrl = (endpoint: string, origin: string): string => new URL(endpoint, origin).toString();
+
+const initTelemetryUnsafe = (): void => {
+  const exporterUrl = resolveExporterUrl(OTEL_TRACES_ENDPOINT, window.location.origin);
 
   const provider = new WebTracerProvider({
     resource: new Resource({
@@ -80,7 +113,7 @@ export const initTelemetry = (): void => {
       root: new TraceIdRatioBasedSampler(OTEL_SAMPLE_RATIO),
     }),
     spanProcessors: [
-      new BatchSpanProcessor(new OTLPTraceExporter({ url: OTEL_TRACES_ENDPOINT }), {
+      new BatchSpanProcessor(new OTLPTraceExporter({ url: exporterUrl }), {
         // Deliberately less chatty than the SDK defaults. A dashboard tab left open all day should
         // not be a steady stream of requests, and losing a span on a closed tab costs nothing.
         scheduledDelayMillis: 10_000,
@@ -98,7 +131,9 @@ export const initTelemetry = (): void => {
   // The exporter's own POST must never be traced. It is made with fetch/XHR like any other request,
   // so tracing it produces a span, which schedules an export, which produces a span: the loop is
   // slow but unbounded, and it is the classic way to take a collector down with one browser tab.
-  const ignoreUrls = [new RegExp(`${OTEL_TRACES_ENDPOINT.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`)];
+  // Matched against the absolute URL the instrumentations see, so this is built from the resolved
+  // exporter URL rather than the configured path.
+  const ignoreUrls = [new RegExp(`${exporterUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`)];
 
   registerInstrumentations({
     tracerProvider: provider,
