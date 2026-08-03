@@ -36,7 +36,7 @@ browser → this app (ng serve :4200, webpack proxy) → hc-patient-gateway :550
 
 - Always build URLs with `ApplicationConfigService.getEndpointFor(api, microservice?)` — pass `'hcpatientservice'` for microservice calls so the gateway's routing applies. Never hardcode a host, port, or `/services/...` prefix.
 - The gateway issues the JWT; `core/interceptor` attaches it. Route protection uses `UserRouteAccessService` with `data.authorities`.
-- `webpack/proxy.conf.js` forwards `/api`, `/services`, `/management`, `/v3/api-docs`, `/auth`, `/health` to **`http://localhost:5505`**, while the gateway's dev port is `5503` and `docker-compose.yml` says `5501`. These three disagree — see decision 1 in `patient-web.md` before debugging "API unreachable".
+- `webpack/proxy.conf.js` forwards `/api`, `/services`, `/management`, `/v3/api-docs`, `/auth`, `/health` to **`http://localhost:5505`**, while the gateway's dev port is `5503`. These two disagree — see decision 1 in `patient-web.md` before debugging "API unreachable". Production is unaffected: it builds same-origin (`SERVER_API_URL` empty, `<base href="/">`) and the web container's nginx does the fan-out.
 - The `Authority` enum knows only `ROLE_ADMIN` and `ROLE_USER`; no `PATIENT`/`ANGEL` role exists anywhere in the subsystem yet.
 
 ## Commands
@@ -56,7 +56,7 @@ Do **not** run `./mvnw` here: there is nothing to compile, and `pom.xml` sets `j
 
 Angular CLI rejects camelCase Jest flags (`--testPathPattern` → `Unknown arguments`), so pass kebab-case through `ng test`. Calling `npx jest` directly does not work: `jest.conf.js` carries no transform, since the Angular preset comes from the builder.
 
-`npx ng test` passes (145 suites, 677 tests). `npm test` runs ESLint first and still fails there on 160 pre-existing rule violations — mostly `jhi-*` selectors against the `hpd` rule — so prefer `npx ng test` while working. `patient-web.md` Phase A tracks the remainder; don't read those lint errors as something you caused.
+`npx ng test` passes (146 suites, 681 tests, ~110s). `npm test` runs ESLint first and still fails there on 172 pre-existing problems — 161 errors and 11 warnings across 77 files, mostly `jhi-*` selectors against the `hpd` rule — so prefer `npx ng test` while working. `patient-web.md` Phase A tracks the remainder; don't read those lint errors as something you caused. Note CI gates nothing today: the only workflow has been failing since 2026-07-30 (`patient-web.md` Phase C).
 
 ## Layout
 
@@ -92,5 +92,5 @@ Also: `entities/patientMS/hc-credential` and `hc-pay-option` still use the pre-r
 - Every user-visible string needs a key in all three i18n bundles.
 - Indentation is 2 spaces everywhere (`.editorconfig` root `indent_size = 2`; its `[*.md]` section only disables trailing-whitespace trimming), and lint-staged runs Prettier on commit.
 - Cypress is configured in `.yo-rc.json` with a skeleton under `src/test/javascript/cypress/`, but it is not installed and has no npm script — e2e cannot run today.
-- `docker-compose-prod.yml` is currently invalid (network key mismatch) and the `docker:*:tag`/`deploy:*` scripts reference an image name the compose files don't build — Phase C of `patient-web.md`.
+- This repo no longer packages or deploys itself: `nginx.conf`, the Dockerfile, `docker-compose*.yml` and the `docker:*:tag`/`deploy:*` scripts moved to `hc-patient/deploy/` (repo `kojoampia/hc-patient-ci`). Change the image, its nginx config, or the deploy there, not here. The generated `src/main/docker/*.yml` helpers stay — they are local dev services, not deployment.
 - `patient-db.log` is output from the workspace-level `start-patient.sh` helper.
