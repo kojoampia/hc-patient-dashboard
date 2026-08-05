@@ -16,10 +16,10 @@
  * bundles, which are deferred.
  */
 
-// sockjs-client expects a CommonJS-style `global`. Only the chatbot uses it, and no backend
-// implements /websocket, so this is inert today — but removing it belongs with removing that
-// feature, not with a CSP change.
-var global = window;
+// NOTE: `var global = window;` used to sit here for sockjs-client. It went with the chatbot widget on
+// 2026-08-05. If some other CommonJS-shaped dependency ever needs it, put it back deliberately with a
+// comment naming that dependency — it is the kind of shim that gets re-added on a hunch and then
+// nobody can tell whether anything still depends on it.
 
 /*
  * Shows the "failed to load" panel if the bundle has not taken over within four seconds. Without it

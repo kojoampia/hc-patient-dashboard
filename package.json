@@ -113,9 +113,7 @@
     "ngx-infinite-scroll": "20.0.0",
     "ngx-webstorage": "20.0.0",
     "rxjs": "7.8.1",
-    "sockjs-client": "^1.6.1",
     "tslib": "2.6.2",
-    "webstomp-client": "^1.2.6",
     "zone.js": "0.15.1"
   },
   "devDependencies": {
@@ -130,7 +128,6 @@
     "@types/hammerjs": "^2.0.45",
     "@types/jest": "29.5.11",
     "@types/node": "22.19.2",
-    "@types/sockjs-client": "^1.5.4",
     "@typescript-eslint/eslint-plugin": "6.13.2",
     "@typescript-eslint/parser": "6.13.2",
     "browser-sync": "3.0.4",

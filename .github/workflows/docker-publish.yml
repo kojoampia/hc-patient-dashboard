@@ -80,18 +80,18 @@ jobs:
       # not reachable by anyone who does not already control the build. What ships to a browser is
       # what matters here.
       #
-      # The Angular i18n/SVG XSS advisories that motivated this are GONE as of the 20.3.27 upgrade —
-      # no @angular/* runtime package carries an advisory any more. Two runtime findings remain and
-      # both need a decision rather than a bump:
-      #   - websocket-driver (critical), reached only through sockjs-client, which exists only for
-      #     the chatbot widget that no backend implements.
-      #   - @opentelemetry/core (moderate), fixed in the 2.x line, which is a browser-SDK migration.
+      # BLOCKING, as of 2026-08-05. The Angular i18n/SVG XSS advisories are gone with the 20.3.27
+      # upgrade, and the last critical — websocket-driver, reached only through sockjs-client — went
+      # with the chatbot widget that no backend implemented. Runtime is now zero critical, zero high.
       #
-      # Still NON-BLOCKING because of the first of those: --audit-level=high fails on it today, and
-      # a job that is red on arrival is a job everybody learns to ignore. Delete continue-on-error
-      # once those two are resolved — that step is the point of adding this at all.
+      # It stays passable only if it stays true, which is the point of gating rather than reporting.
+      # If this fails, the fix is the dependency, not this line.
+      #
+      # --audit-level=high deliberately tolerates the 12 remaining moderates, all of them one
+      # @opentelemetry/core advisory fanning out across the browser SDK. Clearing it means an OTel
+      # 1.x -> 2.x migration; that telemetry code has already taken the SPA down once, so it gets
+      # planned rather than rushed through a gate.
       - name: Audit runtime dependencies
-        continue-on-error: true
         run: npm audit --omit=dev --audit-level=high
 
       # The full picture, always recorded, never gating — so the trend is visible even while the
