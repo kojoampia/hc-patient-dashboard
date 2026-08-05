@@ -1,3 +1,8 @@
+# Build, test and scan the patient dashboard.
+#
+# The filename says docker-publish because that is what this workflow used to be; it builds and tests
+# the Angular app and publishes nothing. Renaming it would break whatever branch protection or badge
+# references it by path, so it keeps the name.
 name: Build and Test Patient Dashboard
 
 on:
@@ -9,11 +14,16 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
 
     steps:
       - name: Checkout repository
@@ -25,11 +35,61 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
+      # `npm ci`, not `npm install`. install ignores the lockfile when package.json allows a newer
+      # match, so CI could silently resolve different transitive versions than a developer's machine
+      # — which also means an audit run against one says nothing reliable about the other. ci fails
+      # outright when the two files disagree, which is the behaviour worth having.
+      #
+      # --legacy-peer-deps stays: Angular 17 with this dependency set does not install without it.
+      # That is a symptom of the version pin, not of this workflow — see the Angular upgrade tracked
+      # in patient-web.md.
       - name: Install dependencies
-        run: npm install --legacy-peer-deps
+        run: npm ci --legacy-peer-deps
 
       - name: Build production bundle
         run: npm run webapp:prod
 
       - name: Run unit tests
         run: npx ng test --coverage=false
+
+  audit:
+    name: Dependency audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      # --omit=dev on purpose: the toolchain accounts for most of this repo's advisory count and is
+      # not reachable by anyone who does not already control the build. What ships to a browser is
+      # what matters here, and that set currently includes Angular 17.0.6, which carries published
+      # i18n XSS advisories.
+      #
+      # NON-BLOCKING until that upgrade lands, because it will fail today and a job that is red on
+      # arrival is a job everybody learns to ignore. Delete continue-on-error once it passes — that
+      # step is the point of adding this at all.
+      - name: Audit runtime dependencies
+        continue-on-error: true
+        run: npm audit --omit=dev --audit-level=high
+
+      # The full picture, always recorded, never gating — so the trend is visible even while the
+      # gate above is off.
+      - name: Full audit report
+        if: always()
+        continue-on-error: true
+        run: npm audit --json > npm-audit.json || true
+
+      - name: Upload audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-audit
+          path: npm-audit.json
+          retention-days: 7
+          if-no-files-found: ignore
