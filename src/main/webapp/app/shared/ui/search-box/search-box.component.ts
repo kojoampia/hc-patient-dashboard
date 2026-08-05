@@ -10,11 +10,10 @@ import { IconComponent } from 'app/shared/ui/icon/icon.component';
  * add lag. If a list ever moves to a server-side query, debounce there, not here.
  */
 @Component({
-  selector: 'hpd-search-box',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SharedModule, IconComponent],
-  template: `
+    selector: 'hpd-search-box',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [SharedModule, IconComponent],
+    template: `
     <div class="hc-search">
       <hpd-icon name="search" [size]="16" />
       <input
@@ -27,7 +26,7 @@ import { IconComponent } from 'app/shared/ui/icon/icon.component';
         (input)="queryChange.emit($any($event.target).value)"
       />
     </div>
-  `,
+  `
 })
 export class SearchBoxComponent {
   @Input({ required: true }) inputId!: string;

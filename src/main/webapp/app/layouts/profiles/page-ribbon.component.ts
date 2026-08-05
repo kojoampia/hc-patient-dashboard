@@ -6,17 +6,16 @@ import SharedModule from 'app/shared/shared.module';
 import { ProfileService } from './profile.service';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-page-ribbon',
-  template: `
+    selector: 'hpd-page-ribbon',
+    template: `
     @if (ribbonEnv$ | async; as ribbonEnv) {
       <div class="ribbon">
         <a href="" hpdTranslate="global.ribbon.{{ ribbonEnv }}">{{ { dev: 'Development' }[ribbonEnv] || '' }}</a>
       </div>
     }
   `,
-  styleUrl: './page-ribbon.component.scss',
-  imports: [SharedModule],
+    styleUrl: './page-ribbon.component.scss',
+    imports: [SharedModule]
 })
 export default class PageRibbonComponent implements OnInit {
   ribbonEnv$?: Observable<string | undefined>;

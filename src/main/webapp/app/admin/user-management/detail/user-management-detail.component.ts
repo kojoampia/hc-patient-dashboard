@@ -5,10 +5,9 @@ import SharedModule from 'app/shared/shared.module';
 import { User } from '../user-management.model';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-user-mgmt-detail',
-  templateUrl: './user-management-detail.component.html',
-  imports: [SharedModule],
+    selector: 'hpd-user-mgmt-detail',
+    templateUrl: './user-management-detail.component.html',
+    imports: [SharedModule]
 })
 export default class UserManagementDetailComponent implements OnInit {
   user: User | null = null;

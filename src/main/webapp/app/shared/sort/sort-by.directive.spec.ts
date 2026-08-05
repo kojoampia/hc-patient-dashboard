@@ -8,7 +8,7 @@ import SortByDirective from './sort-by.directive';
 import SortDirective from './sort.directive';
 
 @Component({
-  template: `
+    template: `
     <table>
       <thead>
         <tr hpdSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="transition($event)">
@@ -22,6 +22,7 @@ import SortDirective from './sort.directive';
       </thead>
     </table>
   `,
+    standalone: false
 })
 class TestSortByDirectiveComponent {
   predicate?: string;
@@ -61,7 +62,8 @@ describe('Directive: SortByDirective', () => {
     // THEN
     expect(sortByDirective.hpdSortBy).toEqual('name');
     expect(component.predicate).toEqual('id');
-    expect(sortByDirective.iconComponent?.icon).toEqual('sort');
+    // `icon` is a model signal in @fortawesome/angular-fontawesome 2.x, so it is read by calling it.
+    expect(sortByDirective.iconComponent?.icon()).toEqual('sort');
     expect(component.transition).toHaveBeenCalledTimes(0);
   });
 
@@ -78,7 +80,7 @@ describe('Directive: SortByDirective', () => {
     expect(sortByDirective.hpdSortBy).toEqual('name');
     expect(component.predicate).toEqual('name');
     expect(component.ascending).toEqual(true);
-    expect(sortByDirective.iconComponent?.icon).toEqual(faSortUp.iconName);
+    expect(sortByDirective.iconComponent?.icon()).toEqual(faSortUp.iconName);
     expect(component.transition).toHaveBeenCalledTimes(0);
   });
 
@@ -96,7 +98,7 @@ describe('Directive: SortByDirective', () => {
     // THEN
     expect(component.predicate).toEqual('name');
     expect(component.ascending).toEqual(false);
-    expect(sortByDirective.iconComponent?.icon).toEqual(faSortDown.iconName);
+    expect(sortByDirective.iconComponent?.icon()).toEqual(faSortDown.iconName);
     expect(component.transition).toHaveBeenCalledTimes(1);
     expect(component.transition).toHaveBeenCalledWith({ predicate: 'name', ascending: false });
   });
@@ -119,7 +121,7 @@ describe('Directive: SortByDirective', () => {
     // THEN
     expect(component.predicate).toEqual('name');
     expect(component.ascending).toEqual(true);
-    expect(sortByDirective.iconComponent?.icon).toEqual(faSortUp.iconName);
+    expect(sortByDirective.iconComponent?.icon()).toEqual(faSortUp.iconName);
     expect(component.transition).toHaveBeenCalledTimes(2);
     expect(component.transition).toHaveBeenNthCalledWith(1, { predicate: 'name', ascending: false });
     expect(component.transition).toHaveBeenNthCalledWith(2, { predicate: 'name', ascending: true });

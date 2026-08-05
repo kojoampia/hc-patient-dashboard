@@ -17,20 +17,19 @@ import { EntityArrayResponseType, TaskService } from '../service/task.service';
 import { TaskDeleteDialogComponent } from '../delete/task-delete-dialog.component';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-task',
-  templateUrl: './task.component.html',
-  imports: [
-    RouterModule,
-    FormsModule,
-    SharedModule,
-    SortDirective,
-    SortByDirective,
-    DurationPipe,
-    FormatMediumDatetimePipe,
-    FormatMediumDatePipe,
-    ItemCountComponent,
-  ],
+    selector: 'hpd-task',
+    templateUrl: './task.component.html',
+    imports: [
+        RouterModule,
+        FormsModule,
+        SharedModule,
+        SortDirective,
+        SortByDirective,
+        DurationPipe,
+        FormatMediumDatetimePipe,
+        FormatMediumDatePipe,
+        ItemCountComponent,
+    ]
 })
 export class TaskComponent implements OnInit {
   tasks?: ITask[];

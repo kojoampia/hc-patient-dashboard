@@ -2,11 +2,10 @@ import { Component, Input, EventEmitter, Output, TemplateRef, CUSTOM_ELEMENTS_SC
 import { LegendPosition, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-histogram',
-  templateUrl: './histogram.component.html',
-  imports: [NgxChartsModule],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    selector: 'hpd-histogram',
+    templateUrl: './histogram.component.html',
+    imports: [NgxChartsModule],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class HistogramComponent {
   @Output() dataSelected: EventEmitter<any> = new EventEmitter<any>();

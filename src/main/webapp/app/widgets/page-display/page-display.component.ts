@@ -14,11 +14,10 @@ import SharedModule from 'app/shared/shared.module';
  * the style of `shared/ui/icon/icon.component.ts` — do not reinstate a blanket bypass here.
  */
 @Component({
-  selector: 'hpd-page-display',
-  standalone: true,
-  templateUrl: './page-display.component.html',
-  styleUrls: ['./page-display.component.scss'],
-  imports: [SharedModule],
+    selector: 'hpd-page-display',
+    templateUrl: './page-display.component.html',
+    styleUrls: ['./page-display.component.scss'],
+    imports: [SharedModule]
 })
 export class PageDisplayComponent {
   @Input() title?: string;

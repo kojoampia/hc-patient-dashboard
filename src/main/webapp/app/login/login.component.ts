@@ -7,10 +7,9 @@ import { LoginService } from 'app/login/login.service';
 import { AccountService } from 'app/core/auth/account.service';
 
 @Component({
-  selector: 'hpd-login',
-  standalone: true,
-  imports: [SharedModule, FormsModule, ReactiveFormsModule, RouterModule],
-  templateUrl: './login.component.html',
+    selector: 'hpd-login',
+    imports: [SharedModule, FormsModule, ReactiveFormsModule, RouterModule],
+    templateUrl: './login.component.html'
 })
 export default class LoginComponent implements OnInit, AfterViewInit {
   @ViewChild('username', { static: false })

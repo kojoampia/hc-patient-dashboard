@@ -8,9 +8,8 @@ import { IRecommendation } from '../recommendation.model';
 import { RecommendationService } from '../service/recommendation.service';
 
 @Component({
-  standalone: true,
-  templateUrl: './recommendation-delete-dialog.component.html',
-  imports: [SharedModule, FormsModule],
+    templateUrl: './recommendation-delete-dialog.component.html',
+    imports: [SharedModule, FormsModule]
 })
 export class RecommendationDeleteDialogComponent {
   recommendation?: IRecommendation;

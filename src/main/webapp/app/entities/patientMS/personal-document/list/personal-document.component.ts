@@ -14,19 +14,18 @@ import { EntityArrayResponseType, PersonalDocumentService } from '../service/per
 import { PersonalDocumentDeleteDialogComponent } from '../delete/personal-document-delete-dialog.component';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-personal-document',
-  templateUrl: './personal-document.component.html',
-  imports: [
-    RouterModule,
-    FormsModule,
-    SharedModule,
-    SortDirective,
-    SortByDirective,
-    DurationPipe,
-    FormatMediumDatetimePipe,
-    FormatMediumDatePipe,
-  ],
+    selector: 'hpd-personal-document',
+    templateUrl: './personal-document.component.html',
+    imports: [
+        RouterModule,
+        FormsModule,
+        SharedModule,
+        SortDirective,
+        SortByDirective,
+        DurationPipe,
+        FormatMediumDatetimePipe,
+        FormatMediumDatePipe,
+    ]
 })
 export class PersonalDocumentComponent implements OnInit {
   personalDocuments?: IPersonalDocument[];

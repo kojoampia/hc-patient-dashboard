@@ -12,10 +12,9 @@ import { RecommendationService } from '../service/recommendation.service';
 import { RecommendationFormService, RecommendationFormGroup } from './recommendation-form.service';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-recommendation-update',
-  templateUrl: './recommendation-update.component.html',
-  imports: [SharedModule, FormsModule, ReactiveFormsModule],
+    selector: 'hpd-recommendation-update',
+    templateUrl: './recommendation-update.component.html',
+    imports: [SharedModule, FormsModule, ReactiveFormsModule]
 })
 export class RecommendationUpdateComponent implements OnInit {
   isSaving = false;

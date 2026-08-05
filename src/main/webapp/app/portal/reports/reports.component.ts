@@ -17,11 +17,10 @@ const PAGE_SIZE = 10;
 
 /** Lab, imaging, clinical and immunisation reports, each with its plain-language summary. */
 @Component({
-  selector: 'hpd-reports',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SharedModule, RouterLink, IconComponent, EmptyStateComponent, PagerComponent, SearchBoxComponent],
-  templateUrl: './reports.component.html',
+    selector: 'hpd-reports',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [SharedModule, RouterLink, IconComponent, EmptyStateComponent, PagerComponent, SearchBoxComponent],
+    templateUrl: './reports.component.html'
 })
 export default class ReportsComponent {
   private readonly context = inject(PatientContextService);

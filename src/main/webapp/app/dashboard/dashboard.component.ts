@@ -19,11 +19,10 @@ import { AllergyComponent } from 'app/features/allergies/allergy.component';
 import { EmergencyComponent } from 'app/features/emergency/emergency.component';
 
 @Component({
-  selector: 'hpd-dashboard',
-  standalone: true,
-  imports: [CommonModule, SharedModule, RouterModule, MetricPanelModule, FeaturesModule, StatusModule],
-  templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss',
+    selector: 'hpd-dashboard',
+    imports: [CommonModule, SharedModule, RouterModule, MetricPanelModule, FeaturesModule, StatusModule],
+    templateUrl: './dashboard.component.html',
+    styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();

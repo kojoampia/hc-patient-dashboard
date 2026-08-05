@@ -12,12 +12,11 @@ import SharedModule from 'app/shared/shared.module';
 import { FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
 
 @Component({
-  selector: 'hpd-converse',
-  standalone: true,
-  templateUrl: './converse.component.html',
-  styleUrls: ['./converse.component.scss'],
-  imports: [SharedModule, FormsModule, ReactiveFormsModule, FormatMediumDatetimePipe, FormatMediumDatePipe],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    selector: 'hpd-converse',
+    templateUrl: './converse.component.html',
+    styleUrls: ['./converse.component.scss'],
+    imports: [SharedModule, FormsModule, ReactiveFormsModule, FormatMediumDatetimePipe, FormatMediumDatePipe],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ConverseComponent implements OnInit, OnDestroy, AfterViewChecked {
   @ViewChild('chatScreen') private chatScreen: ElementRef = {} as ElementRef;

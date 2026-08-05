@@ -12,10 +12,9 @@ import { ConditionService } from '../service/condition.service';
 import { ConditionFormService, ConditionFormGroup } from './condition-form.service';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-condition-update',
-  templateUrl: './condition-update.component.html',
-  imports: [SharedModule, FormsModule, ReactiveFormsModule],
+    selector: 'hpd-condition-update',
+    templateUrl: './condition-update.component.html',
+    imports: [SharedModule, FormsModule, ReactiveFormsModule]
 })
 export class ConditionUpdateComponent implements OnInit {
   isSaving = false;

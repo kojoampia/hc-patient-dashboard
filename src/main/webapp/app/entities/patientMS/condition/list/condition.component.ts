@@ -14,19 +14,18 @@ import { EntityArrayResponseType, ConditionService } from '../service/condition.
 import { ConditionDeleteDialogComponent } from '../delete/condition-delete-dialog.component';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-condition',
-  templateUrl: './condition.component.html',
-  imports: [
-    RouterModule,
-    FormsModule,
-    SharedModule,
-    SortDirective,
-    SortByDirective,
-    DurationPipe,
-    FormatMediumDatetimePipe,
-    FormatMediumDatePipe,
-  ],
+    selector: 'hpd-condition',
+    templateUrl: './condition.component.html',
+    imports: [
+        RouterModule,
+        FormsModule,
+        SharedModule,
+        SortDirective,
+        SortByDirective,
+        DurationPipe,
+        FormatMediumDatetimePipe,
+        FormatMediumDatePipe,
+    ]
 })
 export class ConditionComponent implements OnInit {
   conditions?: ICondition[];

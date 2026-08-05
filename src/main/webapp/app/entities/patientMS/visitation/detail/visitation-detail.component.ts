@@ -6,10 +6,9 @@ import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'ap
 import { IVisitation } from '../visitation.model';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-visitation-detail',
-  templateUrl: './visitation-detail.component.html',
-  imports: [SharedModule, RouterModule, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe],
+    selector: 'hpd-visitation-detail',
+    templateUrl: './visitation-detail.component.html',
+    imports: [SharedModule, RouterModule, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe]
 })
 export class VisitationDetailComponent {
   @Input() visitation: IVisitation | null = null;

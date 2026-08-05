@@ -6,12 +6,11 @@ import SharedModule from 'app/shared/shared.module';
 import { Subject } from 'rxjs';
 
 @Component({
-  selector: 'hpd-info-box',
-  standalone: true,
-  templateUrl: './info-box.component.html',
-  styleUrls: ['./info-box.component.scss'],
-  imports: [SharedModule],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    selector: 'hpd-info-box',
+    templateUrl: './info-box.component.html',
+    styleUrls: ['./info-box.component.scss'],
+    imports: [SharedModule],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class InfoBoxComponent implements OnInit, OnDestroy {
   private destroyed$ = new Subject<boolean>();

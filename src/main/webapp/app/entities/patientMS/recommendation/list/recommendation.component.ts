@@ -14,19 +14,18 @@ import { EntityArrayResponseType, RecommendationService } from '../service/recom
 import { RecommendationDeleteDialogComponent } from '../delete/recommendation-delete-dialog.component';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-recommendation',
-  templateUrl: './recommendation.component.html',
-  imports: [
-    RouterModule,
-    FormsModule,
-    SharedModule,
-    SortDirective,
-    SortByDirective,
-    DurationPipe,
-    FormatMediumDatetimePipe,
-    FormatMediumDatePipe,
-  ],
+    selector: 'hpd-recommendation',
+    templateUrl: './recommendation.component.html',
+    imports: [
+        RouterModule,
+        FormsModule,
+        SharedModule,
+        SortDirective,
+        SortByDirective,
+        DurationPipe,
+        FormatMediumDatetimePipe,
+        FormatMediumDatePipe,
+    ]
 })
 export class RecommendationComponent implements OnInit {
   recommendations?: IRecommendation[];

@@ -19,11 +19,10 @@ import { byDateAsc, byDateDesc, formatDay, formatTime, humanise, matches } from 
  * newest-first for the same reason in reverse.
  */
 @Component({
-  selector: 'hpd-schedules',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SharedModule, RouterLink, IconComponent, EmptyStateComponent, SearchBoxComponent],
-  templateUrl: './schedules.component.html',
+    selector: 'hpd-schedules',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [SharedModule, RouterLink, IconComponent, EmptyStateComponent, SearchBoxComponent],
+    templateUrl: './schedules.component.html'
 })
 export default class SchedulesComponent {
   private readonly context = inject(PatientContextService);

@@ -8,10 +8,9 @@ import { Health, HealthDetails, HealthStatus } from './health.model';
 import HealthModalComponent from './modal/health-modal.component';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-health',
-  templateUrl: './health.component.html',
-  imports: [SharedModule, HealthModalComponent],
+    selector: 'hpd-health',
+    templateUrl: './health.component.html',
+    imports: [SharedModule, HealthModalComponent]
 })
 export default class HealthComponent implements OnInit {
   health?: Health;

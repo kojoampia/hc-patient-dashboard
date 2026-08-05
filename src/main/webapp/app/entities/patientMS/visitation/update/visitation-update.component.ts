@@ -12,10 +12,9 @@ import { VisitationService } from '../service/visitation.service';
 import { VisitationFormService, VisitationFormGroup } from './visitation-form.service';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-visitation-update',
-  templateUrl: './visitation-update.component.html',
-  imports: [SharedModule, FormsModule, ReactiveFormsModule],
+    selector: 'hpd-visitation-update',
+    templateUrl: './visitation-update.component.html',
+    imports: [SharedModule, FormsModule, ReactiveFormsModule]
 })
 export class VisitationUpdateComponent implements OnInit {
   isSaving = false;

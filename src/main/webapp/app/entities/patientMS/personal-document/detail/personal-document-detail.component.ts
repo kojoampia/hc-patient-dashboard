@@ -6,10 +6,9 @@ import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'ap
 import { IPersonalDocument } from '../personal-document.model';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-personal-document-detail',
-  templateUrl: './personal-document-detail.component.html',
-  imports: [SharedModule, RouterModule, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe],
+    selector: 'hpd-personal-document-detail',
+    templateUrl: './personal-document-detail.component.html',
+    imports: [SharedModule, RouterModule, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe]
 })
 export class PersonalDocumentDetailComponent {
   @Input() personalDocument: IPersonalDocument | null = null;

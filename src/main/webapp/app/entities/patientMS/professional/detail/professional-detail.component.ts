@@ -6,10 +6,9 @@ import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'ap
 import { IProfessional } from '../professional.model';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-professional-detail',
-  templateUrl: './professional-detail.component.html',
-  imports: [SharedModule, RouterModule, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe],
+    selector: 'hpd-professional-detail',
+    templateUrl: './professional-detail.component.html',
+    imports: [SharedModule, RouterModule, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe]
 })
 export class ProfessionalDetailComponent {
   @Input() professional: IProfessional | null = null;

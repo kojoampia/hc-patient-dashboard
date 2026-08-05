@@ -14,10 +14,9 @@ import { ActivityLogService } from '../service/activity-log.service';
 import { ActivityLogFormService, ActivityLogFormGroup } from './activity-log-form.service';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-activity-log-update',
-  templateUrl: './activity-log-update.component.html',
-  imports: [SharedModule, FormsModule, ReactiveFormsModule],
+    selector: 'hpd-activity-log-update',
+    templateUrl: './activity-log-update.component.html',
+    imports: [SharedModule, FormsModule, ReactiveFormsModule]
 })
 export class ActivityLogUpdateComponent implements OnInit {
   isSaving = false;

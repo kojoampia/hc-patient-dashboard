@@ -17,20 +17,19 @@ import { EntityArrayResponseType, ProfileService } from '../service/profile.serv
 import { ProfileDeleteDialogComponent } from '../delete/profile-delete-dialog.component';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-profile',
-  templateUrl: './profile.component.html',
-  imports: [
-    RouterModule,
-    FormsModule,
-    SharedModule,
-    SortDirective,
-    SortByDirective,
-    DurationPipe,
-    FormatMediumDatetimePipe,
-    FormatMediumDatePipe,
-    ItemCountComponent,
-  ],
+    selector: 'hpd-profile',
+    templateUrl: './profile.component.html',
+    imports: [
+        RouterModule,
+        FormsModule,
+        SharedModule,
+        SortDirective,
+        SortByDirective,
+        DurationPipe,
+        FormatMediumDatetimePipe,
+        FormatMediumDatePipe,
+        ItemCountComponent,
+    ]
 })
 export class ProfileComponent implements OnInit {
   profiles?: IProfile[];

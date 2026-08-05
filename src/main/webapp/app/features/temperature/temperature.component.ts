@@ -5,11 +5,10 @@ import { IStat } from 'app/entities/patientMS/stat/stat.model';
 import { StatComponent } from 'app/entities/patientMS/stat/list/stat.component';
 
 @Component({
-  selector: 'hpd-temperature',
-  standalone: true,
-  imports: [StatComponent],
-  templateUrl: './temperature.component.html',
-  styleUrl: './temperature.component.scss',
+    selector: 'hpd-temperature',
+    imports: [StatComponent],
+    templateUrl: './temperature.component.html',
+    styleUrl: './temperature.component.scss'
 })
 export class TemperatureComponent implements OnDestroy {
   private destroyed$ = new Subject<boolean>();

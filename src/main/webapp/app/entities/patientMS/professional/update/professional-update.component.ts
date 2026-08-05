@@ -12,10 +12,9 @@ import { ProfessionalService } from '../service/professional.service';
 import { ProfessionalFormService, ProfessionalFormGroup } from './professional-form.service';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-professional-update',
-  templateUrl: './professional-update.component.html',
-  imports: [SharedModule, FormsModule, ReactiveFormsModule],
+    selector: 'hpd-professional-update',
+    templateUrl: './professional-update.component.html',
+    imports: [SharedModule, FormsModule, ReactiveFormsModule]
 })
 export class ProfessionalUpdateComponent implements OnInit {
   isSaving = false;

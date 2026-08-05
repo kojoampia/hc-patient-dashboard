@@ -4,10 +4,9 @@ import SharedModule from 'app/shared/shared.module';
 import { JvmMetrics } from 'app/admin/metrics/metrics.model';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-jvm-memory',
-  templateUrl: './jvm-memory.component.html',
-  imports: [SharedModule],
+    selector: 'hpd-jvm-memory',
+    templateUrl: './jvm-memory.component.html',
+    imports: [SharedModule]
 })
 export class JvmMemoryComponent {
   /**

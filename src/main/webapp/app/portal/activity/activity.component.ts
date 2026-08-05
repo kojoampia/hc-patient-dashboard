@@ -31,11 +31,10 @@ const DEFAULT_STYLE = { icon: 'note' as IconName, colour: 'var(--hc-grey)' };
 
 /** The full record timeline: everything filed, by anyone, newest first. */
 @Component({
-  selector: 'hpd-activity',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SharedModule, RouterLink, IconComponent, EmptyStateComponent, PagerComponent, SearchBoxComponent],
-  templateUrl: './activity.component.html',
+    selector: 'hpd-activity',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [SharedModule, RouterLink, IconComponent, EmptyStateComponent, PagerComponent, SearchBoxComponent],
+    templateUrl: './activity.component.html'
 })
 export default class ActivityComponent {
   private readonly context = inject(PatientContextService);

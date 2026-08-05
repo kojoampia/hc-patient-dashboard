@@ -1,8 +1,8 @@
 jest.mock('@ng-bootstrap/ng-bootstrap');
 
 import { ComponentFixture, TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
-import { HttpResponse } from '@angular/common/http';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpResponse, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { of } from 'rxjs';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -18,9 +18,9 @@ describe('Condition Management Delete Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, ConditionDeleteDialogComponent],
-      providers: [NgbActiveModal],
-    })
+    imports: [ConditionDeleteDialogComponent],
+    providers: [NgbActiveModal, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+})
       .overrideTemplate(ConditionDeleteDialogComponent, '')
       .compileComponents();
     fixture = TestBed.createComponent(ConditionDeleteDialogComponent);

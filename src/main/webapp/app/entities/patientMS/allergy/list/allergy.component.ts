@@ -14,19 +14,18 @@ import { EntityArrayResponseType, AllergyService } from '../service/allergy.serv
 import { AllergyDeleteDialogComponent } from '../delete/allergy-delete-dialog.component';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-allergy',
-  templateUrl: './allergy.component.html',
-  imports: [
-    RouterModule,
-    FormsModule,
-    SharedModule,
-    SortDirective,
-    SortByDirective,
-    DurationPipe,
-    FormatMediumDatetimePipe,
-    FormatMediumDatePipe,
-  ],
+    selector: 'hpd-allergy',
+    templateUrl: './allergy.component.html',
+    imports: [
+        RouterModule,
+        FormsModule,
+        SharedModule,
+        SortDirective,
+        SortByDirective,
+        DurationPipe,
+        FormatMediumDatetimePipe,
+        FormatMediumDatePipe,
+    ]
 })
 export class AllergyComponent implements OnInit {
   allergies?: IAllergy[];

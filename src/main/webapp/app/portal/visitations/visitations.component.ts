@@ -16,11 +16,10 @@ const PAGE_SIZE = 15;
 
 /** Every visit that took place, newest first. */
 @Component({
-  selector: 'hpd-visitations',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SharedModule, RouterLink, EmptyStateComponent, PagerComponent, SearchBoxComponent],
-  templateUrl: './visitations.component.html',
+    selector: 'hpd-visitations',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [SharedModule, RouterLink, EmptyStateComponent, PagerComponent, SearchBoxComponent],
+    templateUrl: './visitations.component.html'
 })
 export default class VisitationsComponent {
   private readonly context = inject(PatientContextService);

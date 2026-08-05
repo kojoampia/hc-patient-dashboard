@@ -6,10 +6,9 @@ import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'ap
 import { IClinicalCase } from '../clinical-case.model';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-clinical-case-detail',
-  templateUrl: './clinical-case-detail.component.html',
-  imports: [SharedModule, RouterModule, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe],
+    selector: 'hpd-clinical-case-detail',
+    templateUrl: './clinical-case-detail.component.html',
+    imports: [SharedModule, RouterModule, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe]
 })
 export class ClinicalCaseDetailComponent {
   @Input() clinicalCase: IClinicalCase | null = null;

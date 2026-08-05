@@ -2,12 +2,11 @@ import { Component, Input, Output, EventEmitter, CUSTOM_ELEMENTS_SCHEMA } from '
 import SharedModule from 'app/shared/shared.module';
 
 @Component({
-  selector: 'hpd-info-box-small',
-  standalone: true,
-  templateUrl: './info-box-small.component.html',
-  styleUrls: ['./info-box-small.component.scss'],
-  imports: [SharedModule],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    selector: 'hpd-info-box-small',
+    templateUrl: './info-box-small.component.html',
+    styleUrls: ['./info-box-small.component.scss'],
+    imports: [SharedModule],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class InfoBoxSmallComponent {
   @Input() info?: any;

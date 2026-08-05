@@ -5,11 +5,10 @@ import { CacheMetrics } from 'app/admin/metrics/metrics.model';
 import { filterNaN } from 'app/core/util/operators';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-metrics-cache',
-  templateUrl: './metrics-cache.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SharedModule],
+    selector: 'hpd-metrics-cache',
+    templateUrl: './metrics-cache.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [SharedModule]
 })
 export class MetricsCacheComponent {
   /**

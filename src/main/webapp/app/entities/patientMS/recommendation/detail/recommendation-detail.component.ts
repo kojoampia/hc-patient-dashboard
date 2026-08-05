@@ -6,10 +6,9 @@ import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'ap
 import { IRecommendation } from '../recommendation.model';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-recommendation-detail',
-  templateUrl: './recommendation-detail.component.html',
-  imports: [SharedModule, RouterModule, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe],
+    selector: 'hpd-recommendation-detail',
+    templateUrl: './recommendation-detail.component.html',
+    imports: [SharedModule, RouterModule, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe]
 })
 export class RecommendationDetailComponent {
   @Input() recommendation: IRecommendation | null = null;

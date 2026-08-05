@@ -17,20 +17,19 @@ import { EntityArrayResponseType, MedicationService } from '../service/medicatio
 import { MedicationDeleteDialogComponent } from '../delete/medication-delete-dialog.component';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-medication',
-  templateUrl: './medication.component.html',
-  imports: [
-    RouterModule,
-    FormsModule,
-    SharedModule,
-    SortDirective,
-    SortByDirective,
-    DurationPipe,
-    FormatMediumDatetimePipe,
-    FormatMediumDatePipe,
-    ItemCountComponent,
-  ],
+    selector: 'hpd-medication',
+    templateUrl: './medication.component.html',
+    imports: [
+        RouterModule,
+        FormsModule,
+        SharedModule,
+        SortDirective,
+        SortByDirective,
+        DurationPipe,
+        FormatMediumDatetimePipe,
+        FormatMediumDatePipe,
+        ItemCountComponent,
+    ]
 })
 export class MedicationComponent implements OnInit {
   medications?: IMedication[];

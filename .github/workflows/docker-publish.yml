@@ -32,7 +32,11 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          # 20.19, not bare '20'. Angular 20 requires ^20.19.0 || ^22.12.0 || >=24.0.0, and a bare
+          # major would silently satisfy that only for as long as setup-node's latest 20.x happens
+          # to be >= 20.19 — which was already true, so the failure this prevents is the confusing
+          # kind that appears months later with no related change.
+          node-version: '20.19'
           cache: 'npm'
 
       # `npm ci`, not `npm install`. install ignores the lockfile when package.json allows a newer
@@ -40,9 +44,11 @@ jobs:
       # — which also means an audit run against one says nothing reliable about the other. ci fails
       # outright when the two files disagree, which is the behaviour worth having.
       #
-      # --legacy-peer-deps stays: Angular 17 with this dependency set does not install without it.
-      # That is a symptom of the version pin, not of this workflow — see the Angular upgrade tracked
-      # in patient-web.md.
+      # --legacy-peer-deps stays, but the reason changed with the Angular 20 upgrade: it is no longer
+      # Angular. The one remaining conflict is browser-sync-webpack-plugin@2.3.0, which peers on
+      # browser-sync ^2 while this repo (and @angular-devkit/build-angular) use 3.x. It is a
+      # dev-server-only plugin, so the mismatch never reaches a build artefact. Dropping the flag
+      # needs that plugin replaced or removed.
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
@@ -60,7 +66,11 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          # 20.19, not bare '20'. Angular 20 requires ^20.19.0 || ^22.12.0 || >=24.0.0, and a bare
+          # major would silently satisfy that only for as long as setup-node's latest 20.x happens
+          # to be >= 20.19 — which was already true, so the failure this prevents is the confusing
+          # kind that appears months later with no related change.
+          node-version: '20.19'
           cache: 'npm'
 
       - name: Install dependencies
@@ -68,12 +78,18 @@ jobs:
 
       # --omit=dev on purpose: the toolchain accounts for most of this repo's advisory count and is
       # not reachable by anyone who does not already control the build. What ships to a browser is
-      # what matters here, and that set currently includes Angular 17.0.6, which carries published
-      # i18n XSS advisories.
+      # what matters here.
       #
-      # NON-BLOCKING until that upgrade lands, because it will fail today and a job that is red on
-      # arrival is a job everybody learns to ignore. Delete continue-on-error once it passes — that
-      # step is the point of adding this at all.
+      # The Angular i18n/SVG XSS advisories that motivated this are GONE as of the 20.3.27 upgrade —
+      # no @angular/* runtime package carries an advisory any more. Two runtime findings remain and
+      # both need a decision rather than a bump:
+      #   - websocket-driver (critical), reached only through sockjs-client, which exists only for
+      #     the chatbot widget that no backend implements.
+      #   - @opentelemetry/core (moderate), fixed in the 2.x line, which is a browser-SDK migration.
+      #
+      # Still NON-BLOCKING because of the first of those: --audit-level=high fails on it today, and
+      # a job that is red on arrival is a job everybody learns to ignore. Delete continue-on-error
+      # once those two are resolved — that step is the point of adding this at all.
       - name: Audit runtime dependencies
         continue-on-error: true
         run: npm audit --omit=dev --audit-level=high
