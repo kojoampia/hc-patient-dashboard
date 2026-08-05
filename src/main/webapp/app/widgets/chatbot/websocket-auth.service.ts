@@ -50,8 +50,11 @@ export class WebsocketAuthService {
   }
 
   websocketConnection(authToken: string): void {
-    let url = '/websocket?access_token=' + authToken;
-    url = this.location.prepareExternalUrl(url);
+    // The token is NOT in the query string. It used to be (`/websocket?access_token=` + token), which writes a bearer
+    // credential into both nginx access logs on this stack, into browser history, and into the Referer header of any
+    // subsequent cross-origin navigation. It is redundant besides: the CONNECT frame below already carries it in an
+    // Authorization header, which is the only place it belongs.
+    const url = this.location.prepareExternalUrl('/websocket');
 
     const socket: WebSocket = new SockJS(url);
     this.$stompClient = Stomp.over(socket);
