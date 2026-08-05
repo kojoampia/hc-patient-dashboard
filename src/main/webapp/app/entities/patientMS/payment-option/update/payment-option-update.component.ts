@@ -12,10 +12,9 @@ import { PaymentOptionService } from '../service/payment-option.service';
 import { PaymentOptionFormService, PaymentOptionFormGroup } from './payment-option-form.service';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-payment-option-update',
-  templateUrl: './payment-option-update.component.html',
-  imports: [SharedModule, FormsModule, ReactiveFormsModule],
+    selector: 'hpd-payment-option-update',
+    templateUrl: './payment-option-update.component.html',
+    imports: [SharedModule, FormsModule, ReactiveFormsModule]
 })
 export class PaymentOptionUpdateComponent implements OnInit {
   isSaving = false;

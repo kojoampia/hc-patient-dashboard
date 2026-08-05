@@ -14,19 +14,18 @@ import { EntityArrayResponseType, StatService } from '../service/stat.service';
 import { StatDeleteDialogComponent } from '../delete/stat-delete-dialog.component';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-stat',
-  templateUrl: './stat.component.html',
-  imports: [
-    RouterModule,
-    FormsModule,
-    SharedModule,
-    SortDirective,
-    SortByDirective,
-    DurationPipe,
-    FormatMediumDatetimePipe,
-    FormatMediumDatePipe,
-  ],
+    selector: 'hpd-stat',
+    templateUrl: './stat.component.html',
+    imports: [
+        RouterModule,
+        FormsModule,
+        SharedModule,
+        SortDirective,
+        SortByDirective,
+        DurationPipe,
+        FormatMediumDatetimePipe,
+        FormatMediumDatePipe,
+    ]
 })
 export class StatComponent implements OnInit {
   stats?: IStat[];

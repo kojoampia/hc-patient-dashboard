@@ -14,19 +14,18 @@ import { EntityArrayResponseType, PaymentOptionService } from '../service/paymen
 import { PaymentOptionDeleteDialogComponent } from '../delete/payment-option-delete-dialog.component';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-payment-option',
-  templateUrl: './payment-option.component.html',
-  imports: [
-    RouterModule,
-    FormsModule,
-    SharedModule,
-    SortDirective,
-    SortByDirective,
-    DurationPipe,
-    FormatMediumDatetimePipe,
-    FormatMediumDatePipe,
-  ],
+    selector: 'hpd-payment-option',
+    templateUrl: './payment-option.component.html',
+    imports: [
+        RouterModule,
+        FormsModule,
+        SharedModule,
+        SortDirective,
+        SortByDirective,
+        DurationPipe,
+        FormatMediumDatetimePipe,
+        FormatMediumDatePipe,
+    ]
 })
 export class PaymentOptionComponent implements OnInit {
   paymentOptions?: IPaymentOption[];

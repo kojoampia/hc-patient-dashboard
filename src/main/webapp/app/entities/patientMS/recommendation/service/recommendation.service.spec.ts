@@ -1,10 +1,11 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { IRecommendation } from '../recommendation.model';
 import { sampleWithRequiredData, sampleWithNewData, sampleWithPartialData, sampleWithFullData } from '../recommendation.test-samples';
 
 import { RecommendationService } from './recommendation.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 const requireRestSample: IRecommendation = {
   ...sampleWithRequiredData,
@@ -17,8 +18,9 @@ describe('Recommendation Service', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-    });
+    imports: [],
+    providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
     expectedResult = null;
     service = TestBed.inject(RecommendationService);
     httpMock = TestBed.inject(HttpTestingController);

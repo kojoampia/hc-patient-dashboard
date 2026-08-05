@@ -23,11 +23,10 @@ const PREVIEW = 5;
  * "anything I need to know?", not "show me everything".
  */
 @Component({
-  selector: 'hpd-overview',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SharedModule, RouterLink, IconComponent, PanelComponent, EmptyStateComponent, SparklineComponent],
-  templateUrl: './overview.component.html',
+    selector: 'hpd-overview',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [SharedModule, RouterLink, IconComponent, PanelComponent, EmptyStateComponent, SparklineComponent],
+    templateUrl: './overview.component.html'
 })
 export default class OverviewComponent {
   private readonly context = inject(PatientContextService);

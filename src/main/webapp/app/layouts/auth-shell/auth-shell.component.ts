@@ -10,11 +10,10 @@ import { IconComponent } from 'app/shared/ui/icon/icon.component';
  * they belong to different products.
  */
 @Component({
-  selector: 'hpd-auth-shell',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SharedModule, RouterOutlet, IconComponent],
-  templateUrl: './auth-shell.component.html',
-  styleUrl: './auth-shell.component.scss',
+    selector: 'hpd-auth-shell',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [SharedModule, RouterOutlet, IconComponent],
+    templateUrl: './auth-shell.component.html',
+    styleUrl: './auth-shell.component.scss'
 })
 export default class AuthShellComponent {}

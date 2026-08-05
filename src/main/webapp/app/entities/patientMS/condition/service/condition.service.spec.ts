@@ -1,11 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { DATE_FORMAT } from 'app/config/input.constants';
 import { ICondition } from '../condition.model';
 import { sampleWithRequiredData, sampleWithNewData, sampleWithPartialData, sampleWithFullData } from '../condition.test-samples';
 
 import { ConditionService, RestCondition } from './condition.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 const requireRestSample: RestCondition = {
   ...sampleWithRequiredData,
@@ -20,8 +21,9 @@ describe('Condition Service', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-    });
+    imports: [],
+    providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
     expectedResult = null;
     service = TestBed.inject(ConditionService);
     httpMock = TestBed.inject(HttpTestingController);

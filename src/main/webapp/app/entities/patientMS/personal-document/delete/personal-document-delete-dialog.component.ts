@@ -8,9 +8,8 @@ import { IPersonalDocument } from '../personal-document.model';
 import { PersonalDocumentService } from '../service/personal-document.service';
 
 @Component({
-  standalone: true,
-  templateUrl: './personal-document-delete-dialog.component.html',
-  imports: [SharedModule, FormsModule],
+    templateUrl: './personal-document-delete-dialog.component.html',
+    imports: [SharedModule, FormsModule]
 })
 export class PersonalDocumentDeleteDialogComponent {
   personalDocument?: IPersonalDocument;

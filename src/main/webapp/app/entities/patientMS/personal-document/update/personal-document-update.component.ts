@@ -12,10 +12,9 @@ import { PersonalDocumentService } from '../service/personal-document.service';
 import { PersonalDocumentFormService, PersonalDocumentFormGroup } from './personal-document-form.service';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-personal-document-update',
-  templateUrl: './personal-document-update.component.html',
-  imports: [SharedModule, FormsModule, ReactiveFormsModule],
+    selector: 'hpd-personal-document-update',
+    templateUrl: './personal-document-update.component.html',
+    imports: [SharedModule, FormsModule, ReactiveFormsModule]
 })
 export class PersonalDocumentUpdateComponent implements OnInit {
   isSaving = false;

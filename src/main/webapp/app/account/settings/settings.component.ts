@@ -10,10 +10,9 @@ import { LANGUAGES } from 'app/config/language.constants';
 const initialAccount: Account = {} as Account;
 
 @Component({
-  selector: 'hpd-settings',
-  standalone: true,
-  imports: [SharedModule, FormsModule, ReactiveFormsModule],
-  templateUrl: './settings.component.html',
+    selector: 'hpd-settings',
+    imports: [SharedModule, FormsModule, ReactiveFormsModule],
+    templateUrl: './settings.component.html'
 })
 export default class SettingsComponent implements OnInit {
   success = false;

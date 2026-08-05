@@ -14,19 +14,18 @@ import { EntityArrayResponseType, CarePlanItemService } from '../service/care-pl
 import { CarePlanItemDeleteDialogComponent } from '../delete/care-plan-item-delete-dialog.component';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-care-plan-item',
-  templateUrl: './care-plan-item.component.html',
-  imports: [
-    RouterModule,
-    FormsModule,
-    SharedModule,
-    SortDirective,
-    SortByDirective,
-    DurationPipe,
-    FormatMediumDatetimePipe,
-    FormatMediumDatePipe,
-  ],
+    selector: 'hpd-care-plan-item',
+    templateUrl: './care-plan-item.component.html',
+    imports: [
+        RouterModule,
+        FormsModule,
+        SharedModule,
+        SortDirective,
+        SortByDirective,
+        DurationPipe,
+        FormatMediumDatetimePipe,
+        FormatMediumDatePipe,
+    ]
 })
 export class CarePlanItemComponent implements OnInit {
   carePlanItems?: ICarePlanItem[];

@@ -8,11 +8,10 @@ import { AppPageTitleStrategy } from 'app/app-page-title-strategy';
 import PageRibbonComponent from '../profiles/page-ribbon.component';
 
 @Component({
-  selector: 'hpd-main',
-  standalone: true,
-  templateUrl: './main.component.html',
-  providers: [AppPageTitleStrategy],
-  imports: [RouterOutlet, PageRibbonComponent],
+    selector: 'hpd-main',
+    templateUrl: './main.component.html',
+    providers: [AppPageTitleStrategy],
+    imports: [RouterOutlet, PageRibbonComponent]
 })
 export default class MainComponent implements OnInit {
   private renderer: Renderer2;

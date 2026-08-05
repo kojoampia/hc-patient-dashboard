@@ -14,19 +14,18 @@ import { EntityArrayResponseType, EmergencyService } from '../service/emergency.
 import { EmergencyDeleteDialogComponent } from '../delete/emergency-delete-dialog.component';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-emergency',
-  templateUrl: './emergency.component.html',
-  imports: [
-    RouterModule,
-    FormsModule,
-    SharedModule,
-    SortDirective,
-    SortByDirective,
-    DurationPipe,
-    FormatMediumDatetimePipe,
-    FormatMediumDatePipe,
-  ],
+    selector: 'hpd-emergency',
+    templateUrl: './emergency.component.html',
+    imports: [
+        RouterModule,
+        FormsModule,
+        SharedModule,
+        SortDirective,
+        SortByDirective,
+        DurationPipe,
+        FormatMediumDatetimePipe,
+        FormatMediumDatePipe,
+    ]
 })
 export class EmergencyComponent implements OnInit {
   emergencies?: IEmergency[];

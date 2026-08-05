@@ -6,10 +6,9 @@ import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'ap
 import { ICarePlanItem } from '../care-plan-item.model';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-care-plan-item-detail',
-  templateUrl: './care-plan-item-detail.component.html',
-  imports: [SharedModule, RouterModule, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe],
+    selector: 'hpd-care-plan-item-detail',
+    templateUrl: './care-plan-item-detail.component.html',
+    imports: [SharedModule, RouterModule, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe]
 })
 export class CarePlanItemDetailComponent {
   @Input() carePlanItem: ICarePlanItem | null = null;

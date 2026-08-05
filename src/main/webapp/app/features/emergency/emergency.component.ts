@@ -4,11 +4,10 @@ import { StatComponent } from 'app/entities/patientMS/stat/list/stat.component';
 import { Subject } from 'rxjs';
 
 @Component({
-  selector: 'hpd-emergency',
-  standalone: true,
-  imports: [StatComponent],
-  templateUrl: './emergency.component.html',
-  styleUrl: './emergency.component.scss',
+    selector: 'hpd-emergency',
+    imports: [StatComponent],
+    templateUrl: './emergency.component.html',
+    styleUrl: './emergency.component.scss'
 })
 export class EmergencyComponent implements OnDestroy {
   private destroyed$ = new Subject<boolean>();

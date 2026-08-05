@@ -11,11 +11,10 @@ const WINDOW = 10;
  * Renders nothing at all when there is only one page — a lone disabled "1" is noise.
  */
 @Component({
-  selector: 'hpd-pager',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SharedModule],
-  template: `
+    selector: 'hpd-pager',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [SharedModule],
+    template: `
     @if (total() > 1) {
       <nav class="hc-pager" [attr.aria-label]="'patientPortal.pager.aria' | translate">
         <button type="button" class="hc-pager__edge" [disabled]="page() <= 1" (click)="go(page() - 1)">
@@ -33,7 +32,7 @@ const WINDOW = 10;
         </button>
       </nav>
     }
-  `,
+  `
 })
 export class PagerComponent {
   readonly page = signal(1);

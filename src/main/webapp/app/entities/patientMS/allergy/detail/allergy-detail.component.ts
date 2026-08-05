@@ -6,10 +6,9 @@ import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'ap
 import { IAllergy } from '../allergy.model';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-allergy-detail',
-  templateUrl: './allergy-detail.component.html',
-  imports: [SharedModule, RouterModule, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe],
+    selector: 'hpd-allergy-detail',
+    templateUrl: './allergy-detail.component.html',
+    imports: [SharedModule, RouterModule, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe]
 })
 export class AllergyDetailComponent {
   @Input() allergy: IAllergy | null = null;

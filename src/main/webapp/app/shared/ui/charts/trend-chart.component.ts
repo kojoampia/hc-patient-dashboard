@@ -21,11 +21,10 @@ const PAD = { left: 34, right: 16, top: 16, bottom: 28 };
  * quick read, the table is the accessible one, and a reading nobody can get to is not a reading.
  */
 @Component({
-  selector: 'hpd-trend-chart',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SharedModule],
-  template: `
+    selector: 'hpd-trend-chart',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [SharedModule],
+    template: `
     @if (points().length > 1) {
       @if (showTable) {
         <table class="hc-viz-tbl">
@@ -80,15 +79,15 @@ const PAD = { left: 34, right: 16, top: 16, bottom: 28 };
       }
     }
   `,
-  styles: [
-    `
+    styles: [
+        `
       .hpd-axis {
         font-size: 10.5px;
         font-weight: 600;
         fill: var(--hc-grey-400);
       }
     `,
-  ],
+    ]
 })
 export class TrendChartComponent {
   /**

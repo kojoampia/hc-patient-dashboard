@@ -15,10 +15,9 @@ const newUser: IUser = {
 } as IUser;
 
 @Component({
-  standalone: true,
-  selector: 'hpd-user-mgmt-update',
-  templateUrl: './user-management-update.component.html',
-  imports: [SharedModule, FormsModule, ReactiveFormsModule],
+    selector: 'hpd-user-mgmt-update',
+    templateUrl: './user-management-update.component.html',
+    imports: [SharedModule, FormsModule, ReactiveFormsModule]
 })
 export default class UserManagementUpdateComponent implements OnInit {
   languages = LANGUAGES;

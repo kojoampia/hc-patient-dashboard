@@ -14,10 +14,9 @@ import { AllergyService } from '../service/allergy.service';
 import { AllergyFormService, AllergyFormGroup } from './allergy-form.service';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-allergy-update',
-  templateUrl: './allergy-update.component.html',
-  imports: [SharedModule, FormsModule, ReactiveFormsModule],
+    selector: 'hpd-allergy-update',
+    templateUrl: './allergy-update.component.html',
+    imports: [SharedModule, FormsModule, ReactiveFormsModule]
 })
 export class AllergyUpdateComponent implements OnInit {
   isSaving = false;

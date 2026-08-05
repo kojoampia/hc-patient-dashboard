@@ -1,11 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { DATE_FORMAT } from 'app/config/input.constants';
 import { IVisitation } from '../visitation.model';
 import { sampleWithRequiredData, sampleWithNewData, sampleWithPartialData, sampleWithFullData } from '../visitation.test-samples';
 
 import { VisitationService, RestVisitation } from './visitation.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 const requireRestSample: RestVisitation = {
   ...sampleWithRequiredData,
@@ -21,8 +22,9 @@ describe('Visitation Service', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-    });
+    imports: [],
+    providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
     expectedResult = null;
     service = TestBed.inject(VisitationService);
     httpMock = TestBed.inject(HttpTestingController);

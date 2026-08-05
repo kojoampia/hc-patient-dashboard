@@ -17,11 +17,10 @@ import { PortalDataService } from '../data/portal-data.service';
  * did not save is worse than one that visibly bounced.
  */
 @Component({
-  selector: 'hpd-plans',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SharedModule, IconComponent, EmptyStateComponent],
-  templateUrl: './plans.component.html',
+    selector: 'hpd-plans',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [SharedModule, IconComponent, EmptyStateComponent],
+    templateUrl: './plans.component.html'
 })
 export default class PlansComponent {
   private readonly data = inject(PortalDataService);

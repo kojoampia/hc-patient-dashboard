@@ -22,11 +22,10 @@ const PREVIEW = 6;
  * The selected vital drives the trend chart — one chart shown well beats four shown small.
  */
 @Component({
-  selector: 'hpd-record',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SharedModule, RouterLink, IconComponent, PanelComponent, EmptyStateComponent, TrendChartComponent],
-  templateUrl: './record.component.html',
+    selector: 'hpd-record',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [SharedModule, RouterLink, IconComponent, PanelComponent, EmptyStateComponent, TrendChartComponent],
+    templateUrl: './record.component.html'
 })
 export default class RecordComponent {
   private readonly context = inject(PatientContextService);

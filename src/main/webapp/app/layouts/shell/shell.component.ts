@@ -21,12 +21,11 @@ interface NavGroup {
  * plus a bottom tab bar. Every portal screen renders into its outlet.
  */
 @Component({
-  selector: 'hpd-shell',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SharedModule, RouterOutlet, RouterLink, IconComponent],
-  templateUrl: './shell.component.html',
-  styleUrl: './shell.component.scss',
+    selector: 'hpd-shell',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [SharedModule, RouterOutlet, RouterLink, IconComponent],
+    templateUrl: './shell.component.html',
+    styleUrl: './shell.component.scss'
 })
 export default class ShellComponent {
   private readonly router = inject(Router);

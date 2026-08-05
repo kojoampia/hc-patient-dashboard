@@ -2,11 +2,10 @@ import { Component, Input, EventEmitter, Output, TemplateRef } from '@angular/co
 import { NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-linechart',
-  templateUrl: './linechart.component.html',
-  styleUrls: ['./linechart.component.scss'],
-  imports: [NgxChartsModule],
+    selector: 'hpd-linechart',
+    templateUrl: './linechart.component.html',
+    styleUrls: ['./linechart.component.scss'],
+    imports: [NgxChartsModule]
 })
 export class LineChartComponent {
   @Output() dataSelected: EventEmitter<any> = new EventEmitter<any>();

@@ -16,11 +16,10 @@ const PAGE_SIZE = 12;
 
 /** The case list, filterable by status and free text. */
 @Component({
-  selector: 'hpd-cases',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SharedModule, RouterLink, IconComponent, EmptyStateComponent, PagerComponent, SearchBoxComponent],
-  templateUrl: './cases.component.html',
+    selector: 'hpd-cases',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [SharedModule, RouterLink, IconComponent, EmptyStateComponent, PagerComponent, SearchBoxComponent],
+    templateUrl: './cases.component.html'
 })
 export default class CasesComponent {
   private readonly context = inject(PatientContextService);

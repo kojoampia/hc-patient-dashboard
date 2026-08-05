@@ -8,9 +8,8 @@ import { IEmergency } from '../emergency.model';
 import { EmergencyService } from '../service/emergency.service';
 
 @Component({
-  standalone: true,
-  templateUrl: './emergency-delete-dialog.component.html',
-  imports: [SharedModule, FormsModule],
+    templateUrl: './emergency-delete-dialog.component.html',
+    imports: [SharedModule, FormsModule]
 })
 export class EmergencyDeleteDialogComponent {
   emergency?: IEmergency;

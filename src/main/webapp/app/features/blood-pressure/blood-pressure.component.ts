@@ -4,11 +4,10 @@ import { StatComponent } from 'app/entities/patientMS/stat/list/stat.component';
 import { Subject } from 'rxjs';
 
 @Component({
-  selector: 'hpd-blood-pressure',
-  standalone: true,
-  imports: [StatComponent],
-  templateUrl: './blood-pressure.component.html',
-  styleUrl: './blood-pressure.component.scss',
+    selector: 'hpd-blood-pressure',
+    imports: [StatComponent],
+    templateUrl: './blood-pressure.component.html',
+    styleUrl: './blood-pressure.component.scss'
 })
 export class BloodPressureComponent implements OnDestroy {
   private destroyed$ = new Subject<boolean>();

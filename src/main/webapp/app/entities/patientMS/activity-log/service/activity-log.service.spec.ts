@@ -1,11 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { DATE_FORMAT } from 'app/config/input.constants';
 import { IActivityLog } from '../activity-log.model';
 import { sampleWithRequiredData, sampleWithNewData, sampleWithPartialData, sampleWithFullData } from '../activity-log.test-samples';
 
 import { ActivityLogService, RestActivityLog } from './activity-log.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 const requireRestSample: RestActivityLog = {
   ...sampleWithRequiredData,
@@ -20,8 +21,9 @@ describe('ActivityLog Service', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-    });
+    imports: [],
+    providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
     expectedResult = null;
     service = TestBed.inject(ActivityLogService);
     httpMock = TestBed.inject(HttpTestingController);

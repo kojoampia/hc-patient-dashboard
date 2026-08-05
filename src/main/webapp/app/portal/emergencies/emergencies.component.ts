@@ -14,11 +14,10 @@ import { byDateDesc, formatDayTime, humanise, matches } from '../data/portal-for
 
 /** Every emergency raised on this record, newest first, with what came of it. */
 @Component({
-  selector: 'hpd-emergencies',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SharedModule, RouterLink, IconComponent, EmptyStateComponent, SearchBoxComponent],
-  templateUrl: './emergencies.component.html',
+    selector: 'hpd-emergencies',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [SharedModule, RouterLink, IconComponent, EmptyStateComponent, SearchBoxComponent],
+    templateUrl: './emergencies.component.html'
 })
 export default class EmergenciesComponent {
   private readonly context = inject(PatientContextService);

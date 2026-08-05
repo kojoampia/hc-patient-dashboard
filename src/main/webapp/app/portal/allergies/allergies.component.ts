@@ -20,11 +20,10 @@ const SEVERITY_RANK: Readonly<Record<string, number | undefined>> = { SEVERE: 0,
  * whether a drug is safe, and a hidden row is a clinical risk.
  */
 @Component({
-  selector: 'hpd-allergies',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SharedModule, IconComponent, PanelComponent, EmptyStateComponent],
-  templateUrl: './allergies.component.html',
+    selector: 'hpd-allergies',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [SharedModule, IconComponent, PanelComponent, EmptyStateComponent],
+    templateUrl: './allergies.component.html'
 })
 export default class AllergiesComponent {
   private readonly context = inject(PatientContextService);

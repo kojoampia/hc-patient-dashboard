@@ -26,7 +26,9 @@
             "outputPath": "target/classes/static/",
             "index": "src/main/webapp/index.html",
             "main": "src/main/webapp/main.ts",
-            "polyfills": ["zone.js"],
+            "polyfills": [
+              "zone.js"
+            ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -35,16 +37,33 @@
               "src/main/webapp/manifest.webapp",
               "src/main/webapp/robots.txt"
             ],
-            "styles": ["src/main/webapp/content/scss/vendor.scss", "src/main/webapp/content/scss/global.scss"],
+            "styles": [
+              "src/main/webapp/content/scss/vendor.scss",
+              "src/main/webapp/content/scss/global.scss"
+            ],
             "stylePreprocessorOptions": {
-              "includePaths": ["src/main/webapp/content/scss", "node_modules"]
+              "includePaths": [
+                "src/main/webapp/content/scss",
+                "node_modules"
+              ]
             },
             "scripts": [],
-            "allowedCommonJsDependencies": ["hammerjs", "sockjs-client", "webstomp-client"]
+            "allowedCommonJsDependencies": [
+              "hammerjs",
+              "sockjs-client",
+              "webstomp-client"
+            ]
           },
           "configurations": {
             "production": {
-              "optimization": true,
+              "optimization": {
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": false
+                },
+                "fonts": true
+              },
               "outputHashing": "all",
               "sourceMap": false,
               "namedChunks": false,
@@ -110,5 +129,31 @@
       "environment": "all"
     },
     "packageManager": "npm"
+  },
+  "schematics": {
+    "@schematics/angular:component": {
+      "type": "component"
+    },
+    "@schematics/angular:directive": {
+      "type": "directive"
+    },
+    "@schematics/angular:service": {
+      "type": "service"
+    },
+    "@schematics/angular:guard": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:interceptor": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:module": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:pipe": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:resolver": {
+      "typeSeparator": "."
+    }
   }
 }

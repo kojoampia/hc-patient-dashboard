@@ -14,10 +14,9 @@ import { EmergencyService } from '../service/emergency.service';
 import { EmergencyFormService, EmergencyFormGroup } from './emergency-form.service';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-emergency-update',
-  templateUrl: './emergency-update.component.html',
-  imports: [SharedModule, FormsModule, ReactiveFormsModule],
+    selector: 'hpd-emergency-update',
+    templateUrl: './emergency-update.component.html',
+    imports: [SharedModule, FormsModule, ReactiveFormsModule]
 })
 export class EmergencyUpdateComponent implements OnInit {
   isSaving = false;

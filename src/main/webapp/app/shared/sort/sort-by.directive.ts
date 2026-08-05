@@ -48,8 +48,10 @@ export default class SortByDirective<T> implements AfterContentInit, OnDestroy {
       if (this.sort.predicate === this.hpdSortBy) {
         icon = this.sort.ascending ? this.sortAscIcon : this.sortDescIcon;
       }
-      this.iconComponent.icon = icon.iconName;
-      this.iconComponent.render();
+      // fontawesome 2.x exposes `icon` as a model signal and renders reactively, so this is a
+      // .set() rather than a property write, and the explicit render() it used to need is gone —
+      // the component recomputes its own markup when the signal changes.
+      this.iconComponent.icon.set(icon.iconName);
     }
   }
 }

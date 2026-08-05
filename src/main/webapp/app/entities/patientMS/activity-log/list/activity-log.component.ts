@@ -17,20 +17,19 @@ import { EntityArrayResponseType, ActivityLogService } from '../service/activity
 import { ActivityLogDeleteDialogComponent } from '../delete/activity-log-delete-dialog.component';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-activity-log',
-  templateUrl: './activity-log.component.html',
-  imports: [
-    RouterModule,
-    FormsModule,
-    SharedModule,
-    SortDirective,
-    SortByDirective,
-    DurationPipe,
-    FormatMediumDatetimePipe,
-    FormatMediumDatePipe,
-    ItemCountComponent,
-  ],
+    selector: 'hpd-activity-log',
+    templateUrl: './activity-log.component.html',
+    imports: [
+        RouterModule,
+        FormsModule,
+        SharedModule,
+        SortDirective,
+        SortByDirective,
+        DurationPipe,
+        FormatMediumDatetimePipe,
+        FormatMediumDatePipe,
+        ItemCountComponent,
+    ]
 })
 export class ActivityLogComponent implements OnInit {
   activityLogs?: IActivityLog[];

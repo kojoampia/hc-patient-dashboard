@@ -15,10 +15,9 @@ import { IClinicalCase } from '../clinical-case.model';
 import { ClinicalCaseFormService, ClinicalCaseFormGroup } from './clinical-case-form.service';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-clinical-case-update',
-  templateUrl: './clinical-case-update.component.html',
-  imports: [SharedModule, FormsModule, ReactiveFormsModule],
+    selector: 'hpd-clinical-case-update',
+    templateUrl: './clinical-case-update.component.html',
+    imports: [SharedModule, FormsModule, ReactiveFormsModule]
 })
 export class ClinicalCaseUpdateComponent implements OnInit {
   isSaving = false;

@@ -1,10 +1,11 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { IPaymentOption } from '../payment-option.model';
 import { sampleWithRequiredData, sampleWithNewData, sampleWithPartialData, sampleWithFullData } from '../payment-option.test-samples';
 
 import { PaymentOptionService } from './payment-option.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 const requireRestSample: IPaymentOption = {
   ...sampleWithRequiredData,
@@ -17,8 +18,9 @@ describe('PaymentOption Service', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-    });
+    imports: [],
+    providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
     expectedResult = null;
     service = TestBed.inject(PaymentOptionService);
     httpMock = TestBed.inject(HttpTestingController);

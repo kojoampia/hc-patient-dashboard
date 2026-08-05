@@ -16,11 +16,10 @@ import { byDateDesc, formatDay, humanise } from '../data/portal-format';
  * filed against it — visits, medications, reports and timeline entries.
  */
 @Component({
-  selector: 'hpd-case-detail',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SharedModule, RouterLink, IconComponent, PanelComponent, EmptyStateComponent],
-  templateUrl: './case-detail.component.html',
+    selector: 'hpd-case-detail',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [SharedModule, RouterLink, IconComponent, PanelComponent, EmptyStateComponent],
+    templateUrl: './case-detail.component.html'
 })
 export default class CaseDetailComponent {
   private readonly context = inject(PatientContextService);

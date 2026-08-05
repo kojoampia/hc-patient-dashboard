@@ -1,4 +1,9 @@
 {
+  // content/ holds plain browser scripts and static assets, not TypeScript. The parser here runs
+  // with `parserOptions.project`, so it errors on any .js file no tsconfig includes — and
+  // content/js/app-loading.js is deliberately outside the TS build: it is the bootstrap shim that
+  // was moved out of index.html so the CSP can be script-src 'self'.
+  "ignorePatterns": ["src/main/webapp/content/**/*.js"],
   "parser": "@typescript-eslint/parser",
   "plugins": ["@angular-eslint/eslint-plugin", "@typescript-eslint"],
   "extends": [

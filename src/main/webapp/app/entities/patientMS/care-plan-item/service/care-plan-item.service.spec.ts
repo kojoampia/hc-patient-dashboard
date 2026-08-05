@@ -1,11 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { DATE_FORMAT } from 'app/config/input.constants';
 import { ICarePlanItem } from '../care-plan-item.model';
 import { sampleWithRequiredData, sampleWithNewData, sampleWithPartialData, sampleWithFullData } from '../care-plan-item.test-samples';
 
 import { CarePlanItemService, RestCarePlanItem } from './care-plan-item.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 const requireRestSample: RestCarePlanItem = {
   ...sampleWithRequiredData,
@@ -20,8 +21,9 @@ describe('CarePlanItem Service', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-    });
+    imports: [],
+    providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
     expectedResult = null;
     service = TestBed.inject(CarePlanItemService);
     httpMock = TestBed.inject(HttpTestingController);

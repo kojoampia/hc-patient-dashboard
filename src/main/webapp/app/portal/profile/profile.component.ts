@@ -22,11 +22,10 @@ const TABS: readonly { readonly id: ProfileTab; readonly labelKey: string }[] = 
 
 /** Who the patient is, how to reach them, what plan they are on, and who looks after them. */
 @Component({
-  selector: 'hpd-profile',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SharedModule, RouterLink, IconComponent, EmptyStateComponent],
-  templateUrl: './profile.component.html',
+    selector: 'hpd-profile',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [SharedModule, RouterLink, IconComponent, EmptyStateComponent],
+    templateUrl: './profile.component.html'
 })
 export default class ProfileComponent {
   private readonly context = inject(PatientContextService);

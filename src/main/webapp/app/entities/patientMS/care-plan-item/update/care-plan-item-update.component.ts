@@ -13,10 +13,9 @@ import { CarePlanItemService } from '../service/care-plan-item.service';
 import { CarePlanItemFormService, CarePlanItemFormGroup } from './care-plan-item-form.service';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-care-plan-item-update',
-  templateUrl: './care-plan-item-update.component.html',
-  imports: [SharedModule, FormsModule, ReactiveFormsModule],
+    selector: 'hpd-care-plan-item-update',
+    templateUrl: './care-plan-item-update.component.html',
+    imports: [SharedModule, FormsModule, ReactiveFormsModule]
 })
 export class CarePlanItemUpdateComponent implements OnInit {
   isSaving = false;

@@ -3,11 +3,10 @@ import { Component, Input, EventEmitter, Output, CUSTOM_ELEMENTS_SCHEMA } from '
 import { NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
 
 @Component({
-  selector: 'hpd-heatmap',
-  standalone: true,
-  templateUrl: './heatmap.component.html',
-  imports: [NgxChartsModule, CommonModule],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    selector: 'hpd-heatmap',
+    templateUrl: './heatmap.component.html',
+    imports: [NgxChartsModule, CommonModule],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class HeatmapComponent {
   @Output() dataSelected: EventEmitter<any> = new EventEmitter<any>();

@@ -8,9 +8,8 @@ import { IClinicalCase } from '../clinical-case.model';
 import { ClinicalCaseService } from '../service/clinical-case.service';
 
 @Component({
-  standalone: true,
-  templateUrl: './clinical-case-delete-dialog.component.html',
-  imports: [SharedModule, FormsModule],
+    templateUrl: './clinical-case-delete-dialog.component.html',
+    imports: [SharedModule, FormsModule]
 })
 export class ClinicalCaseDeleteDialogComponent {
   clinicalCase?: IClinicalCase;

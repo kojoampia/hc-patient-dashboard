@@ -22,11 +22,10 @@ const PAGE_SIZE = 15;
  * is a safety record, and dropping it from the list is how it gets prescribed again.
  */
 @Component({
-  selector: 'hpd-medications',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SharedModule, RouterLink, IconComponent, EmptyStateComponent, PagerComponent, SearchBoxComponent],
-  templateUrl: './medications.component.html',
+    selector: 'hpd-medications',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [SharedModule, RouterLink, IconComponent, EmptyStateComponent, PagerComponent, SearchBoxComponent],
+    templateUrl: './medications.component.html'
 })
 export default class MedicationsComponent {
   private readonly context = inject(PatientContextService);

@@ -14,19 +14,18 @@ import { EntityArrayResponseType, ProfessionalService } from '../service/profess
 import { ProfessionalDeleteDialogComponent } from '../delete/professional-delete-dialog.component';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-professional',
-  templateUrl: './professional.component.html',
-  imports: [
-    RouterModule,
-    FormsModule,
-    SharedModule,
-    SortDirective,
-    SortByDirective,
-    DurationPipe,
-    FormatMediumDatetimePipe,
-    FormatMediumDatePipe,
-  ],
+    selector: 'hpd-professional',
+    templateUrl: './professional.component.html',
+    imports: [
+        RouterModule,
+        FormsModule,
+        SharedModule,
+        SortDirective,
+        SortByDirective,
+        DurationPipe,
+        FormatMediumDatetimePipe,
+        FormatMediumDatePipe,
+    ]
 })
 export class ProfessionalComponent implements OnInit {
   professionals?: IProfessional[];

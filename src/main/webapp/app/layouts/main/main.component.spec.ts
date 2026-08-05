@@ -4,8 +4,8 @@ import { waitForAsync, ComponentFixture, TestBed, fakeAsync, tick } from '@angul
 import { Router, TitleStrategy } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
-import { DOCUMENT } from '@angular/common';
-import { Component } from '@angular/core';
+
+import { Component, DOCUMENT } from '@angular/core';
 import { of } from 'rxjs';
 import { TranslateModule, TranslateService, LangChangeEvent } from '@ngx-translate/core';
 
@@ -225,5 +225,8 @@ describe('MainComponent', () => {
   });
 });
 
-@Component({ template: '' })
+@Component({
+    template: '',
+    standalone: false
+})
 export class BlankComponent {}

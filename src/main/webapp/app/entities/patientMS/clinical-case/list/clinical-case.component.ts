@@ -18,20 +18,19 @@ import { ClinicalCaseDeleteDialogComponent } from '../delete/clinical-case-delet
 import { IClinicalCase } from '../clinical-case.model';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-clinical-case',
-  templateUrl: './clinical-case.component.html',
-  imports: [
-    RouterModule,
-    FormsModule,
-    SharedModule,
-    SortDirective,
-    SortByDirective,
-    DurationPipe,
-    FormatMediumDatetimePipe,
-    FormatMediumDatePipe,
-    InfiniteScrollModule,
-  ],
+    selector: 'hpd-clinical-case',
+    templateUrl: './clinical-case.component.html',
+    imports: [
+        RouterModule,
+        FormsModule,
+        SharedModule,
+        SortDirective,
+        SortByDirective,
+        DurationPipe,
+        FormatMediumDatetimePipe,
+        FormatMediumDatePipe,
+        InfiniteScrollModule,
+    ]
 })
 export class ClinicalCaseComponent implements OnInit {
   clinicalCases?: IClinicalCase[];

@@ -6,10 +6,9 @@ import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'ap
 import { IEmergency } from '../emergency.model';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-emergency-detail',
-  templateUrl: './emergency-detail.component.html',
-  imports: [SharedModule, RouterModule, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe],
+    selector: 'hpd-emergency-detail',
+    templateUrl: './emergency-detail.component.html',
+    imports: [SharedModule, RouterModule, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe]
 })
 export class EmergencyDetailComponent {
   @Input() emergency: IEmergency | null = null;

@@ -17,20 +17,19 @@ import { EntityArrayResponseType, ReportService } from '../service/report.servic
 import { ReportDeleteDialogComponent } from '../delete/report-delete-dialog.component';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-report',
-  templateUrl: './report.component.html',
-  imports: [
-    RouterModule,
-    FormsModule,
-    SharedModule,
-    SortDirective,
-    SortByDirective,
-    DurationPipe,
-    FormatMediumDatetimePipe,
-    FormatMediumDatePipe,
-    ItemCountComponent,
-  ],
+    selector: 'hpd-report',
+    templateUrl: './report.component.html',
+    imports: [
+        RouterModule,
+        FormsModule,
+        SharedModule,
+        SortDirective,
+        SortByDirective,
+        DurationPipe,
+        FormatMediumDatetimePipe,
+        FormatMediumDatePipe,
+        ItemCountComponent,
+    ]
 })
 export class ReportComponent implements OnInit {
   reports?: IReport[];

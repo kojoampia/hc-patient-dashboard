@@ -3,12 +3,11 @@ import { ConsoleLoggerService } from 'app/core/util/console-logger.service';
 import { NguCarousel, NguCarouselConfig } from '@ngu/carousel';
 import SharedModule from 'app/shared/shared.module';
 @Component({
-  selector: 'hpd-tilebox',
-  standalone: true,
-  imports: [SharedModule, NguCarousel],
-  templateUrl: './tilebox.component.html',
-  styleUrls: ['./tilebox.component.scss'],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    selector: 'hpd-tilebox',
+    imports: [SharedModule, NguCarousel],
+    templateUrl: './tilebox.component.html',
+    styleUrls: ['./tilebox.component.scss'],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TileboxComponent {
   @Input() config: NguCarouselConfig = {

@@ -6,10 +6,9 @@ import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'ap
 import { ICondition } from '../condition.model';
 
 @Component({
-  standalone: true,
-  selector: 'hpd-condition-detail',
-  templateUrl: './condition-detail.component.html',
-  imports: [SharedModule, RouterModule, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe],
+    selector: 'hpd-condition-detail',
+    templateUrl: './condition-detail.component.html',
+    imports: [SharedModule, RouterModule, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe]
 })
 export class ConditionDetailComponent {
   @Input() condition: ICondition | null = null;
