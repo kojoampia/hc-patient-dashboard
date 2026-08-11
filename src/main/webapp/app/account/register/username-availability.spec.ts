@@ -50,7 +50,7 @@ describe('RegisterComponent username look-ahead', () => {
     expect(comp.registerForm.controls.login.valid).toBe(true);
     expect(comp.usernameAvailable).toBe(true);
     expect(comp.usernameTaken).toBe(false);
-    expect(comp.usernameSuggestions).toEqual([]);
+    expect(comp.usernameSuggestions()).toEqual([]);
   }));
 
   it('marks a taken username invalid, blocking submission, and keeps the suggestions', fakeAsync(() => {
@@ -62,7 +62,7 @@ describe('RegisterComponent username look-ahead', () => {
     expect(comp.registerForm.controls.login.hasError('usernameTaken')).toBe(true);
     expect(comp.usernameTaken).toBe(true);
     expect(comp.usernameAvailable).toBe(false);
-    expect(comp.usernameSuggestions).toEqual(['kojo1', 'kojo2']);
+    expect(comp.usernameSuggestions()).toEqual(['kojo1', 'kojo2']);
   }));
 
   it('asks the gateway once per pause, not once per keystroke', fakeAsync(() => {
@@ -107,7 +107,7 @@ describe('RegisterComponent username look-ahead', () => {
     // POST /register still answers authoritatively and has its own error path for a taken login.
     expect(comp.registerForm.controls.login.valid).toBe(true);
     expect(comp.usernameTaken).toBe(false);
-    expect(comp.usernameSuggestions).toEqual([]);
+    expect(comp.usernameSuggestions()).toEqual([]);
   }));
 
   it('re-checks the suggestion it puts in the field', fakeAsync(() => {
@@ -115,7 +115,7 @@ describe('RegisterComponent username look-ahead', () => {
 
     type('kojo');
     tick(USERNAME_CHECK_DEBOUNCE_MS);
-    expect(comp.usernameSuggestions).toEqual(['kojo1']);
+    expect(comp.usernameSuggestions()).toEqual(['kojo1']);
 
     // Nothing reserves a suggestion, so it can be taken between being offered and being clicked.
     check.mockReturnValue(of({ available: true, suggestions: [] }));

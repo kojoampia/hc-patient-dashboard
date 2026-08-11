@@ -3,38 +3,38 @@
     <div class="col-md-6">
       <h1 hpdTranslate="register.title" data-cy="registerTitle">Registration</h1>
 
-      @if (success) {
+      @if (success()) {
         <div class="alert alert-success" hpdTranslate="register.messages.success">
           <strong>Registration saved!</strong> Please check your email for confirmation.
         </div>
       }
 
-      @if (error) {
+      @if (error()) {
         <div class="alert alert-danger" hpdTranslate="register.messages.error.fail">
           <strong>Registration failed!</strong> Please try again later.
         </div>
       }
 
-      @if (errorUserExists) {
+      @if (errorUserExists()) {
         <div class="alert alert-danger" hpdTranslate="register.messages.error.userexists">
           <strong>Login name already registered!</strong> Please choose another one.
         </div>
       }
 
-      @if (errorEmailExists) {
+      @if (errorEmailExists()) {
         <div class="alert alert-danger" hpdTranslate="register.messages.error.emailexists">
           <strong>Email is already in use!</strong> Please choose another one.
         </div>
       }
 
-      @if (doNotMatch) {
+      @if (doNotMatch()) {
         <div class="alert alert-danger" hpdTranslate="global.messages.error.dontmatch">The password and its confirmation do not match!</div>
       }
     </div>
   </div>
   <div class="d-flex justify-content-center">
     <div class="col-md-8">
-      @if (!success) {
+      @if (!success()) {
         <form name="form" role="form" (ngSubmit)="register()" [formGroup]="registerForm">
           <div class="mb-3">
             <label class="form-label" for="login" hpdTranslate="global.form.username.label">Username</label>
@@ -68,12 +68,12 @@
                 >This username is already taken.</small
               >
 
-              @if (usernameSuggestions.length > 0) {
+              @if (usernameSuggestions().length > 0) {
                 <div class="mt-1" data-cy="usernameSuggestions">
                   <small class="form-text text-muted d-block" hpdTranslate="register.messages.validate.login.suggestions"
                     >Available instead:</small
                   >
-                  @for (suggestion of usernameSuggestions; track suggestion) {
+                  @for (suggestion of usernameSuggestions(); track suggestion) {
                     <button
                       type="button"
                       class="btn btn-sm btn-outline-secondary me-1 mt-1"
