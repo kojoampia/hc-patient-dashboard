@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, ViewChild, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { AbstractControl, FormGroup, FormControl, ValidationErrors, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -23,14 +23,25 @@ export default class RegisterComponent implements AfterViewInit {
   @ViewChild('login', { static: false })
   login?: ElementRef;
 
-  doNotMatch = false;
-  error = false;
-  errorEmailExists = false;
-  errorUserExists = false;
-  success = false;
+  // Signals, not plain fields, and this is the whole of the success-banner fix.
+  //
+  // These are written from inside the HTTP subscribe below, and a plain assignment there updated the
+  // component without repainting it: registration returned 201, `success` became true, and the user
+  // kept looking at the filled-in form with no confirmation. Verified directly against a production
+  // build — ng.getComponent showed `error: true` within 500ms of a failed submit while the alert
+  // stayed absent for a further six seconds, and ng.applyChanges() rendered it immediately.
+  //
+  // markForCheck() would not have been enough: it marks a view dirty but still needs a tick to
+  // arrive, and no tick was arriving. A signal write notifies Angular's scheduler itself, so the
+  // repaint does not depend on whatever failed to notify it here.
+  doNotMatch = signal(false);
+  error = signal(false);
+  errorEmailExists = signal(false);
+  errorUserExists = signal(false);
+  success = signal(false);
 
   /** Alternatives offered by the gateway when the typed username is taken. */
-  usernameSuggestions: string[] = [];
+  usernameSuggestions = signal<string[]>([]);
 
   registerForm = new FormGroup({
     login: new FormControl('', {
@@ -89,19 +100,19 @@ export default class RegisterComponent implements AfterViewInit {
   }
 
   register(): void {
-    this.doNotMatch = false;
-    this.error = false;
-    this.errorEmailExists = false;
-    this.errorUserExists = false;
+    this.doNotMatch.set(false);
+    this.error.set(false);
+    this.errorEmailExists.set(false);
+    this.errorUserExists.set(false);
 
     const { password, confirmPassword } = this.registerForm.getRawValue();
     if (password !== confirmPassword) {
-      this.doNotMatch = true;
+      this.doNotMatch.set(true);
     } else {
       const { login, email } = this.registerForm.getRawValue();
       this.registerService
         .save({ login, email, password, langKey: this.translateService.currentLang })
-        .subscribe({ next: () => (this.success = true), error: response => this.processError(response) });
+        .subscribe({ next: () => this.success.set(true), error: response => this.processError(response) });
     }
   }
 
@@ -119,11 +130,11 @@ export default class RegisterComponent implements AfterViewInit {
    */
   private checkUsernameAvailable(control: AbstractControl): Observable<ValidationErrors | null> {
     const login = (control.value as string).trim();
-    this.usernameSuggestions = [];
+    this.usernameSuggestions.set([]);
 
     return timer(USERNAME_CHECK_DEBOUNCE_MS).pipe(
       switchMap(() => this.registerService.checkUsername(login)),
-      tap(result => (this.usernameSuggestions = result.available ? [] : result.suggestions)),
+      tap(result => this.usernameSuggestions.set(result.available ? [] : result.suggestions)),
       map(result => (result.available ? null : { usernameTaken: true })),
       // A look-ahead that cannot reach the gateway must not stand between the user and registration.
       // Treating the field as valid hands the decision back to POST /register, which answers
@@ -134,12 +145,16 @@ export default class RegisterComponent implements AfterViewInit {
   }
 
   private processError(response: HttpErrorResponse): void {
-    if (response.status === 400 && response.error.type === LOGIN_ALREADY_USED_TYPE) {
-      this.errorUserExists = true;
-    } else if (response.status === 400 && response.error.type === EMAIL_ALREADY_USED_TYPE) {
-      this.errorEmailExists = true;
+    // `response.error` is the parsed problem+json body, but it is a string when the body could not be
+    // parsed — hence the optional access rather than response.error.type, which would throw inside an
+    // RxJS error handler and leave every flag false.
+    const type = (response.error as { type?: string } | null)?.type;
+    if (response.status === 400 && type === LOGIN_ALREADY_USED_TYPE) {
+      this.errorUserExists.set(true);
+    } else if (response.status === 400 && type === EMAIL_ALREADY_USED_TYPE) {
+      this.errorEmailExists.set(true);
     } else {
-      this.error = true;
+      this.error.set(true);
     }
   }
 }
