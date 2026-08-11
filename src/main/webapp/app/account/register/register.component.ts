@@ -32,6 +32,8 @@ export default class RegisterComponent implements AfterViewInit {
   /** Alternatives offered by the gateway when the typed username is taken. */
   usernameSuggestions: string[] = [];
 
+  /** True only when the current login value has been successfully checked with the gateway. */
+  private usernameAvailabilityKnown = false;
   registerForm = new FormGroup({
     login: new FormControl('', {
       nonNullable: true,
