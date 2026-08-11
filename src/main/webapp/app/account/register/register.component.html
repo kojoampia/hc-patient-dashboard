@@ -41,6 +41,8 @@
             <input
               type="text"
               class="form-control"
+              [class.is-valid]="usernameAvailable"
+              [class.is-invalid]="registerForm.get('login')!.invalid && (registerForm.get('login')!.dirty || registerForm.get('login')!.touched)"
               id="login"
               name="login"
               placeholder="{{ 'global.form.username.placeholder' | translate }}"
@@ -48,6 +50,42 @@
               data-cy="username"
               #login
             />
+
+            @if (usernameChecking) {
+              <small class="form-text text-muted" data-cy="usernameChecking" hpdTranslate="register.messages.validate.login.checking"
+                >Checking availability…</small
+              >
+            }
+
+            @if (usernameAvailable) {
+              <small class="form-text text-success" data-cy="usernameAvailable" hpdTranslate="register.messages.validate.login.available"
+                >This username is available.</small
+              >
+            }
+
+            @if (usernameTaken) {
+              <small class="form-text text-danger" data-cy="usernameTaken" hpdTranslate="register.messages.validate.login.taken"
+                >This username is already taken.</small
+              >
+
+              @if (usernameSuggestions.length > 0) {
+                <div class="mt-1" data-cy="usernameSuggestions">
+                  <small class="form-text text-muted d-block" hpdTranslate="register.messages.validate.login.suggestions"
+                    >Available instead:</small
+                  >
+                  @for (suggestion of usernameSuggestions; track suggestion) {
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-outline-secondary me-1 mt-1"
+                      data-cy="usernameSuggestion"
+                      (click)="useSuggestion(suggestion)"
+                    >
+                      {{ suggestion }}
+                    </button>
+                  }
+                </div>
+              }
+            }
 
             @if (registerForm.get('login')!.invalid && (registerForm.get('login')!.dirty || registerForm.get('login')!.touched)) {
               <div>

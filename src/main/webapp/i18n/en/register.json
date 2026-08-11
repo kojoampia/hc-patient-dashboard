@@ -10,7 +10,11 @@
           "required": "Your username is required.",
           "minlength": "Your username is required to be at least 1 character.",
           "maxlength": "Your username cannot be longer than 50 characters.",
-          "pattern": "Your username is invalid."
+          "pattern": "Your username is invalid.",
+          "checking": "Checking availability…",
+          "available": "This username is available.",
+          "taken": "This username is already taken.",
+          "suggestions": "Available instead:"
         }
       },
       "success": "<strong>Registration saved!</strong> Please check your email for confirmation.",
