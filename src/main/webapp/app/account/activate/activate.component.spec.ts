@@ -51,8 +51,8 @@ describe('ActivateComponent', () => {
       comp.ngOnInit();
       tick();
 
-      expect(comp.error).toBe(false);
-      expect(comp.success).toBe(true);
+      expect(comp.error()).toBe(false);
+      expect(comp.success()).toBe(true);
     }),
   ));
 
@@ -64,8 +64,8 @@ describe('ActivateComponent', () => {
       comp.ngOnInit();
       tick();
 
-      expect(comp.error).toBe(true);
-      expect(comp.success).toBe(false);
+      expect(comp.error()).toBe(true);
+      expect(comp.success()).toBe(false);
     }),
   ));
 });

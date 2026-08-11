@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -15,7 +15,7 @@ const initialAccount: Account = {} as Account;
     templateUrl: './settings.component.html'
 })
 export default class SettingsComponent implements OnInit {
-  success = false;
+  success = signal(false);
   languages = LANGUAGES;
 
   settingsForm = new FormGroup({
@@ -53,11 +53,11 @@ export default class SettingsComponent implements OnInit {
   }
 
   save(): void {
-    this.success = false;
+    this.success.set(false);
 
     const account = this.settingsForm.getRawValue();
     this.accountService.save(account).subscribe(() => {
-      this.success = true;
+      this.success.set(true);
 
       this.accountService.authenticate(account);
 

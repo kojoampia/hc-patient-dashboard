@@ -74,7 +74,7 @@ describe('SettingsComponent', () => {
     comp.save();
 
     // THEN
-    expect(comp.success).toBe(true);
+    expect(comp.success()).toBe(true);
   });
 
   it('should notify of error upon failed save', () => {
@@ -86,6 +86,6 @@ describe('SettingsComponent', () => {
     comp.save();
 
     // THEN
-    expect(comp.success).toBe(false);
+    expect(comp.success()).toBe(false);
   });
 });
