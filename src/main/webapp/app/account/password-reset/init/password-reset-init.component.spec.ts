@@ -42,7 +42,7 @@ describe('PasswordResetInitComponent', () => {
     comp.requestReset();
 
     expect(service.save).toHaveBeenCalledWith('user@domain.com');
-    expect(comp.success).toBe(true);
+    expect(comp.success()).toBe(true);
   }));
 
   it('no notification of success upon error response', inject([PasswordResetInitService], (service: PasswordResetInitService) => {
@@ -58,6 +58,6 @@ describe('PasswordResetInitComponent', () => {
     comp.requestReset();
 
     expect(service.save).toHaveBeenCalledWith('user@domain.com');
-    expect(comp.success).toBe(false);
+    expect(comp.success()).toBe(false);
   }));
 });
