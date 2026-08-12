@@ -49,11 +49,12 @@
   background: #fff;
   border-radius: 50%;
 
-  // The logo is a circular badge drawn on white, so it lines up with the white circle it sits in
-  // and `contain` keeps the gold ring from being cropped by the border-radius.
+  // logo-mark.svg, not the full badge: below ~48px the badge's wordmark and border legend turn to
+  // mush. The mark is transparent and already carries its own margin, so it just fills the circle.
   img {
     width: 100%;
     height: 100%;
+    padding: 3px;
     object-fit: contain;
   }
 }
