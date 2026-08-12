@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 import SharedModule from 'app/shared/shared.module';
-import { IconComponent } from 'app/shared/ui/icon/icon.component';
 
 /**
  * The signed-out layout: brand on the left, whatever form the route supplies on the right.
@@ -12,7 +11,7 @@ import { IconComponent } from 'app/shared/ui/icon/icon.component';
 @Component({
     selector: 'hpd-auth-shell',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [SharedModule, RouterOutlet, IconComponent],
+    imports: [SharedModule, RouterOutlet],
     templateUrl: './auth-shell.component.html',
     styleUrl: './auth-shell.component.scss'
 })
