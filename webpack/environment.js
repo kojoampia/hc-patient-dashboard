@@ -1,6 +1,12 @@
 module.exports = {
   I18N_HASH: 'generated_hash',
+  // The API base baked into the bundle. Empty means same-origin, which is what every build uses —
+  // production is served by the web container's nginx, and `npm start` is served by the dev server;
+  // both proxy /api and /services onward, so the browser talks to one origin and needs no CORS.
   SERVER_API_URL: '',
+  // Generated defaults, kept for regeneration but read by nothing: pointing a *bundle* at another
+  // origin requires CORS the gateway does not have. To develop against a gateway elsewhere, move
+  // the dev server's proxy instead — `HC_GATEWAY_URL=… npm start`, see proxy.conf.js.
   DEV_SERVER_API_URL: 'http://localhost:5505/',
   TEST_SERVER_API_URL: 'https://patient-dashboard.jojoaddison.net/',
   PROD_SERVER_API_URL: 'https://patient-dashboard.abofonsa.com/',

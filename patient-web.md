@@ -115,7 +115,16 @@ Resolved since the last baseline, kept so the numbering change is traceable:
 
 ## Phase A — wiring and correctness
 
-- `[ ]` Resolve decision 1 and align `webpack/proxy.conf.js` with `webpack/environment.js` in one change.
+- `[x]` **The dev server can reach a gateway.** Settled 2026-08-16. The ports had agreed since
+  2026-08-03, but `npm start` still could not talk to one: the dev bundle was built with an absolute
+  `SERVER_API_URL` of `http://localhost:5505/`, so the browser went cross-origin, straight past
+  `webpack/proxy.conf.js`, into the gateway's deliberately-disabled CORS — `403` on the preflight,
+  `503` on the request. The proxy had been configured correctly and used by nothing the whole time.
+  `SERVER_API_URL` is now empty in **every** mode, so dev is same-origin like production and the
+  proxy carries it; `HC_GATEWAY_URL` moves that proxy's target, which is how you develop against a
+  gateway elsewhere — `ssh -N -L 5505:127.0.0.1:15505 jacserver` and the quality stack's seeded
+  record. Verified by signing in against it from `npm start`. This is what makes the rest of Phase E
+  checkable locally instead of by shipping and looking.
 - `[ ]` Resolve decision 2: centralize entity route registration in `entities/entity.routes.ts` and populate `entity-navbar-items.ts` — routes and menu land together, never separately.
 - `[ ]` Rename the `hc-credential` and `hc-pay-option` areas to match the backend's `PersonalDocument` and `PaymentOption` (models, services, routes, i18n keys, specs). Coordinate with `patient-api.md` Phase A, which still has to generate those endpoints.
 - `[ ]` Generate `clinical-case` and `recommendation` screens, or record the decision not to. `api` shipped both in `519ba8f` with a full resource stack; the frontend has nothing for either, and `ClinicalCase` **replaced** `MedCase` rather than renaming it, so there is no old screen to adapt.
