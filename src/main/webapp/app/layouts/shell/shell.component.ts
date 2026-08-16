@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, HostListener, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, HostListener, Signal, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { filter, map, startWith } from 'rxjs/operators';
@@ -7,6 +7,7 @@ import SharedModule from 'app/shared/shared.module';
 import { AccountService } from 'app/core/auth/account.service';
 import { LoginService } from 'app/login/login.service';
 import { IconComponent } from 'app/shared/ui/icon/icon.component';
+import { PortalDataService } from 'app/portal/data/portal-data.service';
 import { SHELL_NAV, SHELL_TABS, ShellNavItem, navOwnerOf } from './shell-nav';
 import { DEFAULT_PAGE_TITLE, PAGE_TITLES } from './shell-titles';
 
@@ -32,19 +33,46 @@ export default class ShellComponent {
   private readonly accountService = inject(AccountService);
   private readonly loginService = inject(LoginService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly data = inject(PortalDataService);
 
   /** Current portal path, e.g. `cases/12` — drives both the active nav item and the title. */
   private readonly activePath = signal(this.portalPathOf(this.router.url));
+
+  /**
+   * How many alerts are on the record, for the badge against Emergencies.
+   *
+   * The count belongs in the frame rather than on the Emergencies screen: its job is to be visible
+   * from the screens that are *not* it. The fetch is shared by PortalDataService, so the screens
+   * that show alerts anyway — the overview, emergencies itself — cost nothing extra, and the ones
+   * that do not pay for a single collection to keep one number honest everywhere.
+   */
+  private readonly emergencies = toSignal(this.data.emergencies$, { initialValue: [] });
+
+  /**
+   * Counts per nav path, for the paths that have one. A signal each, so the sidebar tracks the data
+   * rather than a snapshot; `Partial` because most destinations carry no number, and saying so is
+   * what lets the lookup below be a real check rather than one TypeScript reads as always true.
+   */
+  private readonly badges: Partial<Record<string, Signal<number>>> = {
+    emergencies: computed(() => this.emergencies().length),
+  };
+
+  /** The nav with its live counts attached — the config declares the destinations, this supplies
+   * the numbers, which is why `badge` is a signal the nav file itself never sets. */
+  private readonly nav: readonly ShellNavItem[] = SHELL_NAV.map(item => {
+    const badge = this.badges[item.path];
+    return badge ? { ...item, badge } : item;
+  });
 
   readonly account = toSignal(this.accountService.getAuthenticationState(), { initialValue: null });
 
   /** Drawer state, only meaningful below the shell breakpoint. */
   readonly navOpen = signal(false);
 
-  readonly tabs = SHELL_NAV.filter(item => SHELL_TABS.includes(item.path));
+  readonly tabs = this.nav.filter(item => SHELL_TABS.includes(item.path));
 
   /** The nav, pre-grouped so the template does not need a "did the group change" check. */
-  readonly groups: readonly NavGroup[] = SHELL_NAV.reduce<NavGroup[]>((acc, item) => {
+  readonly groups: readonly NavGroup[] = this.nav.reduce<NavGroup[]>((acc, item) => {
     const last = acc.at(-1);
     if (last?.labelKey === item.groupKey) {
       (last.items as ShellNavItem[]).push(item);
