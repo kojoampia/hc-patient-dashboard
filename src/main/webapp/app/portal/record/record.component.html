@@ -81,7 +81,13 @@
       <div class="hc-chart-card__head">
         <div class="hc-grow">
           <h4>{{ vital.label }}</h4>
-          <p>{{ vital.band || vital.note }}</p>
+          <p>
+            {{ vital.band || vital.note }}
+            @if (vital.recordedAt) {
+              ·
+              {{ 'patientPortal.overview.recordedBy' | translate: { when: formatInstantDay(vital.recordedAt), who: recorderOf(vital) } }}
+            }
+          </p>
         </div>
         <button type="button" class="hc-toggle" [class.is-on]="showTable()" (click)="showTable.set(!showTable())">
           <span hpdTranslate="patientPortal.chart.table">Table</span>

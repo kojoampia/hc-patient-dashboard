@@ -131,8 +131,9 @@
       "onFile": "In Ihrer Akte",
       "onFileSub": "Tippen Sie auf eine Kachel, um sie zu öffnen.",
       "viewVital": "{{ name }} im Detail ansehen",
-      "recordedOn": "erfasst am {{ when }}",
-      "lastReadings": "Die Messwerte dahinter"
+      "lastReadings": "Die Messwerte dahinter",
+      "recordedBy": "erfasst am {{ when }} von {{ who }}",
+      "recordedByYou": "Ihnen"
     },
     "record": {
       "vitals": "Vitalwerte",
@@ -251,7 +252,18 @@
       "search": "Berichte, Befunde oder Art durchsuchen…",
       "openFile": "Datei öffnen",
       "empty": "Keine Befunde hinterlegt",
-      "emptyHint": "Labor-, Bildgebungs- und klinische Befunde erscheinen hier, sobald sie vorliegen."
+      "emptyHint": "Labor-, Bildgebungs- und klinische Befunde erscheinen hier, sobald sie vorliegen.",
+      "upload": "Bericht hochladen",
+      "uploading": "Wird hochgeladen…",
+      "uploadBlurb": "Ein Ergebnis, das Sie auf Papier bekommen haben, oder ein PDF aus einer Praxis. Ihr Team sieht es in Ihrer Akte.",
+      "file": "Die Datei",
+      "fileHint": "PDF oder Foto, bis 10 MB.",
+      "name": "Worum geht es",
+      "nameHint": "z. B. HbA1c-Ergebnisse, 12. August",
+      "attachCase": "Einem Fall zuordnen (optional)",
+      "noCase": "Gehört zu keinem Fall",
+      "tooLarge": "Diese Datei ist größer als 10 MB. Ein Foto mit geringerer Auflösung passt.",
+      "uploadFailed": "Ihr Bericht wurde nicht hochgeladen. Prüfen Sie die Verbindung und versuchen Sie es erneut — Ihre Eingaben sind noch da."
     },
     "plans": {
       "diet": "Ernährungsplan",

@@ -309,7 +309,8 @@
     <div class="hc-muted hc-sm" style="margin-bottom: 12px">
       {{ vital.band || vital.note }}
       @if (vital.recordedAt) {
-        · {{ 'patientPortal.overview.recordedOn' | translate: { when: formatInstantDay(vital.recordedAt) } }}
+        ·
+        {{ 'patientPortal.overview.recordedBy' | translate: { when: formatInstantDay(vital.recordedAt), who: recorderOf(vital) } }}
       }
     </div>
 

@@ -19,6 +19,9 @@ export interface VitalSummary {
   /** The reference band in words, when the reading carries one. */
   readonly band: string;
   readonly recordedAt: dayjs.Dayjs | null;
+  /** Who took the latest reading, for attribution. Null when the record does not say. */
+  readonly source: string | null;
+  readonly recordedById: string | null;
   /** Oldest to newest — a trend reads left to right. */
   readonly series: readonly number[];
   readonly trend: readonly TrendPoint[];
@@ -83,6 +86,8 @@ function summarise(key: string, readings: IStat[]): VitalSummary {
     note: latest.note ?? latest.description ?? '',
     band: bandOf(latest),
     recordedAt: when(latest) ?? null,
+    source: latest.source ?? null,
+    recordedById: latest.recordedById ?? null,
     // The plotted series is the primary value only: a systolic/diastolic pair cannot be one line,
     // and the table below the chart carries both.
     series: recent.map(stat => stat.value ?? 0),

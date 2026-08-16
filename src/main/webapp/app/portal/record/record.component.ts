@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Signal, WritableSignal, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 import SharedModule from 'app/shared/shared.module';
 import { IconComponent } from 'app/shared/ui/icon/icon.component';
@@ -72,6 +73,7 @@ function paged<T>(all: Signal<readonly T[]>): PanelList<T> {
 export default class RecordComponent {
   private readonly context = inject(PatientContextService);
   private readonly data = inject(PortalDataService);
+  private readonly translate = inject(TranslateService);
   private readonly careTeamById = toSignal(this.context.careTeamById$, { initialValue: new Map<string, CareTeamMember>() });
 
   private readonly stats = toSignal(this.data.vitals$, { initialValue: [] });
@@ -132,6 +134,18 @@ export default class RecordComponent {
    */
   caseLink(caseId: string | null | undefined): string[] | null {
     return caseId ? ['/case', caseId] : null;
+  }
+
+  /**
+   * Who took the reading the chart is showing. The same rule the overview's detail view uses — a
+   * reading the patient took themselves is theirs, and one the record does not attribute is the
+   * care team's rather than a name that was never written down.
+   */
+  recorderOf(vital: VitalSummary): string {
+    if (vital.source === 'PATIENT') {
+      return this.translate.instant('patientPortal.overview.recordedByYou') as string;
+    }
+    return this.memberOf(vital.recordedById).name;
   }
 
   vitalPill(flag: string): string {

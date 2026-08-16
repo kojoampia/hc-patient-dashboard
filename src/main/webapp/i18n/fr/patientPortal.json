@@ -131,8 +131,9 @@
       "onFile": "Dans votre dossier",
       "onFileSub": "Touchez une tuile pour l’ouvrir.",
       "viewVital": "Voir {{ name }} en détail",
-      "recordedOn": "relevé le {{ when }}",
-      "lastReadings": "Les mesures derrière cette courbe"
+      "lastReadings": "Les mesures derrière cette courbe",
+      "recordedBy": "relevé le {{ when }} par {{ who }}",
+      "recordedByYou": "vous"
     },
     "record": {
       "vitals": "Constantes",
@@ -251,7 +252,18 @@
       "search": "Rechercher rapports, résultats ou type…",
       "openFile": "Ouvrir le fichier",
       "empty": "Aucun compte rendu enregistré",
-      "emptyHint": "Les comptes rendus de laboratoire, d'imagerie et cliniques apparaissent ici une fois déposés."
+      "emptyHint": "Les comptes rendus de laboratoire, d'imagerie et cliniques apparaissent ici une fois déposés.",
+      "upload": "Téléverser un rapport",
+      "uploading": "Envoi…",
+      "uploadBlurb": "Un résultat reçu sur papier, ou un PDF d’une clinique. Votre équipe le voit sur votre dossier.",
+      "file": "Le fichier",
+      "fileHint": "PDF ou photographie, jusqu’à 10 Mo.",
+      "name": "De quoi s’agit-il",
+      "nameHint": "ex. Résultats HbA1c, 12 août",
+      "attachCase": "Rattacher à un dossier (facultatif)",
+      "noCase": "Sans rapport avec un dossier",
+      "tooLarge": "Ce fichier dépasse 10 Mo. Une photographie de résolution plus basse conviendra.",
+      "uploadFailed": "Votre rapport n’a pas été envoyé. Vérifiez votre connexion et réessayez — votre saisie est toujours là."
     },
     "plans": {
       "diet": "Plan alimentaire",

@@ -422,10 +422,13 @@ Batch 4 — **C5, C8, the A5 leftover and D1 done 2026-08-16**; C10 still blocke
   | Appointments, upcoming | no — the card carries clinician, place and case | no |
   | Vitals, on the record | no — the tile already drives the trend chart beside it | no |
 
-- `[ ]` **C10 · Upload a report**, with **+ Add activity** (C2) and **Log activity** (C5) — the demo's
-  position that the record belongs to the patient. **Log activity shipped in C5**; what remains is
-  the upload, and it needs somewhere to put a file: `Report.url` exists but nothing serves uploads,
-  so this is blocked on an api decision rather than on this repo.
+- `[x]` **C10 · Upload a report**, with **+ Add activity** (C2) and **Log activity** (C5) — the demo's
+  position that the record belongs to the patient. ~~blocked on an api decision~~ **Unblocked and
+  built 2026-08-16**: the api stores report files in GridFS, in the MongoDB it already uses, and
+  serves them back through `PatientScope` so a file is visible exactly when its report is. The
+  portal creates the report first and attaches the file second — the api's shape, and the better
+  failure: an upload that dies halfway leaves a report to retry against rather than nothing. PDF,
+  JPEG, PNG and HEIC up to 10 MB, decided from the *bytes* rather than the filename.
 
 ### E4 — wording, vocabulary and seed data
 
@@ -441,21 +444,26 @@ Batch 4 — **C5, C8, the A5 leftover and D1 done 2026-08-16**; C10 still blocke
 - `[ ]` **D2 · "What was reported" / "What was found"** replace the demo's *Symptoms* / *Diagnosis*.
   This reads as an improvement on the demo rather than drift from it — make it a decision and apply it
   everywhere, rather than leaving two documents disagreeing.
-- `[ ]` **D3 · honorifics dropped** ("Dr. Grace Mensah" → "Grace Mensah"). ~~The seed stores the
-  honorific; this is presentation.~~ **It does not.** Checked 2026-08-16: `patient-demo-seed.json`
-  gives a professional `firstName`, `lastName` and `role`, and there is no honorific field on the
-  model either. Deriving one from the role would invent a title — a physiotherapist and a nurse are
-  not "Dr." — so this needs a field on the api's professional and a value in the seed, not a
-  presentation change here.
+- `[x]` **D3 · honorifics dropped** ("Dr. Grace Mensah" → "Grace Mensah"). ~~The seed stores the
+  honorific; this is presentation.~~ **It did not.** `Professional.honorific` was added to the api,
+  the generator now lifts it out of the mockup's own name, and `CareTeamMember.name` carries it — so
+  it appears everywhere a clinician is named, without every screen having to remember a second
+  field. The mockup gives an honorific to exactly one of the six people, and the seed does the same:
+  guessing "Dr." onto a physiotherapist would be the very mistake this item is about. Note the
+  api redacts professionals for non-staff callers by *whitelist*, so the field had to be named there
+  too or a patient would never have seen it.
 - `[ ]` **D4 · sign-in asks for a username, not an email.** The demo signs in with `kojo@jac.net` and
   offers **Continue with care card** — the number is on the physical card and printed in the profile.
   We ask for a username and add Register and Forgot password, which the demo does not have.
   Email-first is a different onboarding story; decide it.
-- `[ ]` **D5 · vitals carry no attribution.** Demo: "Recorded 24 July 2026 by Ophelia Gaisie." The
-  named carer is the point — she is the angel the patient knows. **Blocked, and not only on the
-  seed**: `IStat` has no author field at all, and the seeded readings carry none — so this is an api
-  model change first. The date half of the sentence now renders in the vital's detail view
-  ("recorded 24 Jul 2026"); the name is what is missing.
+- `[x]` **D5 · vitals carry no attribution.** Demo: "Recorded 24 July 2026 by Ophelia Gaisie."
+  `Stat` gained `source` and `recordedById`, mirroring `ActivityLog`, so a reading the patient took
+  at home reads "you" through the attribution rule the portal already had. **Half the seeded
+  readings are deliberately unattributed**: three of the six reading days are Ophelia's home visits,
+  whose stated purpose is "Vitals and glucose check", and the other three fall on physiotherapy
+  sessions at the Tema centre — a physiotherapist taking a glucose reading is not something this
+  record says. Leaving those unnamed is the record being honest, and it exercises both rendering
+  paths.
 - `[ ]` **D6 · case rows print their title twice.** `patient-demo-seed.json` sets `brief` to the same
   string as `title` because the mockup has one label per case. Either give `brief` real content or stop
   rendering it. Seed-side fix lives in `hc-patient-quality`.

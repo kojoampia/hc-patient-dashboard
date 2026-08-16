@@ -63,6 +63,48 @@ describe('PatientContextService', () => {
     });
   });
 
+  describe('how a clinician is named', () => {
+    /** The care team as the service builds it, from what the endpoint returns. */
+    function careTeamFrom(professionals: unknown[]): Promise<readonly CareTeamMember[]> {
+      TestBed.resetTestingModule();
+      TestBed.configureTestingModule({
+        providers: [
+          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClientTesting(),
+          { provide: AccountService, useValue: { identity: () => of(ACCOUNT) } },
+        ],
+      });
+      const service = TestBed.inject(PatientContextService);
+      const httpMock = TestBed.inject(HttpTestingController);
+      const members = new Promise<readonly CareTeamMember[]>(resolve => service.careTeam$.subscribe(resolve));
+
+      // The care team is reference data: it is fetched on its own, not behind the profile lookup.
+      httpMock.expectOne(req => req.url.includes('/api/professionals')).flush(professionals);
+      return members;
+    }
+
+    it('carries the honorific in the name, so every screen shows it without asking', async () => {
+      const [member] = await careTeamFrom([
+        { id: 'professional-grace', honorific: 'Dr.', firstName: 'Grace', lastName: 'Mensah', role: 'General Practitioner' },
+      ]);
+      expect(member.name).toBe('Dr. Grace Mensah');
+    });
+
+    it('names a clinician who has no honorific without a stray space', async () => {
+      // Five of the record's six professionals have none, and inventing one from the role would put
+      // "Dr." on a physiotherapist.
+      const [member] = await careTeamFrom([{ id: 'professional-yaw', firstName: 'Yaw', lastName: 'Boateng', role: 'Physiotherapist' }]);
+      expect(member.name).toBe('Yaw Boateng');
+    });
+
+    it('keeps the initials free of the honorific', async () => {
+      const [member] = await careTeamFrom([
+        { id: 'professional-grace', honorific: 'Dr.', firstName: 'Grace', lastName: 'Mensah', role: 'General Practitioner' },
+      ]);
+      expect(member.initials).toBe('GM');
+    });
+  });
+
   describe('authorNameOf', () => {
     const grace: CareTeamMember = {
       id: 'professional-grace',

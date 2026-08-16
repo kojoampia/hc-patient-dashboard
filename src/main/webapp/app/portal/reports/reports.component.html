@@ -1,6 +1,11 @@
 <div class="hc-tools">
   <hpd-search-box inputId="q_reports" placeholderKey="patientPortal.reports.search" [value]="query()" (queryChange)="setQuery($event)" />
 
+  <button type="button" class="hc-btn hc-btn--gold hc-btn--sm hc-no-print" (click)="openUpload()">
+    <hpd-icon name="up" [size]="15" />
+    <span hpdTranslate="patientPortal.reports.upload">Upload a report</span>
+  </button>
+
   <hpd-person-filter [people]="careTeam()" [value]="professional()" (valueChange)="setProfessional($event)" />
 
   @for (option of categories(); track option) {
@@ -54,4 +59,58 @@
   <div class="hc-card">
     <hpd-empty-state icon="report" titleKey="patientPortal.reports.empty" messageKey="patientPortal.reports.emptyHint" />
   </div>
+}
+
+@if (uploading()) {
+  <hpd-modal titleKey="patientPortal.reports.upload" icon="report" tone="gold" (closed)="uploading.set(false)">
+    <p class="hc-muted hc-sm" style="margin: -8px 0 16px" hpdTranslate="patientPortal.reports.uploadBlurb">
+      A result you were given on paper, or a PDF from a clinic. Your care team sees it on your record.
+    </p>
+
+    <div class="hc-field">
+      <label for="rp_file" hpdTranslate="patientPortal.reports.file">The file</label>
+      <input id="rp_file" type="file" [attr.accept]="acceptedTypes" (change)="chooseFile($event)" />
+      <p class="hc-muted hc-tiny" style="margin: 6px 0 0" hpdTranslate="patientPortal.reports.fileHint">
+        PDF or a photograph, up to 10 MB.
+      </p>
+    </div>
+
+    <div class="hc-field">
+      <label for="rp_name" hpdTranslate="patientPortal.reports.name">What is it</label>
+      <input
+        id="rp_name"
+        type="text"
+        maxlength="90"
+        [value]="reportName()"
+        (input)="reportName.set($any($event.target).value)"
+        [attr.placeholder]="'patientPortal.reports.nameHint' | translate"
+      />
+    </div>
+
+    @if (openCases().length) {
+      <div class="hc-field">
+        <label for="rp_case" hpdTranslate="patientPortal.reports.attachCase">Attach to a case (optional)</label>
+        <select id="rp_case" [value]="uploadCase() ?? ''" (change)="uploadCase.set($any($event.target).value || null)">
+          <option value="" hpdTranslate="patientPortal.reports.noCase">Not related to a case</option>
+          @for (item of openCases(); track item.id) {
+            <option [value]="item.id">{{ item.title ?? item.brief }}</option>
+          }
+        </select>
+      </div>
+    }
+
+    @if (uploadError(); as error) {
+      <div class="hc-note hc-note--danger">{{ error | translate }}</div>
+    }
+
+    <footer class="hc-modal__foot">
+      <button type="button" class="hc-btn hc-btn--ghost" (click)="uploading.set(false)" hpdTranslate="patientPortal.action.cancel">
+        Cancel
+      </button>
+      <button type="button" class="hc-btn hc-btn--gold" [disabled]="!canUpload()" (click)="save()">
+        <hpd-icon name="up" [size]="15" />
+        <span>{{ (saving() ? 'patientPortal.reports.uploading' : 'patientPortal.reports.upload') | translate }}</span>
+      </button>
+    </footer>
+  </hpd-modal>
 }
