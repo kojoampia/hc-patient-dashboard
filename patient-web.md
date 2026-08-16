@@ -452,10 +452,24 @@ Batch 4 — **C5, C8, the A5 leftover and D1 done 2026-08-16**; C10 still blocke
   guessing "Dr." onto a physiotherapist would be the very mistake this item is about. Note the
   api redacts professionals for non-staff callers by *whitelist*, so the field had to be named there
   too or a patient would never have seen it.
-- `[ ]` **D4 · sign-in asks for a username, not an email.** The demo signs in with `kojo@jac.net` and
-  offers **Continue with care card** — the number is on the physical card and printed in the profile.
-  We ask for a username and add Register and Forgot password, which the demo does not have.
-  Email-first is a different onboarding story; decide it.
+- `[x]` **D4 · sign-in asks for a username, not an email.** ~~The demo signs in with `kojo@jac.net` and
+  offers **Continue with care card**~~ — **decided 2026-08-16: authentication is exclusively by
+  login.** Not a gap, and not deferred: the demo diverges from the product here and the portal is
+  right as it stands.
+
+  That closes the care card with it. "Continue with care card" is a second credential, and the
+  number it would accept is printed on a physical card *and* displayed on the profile screen — a
+  credential a patient shows to a receptionist and carries in a wallet is not one that should open
+  a record. It stays what it is: a field on the record, never a way in.
+
+  Register and Forgot password stay. Neither is an alternative credential — one creates a login, the
+  other recovers it — so both are consistent with login-only authentication. Nothing in the app
+  needed changing: the sign-in screen already asks for a username and nothing anywhere offers a card.
+
+  One consequence worth carrying forward: **registration is open**, so a login is obtainable by
+  anyone with an email address. That is exactly the exposure `PatientScope` in the api was written
+  against, and it is why cross-patient access has to stay a thing a *role* grants rather than a check
+  somebody remembers to write.
 - `[x]` **D5 · vitals carry no attribution.** Demo: "Recorded 24 July 2026 by Ophelia Gaisie."
   `Stat` gained `source` and `recordedById`, mirroring `ActivityLog`, so a reading the patient took
   at home reads "you" through the attribution rule the portal already had. **Half the seeded
