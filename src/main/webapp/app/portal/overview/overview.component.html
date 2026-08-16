@@ -8,14 +8,46 @@
         <span hpdTranslate="patientPortal.overview.greeting">Your health, at a glance</span>
       }
     </h3>
-    <p hpdTranslate="patientPortal.overview.heroBlurb">
-      Everything your care team has recorded — cases, visits, medications and reports — in one place.
-    </p>
+    @if (heroSummary(); as summary) {
+      <p>
+        {{
+          'patientPortal.overview.heroNext'
+            | translate: { when: summary.when, clinician: summary.clinician, open: summary.open, total: summary.total }
+        }}
+      </p>
+    } @else {
+      <p hpdTranslate="patientPortal.overview.heroBlurb">
+        Everything your care team has recorded — cases, visits, medications and reports — in one place.
+      </p>
+    }
+    <a class="hc-btn hc-btn--gold" style="margin-top: 14px" routerLink="/record">
+      <hpd-icon name="folder" [size]="16" [strokeWidth]="2.2" />
+      <span hpdTranslate="patientPortal.overview.openRecord">Open my record</span>
+    </a>
   </div>
 </section>
 
 <div class="hc-grid hc-grid--4 hc-mt-16">
   @for (tile of tiles(); track tile.labelKey) {
+    <a class="hc-stat" [routerLink]="tile.link">
+      <span class="hc-stat__ic" style="background: var(--hc-gold-050); color: var(--hc-gold)">
+        <hpd-icon [name]="tile.icon" [size]="18" [strokeWidth]="2" />
+      </span>
+      <b class="hc-num">{{ tile.value }}</b>
+      <span [hpdTranslate]="tile.labelKey"></span>
+    </a>
+  }
+</div>
+
+<div class="hc-sec-head hc-mt-16">
+  <div>
+    <h3 hpdTranslate="patientPortal.overview.onFile">On your file</h3>
+    <p hpdTranslate="patientPortal.overview.onFileSub">Tap any tile to open it.</p>
+  </div>
+</div>
+
+<div class="hc-grid hc-grid--4">
+  @for (tile of recordTiles(); track tile.labelKey) {
     <a class="hc-stat" [routerLink]="tile.link">
       <span class="hc-stat__ic" style="background: var(--hc-gold-050); color: var(--hc-gold)">
         <hpd-icon [name]="tile.icon" [size]="18" [strokeWidth]="2" />

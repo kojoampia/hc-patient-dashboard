@@ -40,6 +40,8 @@ export default class OverviewComponent {
   private readonly reports = toSignal(this.data.reports$, { initialValue: [] });
   private readonly emergencies = toSignal(this.data.emergencies$, { initialValue: [] });
   private readonly activity = toSignal(this.data.activity$, { initialValue: [] });
+  private readonly allergies = toSignal(this.data.allergies$, { initialValue: [] });
+  private readonly carePlan = toSignal(this.data.carePlan$, { initialValue: [] });
 
   readonly formatDay = formatDay;
   readonly formatInstantDay = formatInstantDay;
@@ -66,6 +68,55 @@ export default class OverviewComponent {
     },
     { icon: 'report' as const, value: this.reports().length, labelKey: 'patientPortal.overview.tile.reports', link: '/reports' },
   ]);
+
+  /**
+   * What is *on* the record, as opposed to what is happening on it.
+   *
+   * The row above counts activity — what needs attention now. This one counts the standing facts a
+   * clinician reads before they do anything: what you are allergic to, what has gone wrong before,
+   * what you have agreed to do. The demo leads with these and uses them as navigation, which is why
+   * every tile here links somewhere.
+   */
+  readonly recordTiles = computed(() => [
+    {
+      icon: 'alert' as const,
+      value: this.emergencies().length,
+      labelKey: 'patientPortal.overview.tile.emergencies',
+      link: '/emergencies',
+    },
+    { icon: 'shield' as const, value: this.allergies().length, labelKey: 'patientPortal.overview.tile.allergies', link: '/allergies' },
+    {
+      icon: 'leaf' as const,
+      value: this.carePlan().filter(item => item.planType === 'DIET').length,
+      labelKey: 'patientPortal.overview.tile.diet',
+      link: '/plans',
+    },
+    {
+      icon: 'run' as const,
+      value: this.carePlan().filter(item => item.planType === 'EXERCISE').length,
+      labelKey: 'patientPortal.overview.tile.exercise',
+      link: '/plans',
+    },
+  ]);
+
+  /**
+   * The hero's sentence: the next appointment, and how much is still open.
+   *
+   * Null when there is nothing ahead — a patient with no appointment gets the plain greeting rather
+   * than a sentence with a gap in it.
+   */
+  readonly heroSummary = computed(() => {
+    const next = this.nextAppointments().at(0);
+    if (!next) {
+      return null;
+    }
+    return {
+      when: formatDayTime(next.scheduledAt ?? next.schedule),
+      clinician: PatientContextService.memberOf(this.careTeamById(), next.attendantId).name,
+      open: this.openCases().length,
+      total: this.cases().length,
+    };
+  });
 
   /** Appointments still ahead of us, soonest first. */
   readonly upcoming = computed(() => {

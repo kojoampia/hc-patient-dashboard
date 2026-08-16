@@ -96,8 +96,16 @@
         "openCases": "Open cases",
         "upcoming": "Upcoming visits",
         "activeMeds": "Active medications",
-        "reports": "Reports on file"
-      }
+        "reports": "Reports on file",
+        "emergencies": "Emergencies",
+        "allergies": "Allergies",
+        "diet": "Diet plan",
+        "exercise": "Exercise plan"
+      },
+      "heroNext": "Your next appointment is {{ when }} with {{ clinician }}. {{ open }} of your {{ total }} cases are still active.",
+      "openRecord": "Open my record",
+      "onFile": "On your file",
+      "onFileSub": "Tap any tile to open it."
     },
     "record": {
       "vitals": "Vitals",
@@ -162,7 +170,7 @@
     "emergencies": {
       "search": "Search alerts",
       "careLineTitle": "Need help now?",
-      "careLineBlurb": "The care line is staffed around the clock. If this is life-threatening, call your local emergency number first.",
+      "careLineBlurb": "The care line is staffed around the clock and your care angel is called at the same time. If this is life-threatening, call your local emergency number first.",
       "callCareLine": "Call the care line",
       "outcome": "Outcome",
       "empty": "No emergencies on record",
@@ -178,6 +186,11 @@
         "dosage": "How to take it",
         "prescriber": "Prescribed by",
         "status": "Status"
+      },
+      "count": {
+        "active": "Taking now",
+        "completed": "Completed courses",
+        "withheld": "Withheld — allergy"
       }
     },
     "reports": {
@@ -201,7 +214,11 @@
       "conditions": "Ongoing conditions",
       "noConditions": "No conditions on file",
       "empty": "No allergies on file",
-      "emptyHint": "Tell your care team about any reaction so it can be recorded here."
+      "emptyHint": "Tell your care team about any reaction so it can be recorded here.",
+      "onRecord": "{{ count }} allergies on your record",
+      "onRecordBlurb": "Every professional who opens your context sees this panel first, and prescribing is blocked against it.",
+      "blocked": "Blocked by this record",
+      "blockedSub": "Prescriptions your team withheld because of an allergy."
     },
     "visitations": {
       "search": "Search visits",

@@ -1,4 +1,20 @@
-<div class="hc-tools">
+<div class="hc-grid hc-grid--3">
+  @for (count of counts(); track count.status) {
+    <div class="hc-stat">
+      <span
+        class="hc-stat__ic"
+        [style.background]="count.status === 'WITHHELD' ? 'var(--hc-danger-bg)' : 'var(--hc-gold-050)'"
+        [style.color]="count.status === 'WITHHELD' ? 'var(--hc-danger)' : 'var(--hc-gold)'"
+      >
+        <hpd-icon [name]="count.status === 'WITHHELD' ? 'shield' : 'pill'" [size]="18" [strokeWidth]="2" />
+      </span>
+      <b class="hc-num">{{ count.value }}</b>
+      <span [hpdTranslate]="count.labelKey"></span>
+    </div>
+  }
+</div>
+
+<div class="hc-tools hc-mt-16">
   <hpd-search-box
     inputId="q_medications"
     placeholderKey="patientPortal.medications.search"

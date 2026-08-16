@@ -96,8 +96,16 @@
         "openCases": "Offene Fälle",
         "upcoming": "Anstehende Besuche",
         "activeMeds": "Laufende Medikamente",
-        "reports": "Vorliegende Befunde"
-      }
+        "reports": "Vorliegende Befunde",
+        "emergencies": "Notfälle",
+        "allergies": "Allergien",
+        "diet": "Ernährungsplan",
+        "exercise": "Bewegungsplan"
+      },
+      "heroNext": "Ihr nächster Termin ist am {{ when }} bei {{ clinician }}. {{ open }} von {{ total }} Fällen sind noch offen.",
+      "openRecord": "Meine Akte öffnen",
+      "onFile": "In Ihrer Akte",
+      "onFileSub": "Tippen Sie auf eine Kachel, um sie zu öffnen."
     },
     "record": {
       "vitals": "Vitalwerte",
@@ -162,7 +170,7 @@
     "emergencies": {
       "search": "Meldungen durchsuchen",
       "careLineTitle": "Brauchen Sie jetzt Hilfe?",
-      "careLineBlurb": "Die Notfallnummer ist rund um die Uhr besetzt. Bei Lebensgefahr wählen Sie zuerst den örtlichen Notruf.",
+      "careLineBlurb": "Die Notfallnummer ist rund um die Uhr besetzt, und Ihr Care Angel wird gleichzeitig verständigt. Bei Lebensgefahr rufen Sie zuerst den örtlichen Notruf.",
       "callCareLine": "Notfallnummer anrufen",
       "outcome": "Ergebnis",
       "empty": "Keine Notfälle erfasst",
@@ -178,6 +186,11 @@
         "dosage": "Einnahme",
         "prescriber": "Verordnet von",
         "status": "Status"
+      },
+      "count": {
+        "active": "Aktuell eingenommen",
+        "completed": "Abgeschlossene Therapien",
+        "withheld": "Zurückgehalten — Allergie"
       }
     },
     "reports": {
@@ -201,7 +214,11 @@
       "conditions": "Bestehende Erkrankungen",
       "noConditions": "Keine Erkrankungen hinterlegt",
       "empty": "Keine Allergien hinterlegt",
-      "emptyHint": "Melden Sie jede Reaktion Ihrem Behandlungsteam, damit sie hier erfasst wird."
+      "emptyHint": "Melden Sie jede Reaktion Ihrem Behandlungsteam, damit sie hier erfasst wird.",
+      "onRecord": "{{ count }} Allergien in Ihrer Akte",
+      "onRecordBlurb": "Jede Fachkraft, die Ihre Akte öffnet, sieht zuerst diese Übersicht, und Verordnungen werden dagegen geprüft.",
+      "blocked": "Durch diese Akte verhindert",
+      "blockedSub": "Verordnungen, die Ihr Team wegen einer Allergie zurückgehalten hat."
     },
     "visitations": {
       "search": "Besuche durchsuchen",
