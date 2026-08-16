@@ -91,6 +91,38 @@ export function formatTime(value: DateLike): string {
   return inZone(value)?.format(TIME) ?? '—';
 }
 
+/** One month's tally, ready to plot: `label` is the short month name, `value` the count. */
+export interface MonthCount {
+  readonly label: string;
+  readonly value: number;
+}
+
+/**
+ * Counts **instants** per calendar month, ending at the most recent and running back at most
+ * `span` months.
+ *
+ * Months with nothing in them are kept, at zero. Plotting only the months that have something
+ * turns a quiet spring into a continuous line and tells the patient their care never paused when
+ * it did — and it makes the x-axis spacing a lie, since consecutive points would sit months apart.
+ */
+export function monthlyCounts(instants: readonly DateLike[], span = 12): MonthCount[] {
+  const moments = instants.map(inZone).filter((moment): moment is dayjs.Dayjs => moment !== null);
+  if (!moments.length) {
+    return [];
+  }
+  const last = moments.reduce((latest, moment) => (moment.isAfter(latest) ? moment : latest)).startOf('month');
+  const first = moments.reduce((earliest, moment) => (moment.isBefore(earliest) ? moment : earliest)).startOf('month');
+  const months = Math.min(span, last.diff(first, 'month') + 1);
+
+  return Array.from({ length: months }, (_, i) => {
+    const month = last.subtract(months - 1 - i, 'month');
+    return {
+      label: month.format('MMM'),
+      value: moments.filter(moment => moment.year() === month.year() && moment.month() === month.month()).length,
+    };
+  });
+}
+
 /** Sorts newest first, putting undated records last rather than at the top. */
 export function byDateDesc<T>(pick: (item: T) => dayjs.Dayjs | null | undefined) {
   return (a: T, b: T): number => {

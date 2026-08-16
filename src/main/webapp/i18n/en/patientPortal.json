@@ -51,7 +51,9 @@
       "seeAll": "See all",
       "viewRecord": "Full record",
       "viewProfile": "Profile",
-      "backToCases": "All cases"
+      "backToCases": "All cases",
+      "printShort": "Print",
+      "close": "Close"
     },
     "auth": {
       "eyebrow": "Abofonsa BridgeCare · Patient portal",
@@ -78,7 +80,22 @@
     },
     "chart": {
       "table": "Table",
-      "when": "When"
+      "when": "When",
+      "glance": "Care at a glance",
+      "glanceSub": "Every chart has a table view — press Table to read the numbers.",
+      "visitsOverTime": "Visits over time",
+      "visitsOverTimeSub": "Visits recorded for you, month by month.",
+      "caseDistribution": "Case distribution",
+      "caseDistributionSub": "How your {{ total }} cases stand today.",
+      "perProfessional": "Cases and visits per professional",
+      "perProfessionalSub": "Who has been involved in your care.",
+      "month": "Month",
+      "cases": "Cases",
+      "visits": "Visits",
+      "status": "Status",
+      "count": "Cases",
+      "share": "Share",
+      "who": "Professional"
     },
     "overview": {
       "greeting": "Your health, at a glance",
@@ -111,11 +128,23 @@
       "vitals": "Vitals",
       "vitalsSub": "Pick a reading to see how it has moved.",
       "history": "Reading history",
-      "visits": "Recent visits",
-      "activity": "Recent activity",
+      "visits": "Visitations",
+      "activity": "Activity trail",
       "careTeam": "Your care team",
       "noCareTeam": "No care team on file",
-      "noCareTeamHint": "The professionals looking after you will be listed here."
+      "noCareTeamHint": "The professionals looking after you will be listed here.",
+      "cases": "Cases",
+      "medications": "Medications",
+      "reports": "Reports",
+      "lists": "On this record",
+      "listsSub": "Three at a time — page through here, or open the full list.",
+      "openAll": {
+        "cases": "Open all cases",
+        "visits": "Open all visitations",
+        "activity": "Open the full activity trail",
+        "medications": "Open all medications",
+        "reports": "Open all reports"
+      }
     },
     "cases": {
       "search": "Search cases, symptoms, diagnoses…",

@@ -22,10 +22,27 @@
       </div>
     </div>
 
-    <a class="hc-btn hc-btn--ghost hc-btn--sm" routerLink="/profile">
-      <hpd-icon name="user" [size]="15" />
-      <span hpdTranslate="patientPortal.action.viewProfile">Profile</span>
-    </a>
+    <div class="hc-row hc-gap-8 hc-wrap hc-no-print">
+      <a class="hc-btn hc-btn--ghost hc-btn--sm" routerLink="/profile">
+        <hpd-icon name="user" [size]="15" />
+        <span hpdTranslate="patientPortal.action.viewProfile">Profile</span>
+      </a>
+
+      <button
+        type="button"
+        class="hc-btn hc-btn--ghost hc-btn--sm"
+        (click)="print()"
+        [attr.title]="'patientPortal.action.print' | translate"
+      >
+        <hpd-icon name="print" [size]="15" />
+        <span hpdTranslate="patientPortal.action.printShort">Print</span>
+      </button>
+
+      <a class="hc-btn hc-btn--primary hc-btn--sm" routerLink="/overview">
+        <hpd-icon name="x" [size]="15" />
+        <span hpdTranslate="patientPortal.action.close">Close</span>
+      </a>
+    </div>
   </div>
 }
 
@@ -91,12 +108,64 @@
   </div>
 }
 
-<!-- ============================= visits, activity, team ============================= -->
-<div class="hc-grid hc-grid--2 hc-mt-16">
+<!-- ============================= the five collections ============================= -->
+<div class="hc-sec-head">
+  <div>
+    <h3 hpdTranslate="patientPortal.record.lists">On this record</h3>
+    <p hpdTranslate="patientPortal.record.listsSub">Three at a time — page through here, or open the full list.</p>
+  </div>
+</div>
+
+<div class="hc-grid hc-grid--3">
+  <hpd-panel titleKey="patientPortal.record.cases" icon="case">
+    <a
+      hpdPanelActions
+      class="hc-icon-btn hc-icon-btn--sm hc-no-print"
+      routerLink="/cases"
+      [attr.aria-label]="'patientPortal.record.openAll.cases' | translate"
+      [attr.title]="'patientPortal.record.openAll.cases' | translate"
+    >
+      <hpd-icon name="expand" [size]="15" />
+    </a>
+
+    @if (casePanel.rows().length) {
+      @for (item of casePanel.rows(); track item.id) {
+        <a class="hc-drow" [routerLink]="caseLink(item.id)">
+          <span class="hc-drow__date">{{ formatInstantDay(item.openedAt) }}</span>
+          <span class="hc-drow__text">
+            {{ item.title ?? item.brief }}
+            <span class="hc-drow__sub">
+              @if (item.caseNumber) {
+                #{{ item.caseNumber }} ·
+              }
+              {{ memberOf(item.assignedProfessionalId).name }}</span
+            >
+          </span>
+        </a>
+      }
+    } @else {
+      <hpd-empty-state icon="case" titleKey="patientPortal.cases.empty" />
+    }
+
+    <footer hpdPanelFoot class="hc-panel__foot" [hidden]="casePanel.totalPages() <= 1">
+      <hpd-pager [currentPage]="casePanel.page()" [totalPages]="casePanel.totalPages()" (pageChange)="casePanel.page.set($event)" />
+    </footer>
+  </hpd-panel>
+
   <hpd-panel titleKey="patientPortal.record.visits" icon="pin">
-    @if (recentVisits().length) {
-      @for (visit of recentVisits(); track visit.id) {
-        <div class="hc-drow">
+    <a
+      hpdPanelActions
+      class="hc-icon-btn hc-icon-btn--sm hc-no-print"
+      routerLink="/visitations"
+      [attr.aria-label]="'patientPortal.record.openAll.visits' | translate"
+      [attr.title]="'patientPortal.record.openAll.visits' | translate"
+    >
+      <hpd-icon name="expand" [size]="15" />
+    </a>
+
+    @if (visitPanel.rows().length) {
+      @for (visit of visitPanel.rows(); track visit.id) {
+        <a class="hc-drow" [routerLink]="caseLink(visit.caseId)">
           <span class="hc-drow__date">{{ formatInstantDay(visit.visitedAt) }}</span>
           <span class="hc-drow__text">
             {{ visit.purpose }}
@@ -107,31 +176,117 @@
               }
             </span>
           </span>
-        </div>
+        </a>
       }
     } @else {
       <hpd-empty-state icon="pin" titleKey="patientPortal.visitations.empty" />
     }
 
-    <footer hpdPanelFoot class="hc-panel__foot hc-center">
-      <a class="hc-btn hc-btn--quiet hc-btn--sm" routerLink="/visitations" hpdTranslate="patientPortal.action.seeAll">See all</a>
+    <footer hpdPanelFoot class="hc-panel__foot" [hidden]="visitPanel.totalPages() <= 1">
+      <hpd-pager [currentPage]="visitPanel.page()" [totalPages]="visitPanel.totalPages()" (pageChange)="visitPanel.page.set($event)" />
     </footer>
   </hpd-panel>
 
   <hpd-panel titleKey="patientPortal.record.activity" icon="note">
-    @if (recentActivity().length) {
-      @for (entry of recentActivity(); track entry.id) {
-        <div class="hc-drow">
+    <a
+      hpdPanelActions
+      class="hc-icon-btn hc-icon-btn--sm hc-no-print"
+      routerLink="/activity"
+      [attr.aria-label]="'patientPortal.record.openAll.activity' | translate"
+      [attr.title]="'patientPortal.record.openAll.activity' | translate"
+    >
+      <hpd-icon name="expand" [size]="15" />
+    </a>
+
+    @if (activityPanel.rows().length) {
+      @for (entry of activityPanel.rows(); track entry.id) {
+        <a class="hc-drow" [routerLink]="caseLink(entry.caseId)">
           <span class="hc-drow__date">{{ formatInstantDay(entry.loggedAt, entry.createdDate) }}</span>
-          <span class="hc-drow__text">{{ entry.summary }}</span>
-        </div>
+          <span class="hc-drow__text">
+            {{ entry.summary }}
+            <span class="hc-drow__sub">{{ authorName(entry) }}</span>
+          </span>
+        </a>
       }
     } @else {
       <hpd-empty-state icon="note" titleKey="patientPortal.activity.empty" />
     }
 
-    <footer hpdPanelFoot class="hc-panel__foot hc-center">
-      <a class="hc-btn hc-btn--quiet hc-btn--sm" routerLink="/activity" hpdTranslate="patientPortal.action.seeAll">See all</a>
+    <footer hpdPanelFoot class="hc-panel__foot" [hidden]="activityPanel.totalPages() <= 1">
+      <hpd-pager
+        [currentPage]="activityPanel.page()"
+        [totalPages]="activityPanel.totalPages()"
+        (pageChange)="activityPanel.page.set($event)"
+      />
+    </footer>
+  </hpd-panel>
+
+  <hpd-panel titleKey="patientPortal.record.medications" icon="pill">
+    <a
+      hpdPanelActions
+      class="hc-icon-btn hc-icon-btn--sm hc-no-print"
+      routerLink="/medications"
+      [attr.aria-label]="'patientPortal.record.openAll.medications' | translate"
+      [attr.title]="'patientPortal.record.openAll.medications' | translate"
+    >
+      <hpd-icon name="expand" [size]="15" />
+    </a>
+
+    @if (medicationPanel.rows().length) {
+      @for (item of medicationPanel.rows(); track item.id) {
+        <a class="hc-drow" [routerLink]="caseLink(item.caseId)">
+          <span class="hc-drow__date">{{ formatDay(item.startedOn ?? item.createdDate) }}</span>
+          <span class="hc-drow__text">
+            {{ item.name }}
+            <span class="hc-drow__sub">{{ item.dosage ?? humanise(item.status) }}</span>
+          </span>
+        </a>
+      }
+    } @else {
+      <hpd-empty-state icon="pill" titleKey="patientPortal.medications.empty" />
+    }
+
+    <footer hpdPanelFoot class="hc-panel__foot" [hidden]="medicationPanel.totalPages() <= 1">
+      <hpd-pager
+        [currentPage]="medicationPanel.page()"
+        [totalPages]="medicationPanel.totalPages()"
+        (pageChange)="medicationPanel.page.set($event)"
+      />
+    </footer>
+  </hpd-panel>
+
+  <hpd-panel titleKey="patientPortal.record.reports" icon="report">
+    <a
+      hpdPanelActions
+      class="hc-icon-btn hc-icon-btn--sm hc-no-print"
+      routerLink="/reports"
+      [attr.aria-label]="'patientPortal.record.openAll.reports' | translate"
+      [attr.title]="'patientPortal.record.openAll.reports' | translate"
+    >
+      <hpd-icon name="expand" [size]="15" />
+    </a>
+
+    @if (reportPanel.rows().length) {
+      @for (item of reportPanel.rows(); track item.id) {
+        <a class="hc-drow" [routerLink]="caseLink(item.caseId)">
+          <span class="hc-drow__date">{{ formatDay(item.reportDate ?? item.createdDate) }}</span>
+          <span class="hc-drow__text">
+            {{ item.name }}
+            <span class="hc-drow__sub">
+              @if (item.category) {
+                {{ item.category }} ·
+              }
+              {{ authorName(item) }}</span
+            >
+          </span>
+        </a>
+      }
+    } @else {
+      <hpd-empty-state icon="report" titleKey="patientPortal.reports.empty" />
+    }
+
+    <footer hpdPanelFoot class="hc-panel__foot" [hidden]="reportPanel.totalPages() <= 1">
+      <hpd-pager [currentPage]="reportPanel.page()" [totalPages]="reportPanel.totalPages()" (pageChange)="reportPanel.page.set($event)" />
     </footer>
   </hpd-panel>
 </div>

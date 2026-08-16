@@ -1,31 +1,63 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Signal, WritableSignal, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 
 import SharedModule from 'app/shared/shared.module';
 import { IconComponent } from 'app/shared/ui/icon/icon.component';
 import { PanelComponent } from 'app/shared/ui/panel/panel.component';
+import { PagerComponent } from 'app/shared/ui/pager/pager.component';
 import { EmptyStateComponent } from 'app/shared/ui/empty-state/empty-state.component';
 import { TrendChartComponent } from 'app/shared/ui/charts/trend-chart.component';
 
 import { CareTeamMember, PatientContextService } from '../data/patient-context.service';
 import { PortalDataService } from '../data/portal-data.service';
 import { VitalSummary, summariseVitals } from '../data/vitals';
-import { byDateDesc, formatDay, humanise, formatInstantDay } from '../data/portal-format';
-
-/** How many rows the summary panels show before pointing at the full list. */
-const PREVIEW = 6;
+import { byDateDesc, formatDay, humanise, formatInstantDay, pageCount, pageOf } from '../data/portal-format';
 
 /**
- * The record: who the patient is, the vitals in detail, and a way into every other list.
+ * Rows a record panel shows at once.
  *
- * The selected vital drives the trend chart — one chart shown well beats four shown small.
+ * Three, as the demo pages its record panels — and the reason the panels page at all rather than
+ * previewing the newest few: with five collections side by side, a preview that cuts off at six
+ * leaves the patient no way to reach the seventh except by opening another screen.
+ */
+const PANEL_PAGE = 3;
+
+/** A record panel's list: the page you are on, the rows to draw, and how many pages there are. */
+interface PanelList<T> {
+  readonly page: WritableSignal<number>;
+  readonly rows: Signal<readonly T[]>;
+  readonly totalPages: Signal<number>;
+}
+
+/**
+ * Wraps a sorted collection as a paginated panel.
+ *
+ * Five panels each needing a page number, a slice and a page count is fifteen fields written the
+ * same way; this is those three, once.
+ */
+function paged<T>(all: Signal<readonly T[]>): PanelList<T> {
+  const page = signal(1);
+  return {
+    page,
+    rows: computed(() => pageOf(all(), page(), PANEL_PAGE)),
+    totalPages: computed(() => pageCount(all(), PANEL_PAGE)),
+  };
+}
+
+/**
+ * The record: who the patient is, the vitals in detail, and every other list in reach.
+ *
+ * The selected vital drives the trend chart — one chart shown well beats four shown small. Below
+ * it sit the five collections as paginated panels, each with a way into its full screen; the care
+ * team closes the page. That arrangement is deliberately not the demo's six equal panels: vitals
+ * are what a patient opens this page for, so they stay above the fold and full width.
  */
 @Component({
-    selector: 'hpd-record',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [SharedModule, RouterLink, IconComponent, PanelComponent, EmptyStateComponent, TrendChartComponent],
-    templateUrl: './record.component.html'
+  selector: 'hpd-record',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [SharedModule, RouterLink, IconComponent, PanelComponent, PagerComponent, EmptyStateComponent, TrendChartComponent],
+  templateUrl: './record.component.html',
 })
 export default class RecordComponent {
   private readonly context = inject(PatientContextService);
@@ -33,8 +65,11 @@ export default class RecordComponent {
   private readonly careTeamById = toSignal(this.context.careTeamById$, { initialValue: new Map<string, CareTeamMember>() });
 
   private readonly stats = toSignal(this.data.vitals$, { initialValue: [] });
+  private readonly cases = toSignal(this.data.cases$, { initialValue: [] });
   private readonly visitations = toSignal(this.data.visitations$, { initialValue: [] });
   private readonly activity = toSignal(this.data.activity$, { initialValue: [] });
+  private readonly medications = toSignal(this.data.medications$, { initialValue: [] });
+  private readonly reports = toSignal(this.data.reports$, { initialValue: [] });
 
   readonly formatDay = formatDay;
   readonly formatInstantDay = formatInstantDay;
@@ -51,6 +86,12 @@ export default class RecordComponent {
 
   readonly vitals = computed(() => summariseVitals(this.stats()));
 
+  readonly casePanel = paged(computed(() => [...this.cases()].sort(byDateDesc(item => item.openedAt))));
+  readonly visitPanel = paged(computed(() => [...this.visitations()].sort(byDateDesc(item => item.visitedAt))));
+  readonly activityPanel = paged(computed(() => [...this.activity()].sort(byDateDesc(item => item.loggedAt ?? item.createdDate))));
+  readonly medicationPanel = paged(computed(() => [...this.medications()].sort(byDateDesc(item => item.startedOn ?? item.createdDate))));
+  readonly reportPanel = paged(computed(() => [...this.reports()].sort(byDateDesc(item => item.reportDate ?? item.createdDate))));
+
   readonly selected = computed<VitalSummary | null>(() => {
     const all = this.vitals();
     const key = this.selectedKey();
@@ -65,14 +106,23 @@ export default class RecordComponent {
     return [profile.firstName, profile.middleNames, profile.lastName].filter(Boolean).join(' ').trim();
   });
 
-  readonly recentVisits = computed(() => [...this.visitations()].sort(byDateDesc(item => item.visitedAt)).slice(0, PREVIEW));
-
-  readonly recentActivity = computed(() =>
-    [...this.activity()].sort(byDateDesc(item => item.loggedAt ?? item.createdDate)).slice(0, PREVIEW),
-  );
-
-  memberOf(id: string | null | undefined): { name: string; role: string } {
+  memberOf(id: string | null | undefined): CareTeamMember {
     return PatientContextService.memberOf(this.careTeamById(), id);
+  }
+
+  /** Entries the patient wrote themselves are attributed to them, not to a clinician. */
+  authorName(item: { source?: string | null; authorId?: string | null }): string {
+    return PatientContextService.authorNameOf(this.careTeamById(), item);
+  }
+
+  /**
+   * The route to a case, or null for a record that does not belong to one.
+   *
+   * Given straight to `[routerLink]`, which renders no `href` at all for null — so a row with no
+   * case to open is not a link, rather than a link that goes nowhere.
+   */
+  caseLink(caseId: string | null | undefined): string[] | null {
+    return caseId ? ['/case', caseId] : null;
   }
 
   vitalPill(flag: string): string {
@@ -84,5 +134,9 @@ export default class RecordComponent {
       default:
         return 'hc-pill--ok';
     }
+  }
+
+  print(): void {
+    window.print();
   }
 }
