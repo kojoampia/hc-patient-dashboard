@@ -10,7 +10,7 @@ import { SearchBoxComponent } from 'app/shared/ui/search-box/search-box.componen
 
 import { CareTeamMember, PatientContextService } from '../data/patient-context.service';
 import { PortalDataService } from '../data/portal-data.service';
-import { byDateDesc, formatDay, humanise, matches, pageCount, pageOf } from '../data/portal-format';
+import { byDateDesc, formatDay, humanise, matches, pageCount, pageOf, formatInstantDay } from '../data/portal-format';
 
 const PAGE_SIZE = 12;
 
@@ -29,6 +29,7 @@ export default class CasesComponent {
   private readonly cases = toSignal(this.data.cases$, { initialValue: [] });
 
   readonly formatDay = formatDay;
+  readonly formatInstantDay = formatInstantDay;
   readonly humanise = humanise;
 
   readonly statuses = ['URGENT', 'OPEN', 'TREATMENT', 'CLOSED'] as const;

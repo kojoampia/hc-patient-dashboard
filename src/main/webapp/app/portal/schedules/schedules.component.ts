@@ -10,7 +10,7 @@ import { IClinicalCase } from 'app/entities/patientMS/clinical-case/clinical-cas
 
 import { CareTeamMember, PatientContextService } from '../data/patient-context.service';
 import { PortalDataService } from '../data/portal-data.service';
-import { byDateAsc, byDateDesc, formatDay, formatTime, humanise, matches } from '../data/portal-format';
+import { byDateAsc, byDateDesc, formatDay, formatTime, humanise, matches, formatInstantDay } from '../data/portal-format';
 
 /**
  * Appointments, split into what is still coming and what already happened.
@@ -38,6 +38,7 @@ export default class SchedulesComponent {
   });
 
   readonly formatDay = formatDay;
+  readonly formatInstantDay = formatInstantDay;
   readonly formatTime = formatTime;
   readonly humanise = humanise;
 

@@ -10,7 +10,7 @@ import { IClinicalCase } from 'app/entities/patientMS/clinical-case/clinical-cas
 
 import { CareTeamMember, PatientContextService } from '../data/patient-context.service';
 import { PortalDataService } from '../data/portal-data.service';
-import { byDateDesc, formatDay, matches, pageCount, pageOf } from '../data/portal-format';
+import { byDateDesc, formatDay, matches, pageCount, pageOf, formatInstantDay } from '../data/portal-format';
 
 const PAGE_SIZE = 15;
 
@@ -30,6 +30,7 @@ export default class VisitationsComponent {
   private readonly visitations = toSignal(this.data.visitations$, { initialValue: [] });
 
   readonly formatDay = formatDay;
+  readonly formatInstantDay = formatInstantDay;
 
   readonly query = signal('');
   readonly page = signal(1);

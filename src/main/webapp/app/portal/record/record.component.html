@@ -54,7 +54,7 @@
         <b class="hc-num"
           >{{ vital.display }} <span class="hc-vital__unit">{{ vital.unit }}</span></b
         >
-        <div class="hc-vital__delta hc-muted">{{ formatDay(vital.recordedAt) }}</div>
+        <div class="hc-vital__delta hc-muted">{{ formatInstantDay(vital.recordedAt) }}</div>
       </button>
     }
   </div>
@@ -97,7 +97,7 @@
     @if (recentVisits().length) {
       @for (visit of recentVisits(); track visit.id) {
         <div class="hc-drow">
-          <span class="hc-drow__date">{{ formatDay(visit.visitedAt) }}</span>
+          <span class="hc-drow__date">{{ formatInstantDay(visit.visitedAt) }}</span>
           <span class="hc-drow__text">
             {{ visit.purpose }}
             <span class="hc-drow__sub"
@@ -122,7 +122,7 @@
     @if (recentActivity().length) {
       @for (entry of recentActivity(); track entry.id) {
         <div class="hc-drow">
-          <span class="hc-drow__date">{{ formatDay(entry.loggedAt ?? entry.createdDate) }}</span>
+          <span class="hc-drow__date">{{ formatInstantDay(entry.loggedAt, entry.createdDate) }}</span>
           <span class="hc-drow__text">{{ entry.summary }}</span>
         </div>
       }

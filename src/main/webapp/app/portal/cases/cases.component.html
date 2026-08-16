@@ -31,7 +31,7 @@
                 <div class="hc-muted hc-tiny">{{ item.brief }}</div>
               }
             </td>
-            <td class="hc-tbl__date">{{ formatDay(item.openedAt) }}</td>
+            <td class="hc-tbl__date">{{ formatInstantDay(item.openedAt) }}</td>
             <td>{{ memberOf(item.assignedProfessionalId).name }}</td>
             <td>
               <span class="hc-pill" [class]="pill(item.status)">{{ humanise(item.status) }}</span>

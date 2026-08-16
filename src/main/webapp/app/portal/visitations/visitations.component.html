@@ -22,7 +22,7 @@
       <tbody>
         @for (item of visible(); track item.id) {
           <tr>
-            <td class="hc-tbl__date">{{ formatDay(item.visitedAt) }}</td>
+            <td class="hc-tbl__date">{{ formatInstantDay(item.visitedAt) }}</td>
             <td>
               <div class="hc-tbl__name">{{ item.purpose }}</div>
               @if (item.notes) {
