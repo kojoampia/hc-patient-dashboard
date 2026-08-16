@@ -8,8 +8,9 @@ import { IconComponent } from 'app/shared/ui/icon/icon.component';
 import { EmptyStateComponent } from 'app/shared/ui/empty-state/empty-state.component';
 
 import { PatientContextService } from '../data/patient-context.service';
+import { StatusLabelPipe } from '../data/status-label.pipe';
 import { PortalDataService } from '../data/portal-data.service';
-import { formatDay, humanise } from '../data/portal-format';
+import { formatDay } from '../data/portal-format';
 
 type ProfileTab = 'about' | 'contact' | 'membership' | 'careTeam';
 
@@ -23,10 +24,10 @@ const TABS: readonly { readonly id: ProfileTab; readonly labelKey: string }[] = 
 
 /** Who the patient is, how to reach them, what plan they are on, and who looks after them. */
 @Component({
-    selector: 'hpd-profile',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [SharedModule, RouterLink, IconComponent, EmptyStateComponent, AvatarComponent],
-    templateUrl: './profile.component.html'
+  selector: 'hpd-profile',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [SharedModule, RouterLink, IconComponent, EmptyStateComponent, AvatarComponent, StatusLabelPipe],
+  templateUrl: './profile.component.html',
 })
 export default class ProfileComponent {
   private readonly context = inject(PatientContextService);
@@ -34,7 +35,6 @@ export default class ProfileComponent {
   private readonly memberships = toSignal(this.data.memberships$, { initialValue: [] });
 
   readonly formatDay = formatDay;
-  readonly humanise = humanise;
   readonly tabs = TABS;
 
   readonly activeTab = signal<ProfileTab>('about');

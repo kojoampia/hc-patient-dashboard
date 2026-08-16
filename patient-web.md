@@ -257,6 +257,11 @@ over exactly what changed, and anything built for E2–E4 should arrive with its
   search screens (cases, emergencies, visitations, activity).
 - `[x]` **A5 · a patient's own note is credited to "Care team"** on case detail, while `/activity`
   renders the same record as "You". Whose words a record carries is not cosmetic.
+  **One instance was missed and fixed 2026-08-16**: the overview's *Recent activity* panel still read
+  `authorId` alone, so the note the patient wrote themselves was filed under "Care team" there while
+  `/record` and `/activity` said "You" about the very same record. Found by reading the deployed
+  quality stack rather than by a test — the two panels sit two screens apart and nothing compares
+  them.
 
 ### E2 — built but unreachable
 
@@ -384,34 +389,73 @@ Batch 3 — the two features. **Done 2026-08-16**, verified against the seeded r
   heading above them. `monthlyCounts` keeps empty months at zero: a gap in care is a finding, and
   plotting only the months that have something turns a quiet spring into an unbroken line.
 
-Batch 4 — needs a decision or a backend:
+#### Decisions taken 2026-08-16 (batch 4)
 
-- `[ ]` **C5 · case detail: Log activity, and the clinician.** **Log activity** (framed "Your own
+5. **The portal gets its own dialog** — `hpd-modal` in `shared/ui`, built on the portal's `hc-`
+   CSS rather than on `NgbModal`. ng-bootstrap stays where it already is: the account, admin and
+   entity screens. `.modal` is a Bootstrap class, and opening one inside an `hc-` screen means
+   styling *around* `.modal-dialog`, `.modal-content` and their z-index rather than with them.
+6. **Log activity writes for real** — `POST /api/activity-logs` with `source: PATIENT`, then a
+   reload of the shared data. The api gates `/api/**` on `authenticated()` only, so a signed-in
+   patient may file against their own record; nothing needed changing on the backend for this.
+
+Batch 4 — **C5, C8, the A5 leftover and D1 done 2026-08-16**; C10 still blocked.
+
+- `[x]` **C5 · case detail: Log activity, and the clinician.** **Log activity** (framed "Your own
   notes appear here too"), the paginated activity-trail panel, the clinician card (photo, "General
-  Practitioner · Accra · Osu", **See appointments**), and Print / Copy / Close.
-- `[ ]` **C8 · detail views for vitals, appointments, alerts, medicines and reports.** The demo's
-  tables carry an Action column opening a detail view per row. We drill into cases only; every other
-  row is terminal.
+  Practitioner · Accra · Osu", **See appointments**), and Print / Copy / Close. The note is a real
+  write, per decision 6 — verified by writing "Dizzy on standing up" against case 12 and watching it
+  come back from the server credited to **You**. Copy puts the case on the clipboard as plain text,
+  for sending to somebody who is not on the portal.
+- `[x]` **C8 · detail views for vitals, appointments, alerts, medicines and reports.** **Three of
+  the five were already covered, and building all five would have added a click that changes
+  nothing** — the audit counted the demo's *table rows*, and this portal renders three of those
+  lists as cards that already carry the whole record:
+
+  | Row | Was it terminal? | Built? |
+  | --- | --- | --- |
+  | Medications | yes — a table row | **yes**: the withheld reason is the one sentence this screen most needs |
+  | Vitals, on the overview | yes — a static tile with an unlabelled sparkline | **yes**: band, full-size trend, and the readings as a table |
+  | Appointments, attended | yes — a table row | **yes**: adds the clinician card and the case |
+  | Reports | no — the card carries summary, author, case and Open file | no |
+  | Emergencies | no — the card carries detail, outcome and who attended | no |
+  | Appointments, upcoming | no — the card carries clinician, place and case | no |
+  | Vitals, on the record | no — the tile already drives the trend chart beside it | no |
+
 - `[ ]` **C10 · Upload a report**, with **+ Add activity** (C2) and **Log activity** (C5) — the demo's
-  position that the record belongs to the patient. Needs somewhere to put a file: `Report.url` exists
-  but nothing serves uploads, so this is blocked on an api decision rather than on this repo.
+  position that the record belongs to the patient. **Log activity shipped in C5**; what remains is
+  the upload, and it needs somewhere to put a file: `Report.url` exists but nothing serves uploads,
+  so this is blocked on an api decision rather than on this repo.
 
 ### E4 — wording, vocabulary and seed data
 
-- `[ ]` **D1 · status vocabulary drifted** toward the enum names: *In treatment → Treatment*, *Taking
+- `[x]` **D1 · status vocabulary drifted** toward the enum names: *In treatment → Treatment*, *Taking
   now → Active*, *Attended → Completed*, *Urgent → High*, *Awaiting confirmation → Pending*. The
   severity one matters most; *Urgent* is what a person reads on an emergency.
+  Fixed 2026-08-16 by an `hpdStatus` pipe over a `patientPortal.status.*` map, replacing `humanise`
+  on twenty pills across ten screens — the enum values are unique across the domains the portal
+  renders, so one flat map covers cases, medications, appointments, emergencies, allergies and
+  vitals. Anything the backend adds later falls back to sentence case rather than rendering a raw
+  translation key. It also caught a pair nobody had listed: vitals read **Ok** and **Warn**, where
+  the demo reads *In range* and *Watch*.
 - `[ ]` **D2 · "What was reported" / "What was found"** replace the demo's *Symptoms* / *Diagnosis*.
   This reads as an improvement on the demo rather than drift from it — make it a decision and apply it
   everywhere, rather than leaving two documents disagreeing.
-- `[ ]` **D3 · honorifics dropped** ("Dr. Grace Mensah" → "Grace Mensah"). The seed stores the
-  honorific; this is presentation.
+- `[ ]` **D3 · honorifics dropped** ("Dr. Grace Mensah" → "Grace Mensah"). ~~The seed stores the
+  honorific; this is presentation.~~ **It does not.** Checked 2026-08-16: `patient-demo-seed.json`
+  gives a professional `firstName`, `lastName` and `role`, and there is no honorific field on the
+  model either. Deriving one from the role would invent a title — a physiotherapist and a nurse are
+  not "Dr." — so this needs a field on the api's professional and a value in the seed, not a
+  presentation change here.
 - `[ ]` **D4 · sign-in asks for a username, not an email.** The demo signs in with `kojo@jac.net` and
   offers **Continue with care card** — the number is on the physical card and printed in the profile.
   We ask for a username and add Register and Forgot password, which the demo does not have.
   Email-first is a different onboarding story; decide it.
 - `[ ]` **D5 · vitals carry no attribution.** Demo: "Recorded 24 July 2026 by Ophelia Gaisie." The
-  named carer is the point — she is the angel the patient knows.
+  named carer is the point — she is the angel the patient knows. **Blocked, and not only on the
+  seed**: `IStat` has no author field at all, and the seeded readings carry none — so this is an api
+  model change first. The date half of the sentence now renders in the vital's detail view
+  ("recorded 24 Jul 2026"); the name is what is missing.
 - `[ ]` **D6 · case rows print their title twice.** `patient-demo-seed.json` sets `brief` to the same
   string as `title` because the mockup has one label per case. Either give `brief` real content or stop
   rendering it. Seed-side fix lives in `hc-patient-quality`.

@@ -12,10 +12,10 @@ import { IconName } from 'app/shared/ui/icon/icon.constants';
  * file" from "we could not reach the server".
  */
 @Component({
-    selector: 'hpd-empty-state',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [SharedModule, IconComponent],
-    template: `
+  selector: 'hpd-empty-state',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [SharedModule, IconComponent],
+  template: `
     <div class="hc-empty">
       <hpd-icon [name]="icon" [size]="42" [strokeWidth]="1.6" />
       <b [hpdTranslate]="titleKey"></b>
@@ -24,7 +24,7 @@ import { IconName } from 'app/shared/ui/icon/icon.constants';
       }
       <ng-content />
     </div>
-  `
+  `,
 })
 export class EmptyStateComponent {
   @Input({ required: true }) titleKey!: string;

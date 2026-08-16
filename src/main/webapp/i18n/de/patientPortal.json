@@ -53,7 +53,13 @@
       "viewProfile": "Profil",
       "backToCases": "Alle Fälle",
       "printShort": "Drucken",
-      "close": "Schließen"
+      "close": "Schließen",
+      "view": "Ansehen",
+      "openCase": "Fall öffnen",
+      "copy": "Kopieren",
+      "cancel": "Abbrechen",
+      "save": "Speichern",
+      "saving": "Wird gespeichert…"
     },
     "auth": {
       "eyebrow": "Abofonsa BridgeCare · Patientenportal",
@@ -95,7 +101,8 @@
       "status": "Status",
       "count": "Fälle",
       "share": "Anteil",
-      "who": "Fachkraft"
+      "who": "Fachkraft",
+      "case": "Fall"
     },
     "overview": {
       "greeting": "Ihre Gesundheit auf einen Blick",
@@ -122,7 +129,10 @@
       "heroNext": "Ihr nächster Termin ist am {{ when }} bei {{ clinician }}. {{ open }} von {{ total }} Fällen sind noch offen.",
       "openRecord": "Meine Akte öffnen",
       "onFile": "In Ihrer Akte",
-      "onFileSub": "Tippen Sie auf eine Kachel, um sie zu öffnen."
+      "onFileSub": "Tippen Sie auf eine Kachel, um sie zu öffnen.",
+      "viewVital": "{{ name }} im Detail ansehen",
+      "recordedOn": "erfasst am {{ when }}",
+      "lastReadings": "Die Messwerte dahinter"
     },
     "record": {
       "vitals": "Vitalwerte",
@@ -177,7 +187,17 @@
       "timeline": "Verlauf",
       "noTimeline": "Zu diesem Fall wurde nichts erfasst",
       "notFound": "Fall nicht gefunden",
-      "notFoundHint": "Er wurde möglicherweise geschlossen oder der Link ist veraltet."
+      "notFoundHint": "Er wurde möglicherweise geschlossen oder der Link ist veraltet.",
+      "logActivity": "Eintrag hinzufügen",
+      "logActivityBlurb": "Notieren Sie, was Ihnen aufgefallen ist — ein Symptom, eine vergessene Dosis, Ihr Schlaf. Es wird zu diesem Fall abgelegt und Ihr Team sieht es.",
+      "noteTitle": "Titel des Ereignisses",
+      "noteTitleHint": "z. B. Schwindel beim Aufstehen",
+      "noteDetail": "Was passiert ist",
+      "noteDetailHint": "Wann es begann, wie lange es dauerte, was geholfen hat…",
+      "noteFailed": "Ihre Notiz wurde nicht gespeichert. Prüfen Sie die Verbindung und versuchen Sie es erneut — Ihr Text ist noch da.",
+      "filedUnder": "Alles zum Fall {{ number }}",
+      "filedUnderSub": "Ihre eigenen Notizen erscheinen hier ebenfalls.",
+      "seeAppointments": "Termine ansehen"
     },
     "schedules": {
       "search": "Nach Datum, Fachkraft oder Termin suchen…",
@@ -194,7 +214,9 @@
         "who": "Mit",
         "where": "Wo",
         "status": "Status"
-      }
+      },
+      "viewOne": "{{ name }} ansehen",
+      "detail": "Termin"
     },
     "emergencies": {
       "search": "Warnungen, Details oder Ergebnis suchen…",
@@ -220,7 +242,10 @@
         "active": "Aktuell eingenommen",
         "completed": "Abgeschlossene Therapien",
         "withheld": "Zurückgehalten — Allergie"
-      }
+      },
+      "viewOne": "{{ name }} ansehen",
+      "withheldTitle": "Nicht gegeben.",
+      "withheldBody": "Dieses Medikament wurde wegen einer in Ihrer Akte vermerkten Allergie nicht verabreicht."
     },
     "reports": {
       "search": "Berichte, Befunde oder Art durchsuchen…",
@@ -301,6 +326,36 @@
     "filter": {
       "professional": "Nach Fachkraft filtern",
       "allProfessionals": "Alle Fachkräfte"
+    },
+    "status": {
+      "URGENT": "Dringend",
+      "OPEN": "Offen",
+      "TREATMENT": "In Behandlung",
+      "CLOSED": "Abgeschlossen",
+      "ACTIVE": "Wird eingenommen",
+      "COMPLETED": "Abgeschlossen",
+      "WITHHELD": "Nicht gegeben",
+      "CONFIRMED": "Bestätigt",
+      "PENDING": "Wartet auf Bestätigung",
+      "ATTENDED": "Wahrgenommen",
+      "CANCELLED": "Abgesagt",
+      "LOW": "Gering",
+      "MODERATE": "Mittel",
+      "HIGH": "Dringend",
+      "RAISED": "Gemeldet",
+      "ACKNOWLEDGED": "Angenommen",
+      "RESOLVED": "Erledigt",
+      "MILD": "Leicht",
+      "SEVERE": "Schwer",
+      "OK": "Im Normbereich",
+      "WARN": "Beobachten",
+      "DANGER": "Außerhalb der Norm",
+      "DIET": "Ernährung",
+      "EXERCISE": "Bewegung",
+      "MEDICATION": "Medikament",
+      "FOOD": "Lebensmittel",
+      "ENVIRONMENTAL": "Umwelt",
+      "OTHER": "Sonstiges"
     }
   }
 }

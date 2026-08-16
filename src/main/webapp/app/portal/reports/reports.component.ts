@@ -19,10 +19,10 @@ const PAGE_SIZE = 8;
 
 /** Lab, imaging, clinical and immunisation reports, each with its plain-language summary. */
 @Component({
-    selector: 'hpd-reports',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [SharedModule, RouterLink, IconComponent, EmptyStateComponent, PagerComponent, SearchBoxComponent, PersonFilterComponent],
-    templateUrl: './reports.component.html'
+  selector: 'hpd-reports',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [SharedModule, RouterLink, IconComponent, EmptyStateComponent, PagerComponent, SearchBoxComponent, PersonFilterComponent],
+  templateUrl: './reports.component.html',
 })
 export default class ReportsComponent {
   private readonly context = inject(PatientContextService);
@@ -32,7 +32,6 @@ export default class ReportsComponent {
 
   private readonly casesById = toSignal(this.data.casesById$, { initialValue: new Map<string, IClinicalCase>() });
   private readonly reports = toSignal(this.data.reports$, { initialValue: [] });
-
 
   /** The people who can be filtered by, in the order the care team is listed. */
   readonly careTeam = toSignal(this.context.careTeam$, { initialValue: [] as readonly CareTeamMember[] });

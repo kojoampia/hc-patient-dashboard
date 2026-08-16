@@ -9,15 +9,16 @@ import { SearchBoxComponent } from 'app/shared/ui/search-box/search-box.componen
 import { IClinicalCase } from 'app/entities/patientMS/clinical-case/clinical-case.model';
 
 import { CareTeamMember, PatientContextService } from '../data/patient-context.service';
+import { StatusLabelPipe } from '../data/status-label.pipe';
 import { PortalDataService } from '../data/portal-data.service';
-import { byDateDesc, formatDayTime, humanise, matches } from '../data/portal-format';
+import { byDateDesc, formatDayTime, matches } from '../data/portal-format';
 
 /** Every emergency raised on this record, newest first, with what came of it. */
 @Component({
-    selector: 'hpd-emergencies',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [SharedModule, RouterLink, IconComponent, EmptyStateComponent, SearchBoxComponent],
-    templateUrl: './emergencies.component.html'
+  selector: 'hpd-emergencies',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [SharedModule, RouterLink, IconComponent, EmptyStateComponent, SearchBoxComponent, StatusLabelPipe],
+  templateUrl: './emergencies.component.html',
 })
 export default class EmergenciesComponent {
   private readonly context = inject(PatientContextService);
@@ -28,7 +29,6 @@ export default class EmergenciesComponent {
   private readonly emergencies = toSignal(this.data.emergencies$, { initialValue: [] });
 
   readonly formatDayTime = formatDayTime;
-  readonly humanise = humanise;
 
   readonly query = signal('');
 

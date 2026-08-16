@@ -14,10 +14,10 @@ import { IconName } from 'app/shared/ui/icon/icon.constants';
  *   </hpd-panel>
  */
 @Component({
-    selector: 'hpd-panel',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [SharedModule, IconComponent],
-    template: `
+  selector: 'hpd-panel',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [SharedModule, IconComponent],
+  template: `
     <section class="hc-panel">
       <header class="hc-panel__head">
         @if (icon) {
@@ -33,7 +33,7 @@ import { IconName } from 'app/shared/ui/icon/icon.constants';
 
       <ng-content select="[hpdPanelFoot]" />
     </section>
-  `
+  `,
 })
 export class PanelComponent {
   @Input({ required: true }) titleKey!: string;

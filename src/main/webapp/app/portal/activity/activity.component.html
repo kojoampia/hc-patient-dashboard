@@ -3,7 +3,7 @@
 
   @for (option of kinds; track option) {
     <button type="button" class="hc-toggle" [class.is-on]="kind() === option" (click)="setKind(option)">
-      {{ humanise(option) }}
+      {{ option | hpdStatus }}
     </button>
   }
 </div>

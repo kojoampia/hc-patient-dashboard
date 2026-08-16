@@ -21,12 +21,12 @@
             <hpd-icon name="shield" [size]="18" [strokeWidth]="2" />
             <b>{{ item.name }}</b>
           </div>
-          <span class="hc-pill" [class]="pill(item.severity)">{{ humanise(item.severity) }}</span>
+          <span class="hc-pill" [class]="pill(item.severity)">{{ item.severity | hpdStatus }}</span>
         </div>
 
         <div class="hc-kv" style="margin-top: 8px">
           <span class="hc-kv__k" hpdTranslate="patientPortal.allergies.category">Type</span>
-          <span class="hc-kv__v">{{ humanise(item.category) }}</span>
+          <span class="hc-kv__v">{{ item.category | hpdStatus }}</span>
         </div>
 
         @if (item.reaction) {

@@ -53,7 +53,13 @@
       "viewProfile": "Profile",
       "backToCases": "All cases",
       "printShort": "Print",
-      "close": "Close"
+      "close": "Close",
+      "view": "View",
+      "openCase": "Open case",
+      "copy": "Copy",
+      "cancel": "Cancel",
+      "save": "Save",
+      "saving": "Saving…"
     },
     "auth": {
       "eyebrow": "Abofonsa BridgeCare · Patient portal",
@@ -95,7 +101,8 @@
       "status": "Status",
       "count": "Cases",
       "share": "Share",
-      "who": "Professional"
+      "who": "Professional",
+      "case": "Case"
     },
     "overview": {
       "greeting": "Your health, at a glance",
@@ -122,7 +129,10 @@
       "heroNext": "Your next appointment is {{ when }} with {{ clinician }}. {{ open }} of your {{ total }} cases are still active.",
       "openRecord": "Open my record",
       "onFile": "On your file",
-      "onFileSub": "Tap any tile to open it."
+      "onFileSub": "Tap any tile to open it.",
+      "viewVital": "See {{ name }} in detail",
+      "recordedOn": "recorded {{ when }}",
+      "lastReadings": "The readings behind it"
     },
     "record": {
       "vitals": "Vitals",
@@ -177,7 +187,17 @@
       "timeline": "Timeline",
       "noTimeline": "Nothing has been logged against this case",
       "notFound": "Case not found",
-      "notFoundHint": "It may have been closed, or the link may be out of date."
+      "notFoundHint": "It may have been closed, or the link may be out of date.",
+      "logActivity": "Log activity",
+      "logActivityBlurb": "Add something you noticed — a symptom, a missed dose, how you slept. It is filed under this case and your care team sees it.",
+      "noteTitle": "Title of event",
+      "noteTitleHint": "e.g. Dizzy on standing up",
+      "noteDetail": "What happened",
+      "noteDetailHint": "When it started, how long it lasted, anything that helped…",
+      "noteFailed": "Your note was not saved. Check your connection and try again — what you wrote is still here.",
+      "filedUnder": "Everything filed under case {{ number }}",
+      "filedUnderSub": "Your own notes appear here too.",
+      "seeAppointments": "See appointments"
     },
     "schedules": {
       "search": "Search by date, professional or appointment…",
@@ -194,7 +214,9 @@
         "who": "With",
         "where": "Where",
         "status": "Status"
-      }
+      },
+      "viewOne": "View {{ name }}",
+      "detail": "Appointment"
     },
     "emergencies": {
       "search": "Search alerts, detail or outcome…",
@@ -220,7 +242,10 @@
         "active": "Taking now",
         "completed": "Completed courses",
         "withheld": "Withheld — allergy"
-      }
+      },
+      "viewOne": "View {{ name }}",
+      "withheldTitle": "Withheld.",
+      "withheldBody": "This was not given because of an allergy recorded on your file."
     },
     "reports": {
       "search": "Search reports, findings or type…",
@@ -301,6 +326,36 @@
     "filter": {
       "professional": "Filter by professional",
       "allProfessionals": "All professionals"
+    },
+    "status": {
+      "URGENT": "Urgent",
+      "OPEN": "Open",
+      "TREATMENT": "In treatment",
+      "CLOSED": "Closed",
+      "ACTIVE": "Taking now",
+      "COMPLETED": "Completed",
+      "WITHHELD": "Withheld",
+      "CONFIRMED": "Confirmed",
+      "PENDING": "Awaiting confirmation",
+      "ATTENDED": "Attended",
+      "CANCELLED": "Cancelled",
+      "LOW": "Low",
+      "MODERATE": "Moderate",
+      "HIGH": "Urgent",
+      "RAISED": "Raised",
+      "ACKNOWLEDGED": "Acknowledged",
+      "RESOLVED": "Resolved",
+      "MILD": "Mild",
+      "SEVERE": "Severe",
+      "OK": "In range",
+      "WARN": "Watch",
+      "DANGER": "Out of range",
+      "DIET": "Diet",
+      "EXERCISE": "Exercise",
+      "MEDICATION": "Medication",
+      "FOOD": "Food",
+      "ENVIRONMENTAL": "Environmental",
+      "OTHER": "Other"
     }
   }
 }

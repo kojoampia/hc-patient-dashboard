@@ -28,8 +28,8 @@
       <article class="hc-card hc-card-pad">
         <div class="hc-row hc-between hc-gap-8 hc-wrap">
           <b class="hc-grow">{{ item.brief }}</b>
-          <span class="hc-pill" [class]="severityPill(item.severity)">{{ humanise(item.severity) }}</span>
-          <span class="hc-pill" [class]="statusPill(item.status)">{{ humanise(item.status) }}</span>
+          <span class="hc-pill" [class]="severityPill(item.severity)">{{ item.severity | hpdStatus }}</span>
+          <span class="hc-pill" [class]="statusPill(item.status)">{{ item.status | hpdStatus }}</span>
         </div>
 
         <div class="hc-row hc-gap-8 hc-muted hc-tiny hc-wrap" style="margin-top: 5px">

@@ -66,7 +66,7 @@
       >
         <div class="hc-row hc-between">
           <span class="hc-vital__label">{{ vital.label }}</span>
-          <span class="hc-pill" [class]="vitalPill(vital.flag)"><span class="hc-pill__dot"></span>{{ humanise(vital.flag) }}</span>
+          <span class="hc-pill" [class]="vitalPill(vital.flag)"><span class="hc-pill__dot"></span>{{ vital.flag | hpdStatus }}</span>
         </div>
         <b class="hc-num"
           >{{ vital.display }} <span class="hc-vital__unit">{{ vital.unit }}</span></b
@@ -238,7 +238,7 @@
           <span class="hc-drow__date">{{ formatDay(item.startedOn ?? item.createdDate) }}</span>
           <span class="hc-drow__text">
             {{ item.name }}
-            <span class="hc-drow__sub">{{ item.dosage ?? humanise(item.status) }}</span>
+            <span class="hc-drow__sub">{{ item.dosage ?? (item.status | hpdStatus) }}</span>
           </span>
         </a>
       }

@@ -8,11 +8,14 @@ import { PersonFilterComponent } from 'app/shared/ui/person-filter/person-filter
 import { EmptyStateComponent } from 'app/shared/ui/empty-state/empty-state.component';
 import { PagerComponent } from 'app/shared/ui/pager/pager.component';
 import { SearchBoxComponent } from 'app/shared/ui/search-box/search-box.component';
+import { ModalComponent } from 'app/shared/ui/modal/modal.component';
 import { IClinicalCase } from 'app/entities/patientMS/clinical-case/clinical-case.model';
+import { IMedication } from 'app/entities/patientMS/medication/medication.model';
 
 import { CareTeamMember, PatientContextService } from '../data/patient-context.service';
+import { StatusLabelPipe } from '../data/status-label.pipe';
 import { PortalDataService } from '../data/portal-data.service';
-import { byDateDesc, formatDay, humanise, matches, pageCount, pageOf } from '../data/portal-format';
+import { byDateDesc, formatDay, matches, pageCount, pageOf } from '../data/portal-format';
 
 /** Rows to a page. Eight, as the demo pages, and the same on every list. */
 const PAGE_SIZE = 8;
@@ -24,10 +27,20 @@ const PAGE_SIZE = 8;
  * is a safety record, and dropping it from the list is how it gets prescribed again.
  */
 @Component({
-    selector: 'hpd-medications',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [SharedModule, RouterLink, IconComponent, EmptyStateComponent, PagerComponent, SearchBoxComponent, PersonFilterComponent],
-    templateUrl: './medications.component.html'
+  selector: 'hpd-medications',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    SharedModule,
+    RouterLink,
+    IconComponent,
+    EmptyStateComponent,
+    PagerComponent,
+    SearchBoxComponent,
+    PersonFilterComponent,
+    ModalComponent,
+    StatusLabelPipe,
+  ],
+  templateUrl: './medications.component.html',
 })
 export default class MedicationsComponent {
   private readonly context = inject(PatientContextService);
@@ -38,11 +51,9 @@ export default class MedicationsComponent {
   private readonly casesById = toSignal(this.data.casesById$, { initialValue: new Map<string, IClinicalCase>() });
   private readonly medications = toSignal(this.data.medications$, { initialValue: [] });
 
-
   /** The people who can be filtered by, in the order the care team is listed. */
   readonly careTeam = toSignal(this.context.careTeam$, { initialValue: [] as readonly CareTeamMember[] });
   readonly formatDay = formatDay;
-  readonly humanise = humanise;
 
   readonly statuses = ['ACTIVE', 'COMPLETED', 'WITHHELD'] as const;
 
@@ -55,7 +66,11 @@ export default class MedicationsComponent {
   readonly counts = computed(() => {
     const all = this.medications();
     return [
-      { status: 'ACTIVE' as const, value: all.filter(item => item.status === 'ACTIVE').length, labelKey: 'patientPortal.medications.count.active' },
+      {
+        status: 'ACTIVE' as const,
+        value: all.filter(item => item.status === 'ACTIVE').length,
+        labelKey: 'patientPortal.medications.count.active',
+      },
       {
         status: 'COMPLETED' as const,
         value: all.filter(item => item.status === 'COMPLETED').length,
@@ -68,6 +83,15 @@ export default class MedicationsComponent {
       },
     ];
   });
+
+  /**
+   * The medicine whose detail view is open, or null.
+   *
+   * The row itself carries the dose and the prescriber; what the detail adds is the *reason* —
+   * a WITHHELD entry explains that it was not given because of the allergy on the record, which
+   * is the one row on this screen a patient most needs a sentence about.
+   */
+  readonly selected = signal<IMedication | null>(null);
 
   readonly query = signal('');
   readonly status = signal<string | null>(null);
@@ -89,6 +113,10 @@ export default class MedicationsComponent {
 
   readonly totalPages = computed(() => pageCount(this.filtered(), PAGE_SIZE));
   readonly visible = computed(() => pageOf(this.filtered(), this.page(), PAGE_SIZE));
+
+  open(item: IMedication): void {
+    this.selected.set(item);
+  }
 
   setQuery(value: string): void {
     this.query.set(value);

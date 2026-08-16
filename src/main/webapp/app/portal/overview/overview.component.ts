@@ -13,10 +13,12 @@ import { SparklineComponent } from 'app/shared/ui/charts/sparkline.component';
 import { TrendChartComponent } from 'app/shared/ui/charts/trend-chart.component';
 import { StackBarComponent, StackSegment } from 'app/shared/ui/charts/stack-bar.component';
 import { BarChartComponent, BarRow } from 'app/shared/ui/charts/bar-chart.component';
+import { ModalComponent } from 'app/shared/ui/modal/modal.component';
 
 import { CareTeamMember, PatientContextService } from '../data/patient-context.service';
+import { StatusLabelPipe } from '../data/status-label.pipe';
 import { PortalDataService } from '../data/portal-data.service';
-import { summariseVitals } from '../data/vitals';
+import { VitalSummary, summariseVitals } from '../data/vitals';
 import { byDateAsc, byDateDesc, formatDay, formatDayTime, humanise, formatInstantDay, monthlyCounts } from '../data/portal-format';
 
 /** How many rows each summary panel shows before "see all" takes over. */
@@ -34,6 +36,9 @@ const SERIES_KEYS = {
   cases: 'patientPortal.chart.cases',
   visits: 'patientPortal.chart.visits',
 };
+
+/** Where the status vocabulary lives — the same keys `hpdStatus` reads for the pills. */
+const STATUS_KEY = (status: string): string => `patientPortal.status.${status}`;
 
 /**
  * The landing screen: how the patient is doing right now, and what happens next.
@@ -55,6 +60,8 @@ const SERIES_KEYS = {
     StackBarComponent,
     BarChartComponent,
     AvatarComponent,
+    ModalComponent,
+    StatusLabelPipe,
   ],
   templateUrl: './overview.component.html',
 })
@@ -79,7 +86,6 @@ export default class OverviewComponent {
   readonly formatDay = formatDay;
   readonly formatInstantDay = formatInstantDay;
   readonly formatDayTime = formatDayTime;
-  readonly humanise = humanise;
 
   readonly profile = toSignal(this.context.profile$, { initialValue: null });
 
@@ -169,6 +175,18 @@ export default class OverviewComponent {
   readonly latestEmergency = computed(() => [...this.emergencies()].sort(byDateDesc(item => item.raisedAt))[0] ?? null);
 
   /**
+   * The vital whose detail view is open, or null.
+   *
+   * The tile shows a sparkline with no numbers on it — a shape, and the latest reading. The
+   * detail is where the shape becomes readable: the band it should sit in, the trend at full
+   * size, and the readings behind it as a table.
+   */
+  readonly selectedVital = signal<VitalSummary | null>(null);
+
+  /** The detail view's own chart/table toggle, independent of the three below. */
+  readonly showVitalTable = signal(false);
+
+  /**
    * Each "Care at a glance" chart reads its own numbers as a table.
    *
    * One flag per chart rather than one for the section: pressing Table on the distribution because
@@ -192,6 +210,20 @@ export default class OverviewComponent {
     { initialValue: ['Cases', 'Visits'] },
   );
 
+  /**
+   * The case statuses in the reader's language, keyed by enum value.
+   *
+   * The distribution chart draws its labels itself, so they cannot go through the `hpdStatus`
+   * pipe the pills use — this reads the same keys through the same service, and follows a
+   * language switch for the same reason `seriesNames` does.
+   */
+  readonly statusWords = toSignal(
+    this.translate
+      .stream(STATUS_ORDER.map(STATUS_KEY))
+      .pipe(map((words: Record<string, string>) => new Map(STATUS_ORDER.map(status => [status, words[STATUS_KEY(status)]])))),
+    { initialValue: new Map<string, string>() },
+  );
+
   /** How many cases the record holds, open or not — the total the distribution divides up. */
   readonly caseTotal = computed(() => this.cases().length);
 
@@ -203,7 +235,10 @@ export default class OverviewComponent {
     const cases = this.cases();
     const statuses = [...new Set([...STATUS_ORDER, ...cases.map(item => item.status ?? 'OPEN')])];
     return statuses
-      .map(status => ({ label: humanise(status), value: cases.filter(item => (item.status ?? 'OPEN') === status).length }))
+      .map(status => ({
+        label: this.statusWords().get(status) ?? humanise(status),
+        value: cases.filter(item => (item.status ?? 'OPEN') === status).length,
+      }))
       .filter(segment => segment.value > 0);
   });
 
@@ -229,6 +264,22 @@ export default class OverviewComponent {
   });
 
   readonly recentCases = computed(() => [...this.cases()].sort(byDateDesc(item => item.openedAt)).slice(0, PREVIEW));
+
+  openVital(vital: VitalSummary): void {
+    this.showVitalTable.set(false);
+    this.selectedVital.set(vital);
+  }
+
+  /**
+   * Who wrote a timeline entry — the patient themselves, the system, or a clinician.
+   *
+   * The same rule the case detail and the activity trail use. This panel credited every entry to
+   * `authorId` alone, so a note the patient wrote themselves was filed under "Care team" here
+   * while `/record` and `/activity` said "You" about the very same record.
+   */
+  authorName(entry: { source?: string | null; authorId?: string | null }): string {
+    return PatientContextService.authorNameOf(this.careTeamById(), entry);
+  }
 
   /** Resolves the professional named on a record to someone with a name and a role. */
   memberOf(id: string | null | undefined): CareTeamMember {

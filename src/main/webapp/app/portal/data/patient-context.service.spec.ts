@@ -85,7 +85,9 @@ describe('PatientContextService', () => {
     });
 
     it('names the clinician for a professional entry', () => {
-      expect(PatientContextService.authorNameOf(careTeam, { source: 'PROFESSIONAL', authorId: 'professional-grace' })).toBe('Dr. Grace Mensah');
+      expect(PatientContextService.authorNameOf(careTeam, { source: 'PROFESSIONAL', authorId: 'professional-grace' })).toBe(
+        'Dr. Grace Mensah',
+      );
     });
 
     it('names the platform for a system entry', () => {

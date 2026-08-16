@@ -10,9 +10,10 @@ import { EmptyStateComponent } from 'app/shared/ui/empty-state/empty-state.compo
 import { TrendChartComponent } from 'app/shared/ui/charts/trend-chart.component';
 
 import { CareTeamMember, PatientContextService } from '../data/patient-context.service';
+import { StatusLabelPipe } from '../data/status-label.pipe';
 import { PortalDataService } from '../data/portal-data.service';
 import { VitalSummary, summariseVitals } from '../data/vitals';
-import { byDateDesc, formatDay, humanise, formatInstantDay, pageCount, pageOf } from '../data/portal-format';
+import { byDateDesc, formatDay, formatInstantDay, pageCount, pageOf } from '../data/portal-format';
 
 /**
  * Rows a record panel shows at once.
@@ -56,7 +57,16 @@ function paged<T>(all: Signal<readonly T[]>): PanelList<T> {
 @Component({
   selector: 'hpd-record',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SharedModule, RouterLink, IconComponent, PanelComponent, PagerComponent, EmptyStateComponent, TrendChartComponent],
+  imports: [
+    SharedModule,
+    RouterLink,
+    IconComponent,
+    PanelComponent,
+    PagerComponent,
+    EmptyStateComponent,
+    TrendChartComponent,
+    StatusLabelPipe,
+  ],
   templateUrl: './record.component.html',
 })
 export default class RecordComponent {
@@ -73,7 +83,6 @@ export default class RecordComponent {
 
   readonly formatDay = formatDay;
   readonly formatInstantDay = formatInstantDay;
-  readonly humanise = humanise;
 
   readonly profile = toSignal(this.context.profile$, { initialValue: null });
   readonly careTeam = toSignal(this.context.careTeam$, { initialValue: [] });

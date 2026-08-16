@@ -10,18 +10,28 @@ import { PagerComponent } from 'app/shared/ui/pager/pager.component';
 import { SearchBoxComponent } from 'app/shared/ui/search-box/search-box.component';
 
 import { CareTeamMember, PatientContextService } from '../data/patient-context.service';
+import { StatusLabelPipe } from '../data/status-label.pipe';
 import { PortalDataService } from '../data/portal-data.service';
-import { byDateDesc, formatDay, humanise, matches, pageCount, pageOf, formatInstantDay } from '../data/portal-format';
+import { byDateDesc, formatDay, matches, pageCount, pageOf, formatInstantDay } from '../data/portal-format';
 
 /** Rows to a page. Eight, as the demo pages, and the same on every list. */
 const PAGE_SIZE = 8;
 
 /** The case list, filterable by status and free text. */
 @Component({
-    selector: 'hpd-cases',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [SharedModule, RouterLink, IconComponent, EmptyStateComponent, PagerComponent, SearchBoxComponent, PersonFilterComponent],
-    templateUrl: './cases.component.html'
+  selector: 'hpd-cases',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    SharedModule,
+    RouterLink,
+    IconComponent,
+    EmptyStateComponent,
+    PagerComponent,
+    SearchBoxComponent,
+    PersonFilterComponent,
+    StatusLabelPipe,
+  ],
+  templateUrl: './cases.component.html',
 })
 export default class CasesComponent {
   private readonly context = inject(PatientContextService);
@@ -31,12 +41,10 @@ export default class CasesComponent {
 
   private readonly cases = toSignal(this.data.cases$, { initialValue: [] });
 
-
   /** The people who can be filtered by, in the order the care team is listed. */
   readonly careTeam = toSignal(this.context.careTeam$, { initialValue: [] as readonly CareTeamMember[] });
   readonly formatDay = formatDay;
   readonly formatInstantDay = formatInstantDay;
-  readonly humanise = humanise;
 
   readonly statuses = ['URGENT', 'OPEN', 'TREATMENT', 'CLOSED'] as const;
 
