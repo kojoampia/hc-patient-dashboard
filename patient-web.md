@@ -208,24 +208,34 @@ priorities.
 Already-built screens failing in front of the user. Cheapest items on the list, and the ones that make
 the portal look unfinished however much else is done.
 
-- `[ ]` **A1 · `/record` throws on every load.** `formatDay()` is typed for `dayjs.Dayjs` and is handed
+**All five fixed 2026-08-16**, verified in a browser against the seeded record. Two things the fixing
+turned up are worth keeping: A1 and A3 were one bug, and the first attempt at A2 broke every
+`LocalDate` in the app until a test caught it — instants and calendar dates need opposite treatment,
+which the formatters now name (`formatDay` never shifts; `formatInstantDay`, `formatDayTime` and
+`formatTime` render in the clinic's zone). The portal also had **no tests at all** — 13 screens, zero
+specs against 204 elsewhere in the repo — which is how A1 and A3 shipped; there are now two suites
+over exactly what changed, and anything built for E2–E4 should arrive with its own.
+
+- `[x]` **A1 · `/record` throws on every load.** `formatDay()` is typed for `dayjs.Dayjs` and is handed
   a plain string, so the template dies before painting: the page shows a name, three literal `· · ·`
   placeholders and two empty boxes. Console: `TypeError: e.format is not a function at formatDay`, 7×
-  per load, `portal/data/portal-format.ts:10`. Fix the caller or widen the helper — and note the
-  helper's signature already documents the contract the caller breaks.
-- `[ ]` **A2 · every time renders in the reader's timezone.** Instants are stored UTC and formatted
+  per load, `portal/data/portal-format.ts:10`. **Cause:** `PatientContextService` fetches the profile
+  with a raw `http.get` — the one profile endpoint `ProfileService` does not cover — so nothing
+  applied that service's date conversion. Fixed where the fetch happens; the formatters also tolerate
+  a string now rather than turning one into a blank screen. **This was the same bug as A3.**
+- `[x]` **A2 · every time renders in the reader's timezone.** Instants are stored UTC and formatted
   with the browser's offset (`formatDayTime()`, `portal-format.ts:15`). Ghana keeps UTC year round, so
   every appointment, alert and log entry is wrong for any reader outside it — +2h from Berlin, and the
   kidney-stone alert moves from *30 Apr 11:05 PM* to **01 May 01:05 AM**, i.e. onto the wrong day. A
   record that reports the wrong date for an emergency is worse than one that reports none. Decide
   whether the portal renders in the record's zone (Africa/Accra) or the reader's, then apply it in the
   one formatter.
-- `[ ]` **A3 · Profile › About renders six labels and no values.** Born, Sex, Blood group, Card, Card
+- `[x]` **A3 · Profile › About renders six labels and no values.** Born, Sex, Blood group, Card, Card
   number, Social. The API returns all six and the neighbouring Contact tab binds the same record
   correctly, so this is that tab's binding.
-- `[ ]` **A4 · the search magnifier is drawn over its input**, covering the placeholder, on all four
+- `[x]` **A4 · the search magnifier is drawn over its input**, covering the placeholder, on all four
   search screens (cases, emergencies, visitations, activity).
-- `[ ]` **A5 · a patient's own note is credited to "Care team"** on case detail, while `/activity`
+- `[x]` **A5 · a patient's own note is credited to "Care team"** on case detail, while `/activity`
   renders the same record as "You". Whose words a record carries is not cosmetic.
 
 ### E2 — built but unreachable
