@@ -155,11 +155,7 @@
             <div class="hc-grid hc-grid--2">
               @for (member of careTeam(); track member.id) {
                 <div class="hc-row hc-gap-12">
-                  @if (member.imageUrl) {
-                    <img class="hc-avatar hc-av-48" [src]="member.imageUrl" alt="" />
-                  } @else {
-                    <span class="hc-monogram hc-av-48">{{ member.initials }}</span>
-                  }
+                  <hpd-avatar [name]="member.name" [initials]="member.initials" [imageUrl]="member.imageUrl" [size]="48" />
                   <span class="hc-grow">
                     <span class="hc-lrow__title">{{ member.name }}</span>
                     <span class="hc-lrow__sub"

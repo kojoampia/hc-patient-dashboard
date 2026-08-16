@@ -118,7 +118,7 @@
       "noCareTeamHint": "Les professionnels qui vous suivent seront listés ici."
     },
     "cases": {
-      "search": "Rechercher un dossier",
+      "search": "Rechercher dossiers, symptômes, diagnostics…",
       "empty": "Aucun dossier enregistré",
       "emptyHint": "Un dossier est ouvert chaque fois que votre équipe soignante examine quelque chose.",
       "openCase": "Ouvrir le dossier {{ name }}",
@@ -151,7 +151,7 @@
       "notFoundHint": "Il a peut-être été clôturé, ou le lien n'est plus à jour."
     },
     "schedules": {
-      "search": "Rechercher un rendez-vous",
+      "search": "Rechercher par date, professionnel ou rendez-vous…",
       "upcoming": "À venir",
       "upcomingSub": "Rendez-vous encore à honorer.",
       "past": "Déjà honorés",
@@ -168,7 +168,7 @@
       }
     },
     "emergencies": {
-      "search": "Rechercher une alerte",
+      "search": "Rechercher alertes, détails ou résultat…",
       "careLineTitle": "Besoin d'aide maintenant ?",
       "careLineBlurb": "La ligne d’assistance est ouverte 24 h/24 et votre ange gardien est appelé en même temps. En cas de danger vital, appelez d’abord votre numéro d’urgence local.",
       "callCareLine": "Appeler la ligne d'assistance",
@@ -177,7 +177,7 @@
       "emptyHint": "Les alertes déclenchées sur votre dossier apparaissent ici, avec leur issue."
     },
     "medications": {
-      "search": "Rechercher un médicament",
+      "search": "Rechercher médicaments, doses ou instructions…",
       "empty": "Aucun médicament enregistré",
       "emptyHint": "Tout ce qui vous est prescrit apparaît ici, en cours comme passé.",
       "column": {
@@ -194,7 +194,7 @@
       }
     },
     "reports": {
-      "search": "Rechercher un compte rendu",
+      "search": "Rechercher rapports, résultats ou type…",
       "openFile": "Ouvrir le fichier",
       "empty": "Aucun compte rendu enregistré",
       "emptyHint": "Les comptes rendus de laboratoire, d'imagerie et cliniques apparaissent ici une fois déposés."
@@ -221,7 +221,7 @@
       "blockedSub": "Prescriptions retenues par votre équipe en raison d’une allergie."
     },
     "visitations": {
-      "search": "Rechercher une visite",
+      "search": "Rechercher visites, lieux ou notes…",
       "empty": "Aucune visite consignée",
       "emptyHint": "Chaque visite consignée par votre équipe soignante apparaîtra ici.",
       "column": {
@@ -233,7 +233,7 @@
       }
     },
     "activity": {
-      "search": "Rechercher dans le journal",
+      "search": "Rechercher entrées ou détails…",
       "empty": "Rien de consigné pour l'instant",
       "emptyHint": "Tout ce qui est déposé sur votre dossier apparaît ici, du plus récent au plus ancien."
     },
@@ -268,6 +268,10 @@
         "since": "Adhérent depuis",
         "renews": "Renouvellement"
       }
+    },
+    "filter": {
+      "professional": "Filtrer par professionnel",
+      "allProfessionals": "Tous les professionnels"
     }
   }
 }

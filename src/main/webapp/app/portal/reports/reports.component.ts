@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 
 import SharedModule from 'app/shared/shared.module';
 import { IconComponent } from 'app/shared/ui/icon/icon.component';
+import { PersonFilterComponent } from 'app/shared/ui/person-filter/person-filter.component';
 import { EmptyStateComponent } from 'app/shared/ui/empty-state/empty-state.component';
 import { PagerComponent } from 'app/shared/ui/pager/pager.component';
 import { SearchBoxComponent } from 'app/shared/ui/search-box/search-box.component';
@@ -13,13 +14,14 @@ import { CareTeamMember, PatientContextService } from '../data/patient-context.s
 import { PortalDataService } from '../data/portal-data.service';
 import { byDateDesc, formatDay, matches, pageCount, pageOf } from '../data/portal-format';
 
-const PAGE_SIZE = 10;
+/** Rows to a page. Eight, as the demo pages, and the same on every list. */
+const PAGE_SIZE = 8;
 
 /** Lab, imaging, clinical and immunisation reports, each with its plain-language summary. */
 @Component({
     selector: 'hpd-reports',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [SharedModule, RouterLink, IconComponent, EmptyStateComponent, PagerComponent, SearchBoxComponent],
+    imports: [SharedModule, RouterLink, IconComponent, EmptyStateComponent, PagerComponent, SearchBoxComponent, PersonFilterComponent],
     templateUrl: './reports.component.html'
 })
 export default class ReportsComponent {
@@ -27,9 +29,13 @@ export default class ReportsComponent {
   private readonly data = inject(PortalDataService);
 
   private readonly careTeamById = toSignal(this.context.careTeamById$, { initialValue: new Map<string, CareTeamMember>() });
+
   private readonly casesById = toSignal(this.data.casesById$, { initialValue: new Map<string, IClinicalCase>() });
   private readonly reports = toSignal(this.data.reports$, { initialValue: [] });
 
+
+  /** The people who can be filtered by, in the order the care team is listed. */
+  readonly careTeam = toSignal(this.context.careTeam$, { initialValue: [] as readonly CareTeamMember[] });
   readonly formatDay = formatDay;
 
   readonly query = signal('');
@@ -47,11 +53,16 @@ export default class ReportsComponent {
     ].sort((a, b) => a.localeCompare(b)),
   );
 
+  /** Whose records to show — null is everyone. */
+  readonly professional = signal<string | null>(null);
+
   readonly filtered = computed(() => {
     const needle = this.query();
+    const person = this.professional();
     const category = this.category();
     return this.reports()
       .filter(item => !category || item.category === category)
+      .filter(item => !person || item.authorId === person)
       .filter(item => matches(needle, item.name, item.summary, item.description, item.category))
       .sort(byDateDesc(item => item.reportDate ?? item.createdDate));
   });
@@ -69,7 +80,12 @@ export default class ReportsComponent {
     this.page.set(1);
   }
 
-  memberOf(id: string | null | undefined): { name: string; role: string } {
+  setProfessional(id: string | null): void {
+    this.professional.set(id);
+    this.page.set(1);
+  }
+
+  memberOf(id: string | null | undefined): CareTeamMember {
     return PatientContextService.memberOf(this.careTeamById(), id);
   }
 

@@ -1036,6 +1036,54 @@ button.hc-drow:hover {
   }
 }
 
+/* ============================= select ============================= */
+
+/* A filter control for the tools row, sized to sit beside .hc-search and .hc-toggle.
+   Not .hc-field, which is a stacked form field with a label above it and a bottom margin. */
+.hc-select {
+  position: relative;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+
+  select {
+    max-width: 210px;
+    padding: 9px 32px 9px 13px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--hc-navy);
+    text-overflow: ellipsis;
+    background: #fff;
+    border: 1.5px solid var(--hc-line);
+    border-radius: 999px;
+    appearance: none;
+    transition:
+      border-color 0.16s,
+      box-shadow 0.16s;
+
+    &:focus {
+      border-color: var(--hc-navy);
+      outline: none;
+      box-shadow: 0 0 0 3.5px rgba(13, 48, 88, 0.1);
+    }
+  }
+
+  /* The chevron the native control loses to appearance: none. Pointer events off so the click
+     still reaches the select underneath. */
+  &::after {
+    position: absolute;
+    right: 13px;
+    width: 8px;
+    height: 8px;
+    pointer-events: none;
+    content: '';
+    border-right: 1.6px solid var(--hc-grey-400);
+    border-bottom: 1.6px solid var(--hc-grey-400);
+    transform: translateY(-2px) rotate(45deg);
+  }
+}
+
 /* ============================= pager ============================= */
 
 .hc-pager {

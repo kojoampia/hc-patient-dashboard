@@ -3,6 +3,8 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 
 import SharedModule from 'app/shared/shared.module';
+import { AvatarComponent } from 'app/shared/ui/avatar/avatar.component';
+import { PersonFilterComponent } from 'app/shared/ui/person-filter/person-filter.component';
 import { IconComponent } from 'app/shared/ui/icon/icon.component';
 import { EmptyStateComponent } from 'app/shared/ui/empty-state/empty-state.component';
 import { SearchBoxComponent } from 'app/shared/ui/search-box/search-box.component';
@@ -21,7 +23,7 @@ import { byDateAsc, byDateDesc, formatDay, formatTime, humanise, matches, format
 @Component({
     selector: 'hpd-schedules',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [SharedModule, RouterLink, IconComponent, EmptyStateComponent, SearchBoxComponent],
+    imports: [SharedModule, RouterLink, IconComponent, EmptyStateComponent, SearchBoxComponent, AvatarComponent, PersonFilterComponent],
     templateUrl: './schedules.component.html'
 })
 export default class SchedulesComponent {
@@ -29,20 +31,34 @@ export default class SchedulesComponent {
   private readonly data = inject(PortalDataService);
 
   private readonly careTeamById = toSignal(this.context.careTeamById$, { initialValue: new Map<string, CareTeamMember>() });
+
   private readonly casesById = toSignal(this.data.casesById$, { initialValue: new Map<string, IClinicalCase>() });
   private readonly schedules = toSignal(this.data.schedules$, { initialValue: [] });
 
   private readonly matching = computed(() => {
     const needle = this.query();
-    return this.schedules().filter(item => matches(needle, item.name, item.description, item.location, item.attendant));
+    const person = this.professional();
+    return this.schedules()
+      .filter(item => !person || item.attendantId === person)
+      .filter(item =>
+      // The formatted date is included so "28 Jul" finds an appointment, which is how a person
+      // searches a schedule — the raw instant would never match what they typed.
+        matches(needle, item.name, item.description, item.location, item.attendant, formatInstantDay(item.scheduledAt, item.schedule)),
+      );
   });
 
+
+  /** The people who can be filtered by, in the order the care team is listed. */
+  readonly careTeam = toSignal(this.context.careTeam$, { initialValue: [] as readonly CareTeamMember[] });
   readonly formatDay = formatDay;
   readonly formatInstantDay = formatInstantDay;
   readonly formatTime = formatTime;
   readonly humanise = humanise;
 
   readonly query = signal('');
+
+  /** Whose appointments to show — null is everyone. */
+  readonly professional = signal<string | null>(null);
 
   /** Not yet attended and not cancelled, regardless of date — a missed appointment still needs action. */
   readonly upcoming = computed(() =>
@@ -57,7 +73,7 @@ export default class SchedulesComponent {
       .sort(byDateDesc(item => item.scheduledAt ?? item.schedule)),
   );
 
-  memberOf(id: string | null | undefined): { name: string; role: string } {
+  memberOf(id: string | null | undefined): CareTeamMember {
     return PatientContextService.memberOf(this.careTeamById(), id);
   }
 
