@@ -429,6 +429,12 @@ Batch 4 — **C5, C8, the A5 leftover and D1 done 2026-08-16**; C10 still blocke
   portal creates the report first and attaches the file second — the api's shape, and the better
   failure: an upload that dies halfway leaves a report to retry against rather than nothing. PDF,
   JPEG, PNG and HEIC up to 10 MB, decided from the *bytes* rather than the filename.
+  **Opening the file needed a second fix, found by deploying it.** "Open file" was a plain
+  `<a href>`, and a browser navigation carries no Authorization header — so following it produced a
+  401 error page for every uploaded file. Nothing had revealed it before, because every *seeded*
+  report has an empty `url` and the button had never been pressed against a real file. It now
+  fetches through the interceptor and opens the result as a blob, with the tab opened inside the
+  click itself so a popup blocker still trusts it.
 
 ### E4 — wording, vocabulary and seed data
 

@@ -10,6 +10,7 @@ import { PagerComponent } from 'app/shared/ui/pager/pager.component';
 import { SearchBoxComponent } from 'app/shared/ui/search-box/search-box.component';
 import { ModalComponent } from 'app/shared/ui/modal/modal.component';
 import { IClinicalCase } from 'app/entities/patientMS/clinical-case/clinical-case.model';
+import { IReport } from 'app/entities/patientMS/report/report.model';
 
 import { CareTeamMember, PatientContextService } from '../data/patient-context.service';
 import { PortalDataService } from '../data/portal-data.service';
@@ -70,6 +71,9 @@ export default class ReportsComponent {
   readonly uploadCase = signal<string | null>(null);
   readonly saving = signal(false);
   readonly uploadError = signal<string | null>(null);
+
+  /** The report whose file is being fetched, so its button can say so and not be pressed twice. */
+  readonly opening = signal<string | null>(null);
 
   readonly query = signal('');
   readonly category = signal<string | null>(null);
@@ -174,6 +178,36 @@ export default class ReportsComponent {
       error: () => {
         this.saving.set(false);
         this.uploadError.set('patientPortal.reports.uploadFailed');
+      },
+    });
+  }
+
+  /**
+   * Opens a report's file in a new tab.
+   *
+   * Fetched rather than linked: the api wants a bearer token and a plain navigation carries none,
+   * so `<a href>` produced a 401 error page for every uploaded file. The tab is opened *before* the
+   * request, because a popup blocker only trusts a window opened inside the click itself — after an
+   * await it is no longer a user gesture.
+   */
+  openFile(item: IReport): void {
+    if (!item.url || this.opening()) {
+      return;
+    }
+    const tab = window.open('', '_blank');
+    this.opening.set(item.id);
+    this.uploads.open(item.url).subscribe({
+      next: url => {
+        this.opening.set(null);
+        if (tab) {
+          tab.location.href = url;
+        }
+        // Revoked once the new tab has had a chance to load it; holding it forever leaks the blob.
+        setTimeout(() => URL.revokeObjectURL(url), 60_000);
+      },
+      error: () => {
+        this.opening.set(null);
+        tab?.close();
       },
     });
   }

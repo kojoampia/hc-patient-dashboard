@@ -263,7 +263,8 @@
       "attachCase": "Rattacher à un dossier (facultatif)",
       "noCase": "Sans rapport avec un dossier",
       "tooLarge": "Ce fichier dépasse 10 Mo. Une photographie de résolution plus basse conviendra.",
-      "uploadFailed": "Votre rapport n’a pas été envoyé. Vérifiez votre connexion et réessayez — votre saisie est toujours là."
+      "uploadFailed": "Votre rapport n’a pas été envoyé. Vérifiez votre connexion et réessayez — votre saisie est toujours là.",
+      "opening": "Ouverture…"
     },
     "plans": {
       "diet": "Plan alimentaire",
