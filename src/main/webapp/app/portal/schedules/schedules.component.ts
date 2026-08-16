@@ -8,11 +8,14 @@ import { PersonFilterComponent } from 'app/shared/ui/person-filter/person-filter
 import { IconComponent } from 'app/shared/ui/icon/icon.component';
 import { EmptyStateComponent } from 'app/shared/ui/empty-state/empty-state.component';
 import { SearchBoxComponent } from 'app/shared/ui/search-box/search-box.component';
+import { ModalComponent } from 'app/shared/ui/modal/modal.component';
 import { IClinicalCase } from 'app/entities/patientMS/clinical-case/clinical-case.model';
+import { ITask } from 'app/entities/patientMS/task/task.model';
 
 import { CareTeamMember, PatientContextService } from '../data/patient-context.service';
+import { StatusLabelPipe } from '../data/status-label.pipe';
 import { PortalDataService } from '../data/portal-data.service';
-import { byDateAsc, byDateDesc, formatDay, formatTime, humanise, matches, formatInstantDay } from '../data/portal-format';
+import { byDateAsc, byDateDesc, formatDay, formatTime, matches, formatInstantDay } from '../data/portal-format';
 
 /**
  * Appointments, split into what is still coming and what already happened.
@@ -21,10 +24,20 @@ import { byDateAsc, byDateDesc, formatDay, formatTime, humanise, matches, format
  * newest-first for the same reason in reverse.
  */
 @Component({
-    selector: 'hpd-schedules',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [SharedModule, RouterLink, IconComponent, EmptyStateComponent, SearchBoxComponent, AvatarComponent, PersonFilterComponent],
-    templateUrl: './schedules.component.html'
+  selector: 'hpd-schedules',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    SharedModule,
+    RouterLink,
+    IconComponent,
+    EmptyStateComponent,
+    SearchBoxComponent,
+    AvatarComponent,
+    PersonFilterComponent,
+    ModalComponent,
+    StatusLabelPipe,
+  ],
+  templateUrl: './schedules.component.html',
 })
 export default class SchedulesComponent {
   private readonly context = inject(PatientContextService);
@@ -41,19 +54,26 @@ export default class SchedulesComponent {
     return this.schedules()
       .filter(item => !person || item.attendantId === person)
       .filter(item =>
-      // The formatted date is included so "28 Jul" finds an appointment, which is how a person
-      // searches a schedule — the raw instant would never match what they typed.
+        // The formatted date is included so "28 Jul" finds an appointment, which is how a person
+        // searches a schedule — the raw instant would never match what they typed.
         matches(needle, item.name, item.description, item.location, item.attendant, formatInstantDay(item.scheduledAt, item.schedule)),
       );
   });
 
-
   /** The people who can be filtered by, in the order the care team is listed. */
   readonly careTeam = toSignal(this.context.careTeam$, { initialValue: [] as readonly CareTeamMember[] });
+  /**
+   * The appointment whose detail view is open, or null.
+   *
+   * Opened from the attended table, whose rows are the only ones on this screen that do not
+   * already carry everything: the upcoming cards show the clinician, the place and the case, and
+   * a dialog repeating them would be a click that changes nothing.
+   */
+  readonly selected = signal<ITask | null>(null);
+
   readonly formatDay = formatDay;
   readonly formatInstantDay = formatInstantDay;
   readonly formatTime = formatTime;
-  readonly humanise = humanise;
 
   readonly query = signal('');
 

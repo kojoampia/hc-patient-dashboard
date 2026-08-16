@@ -24,10 +24,9 @@
 
   <hpd-person-filter [people]="careTeam()" [value]="professional()" (valueChange)="setProfessional($event)" />
 
-
   @for (option of statuses; track option) {
     <button type="button" class="hc-toggle" [class.is-on]="status() === option" (click)="setStatus(option)">
-      {{ humanise(option) }}
+      {{ option | hpdStatus }}
     </button>
   }
 </div>
@@ -42,6 +41,7 @@
           <th hpdTranslate="patientPortal.medications.column.dosage">How to take it</th>
           <th hpdTranslate="patientPortal.medications.column.prescriber">Prescribed by</th>
           <th hpdTranslate="patientPortal.medications.column.status">Status</th>
+          <th><span class="hc-sr-only" hpdTranslate="patientPortal.action.view">View</span></th>
         </tr>
       </thead>
       <tbody>
@@ -57,7 +57,17 @@
             <td>{{ item.dosage ?? item.prescription ?? '—' }}</td>
             <td>{{ memberOf(item.prescribedById).name }}</td>
             <td>
-              <span class="hc-pill" [class]="pill(item.status)">{{ humanise(item.status) }}</span>
+              <span class="hc-pill" [class]="pill(item.status)">{{ item.status | hpdStatus }}</span>
+            </td>
+            <td class="hc-right">
+              <button
+                type="button"
+                class="hc-icon-btn hc-icon-btn--sm"
+                (click)="open(item)"
+                [attr.aria-label]="'patientPortal.medications.viewOne' | translate: { name: item.name }"
+              >
+                <hpd-icon name="eye" [size]="16" />
+              </button>
             </td>
           </tr>
         }
@@ -72,4 +82,52 @@
   <div class="hc-card">
     <hpd-empty-state icon="pill" titleKey="patientPortal.medications.empty" messageKey="patientPortal.medications.emptyHint" />
   </div>
+}
+
+@if (selected(); as item) {
+  <hpd-modal [title]="item.name ?? ''" icon="pill" [tone]="item.status === 'WITHHELD' ? 'danger' : 'gold'" (closed)="selected.set(null)">
+    <div class="hc-row hc-gap-8 hc-wrap" style="margin-bottom: 13px">
+      <span class="hc-pill" [class]="pill(item.status)">{{ item.status | hpdStatus }}</span>
+      <span class="hc-pill hc-pill--grey">{{ formatDay(item.startedOn ?? item.createdDate) }}</span>
+    </div>
+
+    <div class="hc-card hc-card-pad" style="background: var(--hc-cream)">
+      <div class="hc-kv">
+        <span class="hc-kv__k" hpdTranslate="patientPortal.medications.column.dosage">How to take it</span>
+        <span class="hc-kv__v">{{ item.dosage ?? item.prescription ?? '—' }}</span>
+      </div>
+      <div class="hc-kv">
+        <span class="hc-kv__k" hpdTranslate="patientPortal.medications.column.prescriber">Prescribed by</span>
+        <span class="hc-kv__v">{{ memberOf(item.prescribedById).name }}</span>
+      </div>
+      @if (caseLabel(item.caseId); as label) {
+        <div class="hc-kv">
+          <span class="hc-kv__k" hpdTranslate="patientPortal.chart.case">Case</span>
+          <span class="hc-kv__v">{{ label }}</span>
+        </div>
+      }
+    </div>
+
+    @if (item.description) {
+      <div class="hc-prose" style="margin-top: 12px">
+        <p>{{ item.description }}</p>
+      </div>
+    }
+
+    @if (item.status === 'WITHHELD') {
+      <div class="hc-note hc-note--danger" style="margin-top: 14px">
+        <b hpdTranslate="patientPortal.medications.withheldTitle">Withheld.</b>
+        <span hpdTranslate="patientPortal.medications.withheldBody"> This was not given because of an allergy recorded on your file. </span>
+      </div>
+    }
+
+    <footer class="hc-modal__foot">
+      @if (item.caseId) {
+        <a class="hc-btn hc-btn--ghost" [routerLink]="['/case', item.caseId]" hpdTranslate="patientPortal.action.openCase">Open case</a>
+      }
+      <button type="button" class="hc-btn hc-btn--primary" (click)="selected.set(null)" hpdTranslate="patientPortal.action.close">
+        Close
+      </button>
+    </footer>
+  </hpd-modal>
 }

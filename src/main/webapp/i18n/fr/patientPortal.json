@@ -53,7 +53,13 @@
       "viewProfile": "Profil",
       "backToCases": "Tous les dossiers",
       "printShort": "Imprimer",
-      "close": "Fermer"
+      "close": "Fermer",
+      "view": "Voir",
+      "openCase": "Ouvrir le dossier",
+      "copy": "Copier",
+      "cancel": "Annuler",
+      "save": "Enregistrer",
+      "saving": "Enregistrement…"
     },
     "auth": {
       "eyebrow": "Abofonsa BridgeCare · Portail patient",
@@ -95,7 +101,8 @@
       "status": "Statut",
       "count": "Dossiers",
       "share": "Part",
-      "who": "Professionnel"
+      "who": "Professionnel",
+      "case": "Dossier"
     },
     "overview": {
       "greeting": "Votre santé, en un coup d'œil",
@@ -122,7 +129,10 @@
       "heroNext": "Votre prochain rendez-vous est le {{ when }} avec {{ clinician }}. {{ open }} de vos {{ total }} dossiers sont encore ouverts.",
       "openRecord": "Ouvrir mon dossier",
       "onFile": "Dans votre dossier",
-      "onFileSub": "Touchez une tuile pour l’ouvrir."
+      "onFileSub": "Touchez une tuile pour l’ouvrir.",
+      "viewVital": "Voir {{ name }} en détail",
+      "recordedOn": "relevé le {{ when }}",
+      "lastReadings": "Les mesures derrière cette courbe"
     },
     "record": {
       "vitals": "Constantes",
@@ -177,7 +187,17 @@
       "timeline": "Chronologie",
       "noTimeline": "Rien n'a été consigné pour ce dossier",
       "notFound": "Dossier introuvable",
-      "notFoundHint": "Il a peut-être été clôturé, ou le lien n'est plus à jour."
+      "notFoundHint": "Il a peut-être été clôturé, ou le lien n'est plus à jour.",
+      "logActivity": "Noter un événement",
+      "logActivityBlurb": "Ajoutez ce que vous avez remarqué — un symptôme, une dose oubliée, votre sommeil. C’est classé dans ce dossier et votre équipe le voit.",
+      "noteTitle": "Titre de l’événement",
+      "noteTitleHint": "ex. Vertige en me levant",
+      "noteDetail": "Ce qui s’est passé",
+      "noteDetailHint": "Quand cela a commencé, combien de temps, ce qui a aidé…",
+      "noteFailed": "Votre note n’a pas été enregistrée. Vérifiez votre connexion et réessayez — votre texte est toujours là.",
+      "filedUnder": "Tout ce qui est classé au dossier {{ number }}",
+      "filedUnderSub": "Vos propres notes y figurent aussi.",
+      "seeAppointments": "Voir les rendez-vous"
     },
     "schedules": {
       "search": "Rechercher par date, professionnel ou rendez-vous…",
@@ -194,7 +214,9 @@
         "who": "Avec",
         "where": "Où",
         "status": "Statut"
-      }
+      },
+      "viewOne": "Voir {{ name }}",
+      "detail": "Rendez-vous"
     },
     "emergencies": {
       "search": "Rechercher alertes, détails ou résultat…",
@@ -220,7 +242,10 @@
         "active": "En cours",
         "completed": "Traitements terminés",
         "withheld": "Non administré — allergie"
-      }
+      },
+      "viewOne": "Voir {{ name }}",
+      "withheldTitle": "Non administré.",
+      "withheldBody": "Ce médicament n’a pas été donné en raison d’une allergie inscrite à votre dossier."
     },
     "reports": {
       "search": "Rechercher rapports, résultats ou type…",
@@ -301,6 +326,36 @@
     "filter": {
       "professional": "Filtrer par professionnel",
       "allProfessionals": "Tous les professionnels"
+    },
+    "status": {
+      "URGENT": "Urgent",
+      "OPEN": "Ouvert",
+      "TREATMENT": "En traitement",
+      "CLOSED": "Clos",
+      "ACTIVE": "En cours",
+      "COMPLETED": "Terminé",
+      "WITHHELD": "Non administré",
+      "CONFIRMED": "Confirmé",
+      "PENDING": "En attente de confirmation",
+      "ATTENDED": "Honoré",
+      "CANCELLED": "Annulé",
+      "LOW": "Faible",
+      "MODERATE": "Modéré",
+      "HIGH": "Urgent",
+      "RAISED": "Signalé",
+      "ACKNOWLEDGED": "Pris en charge",
+      "RESOLVED": "Résolu",
+      "MILD": "Léger",
+      "SEVERE": "Sévère",
+      "OK": "Dans la norme",
+      "WARN": "À surveiller",
+      "DANGER": "Hors norme",
+      "DIET": "Alimentation",
+      "EXERCISE": "Exercice",
+      "MEDICATION": "Médicament",
+      "FOOD": "Aliment",
+      "ENVIRONMENTAL": "Environnement",
+      "OTHER": "Autre"
     }
   }
 }

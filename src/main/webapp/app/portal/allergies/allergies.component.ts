@@ -7,9 +7,10 @@ import { PanelComponent } from 'app/shared/ui/panel/panel.component';
 import { EmptyStateComponent } from 'app/shared/ui/empty-state/empty-state.component';
 
 import { CareTeamMember, PatientContextService } from '../data/patient-context.service';
+import { StatusLabelPipe } from '../data/status-label.pipe';
 import { IMedication } from 'app/entities/patientMS/medication/medication.model';
 import { PortalDataService } from '../data/portal-data.service';
-import { byDateDesc, formatDay, humanise } from '../data/portal-format';
+import { byDateDesc, formatDay } from '../data/portal-format';
 
 /** Order of severity, worst first — this is a safety list, not an alphabetical one. */
 const SEVERITY_RANK: Readonly<Record<string, number | undefined>> = { SEVERE: 0, MODERATE: 1, MILD: 2 };
@@ -21,10 +22,10 @@ const SEVERITY_RANK: Readonly<Record<string, number | undefined>> = { SEVERE: 0,
  * whether a drug is safe, and a hidden row is a clinical risk.
  */
 @Component({
-    selector: 'hpd-allergies',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [SharedModule, IconComponent, PanelComponent, EmptyStateComponent],
-    templateUrl: './allergies.component.html'
+  selector: 'hpd-allergies',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [SharedModule, IconComponent, PanelComponent, EmptyStateComponent, StatusLabelPipe],
+  templateUrl: './allergies.component.html',
 })
 export default class AllergiesComponent {
   private readonly context = inject(PatientContextService);
@@ -36,7 +37,6 @@ export default class AllergiesComponent {
   private readonly medications = toSignal(this.data.medications$, { initialValue: [] });
 
   readonly formatDay = formatDay;
-  readonly humanise = humanise;
 
   readonly allergies = computed(() =>
     [...this.rawAllergies()].sort((a, b) => (SEVERITY_RANK[a.severity ?? ''] ?? 3) - (SEVERITY_RANK[b.severity ?? ''] ?? 3)),

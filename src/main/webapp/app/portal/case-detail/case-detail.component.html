@@ -8,11 +8,23 @@
         · {{ clinician().name }} · {{ clinician().role }}
       </div>
     </div>
-    <span class="hc-pill" [class]="pill(record.status)">{{ humanise(record.status) }}</span>
-    <a class="hc-btn hc-btn--ghost hc-btn--sm" routerLink="/cases">
-      <hpd-icon name="chev" [size]="14" [strokeWidth]="2.2" />
-      <span hpdTranslate="patientPortal.action.backToCases">All cases</span>
-    </a>
+    <span class="hc-pill" [class]="pill(record.status)">{{ record.status | hpdStatus }}</span>
+    <div class="hc-row hc-gap-8 hc-wrap hc-no-print">
+      <button type="button" class="hc-btn hc-btn--ghost hc-btn--sm" (click)="print()">
+        <hpd-icon name="print" [size]="15" />
+        <span hpdTranslate="patientPortal.action.printShort">Print</span>
+      </button>
+
+      <button type="button" class="hc-btn hc-btn--ghost hc-btn--sm" (click)="copy()">
+        <hpd-icon name="copy" [size]="15" />
+        <span hpdTranslate="patientPortal.action.copy">Copy</span>
+      </button>
+
+      <a class="hc-btn hc-btn--primary hc-btn--sm" routerLink="/cases">
+        <hpd-icon name="x" [size]="15" />
+        <span hpdTranslate="patientPortal.action.close">Close</span>
+      </a>
+    </div>
   </div>
 
   <div class="hc-grid hc-grid--2 hc-mt-16">
@@ -43,7 +55,18 @@
     }
   </hpd-panel>
 
-  <div class="hc-grid hc-grid--2 hc-mt-16">
+  <div class="hc-sec-head">
+    <div>
+      <h3>{{ 'patientPortal.case.filedUnder' | translate: { number: record.caseNumber ?? '' } }}</h3>
+      <p hpdTranslate="patientPortal.case.filedUnderSub">Your own notes appear here too.</p>
+    </div>
+    <button type="button" class="hc-btn hc-btn--gold hc-btn--sm hc-no-print" (click)="openLog()">
+      <hpd-icon name="plus" [size]="15" />
+      <span hpdTranslate="patientPortal.case.logActivity">Log activity</span>
+    </button>
+  </div>
+
+  <div class="hc-grid hc-grid--2">
     <hpd-panel titleKey="patientPortal.case.visits" icon="pin">
       @if (caseVisits().length) {
         @for (visit of caseVisits(); track visit.id) {
@@ -100,8 +123,19 @@
     </hpd-panel>
 
     <hpd-panel titleKey="patientPortal.case.timeline" icon="clock">
-      @if (caseActivity().length) {
-        @for (entry of caseActivity(); track entry.id) {
+      <button
+        hpdPanelActions
+        type="button"
+        class="hc-icon-btn hc-icon-btn--sm hc-no-print"
+        (click)="openLog()"
+        [attr.aria-label]="'patientPortal.case.logActivity' | translate"
+        [attr.title]="'patientPortal.case.logActivity' | translate"
+      >
+        <hpd-icon name="plus" [size]="15" />
+      </button>
+
+      @if (timelineRows().length) {
+        @for (entry of timelineRows(); track entry.id) {
           <div class="hc-drow">
             <span class="hc-drow__date">{{ formatInstantDay(entry.loggedAt, entry.createdDate) }}</span>
             <span class="hc-drow__text">
@@ -113,7 +147,29 @@
       } @else {
         <hpd-empty-state icon="clock" titleKey="patientPortal.case.noTimeline" />
       }
+
+      <footer hpdPanelFoot class="hc-panel__foot" [hidden]="timelinePages() <= 1">
+        <hpd-pager [currentPage]="timelinePage()" [totalPages]="timelinePages()" (pageChange)="timelinePage.set($event)" />
+      </footer>
     </hpd-panel>
+  </div>
+
+  <!-- ============================= the clinician ============================= -->
+  <div class="hc-card hc-card-pad hc-mt-16 hc-row hc-gap-16 hc-wrap">
+    <hpd-avatar [name]="clinician().name" [initials]="clinician().initials" [imageUrl]="clinician().imageUrl" [size]="56" />
+    <div class="hc-grow">
+      <b>{{ clinician().name }}</b>
+      <div class="hc-muted hc-sm">
+        {{ clinician().role }}
+        @if (clinician().location) {
+          · {{ clinician().location }}
+        }
+      </div>
+    </div>
+    <a class="hc-btn hc-btn--ghost hc-btn--sm hc-no-print" routerLink="/schedules">
+      <hpd-icon name="cal" [size]="15" />
+      <span hpdTranslate="patientPortal.case.seeAppointments">See appointments</span>
+    </a>
   </div>
 } @else if (missing()) {
   <div class="hc-card">
@@ -123,4 +179,52 @@
       </a>
     </hpd-empty-state>
   </div>
+}
+
+@if (logging()) {
+  <hpd-modal titleKey="patientPortal.case.logActivity" icon="note" tone="gold" (closed)="logging.set(false)">
+    <p class="hc-muted hc-sm" style="margin: -8px 0 16px" hpdTranslate="patientPortal.case.logActivityBlurb">
+      Add something you noticed — a symptom, a missed dose, how you slept. It is filed under this case and your care team sees it.
+    </p>
+
+    <div class="hc-field">
+      <label for="note_title" hpdTranslate="patientPortal.case.noteTitle">Title of event</label>
+      <input
+        id="note_title"
+        type="text"
+        maxlength="90"
+        [value]="noteTitle()"
+        (input)="noteTitle.set($any($event.target).value)"
+        [attr.placeholder]="'patientPortal.case.noteTitleHint' | translate"
+      />
+    </div>
+
+    <div class="hc-field">
+      <label for="note_detail" hpdTranslate="patientPortal.case.noteDetail">What happened</label>
+      <textarea
+        id="note_detail"
+        rows="4"
+        maxlength="600"
+        [value]="noteDetail()"
+        (input)="noteDetail.set($any($event.target).value)"
+        [attr.placeholder]="'patientPortal.case.noteDetailHint' | translate"
+      ></textarea>
+    </div>
+
+    @if (saveFailed()) {
+      <div class="hc-note hc-note--danger" hpdTranslate="patientPortal.case.noteFailed">
+        Your note was not saved. Check your connection and try again — what you wrote is still here.
+      </div>
+    }
+
+    <footer class="hc-modal__foot">
+      <button type="button" class="hc-btn hc-btn--ghost" (click)="logging.set(false)" hpdTranslate="patientPortal.action.cancel">
+        Cancel
+      </button>
+      <button type="button" class="hc-btn hc-btn--gold" [disabled]="!canSave()" (click)="save()">
+        <hpd-icon name="save" [size]="15" />
+        <span>{{ (saving() ? 'patientPortal.action.saving' : 'patientPortal.action.save') | translate }}</span>
+      </button>
+    </footer>
+  </hpd-modal>
 }

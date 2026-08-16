@@ -11,8 +11,9 @@ import { SearchBoxComponent } from 'app/shared/ui/search-box/search-box.componen
 import { IClinicalCase } from 'app/entities/patientMS/clinical-case/clinical-case.model';
 
 import { CareTeamMember, PatientContextService } from '../data/patient-context.service';
+import { StatusLabelPipe } from '../data/status-label.pipe';
 import { PortalDataService } from '../data/portal-data.service';
-import { byDateDesc, formatDay, humanise, matches, pageCount, pageOf, formatInstantDay } from '../data/portal-format';
+import { byDateDesc, formatDay, matches, pageCount, pageOf, formatInstantDay } from '../data/portal-format';
 
 /** Rows to a page. Eight, as the demo pages, and the same on every list. */
 const PAGE_SIZE = 8;
@@ -32,10 +33,10 @@ const DEFAULT_STYLE = { icon: 'note' as IconName, colour: 'var(--hc-grey)' };
 
 /** The full record timeline: everything filed, by anyone, newest first. */
 @Component({
-    selector: 'hpd-activity',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [SharedModule, RouterLink, IconComponent, EmptyStateComponent, PagerComponent, SearchBoxComponent],
-    templateUrl: './activity.component.html'
+  selector: 'hpd-activity',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [SharedModule, RouterLink, IconComponent, EmptyStateComponent, PagerComponent, SearchBoxComponent, StatusLabelPipe],
+  templateUrl: './activity.component.html',
 })
 export default class ActivityComponent {
   private readonly context = inject(PatientContextService);
@@ -47,7 +48,6 @@ export default class ActivityComponent {
 
   readonly formatDay = formatDay;
   readonly formatInstantDay = formatInstantDay;
-  readonly humanise = humanise;
 
   readonly kinds = ['CASE', 'VITAL', 'RECOMMENDATION', 'REPORT', 'VISIT', 'MEDICATION', 'NOTE'] as const;
 

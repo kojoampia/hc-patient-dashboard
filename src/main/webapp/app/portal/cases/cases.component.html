@@ -3,10 +3,9 @@
 
   <hpd-person-filter [people]="careTeam()" [value]="professional()" (valueChange)="setProfessional($event)" />
 
-
   @for (option of statuses; track option) {
     <button type="button" class="hc-toggle" [class.is-on]="status() === option" (click)="setStatus(option)">
-      {{ humanise(option) }}
+      {{ option | hpdStatus }}
     </button>
   }
 </div>
@@ -37,7 +36,7 @@
             <td class="hc-tbl__date">{{ formatInstantDay(item.openedAt) }}</td>
             <td>{{ memberOf(item.assignedProfessionalId).name }}</td>
             <td>
-              <span class="hc-pill" [class]="pill(item.status)">{{ humanise(item.status) }}</span>
+              <span class="hc-pill" [class]="pill(item.status)">{{ item.status | hpdStatus }}</span>
             </td>
             <td class="hc-right">
               <a

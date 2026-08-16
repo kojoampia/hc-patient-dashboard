@@ -7,7 +7,6 @@
   />
 
   <hpd-person-filter [people]="careTeam()" [value]="professional()" (valueChange)="professional.set($event)" />
-
 </div>
 
 <div class="hc-sec-head">
@@ -23,7 +22,7 @@
       <article class="hc-card hc-card-pad">
         <div class="hc-row hc-between hc-gap-8">
           <b>{{ item.name }}</b>
-          <span class="hc-pill" [class]="pill(item.status)">{{ humanise(item.status) }}</span>
+          <span class="hc-pill" [class]="pill(item.status)">{{ item.status | hpdStatus }}</span>
         </div>
 
         <div class="hc-row hc-gap-8 hc-muted hc-sm" style="margin-top: 6px">
@@ -76,6 +75,7 @@
           <th hpdTranslate="patientPortal.schedules.column.who">With</th>
           <th hpdTranslate="patientPortal.schedules.column.where">Where</th>
           <th hpdTranslate="patientPortal.schedules.column.status">Status</th>
+          <th><span class="hc-sr-only" hpdTranslate="patientPortal.action.view">View</span></th>
         </tr>
       </thead>
       <tbody>
@@ -86,7 +86,17 @@
             <td>{{ memberOf(item.attendantId).name }}</td>
             <td>{{ item.location ?? '—' }}</td>
             <td>
-              <span class="hc-pill" [class]="pill(item.status)">{{ humanise(item.status) }}</span>
+              <span class="hc-pill" [class]="pill(item.status)">{{ item.status | hpdStatus }}</span>
+            </td>
+            <td class="hc-right">
+              <button
+                type="button"
+                class="hc-icon-btn hc-icon-btn--sm"
+                (click)="selected.set(item)"
+                [attr.aria-label]="'patientPortal.schedules.viewOne' | translate: { name: item.name }"
+              >
+                <hpd-icon name="eye" [size]="16" />
+              </button>
             </td>
           </tr>
         }
@@ -97,4 +107,68 @@
   <div class="hc-card">
     <hpd-empty-state icon="clock" titleKey="patientPortal.schedules.emptyPast" />
   </div>
+}
+
+@if (selected(); as item) {
+  <hpd-modal titleKey="patientPortal.schedules.detail" icon="cal" (closed)="selected.set(null)">
+    <div class="hc-row hc-gap-12" style="margin-bottom: 14px">
+      <hpd-avatar
+        [name]="memberOf(item.attendantId).name"
+        [initials]="memberOf(item.attendantId).initials"
+        [imageUrl]="memberOf(item.attendantId).imageUrl"
+        [size]="56"
+      />
+      <div class="hc-grow">
+        <b>{{ memberOf(item.attendantId).name }}</b>
+        <div class="hc-muted hc-sm">
+          {{ memberOf(item.attendantId).role }}
+          @if (memberOf(item.attendantId).location) {
+            · {{ memberOf(item.attendantId).location }}
+          }
+        </div>
+      </div>
+      <span class="hc-pill" [class]="pill(item.status)">{{ item.status | hpdStatus }}</span>
+    </div>
+
+    <div class="hc-card hc-card-pad" style="background: var(--hc-cream)">
+      <div class="hc-kv">
+        <span class="hc-kv__k" hpdTranslate="patientPortal.schedules.column.what">Appointment</span>
+        <span class="hc-kv__v">{{ item.name }}</span>
+      </div>
+      <div class="hc-kv">
+        <span class="hc-kv__k" hpdTranslate="patientPortal.schedules.column.when">When</span>
+        <span class="hc-kv__v hc-num">
+          {{ formatInstantDay(item.scheduledAt, item.schedule) }}
+          @if (item.scheduledAt) {
+            · {{ formatTime(item.scheduledAt) }}
+          }
+        </span>
+      </div>
+      <div class="hc-kv">
+        <span class="hc-kv__k" hpdTranslate="patientPortal.schedules.column.where">Where</span>
+        <span class="hc-kv__v">{{ item.location ?? '—' }}</span>
+      </div>
+      @if (caseLabel(item.caseId); as label) {
+        <div class="hc-kv">
+          <span class="hc-kv__k" hpdTranslate="patientPortal.chart.case">Case</span>
+          <span class="hc-kv__v">{{ label }}</span>
+        </div>
+      }
+    </div>
+
+    @if (item.description) {
+      <div class="hc-prose" style="margin-top: 12px">
+        <p>{{ item.description }}</p>
+      </div>
+    }
+
+    <footer class="hc-modal__foot">
+      @if (item.caseId) {
+        <a class="hc-btn hc-btn--ghost" [routerLink]="['/case', item.caseId]" hpdTranslate="patientPortal.action.openCase">Open case</a>
+      }
+      <button type="button" class="hc-btn hc-btn--primary" (click)="selected.set(null)" hpdTranslate="patientPortal.action.close">
+        Close
+      </button>
+    </footer>
+  </hpd-modal>
 }

@@ -3,7 +3,6 @@
 
   <hpd-person-filter [people]="careTeam()" [value]="professional()" (valueChange)="setProfessional($event)" />
 
-
   @for (option of categories(); track option) {
     <button type="button" class="hc-toggle" [class.is-on]="category() === option" (click)="setCategory(option)">
       {{ option }}

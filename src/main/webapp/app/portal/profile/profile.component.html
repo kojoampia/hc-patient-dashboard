@@ -120,7 +120,7 @@
                 <div class="hc-kv">
                   <span class="hc-kv__k" hpdTranslate="patientPortal.profile.field.status">Status</span>
                   <span class="hc-kv__v"
-                    ><span class="hc-pill hc-pill--ok">{{ humanise(plan.status) }}</span></span
+                    ><span class="hc-pill hc-pill--ok">{{ plan.status | hpdStatus }}</span></span
                   >
                 </div>
               </div>
