@@ -23,7 +23,7 @@ describe('StatusLabelPipe', () => {
         {
           provide: TranslateService,
           // ngx-translate returns the key itself when it has no translation for it.
-          useValue: { instant: (key: string) => LABELS[key] ?? key },
+          useValue: { instant: (key: string) => (key in LABELS ? LABELS[key] : key) },
         },
       ],
     });

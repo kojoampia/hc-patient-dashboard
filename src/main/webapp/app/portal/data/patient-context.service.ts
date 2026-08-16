@@ -13,6 +13,7 @@ import { ProfessionalService } from 'app/entities/patientMS/professional/service
 /** A care-team member, resolved to something a template can render directly. */
 export interface CareTeamMember {
   readonly id: string;
+  /** How this person is named on screen, honorific included: "Dr. Grace Mensah". */
   readonly name: string;
   readonly role: string;
   readonly initials: string;
@@ -137,9 +138,12 @@ function withParsedDates(profile: RestProfile): IProfile {
 
 function toMember(professional: IProfessional): CareTeamMember {
   const name = [professional.firstName, professional.lastName].filter(Boolean).join(' ').trim();
+  // The honorific is part of how a person is addressed, so it belongs to the name rather than
+  // being a second field every caller has to remember to render. `initialsOf` strips it again.
+  const addressed = [professional.honorific, name].filter(Boolean).join(' ').trim();
   return {
     id: professional.id,
-    name: name || 'Care team',
+    name: addressed || 'Care team',
     role: professional.role ?? professional.specialty ?? '',
     initials: professional.initials ?? initialsOf(name),
     location: professional.location ?? '',

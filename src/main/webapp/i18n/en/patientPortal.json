@@ -131,8 +131,9 @@
       "onFile": "On your file",
       "onFileSub": "Tap any tile to open it.",
       "viewVital": "See {{ name }} in detail",
-      "recordedOn": "recorded {{ when }}",
-      "lastReadings": "The readings behind it"
+      "lastReadings": "The readings behind it",
+      "recordedBy": "recorded {{ when }} by {{ who }}",
+      "recordedByYou": "you"
     },
     "record": {
       "vitals": "Vitals",
@@ -251,7 +252,18 @@
       "search": "Search reports, findings or type…",
       "openFile": "Open file",
       "empty": "No reports on file",
-      "emptyHint": "Lab, imaging and clinical reports appear here once filed."
+      "emptyHint": "Lab, imaging and clinical reports appear here once filed.",
+      "upload": "Upload a report",
+      "uploading": "Uploading…",
+      "uploadBlurb": "A result you were given on paper, or a PDF from a clinic. Your care team sees it on your record.",
+      "file": "The file",
+      "fileHint": "PDF or a photograph, up to 10 MB.",
+      "name": "What is it",
+      "nameHint": "e.g. HbA1c results, 12 August",
+      "attachCase": "Attach to a case (optional)",
+      "noCase": "Not related to a case",
+      "tooLarge": "That file is larger than 10 MB. A photograph taken at a lower resolution will fit.",
+      "uploadFailed": "Your report was not uploaded. Check your connection and try again — what you typed is still here."
     },
     "plans": {
       "diet": "Diet plan",

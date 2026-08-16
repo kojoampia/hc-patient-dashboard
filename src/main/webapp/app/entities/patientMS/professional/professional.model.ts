@@ -4,6 +4,8 @@ export interface IProfessional {
   id: string;
   firstName?: string | null;
   lastName?: string | null;
+  /** "Dr.", "Prof.", "Sr." — how this person is addressed, when the record says. */
+  honorific?: string | null;
   role?: string | null;
   specialty?: string | null;
   email?: string | null;

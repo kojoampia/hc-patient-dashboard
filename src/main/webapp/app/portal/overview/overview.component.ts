@@ -265,6 +265,24 @@ export default class OverviewComponent {
 
   readonly recentCases = computed(() => [...this.cases()].sort(byDateDesc(item => item.openedAt)).slice(0, PREVIEW));
 
+  /**
+   * Who took a reading, in the words the patient would use.
+   *
+   * The demo's sentence is "Recorded 24 July 2026 by Ophelia Gaisie", and the named carer is the
+   * point — she is the angel the patient knows. A reading the patient took themselves says "you",
+   * through the same rule their own notes already follow; a reading the record does not attribute
+   * says "your care team" rather than borrowing a name that was never recorded.
+   */
+  recorderOf(vital: VitalSummary): string {
+    if (vital.source === 'PATIENT') {
+      return this.translate.instant('patientPortal.overview.recordedByYou') as string;
+    }
+    if (!vital.recordedById) {
+      return this.memberOf(null).name;
+    }
+    return this.memberOf(vital.recordedById).name;
+  }
+
   openVital(vital: VitalSummary): void {
     this.showVitalTable.set(false);
     this.selectedVital.set(vital);
