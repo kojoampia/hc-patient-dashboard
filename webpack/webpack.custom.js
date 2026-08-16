@@ -123,7 +123,13 @@ module.exports = async (config, options, targetOptions) => {
       // compiled to `setEndpointPrefix(/)` and the production build died with "Unterminated regular
       // expression". Empty means same-origin — index.html sets <base href="/">, so the relative URLs the
       // entity services build ('api/profiles') resolve against the serving origin and need no CORS.
-      SERVER_API_URL: JSON.stringify(config.mode === 'development' ? environment.DEV_SERVER_API_URL : ''),
+      // Same-origin in EVERY mode, development included. Under `ng serve` the dev server proxies
+      // /api, /services and /management to the gateway (see proxy.conf.js), so a relative URL
+      // reaches it without the browser ever going cross-origin. Building dev with an absolute
+      // `http://localhost:5505/` — which this did until 2026-08-16 — walked straight past that
+      // proxy and into the gateway's deliberately-disabled CORS: 403 on the preflight, 503 on the
+      // request, and no way to run `npm start` against a real gateway at all.
+      SERVER_API_URL: JSON.stringify(''),
       // Browser telemetry, production builds only. Under `ng serve` there is no collector behind
       // /v1/traces, so every export would be a 404 in the console and nothing would be gained.
       // Same JSON.stringify caution as SERVER_API_URL above: DefinePlugin substitutes raw source,

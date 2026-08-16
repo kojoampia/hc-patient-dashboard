@@ -62,9 +62,28 @@ Start the dev server with HMR on <http://localhost:4200>:
 npm start
 ```
 
-API calls are proxied by `webpack/proxy.conf.js`, which forwards `/api`, `/services`, `/management`, `/v3/api-docs`, `/auth`, and `/health` to **`http://localhost:5505`** (`DEV_SERVER_API_URL` in `webpack/environment.js`).
+API calls are proxied by `webpack/proxy.conf.js`, which forwards `/api`, `/services`, `/management`, `/v3/api-docs`, `/auth`, and `/health` to **`http://localhost:5505`**. The bundle is built **same-origin in every mode**, so the browser only ever talks to the dev server and the proxy carries it from there — the same shape production has, where the web container's nginx does the fan-out.
 
-> The gateway listens on **5505** too, so `npm start` reaches it with no further configuration. These two values disagreed until 2026-08-03, when the gateway moved from 5503 to 5505 across dev, prod and the deploy stack. Production is unaffected by the proxy either way — the bundle is built same-origin and the web container's nginx proxies to the gateway.
+> That proxy was configured correctly but unused until 2026-08-16: the dev bundle was built with an absolute `SERVER_API_URL` of `http://localhost:5505/`, which sent the browser straight past it and cross-origin to the gateway, where CORS — disabled on purpose, since production is same-origin — answered the preflight `403` and the request `503`. `npm start` could not reach a gateway at all. The port question was separate and settled on 2026-08-03, when the gateway moved from 5503 to 5505 everywhere.
+
+### Developing against a gateway that is not on this machine
+
+`HC_GATEWAY_URL` moves the proxy's target. The browser stays same-origin, so CORS never enters into
+it. Against the quality stack, whose ports bind loopback on jacserver:
+
+```
+ssh -N -L 5505:127.0.0.1:15505 jacserver &   # the default target already points at :5505
+npm start
+```
+
+or straight at any reachable gateway:
+
+```
+HC_GATEWAY_URL=http://gateway.example:5505 npm start
+```
+
+That is how a change is checked against real seeded data before it ships — `kojo` / `Kojo@0123` on
+the quality stack's record.
 
 Run with TLS instead (`ng serve --ssl`):
 
