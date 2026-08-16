@@ -34,6 +34,18 @@ import { IconName } from 'app/shared/ui/icon/icon.constants';
       <ng-content select="[hpdPanelFoot]" />
     </section>
   `,
+  styles: [
+    `
+      /* A custom element is inline until told otherwise, and a vertical margin on an inline element
+         does nothing at all. Four templates put \`hc-mt-16\` on this component and got no gap for it —
+         visible on the allergies screen, where the conditions panel sat flush against the card above
+         it and the two read as one block. Everywhere else a grid supplies the spacing, which is why
+         it went unnoticed for so long. */
+      :host {
+        display: block;
+      }
+    `,
+  ],
 })
 export class PanelComponent {
   @Input({ required: true }) titleKey!: string;
