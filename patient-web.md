@@ -115,6 +115,17 @@ Resolved since the last baseline, kept so the numbering change is traceable:
 
 ## Phase A — wiring and correctness
 
+- `[x]` **An expired token no longer locks you out.** Settled 2026-08-16. `auth.interceptor.ts`
+  attached the stored token to *every* same-origin request, `/api/authenticate` included. Spring
+  Security's bearer filter runs **before** authorization, so a present-but-expired token fails the
+  request outright and `permitAll` never gets a say: sign-in answered 401 for a reason that had
+  nothing to do with the credentials typed into it, and because the stored token was what caused the
+  failure, trying again did the same. Clearing site data by hand was the only way back in — and the
+  trigger is ordinary, a token expiring while the tab is closed. The interceptor now skips the
+  endpoints whose job is to *get* you a token, matched against the gateway's own `permitAll` list;
+  keep the two in step. Found from a real 401 report, and it cost this repo's own verification loop
+  three ports before it was fixed.
+
 - `[x]` **The dev server can reach a gateway.** Settled 2026-08-16. The ports had agreed since
   2026-08-03, but `npm start` still could not talk to one: the dev bundle was built with an absolute
   `SERVER_API_URL` of `http://localhost:5505/`, so the browser went cross-origin, straight past
