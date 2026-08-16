@@ -1001,12 +1001,17 @@ button.hc-drow:hover {
   flex: 1;
   min-width: 190px;
 
-  svg {
+  /* The wrapper, not the svg inside it.
+   *
+   * `hpd-icon` renders `<span class="hpd-icon">` sized in px from its `[size]` input, with
+   * `svg { width: 100%; height: 100% }` inside. Positioning the *svg* absolutely took it out of
+   * that span, so its percentages resolved against this box instead — a 16px magnifier became one
+   * the full width and height of the search field, sitting on top of the placeholder. Position the
+   * span and let the icon size itself. */
+  .hpd-icon {
     position: absolute;
     top: 50%;
     left: 12px;
-    width: 16px;
-    height: 16px;
     color: var(--hc-grey-400);
     pointer-events: none;
     transform: translateY(-50%);

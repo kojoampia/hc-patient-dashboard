@@ -1,10 +1,12 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, ReplaySubject, catchError, map, of, shareReplay, switchMap } from 'rxjs';
+import dayjs from 'dayjs/esm';
 
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { AccountService } from 'app/core/auth/account.service';
 import { IProfile } from 'app/entities/patientMS/profile/profile.model';
+import { RestProfile } from 'app/entities/patientMS/profile/service/profile.service';
 import { IProfessional } from 'app/entities/patientMS/professional/professional.model';
 import { ProfessionalService } from 'app/entities/patientMS/professional/service/professional.service';
 
@@ -54,7 +56,12 @@ export class PatientContextService {
       if (!account?.email) {
         return of(null);
       }
-      return this.http.get<IProfile>(`${this.profileUrl}/email/${encodeURIComponent(account.email)}`).pipe(
+      return this.http.get<RestProfile>(`${this.profileUrl}/email/${encodeURIComponent(account.email)}`).pipe(
+        // This endpoint is fetched directly rather than through ProfileService, because that
+        // service has no by-email method — so the date conversion it would have applied has to
+        // happen here. Without it `birthDate` stays the ISO string the API sent, and every screen
+        // that formats it renders blank: this is what emptied `/record` and the profile's About tab.
+        map(profile => withParsedDates(profile)),
         // A signed-in user with no profile document yet is a normal state, not an error: the
         // screens fall back to their empty state rather than showing a failure.
         catchError(() => of(null)),
@@ -91,10 +98,41 @@ export class PatientContextService {
     return (id ? byId.get(id) : undefined) ?? UNKNOWN_MEMBER;
   }
 
+  /**
+   * Who to credit for a record the patient can read.
+   *
+   * `source` decides before `authorId` does, and that order is the point: an entry the patient
+   * wrote has no professional to resolve, so resolving first falls through to the "Care team"
+   * stand-in and the portal tells them their own note was written by somebody else. The case
+   * timeline did exactly that while the activity trail did not, which is why this now lives in one
+   * place rather than in each screen that shows a trail.
+   */
+  static authorNameOf(byId: ReadonlyMap<string, CareTeamMember>, entry: { source?: string | null; authorId?: string | null }): string {
+    if (entry.source === 'PATIENT') {
+      return 'You';
+    }
+    if (entry.source === 'SYSTEM') {
+      return 'Abofonsa BridgeCare';
+    }
+    return PatientContextService.memberOf(byId, entry.authorId).name;
+  }
+
   /** Re-fetches the profile and care team. Call after a write that changes either. */
   reload(): void {
     this.refresh$.next();
   }
+}
+
+/**
+ * The date conversion `ProfileService` applies to everything it fetches, for the one endpoint it
+ * does not cover. Kept beside the caller rather than added to the generated service, which is a
+ * JHipster regeneration point.
+ */
+function withParsedDates(profile: RestProfile): IProfile {
+  return {
+    ...profile,
+    birthDate: profile.birthDate ? dayjs(profile.birthDate) : undefined,
+  };
 }
 
 function toMember(professional: IProfessional): CareTeamMember {

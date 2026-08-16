@@ -12,7 +12,7 @@ import { IClinicalCase } from 'app/entities/patientMS/clinical-case/clinical-cas
 
 import { CareTeamMember, PatientContextService } from '../data/patient-context.service';
 import { PortalDataService } from '../data/portal-data.service';
-import { byDateDesc, formatDay, humanise, matches, pageCount, pageOf } from '../data/portal-format';
+import { byDateDesc, formatDay, humanise, matches, pageCount, pageOf, formatInstantDay } from '../data/portal-format';
 
 const PAGE_SIZE = 20;
 
@@ -45,6 +45,7 @@ export default class ActivityComponent {
   private readonly activity = toSignal(this.data.activity$, { initialValue: [] });
 
   readonly formatDay = formatDay;
+  readonly formatInstantDay = formatInstantDay;
   readonly humanise = humanise;
 
   readonly kinds = ['CASE', 'VITAL', 'RECOMMENDATION', 'REPORT', 'VISIT', 'MEDICATION', 'NOTE'] as const;
@@ -81,13 +82,7 @@ export default class ActivityComponent {
 
   /** Entries the patient wrote themselves are attributed to them, not to a clinician. */
   authorName(item: { source?: string | null; authorId?: string | null }): string {
-    if (item.source === 'PATIENT') {
-      return 'You';
-    }
-    if (item.source === 'SYSTEM') {
-      return 'Abofonsa BridgeCare';
-    }
-    return PatientContextService.memberOf(this.careTeamById(), item.authorId).name;
+    return PatientContextService.authorNameOf(this.careTeamById(), item);
   }
 
   caseLabel(caseId: string | null | undefined): string {

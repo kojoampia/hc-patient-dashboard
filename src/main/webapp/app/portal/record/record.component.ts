@@ -11,7 +11,7 @@ import { TrendChartComponent } from 'app/shared/ui/charts/trend-chart.component'
 import { CareTeamMember, PatientContextService } from '../data/patient-context.service';
 import { PortalDataService } from '../data/portal-data.service';
 import { VitalSummary, summariseVitals } from '../data/vitals';
-import { byDateDesc, formatDay, humanise } from '../data/portal-format';
+import { byDateDesc, formatDay, humanise, formatInstantDay } from '../data/portal-format';
 
 /** How many rows the summary panels show before pointing at the full list. */
 const PREVIEW = 6;
@@ -37,6 +37,7 @@ export default class RecordComponent {
   private readonly activity = toSignal(this.data.activity$, { initialValue: [] });
 
   readonly formatDay = formatDay;
+  readonly formatInstantDay = formatInstantDay;
   readonly humanise = humanise;
 
   readonly profile = toSignal(this.context.profile$, { initialValue: null });

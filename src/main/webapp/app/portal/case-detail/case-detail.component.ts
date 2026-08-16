@@ -9,7 +9,7 @@ import { EmptyStateComponent } from 'app/shared/ui/empty-state/empty-state.compo
 
 import { CareTeamMember, PatientContextService } from '../data/patient-context.service';
 import { PortalDataService } from '../data/portal-data.service';
-import { byDateDesc, formatDay, humanise } from '../data/portal-format';
+import { byDateDesc, formatDay, humanise, formatInstantDay } from '../data/portal-format';
 
 /**
  * One case in full: what was reported, what was found, what was recommended, and everything
@@ -33,6 +33,7 @@ export default class CaseDetailComponent {
   private readonly activity = toSignal(this.data.activity$, { initialValue: [] });
 
   readonly formatDay = formatDay;
+  readonly formatInstantDay = formatInstantDay;
   readonly humanise = humanise;
 
   /** Bound from the route by `withComponentInputBinding()`. */
@@ -78,6 +79,11 @@ export default class CaseDetailComponent {
 
   memberOf(id: string | null | undefined): { name: string; role: string } {
     return PatientContextService.memberOf(this.careTeamById(), id);
+  }
+
+  /** Who wrote a timeline entry — the patient themselves, the system, or a clinician. */
+  authorName(entry: { source?: string | null; authorId?: string | null }): string {
+    return PatientContextService.authorNameOf(this.careTeamById(), entry);
   }
 
   pill(status: string | null | undefined): string {

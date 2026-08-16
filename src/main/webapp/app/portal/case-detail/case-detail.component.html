@@ -4,7 +4,7 @@
     <div class="hc-grow">
       <div class="hc-rec-head__who">{{ record.title ?? record.brief }}</div>
       <div class="hc-rec-head__sub">
-        {{ 'patientPortal.case.openedOn' | translate: { date: formatDay(record.openedAt) } }}
+        {{ 'patientPortal.case.openedOn' | translate: { date: formatInstantDay(record.openedAt) } }}
         · {{ clinician().name }} · {{ clinician().role }}
       </div>
     </div>
@@ -48,7 +48,7 @@
       @if (caseVisits().length) {
         @for (visit of caseVisits(); track visit.id) {
           <div class="hc-drow">
-            <span class="hc-drow__date">{{ formatDay(visit.visitedAt) }}</span>
+            <span class="hc-drow__date">{{ formatInstantDay(visit.visitedAt) }}</span>
             <span class="hc-drow__text">
               {{ visit.purpose }}
               <span class="hc-drow__sub"
@@ -103,10 +103,10 @@
       @if (caseActivity().length) {
         @for (entry of caseActivity(); track entry.id) {
           <div class="hc-drow">
-            <span class="hc-drow__date">{{ formatDay(entry.loggedAt ?? entry.createdDate) }}</span>
+            <span class="hc-drow__date">{{ formatInstantDay(entry.loggedAt, entry.createdDate) }}</span>
             <span class="hc-drow__text">
               {{ entry.summary }}
-              <span class="hc-drow__sub">{{ memberOf(entry.authorId).name }}</span>
+              <span class="hc-drow__sub">{{ authorName(entry) }}</span>
             </span>
           </div>
         }

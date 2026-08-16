@@ -19,7 +19,7 @@
         <div class="hc-grow">
           <div class="hc-row hc-between hc-gap-8 hc-wrap">
             <b class="hc-sm">{{ item.summary }}</b>
-            <span class="hc-muted hc-tiny hc-num">{{ formatDay(item.loggedAt ?? item.createdDate) }}</span>
+            <span class="hc-muted hc-tiny hc-num">{{ formatInstantDay(item.loggedAt, item.createdDate) }}</span>
           </div>
 
           @if (item.detail) {

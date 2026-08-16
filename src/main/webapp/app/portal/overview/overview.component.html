@@ -68,7 +68,7 @@
     @if (nextAppointments().length) {
       @for (task of nextAppointments(); track task.id) {
         <div class="hc-drow">
-          <span class="hc-drow__date">{{ formatDay(task.scheduledAt ?? task.schedule) }}</span>
+          <span class="hc-drow__date">{{ formatInstantDay(task.scheduledAt, task.schedule) }}</span>
           <span class="hc-drow__text">
             {{ task.name }}
             <span class="hc-drow__sub"
@@ -95,7 +95,7 @@
         <a class="hc-lrow" [routerLink]="['/case', item.id]">
           <span class="hc-grow">
             <span class="hc-lrow__title">{{ item.title ?? item.brief }}</span>
-            <span class="hc-lrow__sub">{{ formatDay(item.openedAt) }} · {{ memberOf(item.assignedProfessionalId).name }}</span>
+            <span class="hc-lrow__sub">{{ formatInstantDay(item.openedAt) }} · {{ memberOf(item.assignedProfessionalId).name }}</span>
           </span>
           <span class="hc-pill" [class]="casePill(item.status)">{{ humanise(item.status) }}</span>
           <hpd-icon name="chev" [size]="17" [strokeWidth]="2.2" />
@@ -117,7 +117,7 @@
     @if (recentActivity().length) {
       @for (entry of recentActivity(); track entry.id) {
         <div class="hc-drow">
-          <span class="hc-drow__date">{{ formatDay(entry.loggedAt ?? entry.createdDate) }}</span>
+          <span class="hc-drow__date">{{ formatInstantDay(entry.loggedAt, entry.createdDate) }}</span>
           <span class="hc-drow__text">
             {{ entry.summary }}
             <span class="hc-drow__sub">{{ memberOf(entry.authorId).name }}</span>

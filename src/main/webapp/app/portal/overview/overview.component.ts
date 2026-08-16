@@ -11,7 +11,7 @@ import { SparklineComponent } from 'app/shared/ui/charts/sparkline.component';
 import { CareTeamMember, PatientContextService } from '../data/patient-context.service';
 import { PortalDataService } from '../data/portal-data.service';
 import { summariseVitals } from '../data/vitals';
-import { byDateAsc, byDateDesc, formatDay, formatDayTime, humanise } from '../data/portal-format';
+import { byDateAsc, byDateDesc, formatDay, formatDayTime, humanise, formatInstantDay } from '../data/portal-format';
 
 /** How many rows each summary panel shows before "see all" takes over. */
 const PREVIEW = 5;
@@ -42,6 +42,7 @@ export default class OverviewComponent {
   private readonly activity = toSignal(this.data.activity$, { initialValue: [] });
 
   readonly formatDay = formatDay;
+  readonly formatInstantDay = formatInstantDay;
   readonly formatDayTime = formatDayTime;
   readonly humanise = humanise;
 
