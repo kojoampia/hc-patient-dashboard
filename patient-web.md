@@ -249,14 +249,29 @@ over exactly what changed, and anything built for E2–E4 should arrive with its
 
 ### E2 — built but unreachable
 
-- `[ ]` **B1 · Visitations and the Activity trail have no nav entry.** Both are complete and good —
+**Both closed 2026-08-16.** B1 needed no code: it was a symptom of A1, not a gap of its own.
+
+- `[x]` **B1 · Visitations and the Activity trail have no nav entry.** Both are complete and good —
   eighteen visits with case links; kind icons, kind filter chips and correct attribution. `shell-nav.ts`
   lists ten items and neither is among them, and the demo's route to them is the record-panel expanders
   (C2), which do not exist yet. Reachable today only by typing the URL. Closing C2 closes this; adding
   two nav entries closes it sooner.
-- `[ ]` **B2 · the Emergencies badge is never set.** The demo carries a red `4` — the only number in
-  the nav. `ShellNavItem` already declares `badge?: Signal<number>`, a signal so it tracks live;
-  nothing supplies it.
+  **Neither was needed.** `/record` already carries a **See all** under Recent visits and Recent
+  activity, linking to both screens — the demo's own route to them, in a simpler form than the panel
+  expanders. They were unreachable because the page they live on was throwing (A1), not because the
+  route was missing. Fixing A1 restored it; verified by clicking through to `/visitations`. Adding
+  sidebar entries would have *diverged* from the mockup, whose ten nav items are exactly the ten this
+  portal has — the record is deliberately the way in. C2 still stands on its own for the panels and
+  their pagination.
+- `[x]` **B2 · the Emergencies badge is never set.** The demo carries a red `4` — the only number in
+  the nav. `ShellNavItem` already declared `badge?: Signal<number>`, the template already rendered it
+  in both the sidebar and the mobile tab bar, and `_components.scss` already styled it. Only the
+  assignment was missing. `ShellComponent` now supplies it from `PortalDataService.emergencies$`,
+  which is where the interface's own comment said it should come from — "a signal … so the sidebar
+  tracks live data without the nav config having to know where that data comes from". The count is
+  fetched in the frame rather than on the Emergencies screen because its job is to be visible from
+  the screens that are *not* it; the fetch is shared, so the screens that show alerts anyway cost
+  nothing extra.
 
 ### E3 — in the demo, not yet built
 
