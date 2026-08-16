@@ -36,10 +36,10 @@
           </div>
 
           @if (item.url) {
-            <a class="hc-btn hc-btn--ghost hc-btn--sm" [href]="item.url" target="_blank" rel="noopener noreferrer">
+            <button type="button" class="hc-btn hc-btn--ghost hc-btn--sm" [disabled]="opening() === item.id" (click)="openFile(item)">
               <hpd-icon name="eye" [size]="15" />
-              <span hpdTranslate="patientPortal.reports.openFile">Open file</span>
-            </a>
+              <span>{{ (opening() === item.id ? 'patientPortal.reports.opening' : 'patientPortal.reports.openFile') | translate }}</span>
+            </button>
           }
         </div>
 

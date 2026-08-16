@@ -263,7 +263,8 @@
       "attachCase": "Attach to a case (optional)",
       "noCase": "Not related to a case",
       "tooLarge": "That file is larger than 10 MB. A photograph taken at a lower resolution will fit.",
-      "uploadFailed": "Your report was not uploaded. Check your connection and try again — what you typed is still here."
+      "uploadFailed": "Your report was not uploaded. Check your connection and try again — what you typed is still here.",
+      "opening": "Opening…"
     },
     "plans": {
       "diet": "Diet plan",

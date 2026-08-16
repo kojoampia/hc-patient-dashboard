@@ -263,7 +263,8 @@
       "attachCase": "Einem Fall zuordnen (optional)",
       "noCase": "Gehört zu keinem Fall",
       "tooLarge": "Diese Datei ist größer als 10 MB. Ein Foto mit geringerer Auflösung passt.",
-      "uploadFailed": "Ihr Bericht wurde nicht hochgeladen. Prüfen Sie die Verbindung und versuchen Sie es erneut — Ihre Eingaben sind noch da."
+      "uploadFailed": "Ihr Bericht wurde nicht hochgeladen. Prüfen Sie die Verbindung und versuchen Sie es erneut — Ihre Eingaben sind noch da.",
+      "opening": "Wird geöffnet…"
     },
     "plans": {
       "diet": "Ernährungsplan",
