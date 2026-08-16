@@ -275,55 +275,91 @@ over exactly what changed, and anything built for E2–E4 should arrive with its
 
 ### E3 — in the demo, not yet built
 
-- `[ ]` **C1 · "Care at a glance" — three charts with table views.** Visits over time (area, direct
-  endpoint label), case distribution (stacked bar, 9 closed / 2 in treatment / 1 open, "12 cases on
-  file since January 2019"), and cases-and-visits per professional (grouped horizontal bars). Each has
-  a **Table** toggle, introduced as "Every chart has a table view — press Table to read the numbers":
-  an accessibility commitment, not a chart option, and it belongs to whoever builds the charts. The d3
-  `widgets/` library already in this repo is unused by the portal — decide whether it is the vehicle or
-  whether it retires here.
-- `[ ]` **C2 · the record hub.** Six panels — identity, cases, visitations, activity, medications,
-  reports — each paginated independently, each with an expander to its full screen, plus **+ Add
-  activity** on the trail and **↑ Upload report** on reports. Header carries the patient line (*Male ·
-  50 years · Blood group O+ · Card GZ-228-44998*) with Print and Close; below sits "Vitals on this
-  record", the latest reading with the six before it. Depends on A1.
-- `[ ]` **C3 · Emergencies opens with a way to call for help.** The demo leads with "Need help right
-  now? The BridgeCare line answers 24 hours a day, and your care angel Ophelia Gaisie is called at the
-  same time" and a **Call care line** button. Ours is a list of things that already happened. The one
-  screen a frightened person opens should offer the phone call first.
-- `[ ]` **C4 · Allergies states what it protects and what it blocked.** The banner ("2 allergies on
-  your record. Every professional who opens your context sees this panel first, and prescribing is
-  blocked against it") and the **Blocked by this record** section showing the withheld Amoxicillin.
-  That row exists in the portal — on Medications. Here, where it means something, it is absent.
-- `[ ]` **C5 · case detail: Log activity, and the clinician.** Missing from an otherwise strong screen:
-  **Log activity** (framed "Your own notes appear here too"), the paginated activity-trail panel, the
-  clinician card (photo, "General Practitioner · Accra · Osu", **See appointments**), and Print / Copy /
-  Close.
-- `[ ]` **C6 · "On your file" tiles.** The demo counts what is *on the record* — emergencies 4,
-  allergies 2, diet 5, exercise 10 — each a link, under "Tap any tile to open it". We count activity
-  instead (open cases, upcoming visits, active medications, reports). Both are defensible; only the
-  demo's doubles as navigation. Decide, don't drift.
-- `[ ]` **C7 · the hero says something specific.** Demo: "Your next appointment is 28 Jul 2026 at 09:30
-  AM with Dr. Grace Mensah. 3 of your 12 cases are still active," with **Open my record**. Ours
-  describes the product instead of the patient's situation, and offers no action.
-- `[ ]` **C8 · detail views for vitals, appointments, alerts, medicines and reports.** The demo's tables
-  carry an Action column opening a detail view per row. We drill into cases only; every other row is
-  terminal.
-- `[ ]` **C9 · medications summary tiles** — 5 taking now, 8 completed, and **1 withheld (allergy)**.
+**Re-verified against source 2026-08-16 before starting, and six of the fourteen were wrong or
+overstated.** The audit was screenshot-driven, and things below the fold or hidden behind A1's crash
+read as missing. Corrections first, because a backlog that overstates the work is as expensive as one
+that misses it:
+
+| Item | Audited as | Actually |
+| --- | --- | --- |
+| C3 | care-line banner absent | **Built** — red banner, blurb and a working `tel:` button. The screenshot was scrolled past it. Only the care angel's name is missing from the blurb |
+| C11 | "renders whole lists" | **Implemented** on five screens through `shared/ui/pager`. Page sizes are 12/10/20/15 against the demo's 8, so the seeded record mostly fits one page and no pager appears |
+| C14 | search may be narrower | Case search already matches title, brief, **diagnosis, symptoms** and number. Only the placeholder undersells it |
+| C13 | avatars absent | Rendered on **profile** for the patient and the care team; absent on schedules, case detail and overview. The seed carries no `imageUrl`, so initials show regardless |
+| C1 | "the d3 `widgets/` library is unused" | Misleading. `shared/ui/charts` (sparkline, trend-chart) is newer and already used by the record page; `widgets/` is the legacy layer |
+| C2 | "the page has to be built" | It exists — identity, vitals with trend and reading history, recent visits, recent activity, care team. Three panels and the header actions are what is missing |
+
+#### Decisions taken 2026-08-16
+
+Asked and answered rather than assumed, because each changes what gets built:
+
+1. **Charts are built on `shared/ui/charts`**, extending it with a bar chart and a stacked bar. It is
+   what the record page already uses, so the portal keeps one chart style. The legacy d3 `widgets/`
+   is left untouched and retiring it is a separate decision.
+2. **The record hub gains the missing panels only** — cases, medications, reports — keeping the
+   vitals-forward layout and the care-team panel rather than flattening to the demo's six equal
+   panels. Coverage matches; the arrangement stays as it is, because it reads better.
+3. **The overview shows both tile rows**: the portal's activity counts (open cases, upcoming visits,
+   active medications, reports) *and* the demo's record counts (emergencies, allergies, diet,
+   exercise). They answer different questions and both are wanted.
+4. **Avatar markup goes on schedules, case detail and overview, but no photographs go into the
+   seed** — they render the same initials circle the profile screen already uses. The mockup's base64
+   faces stay out of `patient-demo-seed.json`.
+
+#### The work, in build order
+
+Batch 1 — the record's own counts and copy. **Done 2026-08-16**, verified against the seeded record
+from `npm start` over a tunnel; every string added to `en`, `fr` and `de` (209 keys each, checked
+equal — a key missing from one bundle renders as the raw key in that language):
+
+- `[x]` **C6 · both tile rows on the overview** (decision 3), the demo's row linking through under
+  "Tap any tile to open it".
+- `[x]` **C7 · the hero says something specific.** "Your next appointment is 28 Jul 2026 at 09:30 AM
+  with Dr. Grace Mensah. 3 of your 12 cases are still active," with **Open my record**. Ours describes
+  the product instead of the patient's situation and offers no action.
+- `[x]` **C9 · medications summary tiles** — 5 taking now, 8 completed, and **1 withheld (allergy)**.
   The rows are all present; the count that makes the withheld one findable is not.
-- `[ ]` **C10 · Upload a report.** With **+ Add activity** (C2) and **Log activity** (C5) this is the
-  demo's position that the record belongs to the patient. The portal is read-only.
-- `[ ]` **C11 · pagination** on cases, schedules, medications, reports and every record panel — eight
-  rows a page. We render whole lists; medications is already fourteen rows and visitations eighteen,
-  and a real history has no bottom.
-- `[ ]` **C12 · filter by professional, not just status.** The demo's Filter control spans clinician
-  *and* status across four screens. We have status chips on Cases and nothing elsewhere, so "what has
-  Yaw Boateng seen me about?" is not askable.
-- `[ ]` **C13 · clinician photographs** on schedules, case detail and the overview's next-appointments
-  panel. On a screen about who is looking after you, the faces are most of the warmth.
-- `[ ]` **C14 · search that reaches into the record.** The demo promises scope in its placeholders
-  ("Search cases, symptoms, diagnoses…", "Search by date, professional or appointment…"). Confirm ours
-  is as narrow as its placeholder says, and widen it if so.
+- `[x]` **C4 · allergies states what it protects, and what it blocked.** The banner ("2 allergies on
+  your record. Every professional who opens your context sees this panel first, and prescribing is
+  blocked against it") and **Blocked by this record**, listing the withheld Amoxicillin. That row
+  exists in the portal — on Medications. Here, where it means something, it is absent.
+- `[x]` **C3 · name the care angel in the care-line blurb.** Reduced to its real remainder: the banner
+  and the call button are built; the demo also says "and your care angel Ophelia Gaisie is called at
+  the same time", which is the part that tells the patient who actually turns up.
+
+Batch 2 — list mechanics:
+
+- `[ ]` **C11 · page size.** Pagination works; the demo pages at 8 and we page at 12/10/20/15. Settle
+  on one number and apply it, so a list looks the same everywhere.
+- `[ ]` **C12 · filter by professional, not just status.** The demo's Filter spans clinician *and*
+  status across four screens. We have status chips on Cases and nothing elsewhere, so "what has Yaw
+  Boateng seen me about?" is not askable.
+- `[ ]` **C14 · widen the placeholders to match the scope that already exists** ("Search cases,
+  symptoms, diagnoses…"), and check the other screens' scope against their own placeholder.
+- `[ ]` **C13 · avatar markup on schedules, case detail and overview** (decision 4), showing initials.
+
+Batch 3 — the two features:
+
+- `[ ]` **C2 · the record hub gains cases, medications and reports panels** (decision 2), each
+  paginated, plus the Print/Close header. **+ Add activity** and **↑ Upload report** are C10.
+- `[ ]` **C1 · "Care at a glance" — three charts with table views** (decision 1). Visits over time
+  (area, direct endpoint label), case distribution (stacked bar, 9 closed / 2 in treatment / 1 open,
+  "12 cases on file since January 2019"), and cases-and-visits per professional (grouped horizontal
+  bars). Each has a **Table** toggle, introduced as "Every chart has a table view — press Table to
+  read the numbers": an accessibility commitment, not a chart option. `chart.table` and `chart.when`
+  are already in the i18n bundle and the record page already implements the pattern.
+
+Batch 4 — needs a decision or a backend:
+
+- `[ ]` **C5 · case detail: Log activity, and the clinician.** **Log activity** (framed "Your own
+  notes appear here too"), the paginated activity-trail panel, the clinician card (photo, "General
+  Practitioner · Accra · Osu", **See appointments**), and Print / Copy / Close.
+- `[ ]` **C8 · detail views for vitals, appointments, alerts, medicines and reports.** The demo's
+  tables carry an Action column opening a detail view per row. We drill into cases only; every other
+  row is terminal.
+- `[ ]` **C10 · Upload a report**, with **+ Add activity** (C2) and **Log activity** (C5) — the demo's
+  position that the record belongs to the patient. Needs somewhere to put a file: `Report.url` exists
+  but nothing serves uploads, so this is blocked on an api decision rather than on this repo.
 
 ### E4 — wording, vocabulary and seed data
 

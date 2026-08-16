@@ -40,6 +40,29 @@ export default class MedicationsComponent {
 
   readonly statuses = ['ACTIVE', 'COMPLETED', 'WITHHELD'] as const;
 
+  /**
+   * The shape of the list before you read it: what is being taken, what is finished, and what was
+   * withheld. The last one is why this row exists — a withheld prescription is a safety decision
+   * somebody made about this patient, and in a list of fourteen it is one row like any other.
+   * Counting it puts it where the eye lands, and clicking it filters to exactly that.
+   */
+  readonly counts = computed(() => {
+    const all = this.medications();
+    return [
+      { status: 'ACTIVE' as const, value: all.filter(item => item.status === 'ACTIVE').length, labelKey: 'patientPortal.medications.count.active' },
+      {
+        status: 'COMPLETED' as const,
+        value: all.filter(item => item.status === 'COMPLETED').length,
+        labelKey: 'patientPortal.medications.count.completed',
+      },
+      {
+        status: 'WITHHELD' as const,
+        value: all.filter(item => item.status === 'WITHHELD').length,
+        labelKey: 'patientPortal.medications.count.withheld',
+      },
+    ];
+  });
+
   readonly query = signal('');
   readonly status = signal<string | null>(null);
   readonly page = signal(1);

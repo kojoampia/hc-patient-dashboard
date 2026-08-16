@@ -1,5 +1,19 @@
 @if (allergies().length) {
-  <div class="hc-grid hc-grid--2">
+  <section class="hc-card hc-card-pad" style="border-left: 4px solid var(--hc-danger)">
+    <div class="hc-row hc-gap-12">
+      <span class="hc-stat__ic" style="background: var(--hc-danger-bg); color: var(--hc-danger)">
+        <hpd-icon name="shield" [size]="18" [strokeWidth]="2" />
+      </span>
+      <div>
+        <b>{{ 'patientPortal.allergies.onRecord' | translate: { count: allergies().length } }}</b>
+        <p class="hc-muted hc-sm" style="margin: 4px 0 0" hpdTranslate="patientPortal.allergies.onRecordBlurb">
+          Every professional who opens your context sees this panel first, and prescribing is blocked against it.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="hc-grid hc-grid--2 hc-mt-16">
     @for (item of allergies(); track item.id) {
       <article class="hc-card hc-card-pad" [style.border-left]="item.severity === 'SEVERE' ? '4px solid var(--hc-danger)' : null">
         <div class="hc-row hc-between hc-gap-8 hc-wrap">
@@ -32,6 +46,32 @@
 } @else {
   <div class="hc-card">
     <hpd-empty-state icon="shield" titleKey="patientPortal.allergies.empty" messageKey="patientPortal.allergies.emptyHint" />
+  </div>
+}
+
+@if (blocked().length) {
+  <div class="hc-sec-head hc-mt-16">
+    <div>
+      <h3 hpdTranslate="patientPortal.allergies.blocked">Blocked by this record</h3>
+      <p hpdTranslate="patientPortal.allergies.blockedSub">Prescriptions your team withheld because of an allergy.</p>
+    </div>
+  </div>
+
+  <div class="hc-card">
+    @for (item of blocked(); track item.id) {
+      <div class="hc-drow">
+        <span class="hc-tl-item__dot" style="background: var(--hc-danger)">
+          <hpd-icon name="x" [size]="14" [strokeWidth]="2.4" />
+        </span>
+        <span class="hc-drow__text">
+          {{ item.name }}
+          @if (item.dosage) {
+            <span class="hc-drow__sub">{{ item.dosage }}</span>
+          }
+        </span>
+        <span class="hc-drow__date">{{ formatDay(item.startedOn) }}</span>
+      </div>
+    }
   </div>
 }
 

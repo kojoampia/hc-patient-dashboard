@@ -96,8 +96,16 @@
         "openCases": "Dossiers ouverts",
         "upcoming": "Visites à venir",
         "activeMeds": "Médicaments en cours",
-        "reports": "Comptes rendus"
-      }
+        "reports": "Comptes rendus",
+        "emergencies": "Urgences",
+        "allergies": "Allergies",
+        "diet": "Plan alimentaire",
+        "exercise": "Plan d’exercice"
+      },
+      "heroNext": "Votre prochain rendez-vous est le {{ when }} avec {{ clinician }}. {{ open }} de vos {{ total }} dossiers sont encore ouverts.",
+      "openRecord": "Ouvrir mon dossier",
+      "onFile": "Dans votre dossier",
+      "onFileSub": "Touchez une tuile pour l’ouvrir."
     },
     "record": {
       "vitals": "Constantes",
@@ -162,7 +170,7 @@
     "emergencies": {
       "search": "Rechercher une alerte",
       "careLineTitle": "Besoin d'aide maintenant ?",
-      "careLineBlurb": "La ligne d'assistance est ouverte 24 h/24. En cas de danger vital, appelez d'abord le numéro d'urgence local.",
+      "careLineBlurb": "La ligne d’assistance est ouverte 24 h/24 et votre ange gardien est appelé en même temps. En cas de danger vital, appelez d’abord votre numéro d’urgence local.",
       "callCareLine": "Appeler la ligne d'assistance",
       "outcome": "Issue",
       "empty": "Aucune urgence enregistrée",
@@ -178,6 +186,11 @@
         "dosage": "Comment le prendre",
         "prescriber": "Prescrit par",
         "status": "Statut"
+      },
+      "count": {
+        "active": "En cours",
+        "completed": "Traitements terminés",
+        "withheld": "Non administré — allergie"
       }
     },
     "reports": {
@@ -201,7 +214,11 @@
       "conditions": "Affections en cours",
       "noConditions": "Aucune affection enregistrée",
       "empty": "Aucune allergie enregistrée",
-      "emptyHint": "Signalez toute réaction à votre équipe soignante afin qu'elle soit consignée ici."
+      "emptyHint": "Signalez toute réaction à votre équipe soignante afin qu'elle soit consignée ici.",
+      "onRecord": "{{ count }} allergies dans votre dossier",
+      "onRecordBlurb": "Chaque professionnel qui ouvre votre dossier voit d’abord ce panneau, et toute prescription est bloquée en conséquence.",
+      "blocked": "Bloqué par ce dossier",
+      "blockedSub": "Prescriptions retenues par votre équipe en raison d’une allergie."
     },
     "visitations": {
       "search": "Rechercher une visite",
