@@ -51,7 +51,9 @@
       "seeAll": "Tout voir",
       "viewRecord": "Dossier complet",
       "viewProfile": "Profil",
-      "backToCases": "Tous les dossiers"
+      "backToCases": "Tous les dossiers",
+      "printShort": "Imprimer",
+      "close": "Fermer"
     },
     "auth": {
       "eyebrow": "Abofonsa BridgeCare · Portail patient",
@@ -78,7 +80,22 @@
     },
     "chart": {
       "table": "Tableau",
-      "when": "Quand"
+      "when": "Quand",
+      "glance": "Votre suivi en un coup d’œil",
+      "glanceSub": "Chaque graphique a une vue tableau — appuyez sur Tableau pour lire les chiffres.",
+      "visitsOverTime": "Visites au fil du temps",
+      "visitsOverTimeSub": "Vos visites enregistrées, mois par mois.",
+      "caseDistribution": "Répartition des dossiers",
+      "caseDistributionSub": "Où en sont vos {{ total }} dossiers aujourd’hui.",
+      "perProfessional": "Dossiers et visites par professionnel",
+      "perProfessionalSub": "Qui participe à vos soins.",
+      "month": "Mois",
+      "cases": "Dossiers",
+      "visits": "Visites",
+      "status": "Statut",
+      "count": "Dossiers",
+      "share": "Part",
+      "who": "Professionnel"
     },
     "overview": {
       "greeting": "Votre santé, en un coup d'œil",
@@ -111,11 +128,23 @@
       "vitals": "Constantes",
       "vitalsSub": "Choisissez une mesure pour voir son évolution.",
       "history": "Historique des mesures",
-      "visits": "Visites récentes",
-      "activity": "Activité récente",
+      "visits": "Visites",
+      "activity": "Journal d’activité",
       "careTeam": "Votre équipe soignante",
       "noCareTeam": "Aucune équipe soignante enregistrée",
-      "noCareTeamHint": "Les professionnels qui vous suivent seront listés ici."
+      "noCareTeamHint": "Les professionnels qui vous suivent seront listés ici.",
+      "cases": "Dossiers",
+      "medications": "Médicaments",
+      "reports": "Rapports",
+      "lists": "Dans ce dossier",
+      "listsSub": "Trois à la fois — parcourez ici, ou ouvrez la liste complète.",
+      "openAll": {
+        "cases": "Ouvrir tous les dossiers",
+        "visits": "Ouvrir toutes les visites",
+        "activity": "Ouvrir le journal complet",
+        "medications": "Ouvrir tous les médicaments",
+        "reports": "Ouvrir tous les rapports"
+      }
     },
     "cases": {
       "search": "Rechercher dossiers, symptômes, diagnostics…",

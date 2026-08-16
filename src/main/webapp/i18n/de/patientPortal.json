@@ -51,7 +51,9 @@
       "seeAll": "Alle anzeigen",
       "viewRecord": "Vollständige Akte",
       "viewProfile": "Profil",
-      "backToCases": "Alle Fälle"
+      "backToCases": "Alle Fälle",
+      "printShort": "Drucken",
+      "close": "Schließen"
     },
     "auth": {
       "eyebrow": "Abofonsa BridgeCare · Patientenportal",
@@ -78,7 +80,22 @@
     },
     "chart": {
       "table": "Tabelle",
-      "when": "Wann"
+      "when": "Wann",
+      "glance": "Versorgung auf einen Blick",
+      "glanceSub": "Jedes Diagramm hat eine Tabellenansicht — drücken Sie Tabelle, um die Zahlen zu lesen.",
+      "visitsOverTime": "Besuche im Zeitverlauf",
+      "visitsOverTimeSub": "Ihre erfassten Besuche, Monat für Monat.",
+      "caseDistribution": "Verteilung der Fälle",
+      "caseDistributionSub": "So stehen Ihre {{ total }} Fälle heute.",
+      "perProfessional": "Fälle und Besuche je Fachkraft",
+      "perProfessionalSub": "Wer an Ihrer Versorgung beteiligt ist.",
+      "month": "Monat",
+      "cases": "Fälle",
+      "visits": "Besuche",
+      "status": "Status",
+      "count": "Fälle",
+      "share": "Anteil",
+      "who": "Fachkraft"
     },
     "overview": {
       "greeting": "Ihre Gesundheit auf einen Blick",
@@ -111,11 +128,23 @@
       "vitals": "Vitalwerte",
       "vitalsSub": "Wählen Sie einen Messwert, um seinen Verlauf zu sehen.",
       "history": "Messwertverlauf",
-      "visits": "Letzte Besuche",
-      "activity": "Letzte Aktivität",
+      "visits": "Besuche",
+      "activity": "Aktivitätsverlauf",
       "careTeam": "Ihr Behandlungsteam",
       "noCareTeam": "Kein Behandlungsteam hinterlegt",
-      "noCareTeamHint": "Die Fachkräfte, die Sie betreuen, werden hier aufgeführt."
+      "noCareTeamHint": "Die Fachkräfte, die Sie betreuen, werden hier aufgeführt.",
+      "cases": "Fälle",
+      "medications": "Medikamente",
+      "reports": "Berichte",
+      "lists": "In dieser Akte",
+      "listsSub": "Drei auf einmal — hier blättern oder die vollständige Liste öffnen.",
+      "openAll": {
+        "cases": "Alle Fälle öffnen",
+        "visits": "Alle Besuche öffnen",
+        "activity": "Vollständigen Verlauf öffnen",
+        "medications": "Alle Medikamente öffnen",
+        "reports": "Alle Berichte öffnen"
+      }
     },
     "cases": {
       "search": "Fälle, Symptome, Diagnosen durchsuchen…",

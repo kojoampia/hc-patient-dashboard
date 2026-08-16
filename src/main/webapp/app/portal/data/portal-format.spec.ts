@@ -1,6 +1,6 @@
 import dayjs from 'dayjs/esm';
 
-import { formatDay, formatDayTime, formatInstantDay, formatTime } from './portal-format';
+import { formatDay, formatDayTime, formatInstantDay, formatTime, monthlyCounts } from './portal-format';
 
 /**
  * These cover the two mistakes that emptied `/record` and the profile's About tab, and the one that
@@ -59,6 +59,37 @@ describe('portal-format', () => {
 
     it('formats an ISO instant string in the record’s zone too', () => {
       expect(formatDayTime('2026-07-28T09:30:00Z')).toBe('28 Jul 2026, 09:30 AM');
+    });
+  });
+
+  describe('counting by month', () => {
+    it('keeps the quiet months, at zero', () => {
+      // The point of the chart: a gap in care is a finding. Plotting only the months that have
+      // something turns three visits across five months into an unbroken line.
+      expect(monthlyCounts(['2026-01-04T10:00:00Z', '2026-01-19T10:00:00Z', '2026-04-02T10:00:00Z'])).toEqual([
+        { label: 'Jan', value: 2 },
+        { label: 'Feb', value: 0 },
+        { label: 'Mar', value: 0 },
+        { label: 'Apr', value: 1 },
+      ]);
+    });
+
+    it('runs back no further than the span, ending at the most recent month', () => {
+      const monthly = ['2024-01-10T10:00:00Z', '2026-06-10T10:00:00Z', '2026-07-10T10:00:00Z'];
+      const counts = monthlyCounts(monthly, 3);
+      expect(counts.map(month => month.label)).toEqual(['May', 'Jun', 'Jul']);
+      expect(counts.map(month => month.value)).toEqual([0, 1, 1]);
+    });
+
+    it('counts an instant in the month it falls on in the clinic’s zone', () => {
+      // 23:05 on the last day of April is April, not May — the same shift that put an emergency
+      // on the wrong day would put it in the wrong bar.
+      expect(monthlyCounts(['2025-04-30T23:05:00Z'])).toEqual([{ label: 'Apr', value: 1 }]);
+    });
+
+    it('has nothing to plot when nothing is dated', () => {
+      expect(monthlyCounts([])).toEqual([]);
+      expect(monthlyCounts([null, undefined, ''])).toEqual([]);
     });
   });
 

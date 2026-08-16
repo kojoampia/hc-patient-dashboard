@@ -646,7 +646,10 @@ button.hc-lrow:hover {
     font-size: 13.5px;
     font-weight: 600;
 
+    /* Its own line — a `span` with a top margin and no `display` was a margin that did nothing,
+       and the secondary text ran on from the title as if it were part of it. */
     .hc-drow__sub {
+      display: block;
       margin-top: 1px;
       font-size: 12px;
       font-weight: 600;
@@ -655,7 +658,15 @@ button.hc-lrow:hover {
   }
 }
 
-button.hc-drow:hover {
+/* A row that opens the case it belongs to. Rows with no case render as anchors without an `href`
+   — no underline, no pointer, no hover — which is what a row that goes nowhere should look like. */
+a.hc-drow {
+  color: inherit;
+  text-decoration: none;
+}
+
+button.hc-drow:hover,
+a.hc-drow[href]:hover {
   background: #faf9f5;
 }
 

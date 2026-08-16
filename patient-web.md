@@ -343,16 +343,35 @@ Batch 2 — list mechanics. **Done 2026-08-16**, verified against the seeded rec
   which is C5 — putting a bare avatar in the header instead would invent a placement the demo does
   not have and then have to be undone.
 
-Batch 3 — the two features:
+Batch 3 — the two features. **Done 2026-08-16**, verified against the seeded record from `npm start` over a tunnel:
 
-- `[ ]` **C2 · the record hub gains cases, medications and reports panels** (decision 2), each
+- `[x]` **C2 · the record hub gains cases, medications and reports panels** (decision 2), each
   paginated, plus the Print/Close header. **+ Add activity** and **↑ Upload report** are C10.
-- `[ ]` **C1 · "Care at a glance" — three charts with table views** (decision 1). Visits over time
+  Five list panels now sit under **On this record** — cases, visitations, activity trail,
+  medications, reports — each paging the whole collection three rows at a time, with an expander in
+  its head to the full screen. Visits and activity used to preview six rows behind a *See all*; with
+  five panels side by side a preview leaves no way to reach the seventh row without leaving the
+  page, so they page like the rest. Rows that belong to a case open it. Two things came out of
+  building it: `.hc-drow__sub` carried a top margin with no `display`, so the secondary text ran on
+  from the title as if it were part of it on every screen that uses a dated row — it is a block now;
+  and rows with no case render as anchors without an `href`, which is not a link rather than a link
+  that goes nowhere.
+- `[x]` **C1 · "Care at a glance" — three charts with table views** (decision 1). Visits over time
   (area, direct endpoint label), case distribution (stacked bar, 9 closed / 2 in treatment / 1 open,
   "12 cases on file since January 2019"), and cases-and-visits per professional (grouped horizontal
   bars). Each has a **Table** toggle, introduced as "Every chart has a table view — press Table to
   read the numbers": an accessibility commitment, not a chart option. `chart.table` and `chart.when`
   are already in the i18n bundle and the record page already implements the pattern.
+  On the overview, where the demo puts it. `shared/ui/charts` gained `hpd-stack-bar` and
+  `hpd-bar-chart` alongside the existing sparkline and trend chart; the legacy d3 `widgets/` was not
+  touched. Each chart has its own Table flag, so reading one set of numbers does not flip the two
+  either side of it. Two things the seeded record exposed: the trend chart padded its scale 35%
+  below the minimum, which on a series of counts drew a gridline at **−1.7 visits** — it now stops
+  at zero, and `[wholeNumbers]` snaps the axis to whole numbers for a count; and the bar chart is
+  drawn at a 900-wide viewBox rather than 620 because it is laid out full width, and an SVG scaled
+  up a third scales its type with it — 11.5px labels were arriving at 17px, larger than the card
+  heading above them. `monthlyCounts` keeps empty months at zero: a gap in care is a finding, and
+  plotting only the months that have something turns a quiet spring into an unbroken line.
 
 Batch 4 — needs a decision or a backend:
 

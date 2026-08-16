@@ -94,6 +94,100 @@
   </div>
 }
 
+<!-- ============================= care at a glance ============================= -->
+@if (visitTrend().length > 1 || caseDistribution().length || careTeamLoad().length) {
+  <div class="hc-sec-head">
+    <div>
+      <h3 hpdTranslate="patientPortal.chart.glance">Care at a glance</h3>
+      <p hpdTranslate="patientPortal.chart.glanceSub">Every chart has a table view — press Table to read the numbers.</p>
+    </div>
+  </div>
+
+  <div class="hc-grid hc-grid--2">
+    @if (visitTrend().length > 1) {
+      <div class="hc-chart-card">
+        <div class="hc-chart-card__head">
+          <div class="hc-grow">
+            <h4 hpdTranslate="patientPortal.chart.visitsOverTime">Visits over time</h4>
+            <p hpdTranslate="patientPortal.chart.visitsOverTimeSub">Visits recorded for you, month by month.</p>
+          </div>
+          <button type="button" class="hc-toggle" [class.is-on]="showVisitsTable()" (click)="showVisitsTable.set(!showVisitsTable())">
+            <span hpdTranslate="patientPortal.chart.table">Table</span>
+          </button>
+        </div>
+
+        <div class="hc-chart-card__body">
+          <hpd-trend-chart
+            [data]="visitTrend()"
+            [unit]="'patientPortal.chart.visits' | translate"
+            labelHeadingKey="patientPortal.chart.month"
+            [wholeNumbers]="true"
+            [showTable]="showVisitsTable()"
+          />
+        </div>
+      </div>
+    }
+
+    @if (caseDistribution().length) {
+      <div class="hc-chart-card">
+        <div class="hc-chart-card__head">
+          <div class="hc-grow">
+            <h4 hpdTranslate="patientPortal.chart.caseDistribution">Case distribution</h4>
+            <p>{{ 'patientPortal.chart.caseDistributionSub' | translate: { total: caseTotal() } }}</p>
+          </div>
+          <button type="button" class="hc-toggle" [class.is-on]="showDistTable()" (click)="showDistTable.set(!showDistTable())">
+            <span hpdTranslate="patientPortal.chart.table">Table</span>
+          </button>
+        </div>
+
+        <div class="hc-chart-card__body">
+          <hpd-stack-bar [data]="caseDistribution()" [showTable]="showDistTable()" />
+
+          @if (!showDistTable()) {
+            <div class="hc-legend">
+              @for (segment of caseDistribution(); track segment.label; let i = $index) {
+                <span class="hc-legend__item">
+                  <span class="hc-legend__swatch" [style.background]="'var(--hc-series-' + ((i % 3) + 1) + ')'"></span>
+                  {{ segment.label }} · {{ segment.value }}
+                </span>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  @if (careTeamLoad().length) {
+    <div class="hc-chart-card hc-mt-16">
+      <div class="hc-chart-card__head">
+        <div class="hc-grow">
+          <h4 hpdTranslate="patientPortal.chart.perProfessional">Cases and visits per professional</h4>
+          <p hpdTranslate="patientPortal.chart.perProfessionalSub">Who has been involved in your care.</p>
+        </div>
+        <button type="button" class="hc-toggle" [class.is-on]="showTeamTable()" (click)="showTeamTable.set(!showTeamTable())">
+          <span hpdTranslate="patientPortal.chart.table">Table</span>
+        </button>
+      </div>
+
+      <div class="hc-chart-card__body">
+        <hpd-bar-chart [data]="careTeamLoad()" [series]="seriesNames()" [showTable]="showTeamTable()" />
+
+        @if (!showTeamTable()) {
+          <div class="hc-legend">
+            @for (name of seriesNames(); track name; let i = $index) {
+              <span class="hc-legend__item">
+                <span class="hc-legend__swatch" [style.background]="'var(--hc-series-' + ((i % 3) + 1) + ')'"></span>
+                {{ name }}
+              </span>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
+}
+
 <!-- ============================= two columns ============================= -->
 <div class="hc-grid hc-grid--2 hc-mt-16">
   <hpd-panel titleKey="patientPortal.overview.nextUp" icon="cal">

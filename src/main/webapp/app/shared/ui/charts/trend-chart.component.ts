@@ -21,10 +21,10 @@ const PAD = { left: 34, right: 16, top: 16, bottom: 28 };
  * quick read, the table is the accessible one, and a reading nobody can get to is not a reading.
  */
 @Component({
-    selector: 'hpd-trend-chart',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [SharedModule],
-    template: `
+  selector: 'hpd-trend-chart',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [SharedModule],
+  template: `
     @if (points().length > 1) {
       @if (showTable) {
         <table class="hc-viz-tbl">
@@ -79,19 +79,24 @@ const PAD = { left: 34, right: 16, top: 16, bottom: 28 };
       }
     }
   `,
-    styles: [
-        `
+  styles: [
+    `
       .hpd-axis {
         font-size: 10.5px;
         font-weight: 600;
         fill: var(--hc-grey-400);
       }
     `,
-    ]
+  ],
 })
 export class TrendChartComponent {
   /**
    * Scale bounds, padded above and below so the line never touches the frame.
+   *
+   * Padding below the minimum is dropped the moment it would go negative: a series of counts has a
+   * real floor at zero, and an axis labelled −1.7 visits invites the reader to believe the scale
+   * means something it does not. {@link wholeNumbers} goes further and puts the floor at zero
+   * outright, so the bar heights stay proportional to the counts they represent.
    *
    * Declared above `points`, which it reads: a computed body is lazy, so it does not run until
    * something reads it — long after every field is initialised.
@@ -101,7 +106,13 @@ export class TrendChartComponent {
     const min = Math.min(...values);
     const max = Math.max(...values);
     const span = max - min || 1;
-    return { low: min - span * 0.35, high: max + span * 0.35 };
+
+    if (this.wholeNumbers) {
+      // Rounded up to a multiple of four, so all five gridlines land on whole numbers.
+      return { low: 0, high: Math.max(4, Math.ceil((max * 1.15) / 4) * 4) };
+    }
+    const low = min - span * 0.35;
+    return { low: min >= 0 ? Math.max(0, low) : low, high: max + span * 0.35 };
   });
 
   readonly width = WIDTH;
@@ -116,6 +127,9 @@ export class TrendChartComponent {
 
   /** Column heading for the label column in table mode. */
   @Input() labelHeadingKey = 'patientPortal.chart.when';
+
+  /** Set for a series of counts: the axis starts at zero and every gridline is a whole number. */
+  @Input() wholeNumbers = false;
 
   readonly points = signal<readonly TrendPoint[]>([]);
 
