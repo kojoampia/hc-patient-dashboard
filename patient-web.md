@@ -3,6 +3,7 @@
 Single plan of record for `hc-patient-dashboard`. It consolidates what used to be spread across the now-deleted `AGENT.md` (refactoring plan), `code-review.md` (deploy/compose findings), `HC - Patient Blueprint.md` / `HC - Patient Checklist.md` (subsystem phases), and the `.github/todo.md` / `.github/patient_plan.md` drafts.
 
 - **Baseline verified:** 2026-08-03 against `package.json`, `angular.json`, `jest.conf.js`, `.eslintrc.json`, `webpack/`, `src/main/webapp`, the CI workflow and its last four runs, and a full `ng test` + `npm run lint`. (Previous baseline 2026-07-30, when this repo still owned its own Docker and compose files.)
+- **Demo parity audited:** 2026-08-16, both the mockup and the running portal walked side by side against the seeded record — see Phase E, which is now where the remaining distance to `patient-web-demo.html` is tracked.
 - **Companion docs:** `CLAUDE.md` (what exists and how it is wired), `AGENTS.md` (standing expectations), `README.md` (stack, commands, ports).
 - **Sibling plans:** `hc-patient-service/patient-api.md`, `hc-patient-gateway/patient-gateway.md`, and `hc-patient/deploy/TODO.md` — which now owns everything about packaging and shipping this app.
 
@@ -188,6 +189,146 @@ These come from the subsystem blueprint's Phase 3 and are largely blocked on bac
 - `[ ]` Assigned professionals directory — needs a contract with the professional subsystem.
 - `[ ]` Time-bound record sharing toggles — no sharing/consent model exists.
 - `[ ]` `PATIENT`/`ANGEL` role support in the `Authority` enum and route guards — joint change tracked in `patient-gateway.md` Phase B. The enum still holds only `ROLE_ADMIN` and `ROLE_USER`, and no service in the subsystem issues the other two.
+
+## Phase E — demo parity
+
+`patient-web-demo.html` is the design the portal was rebuilt against, and it is still the target: it is
+the only artefact that says what "finished" looks like, and the quality stack now seeds the record it
+was drawn against, so the two can be compared directly rather than argued about.
+
+**Audited 2026-08-16**, both running side by side — the mockup served locally, the portal on the
+quality stack at `patient.healthconnect.local` signed in as `kojo`, against
+`quality/patient-demo-seed.json`. All thirteen routes walked in both, plus the browser console and the
+two routes that have no way in. Nothing below is inferred from source alone; where a cause is named,
+the console or the rendered output showed it. Item ids are stable references for review, not
+priorities.
+
+### E1 — built but broken
+
+Already-built screens failing in front of the user. Cheapest items on the list, and the ones that make
+the portal look unfinished however much else is done.
+
+- `[ ]` **A1 · `/record` throws on every load.** `formatDay()` is typed for `dayjs.Dayjs` and is handed
+  a plain string, so the template dies before painting: the page shows a name, three literal `· · ·`
+  placeholders and two empty boxes. Console: `TypeError: e.format is not a function at formatDay`, 7×
+  per load, `portal/data/portal-format.ts:10`. Fix the caller or widen the helper — and note the
+  helper's signature already documents the contract the caller breaks.
+- `[ ]` **A2 · every time renders in the reader's timezone.** Instants are stored UTC and formatted
+  with the browser's offset (`formatDayTime()`, `portal-format.ts:15`). Ghana keeps UTC year round, so
+  every appointment, alert and log entry is wrong for any reader outside it — +2h from Berlin, and the
+  kidney-stone alert moves from *30 Apr 11:05 PM* to **01 May 01:05 AM**, i.e. onto the wrong day. A
+  record that reports the wrong date for an emergency is worse than one that reports none. Decide
+  whether the portal renders in the record's zone (Africa/Accra) or the reader's, then apply it in the
+  one formatter.
+- `[ ]` **A3 · Profile › About renders six labels and no values.** Born, Sex, Blood group, Card, Card
+  number, Social. The API returns all six and the neighbouring Contact tab binds the same record
+  correctly, so this is that tab's binding.
+- `[ ]` **A4 · the search magnifier is drawn over its input**, covering the placeholder, on all four
+  search screens (cases, emergencies, visitations, activity).
+- `[ ]` **A5 · a patient's own note is credited to "Care team"** on case detail, while `/activity`
+  renders the same record as "You". Whose words a record carries is not cosmetic.
+
+### E2 — built but unreachable
+
+- `[ ]` **B1 · Visitations and the Activity trail have no nav entry.** Both are complete and good —
+  eighteen visits with case links; kind icons, kind filter chips and correct attribution. `shell-nav.ts`
+  lists ten items and neither is among them, and the demo's route to them is the record-panel expanders
+  (C2), which do not exist yet. Reachable today only by typing the URL. Closing C2 closes this; adding
+  two nav entries closes it sooner.
+- `[ ]` **B2 · the Emergencies badge is never set.** The demo carries a red `4` — the only number in
+  the nav. `ShellNavItem` already declares `badge?: Signal<number>`, a signal so it tracks live;
+  nothing supplies it.
+
+### E3 — in the demo, not yet built
+
+- `[ ]` **C1 · "Care at a glance" — three charts with table views.** Visits over time (area, direct
+  endpoint label), case distribution (stacked bar, 9 closed / 2 in treatment / 1 open, "12 cases on
+  file since January 2019"), and cases-and-visits per professional (grouped horizontal bars). Each has
+  a **Table** toggle, introduced as "Every chart has a table view — press Table to read the numbers":
+  an accessibility commitment, not a chart option, and it belongs to whoever builds the charts. The d3
+  `widgets/` library already in this repo is unused by the portal — decide whether it is the vehicle or
+  whether it retires here.
+- `[ ]` **C2 · the record hub.** Six panels — identity, cases, visitations, activity, medications,
+  reports — each paginated independently, each with an expander to its full screen, plus **+ Add
+  activity** on the trail and **↑ Upload report** on reports. Header carries the patient line (*Male ·
+  50 years · Blood group O+ · Card GZ-228-44998*) with Print and Close; below sits "Vitals on this
+  record", the latest reading with the six before it. Depends on A1.
+- `[ ]` **C3 · Emergencies opens with a way to call for help.** The demo leads with "Need help right
+  now? The BridgeCare line answers 24 hours a day, and your care angel Ophelia Gaisie is called at the
+  same time" and a **Call care line** button. Ours is a list of things that already happened. The one
+  screen a frightened person opens should offer the phone call first.
+- `[ ]` **C4 · Allergies states what it protects and what it blocked.** The banner ("2 allergies on
+  your record. Every professional who opens your context sees this panel first, and prescribing is
+  blocked against it") and the **Blocked by this record** section showing the withheld Amoxicillin.
+  That row exists in the portal — on Medications. Here, where it means something, it is absent.
+- `[ ]` **C5 · case detail: Log activity, and the clinician.** Missing from an otherwise strong screen:
+  **Log activity** (framed "Your own notes appear here too"), the paginated activity-trail panel, the
+  clinician card (photo, "General Practitioner · Accra · Osu", **See appointments**), and Print / Copy /
+  Close.
+- `[ ]` **C6 · "On your file" tiles.** The demo counts what is *on the record* — emergencies 4,
+  allergies 2, diet 5, exercise 10 — each a link, under "Tap any tile to open it". We count activity
+  instead (open cases, upcoming visits, active medications, reports). Both are defensible; only the
+  demo's doubles as navigation. Decide, don't drift.
+- `[ ]` **C7 · the hero says something specific.** Demo: "Your next appointment is 28 Jul 2026 at 09:30
+  AM with Dr. Grace Mensah. 3 of your 12 cases are still active," with **Open my record**. Ours
+  describes the product instead of the patient's situation, and offers no action.
+- `[ ]` **C8 · detail views for vitals, appointments, alerts, medicines and reports.** The demo's tables
+  carry an Action column opening a detail view per row. We drill into cases only; every other row is
+  terminal.
+- `[ ]` **C9 · medications summary tiles** — 5 taking now, 8 completed, and **1 withheld (allergy)**.
+  The rows are all present; the count that makes the withheld one findable is not.
+- `[ ]` **C10 · Upload a report.** With **+ Add activity** (C2) and **Log activity** (C5) this is the
+  demo's position that the record belongs to the patient. The portal is read-only.
+- `[ ]` **C11 · pagination** on cases, schedules, medications, reports and every record panel — eight
+  rows a page. We render whole lists; medications is already fourteen rows and visitations eighteen,
+  and a real history has no bottom.
+- `[ ]` **C12 · filter by professional, not just status.** The demo's Filter control spans clinician
+  *and* status across four screens. We have status chips on Cases and nothing elsewhere, so "what has
+  Yaw Boateng seen me about?" is not askable.
+- `[ ]` **C13 · clinician photographs** on schedules, case detail and the overview's next-appointments
+  panel. On a screen about who is looking after you, the faces are most of the warmth.
+- `[ ]` **C14 · search that reaches into the record.** The demo promises scope in its placeholders
+  ("Search cases, symptoms, diagnoses…", "Search by date, professional or appointment…"). Confirm ours
+  is as narrow as its placeholder says, and widen it if so.
+
+### E4 — wording, vocabulary and seed data
+
+- `[ ]` **D1 · status vocabulary drifted** toward the enum names: *In treatment → Treatment*, *Taking
+  now → Active*, *Attended → Completed*, *Urgent → High*, *Awaiting confirmation → Pending*. The
+  severity one matters most; *Urgent* is what a person reads on an emergency.
+- `[ ]` **D2 · "What was reported" / "What was found"** replace the demo's *Symptoms* / *Diagnosis*.
+  This reads as an improvement on the demo rather than drift from it — make it a decision and apply it
+  everywhere, rather than leaving two documents disagreeing.
+- `[ ]` **D3 · honorifics dropped** ("Dr. Grace Mensah" → "Grace Mensah"). The seed stores the
+  honorific; this is presentation.
+- `[ ]` **D4 · sign-in asks for a username, not an email.** The demo signs in with `kojo@jac.net` and
+  offers **Continue with care card** — the number is on the physical card and printed in the profile.
+  We ask for a username and add Register and Forgot password, which the demo does not have.
+  Email-first is a different onboarding story; decide it.
+- `[ ]` **D5 · vitals carry no attribution.** Demo: "Recorded 24 July 2026 by Ophelia Gaisie." The
+  named carer is the point — she is the angel the patient knows.
+- `[ ]` **D6 · case rows print their title twice.** `patient-demo-seed.json` sets `brief` to the same
+  string as `title` because the mockup has one label per case. Either give `brief` real content or stop
+  rendering it. Seed-side fix lives in `hc-patient-quality`.
+- `[ ]` **D7 · ongoing conditions show a bare `—` and repeat themselves.** The panel is an addition
+  beyond the demo; it needs a date and a description that adds something. Seed-side, as D6.
+- `[ ]` **D8 · the sidebar drops the patient's location** ("Patient · Accra, GH" → "Patient"), which is
+  already on the record.
+- `[ ]` **D9 · the sign-in counters are inherited, not computed.** Both show *12 cases · 41 visits · 6
+  professionals · 24/7*; twelve and six match the record, forty-one does not (eighteen are seeded).
+  They read as live numbers on a page nobody has signed into. Decide whether they are marketing copy or
+  a figure, and make them honest either way.
+
+### Ahead of the demo — keep when closing the above
+
+Not gaps. Recorded so a parity pass does not quietly delete them.
+
+- Case links on every artefact — medications, reports, visits and activity all link back to the case
+  that produced them. The demo does not.
+- Report summaries inline on the list, rather than one click away.
+- Kind filter chips on the activity trail.
+- The "Most recent alert" panel on the overview, with narrative and outcome.
+- Ongoing conditions surfaced on Allergies (see D7).
 
 ## Out of scope here
 

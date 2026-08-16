@@ -68,7 +68,9 @@ src/main/webapp/app/
                  telemetry/  OpenTelemetry browser SDK setup + the global ErrorHandler
   shared/        shared module, i18n helpers, alerts, common UI plumbing
   config/        constants, authorities, dayjs/datepicker configuration
-  layouts/       navbar, footer, main shell, profile info, error pages
+  layouts/shell/      the portal frame — navy sidebar, sticky topbar, mobile drawer and tab bar
+  layouts/auth-shell/ the signed-out split brand/form screen
+  portal/        the 13 patient screens (see below) + portal/data/ — the scoped data layer
   home/          landing route — renders DashboardComponent
   dashboard/     dashboard component/service + metric-panel, status-panel
   features/      modal wrappers: temperature, blood pressure, heart rate, sugar, allergies, emergency
@@ -77,10 +79,22 @@ src/main/webapp/app/
   account/ admin/ login/   standard JHipster surfaces
 ```
 
+**The portal is the app.** `app/portal/` holds thirteen routed screens — overview, record, cases, case
+detail, schedules, emergencies, medications, reports, plans, allergies, visitations, activity, profile
+— built against `patient-web-demo.html` on `feature/ui-refactor`. They read through
+`portal/data/portal-data.service.ts`, which scopes every collection to the signed-in patient in one
+place, and format through `portal/data/portal-format.ts`. `app.routes.ts` redirects `/` to `overview`.
+`layouts/shell/shell-nav.ts` defines the sidebar; it lists ten of the thirteen, so `visitations` and
+`activity` are routed but have no way in (`patient-web.md` Phase E, B1).
+
 Two wiring facts that surprise people:
 
-1. **The dashboard has no route.** `HomeComponent` imports and renders `DashboardComponent` at `/`.
-2. **The generated entity screens are unreachable.** `entities/entity.routes.ts` and `entities/entity-navbar-items.ts` contain only the JHipster needles / an empty array, so nothing under `entities/patientMS/` is routed or in the menu. Don't delete those screens as "dead" — decision 2 in `patient-web.md` covers routing versus retiring them.
+1. **`HomeComponent` is not the portal.** It renders the older `DashboardComponent`, which survives
+   alongside `portal/overview`. Don't mistake it for the screen users see.
+2. **The generated entity screens are routed but not in the menu.** `entities/entity.routes.ts` now
+   registers address, condition, medication, stat and the rest; `entity-navbar-items.ts` is still an
+   empty array, so nothing under `entities/patientMS/` appears in a menu. Don't delete those screens as
+   "dead" — decision 2 in `patient-web.md` covers routing versus retiring them.
 
 Also: `entities/patientMS/hc-credential` and `hc-pay-option` still use the pre-rename entity names; the backend calls them `PersonalDocument` and `PaymentOption` (and hasn't generated those endpoints yet).
 
