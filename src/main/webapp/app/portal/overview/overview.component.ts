@@ -3,6 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 
 import SharedModule from 'app/shared/shared.module';
+import { AvatarComponent } from 'app/shared/ui/avatar/avatar.component';
 import { IconComponent } from 'app/shared/ui/icon/icon.component';
 import { PanelComponent } from 'app/shared/ui/panel/panel.component';
 import { EmptyStateComponent } from 'app/shared/ui/empty-state/empty-state.component';
@@ -25,7 +26,7 @@ const PREVIEW = 5;
 @Component({
     selector: 'hpd-overview',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [SharedModule, RouterLink, IconComponent, PanelComponent, EmptyStateComponent, SparklineComponent],
+    imports: [SharedModule, RouterLink, IconComponent, PanelComponent, EmptyStateComponent, SparklineComponent, AvatarComponent],
     templateUrl: './overview.component.html'
 })
 export default class OverviewComponent {
@@ -138,7 +139,7 @@ export default class OverviewComponent {
   readonly recentCases = computed(() => [...this.cases()].sort(byDateDesc(item => item.openedAt)).slice(0, PREVIEW));
 
   /** Resolves the professional named on a record to someone with a name and a role. */
-  memberOf(id: string | null | undefined): { name: string; role: string; initials: string } {
+  memberOf(id: string | null | undefined): CareTeamMember {
     return PatientContextService.memberOf(this.careTeamById(), id);
   }
 

@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 
 import SharedModule from 'app/shared/shared.module';
 import { IconComponent } from 'app/shared/ui/icon/icon.component';
+import { PersonFilterComponent } from 'app/shared/ui/person-filter/person-filter.component';
 import { EmptyStateComponent } from 'app/shared/ui/empty-state/empty-state.component';
 import { PagerComponent } from 'app/shared/ui/pager/pager.component';
 import { SearchBoxComponent } from 'app/shared/ui/search-box/search-box.component';
@@ -13,7 +14,8 @@ import { CareTeamMember, PatientContextService } from '../data/patient-context.s
 import { PortalDataService } from '../data/portal-data.service';
 import { byDateDesc, formatDay, humanise, matches, pageCount, pageOf } from '../data/portal-format';
 
-const PAGE_SIZE = 15;
+/** Rows to a page. Eight, as the demo pages, and the same on every list. */
+const PAGE_SIZE = 8;
 
 /**
  * Everything the patient has been prescribed, current and past.
@@ -24,7 +26,7 @@ const PAGE_SIZE = 15;
 @Component({
     selector: 'hpd-medications',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [SharedModule, RouterLink, IconComponent, EmptyStateComponent, PagerComponent, SearchBoxComponent],
+    imports: [SharedModule, RouterLink, IconComponent, EmptyStateComponent, PagerComponent, SearchBoxComponent, PersonFilterComponent],
     templateUrl: './medications.component.html'
 })
 export default class MedicationsComponent {
@@ -32,9 +34,13 @@ export default class MedicationsComponent {
   private readonly data = inject(PortalDataService);
 
   private readonly careTeamById = toSignal(this.context.careTeamById$, { initialValue: new Map<string, CareTeamMember>() });
+
   private readonly casesById = toSignal(this.data.casesById$, { initialValue: new Map<string, IClinicalCase>() });
   private readonly medications = toSignal(this.data.medications$, { initialValue: [] });
 
+
+  /** The people who can be filtered by, in the order the care team is listed. */
+  readonly careTeam = toSignal(this.context.careTeam$, { initialValue: [] as readonly CareTeamMember[] });
   readonly formatDay = formatDay;
   readonly humanise = humanise;
 
@@ -67,11 +73,16 @@ export default class MedicationsComponent {
   readonly status = signal<string | null>(null);
   readonly page = signal(1);
 
+  /** Whose records to show — null is everyone. */
+  readonly professional = signal<string | null>(null);
+
   readonly filtered = computed(() => {
     const needle = this.query();
+    const person = this.professional();
     const status = this.status();
     return this.medications()
       .filter(item => !status || item.status === status)
+      .filter(item => !person || item.prescribedById === person)
       .filter(item => matches(needle, item.name, item.dosage, item.prescription, item.description))
       .sort(byDateDesc(item => item.startedOn ?? item.createdDate));
   });
@@ -86,6 +97,11 @@ export default class MedicationsComponent {
 
   setStatus(value: string): void {
     this.status.set(this.status() === value ? null : value);
+    this.page.set(1);
+  }
+
+  setProfessional(id: string | null): void {
+    this.professional.set(id);
     this.page.set(1);
   }
 

@@ -77,7 +77,7 @@ export default class CaseDetailComponent {
       .sort(byDateDesc(entry => entry.loggedAt ?? entry.createdDate)),
   );
 
-  memberOf(id: string | null | undefined): { name: string; role: string } {
+  memberOf(id: string | null | undefined): CareTeamMember {
     return PatientContextService.memberOf(this.careTeamById(), id);
   }
 

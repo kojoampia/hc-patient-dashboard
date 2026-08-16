@@ -5,6 +5,9 @@
     [value]="query()"
     (queryChange)="query.set($event)"
   />
+
+  <hpd-person-filter [people]="careTeam()" [value]="professional()" (valueChange)="professional.set($event)" />
+
 </div>
 
 <div class="hc-sec-head">
@@ -32,7 +35,12 @@
         </div>
 
         <div class="hc-row hc-gap-8 hc-muted hc-sm" style="margin-top: 4px">
-          <hpd-icon name="user" [size]="15" />
+          <hpd-avatar
+            [name]="memberOf(item.attendantId).name"
+            [initials]="memberOf(item.attendantId).initials"
+            [imageUrl]="memberOf(item.attendantId).imageUrl"
+            [size]="32"
+          />
           <span>{{ memberOf(item.attendantId).name }}</span>
           @if (item.location) {
             <span>· {{ item.location }}</span>

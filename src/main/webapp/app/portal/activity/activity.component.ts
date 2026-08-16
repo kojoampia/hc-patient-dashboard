@@ -14,7 +14,8 @@ import { CareTeamMember, PatientContextService } from '../data/patient-context.s
 import { PortalDataService } from '../data/portal-data.service';
 import { byDateDesc, formatDay, humanise, matches, pageCount, pageOf, formatInstantDay } from '../data/portal-format';
 
-const PAGE_SIZE = 20;
+/** Rows to a page. Eight, as the demo pages, and the same on every list. */
+const PAGE_SIZE = 8;
 
 /** Icon and dot colour per kind of timeline entry. */
 const KIND_STYLE: Readonly<Record<string, { icon: IconName; colour: string } | undefined>> = {

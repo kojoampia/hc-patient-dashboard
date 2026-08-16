@@ -118,7 +118,7 @@
       "noCareTeamHint": "Die Fachkräfte, die Sie betreuen, werden hier aufgeführt."
     },
     "cases": {
-      "search": "Fälle durchsuchen",
+      "search": "Fälle, Symptome, Diagnosen durchsuchen…",
       "empty": "Keine Fälle hinterlegt",
       "emptyHint": "Ein Fall wird eröffnet, sobald Ihr Behandlungsteam etwas untersucht.",
       "openCase": "Fall {{ name }} öffnen",
@@ -151,7 +151,7 @@
       "notFoundHint": "Er wurde möglicherweise geschlossen oder der Link ist veraltet."
     },
     "schedules": {
-      "search": "Termine durchsuchen",
+      "search": "Nach Datum, Fachkraft oder Termin suchen…",
       "upcoming": "Als Nächstes",
       "upcomingSub": "Termine, die noch anstehen.",
       "past": "Bereits wahrgenommen",
@@ -168,7 +168,7 @@
       }
     },
     "emergencies": {
-      "search": "Meldungen durchsuchen",
+      "search": "Warnungen, Details oder Ergebnis suchen…",
       "careLineTitle": "Brauchen Sie jetzt Hilfe?",
       "careLineBlurb": "Die Notfallnummer ist rund um die Uhr besetzt, und Ihr Care Angel wird gleichzeitig verständigt. Bei Lebensgefahr rufen Sie zuerst den örtlichen Notruf.",
       "callCareLine": "Notfallnummer anrufen",
@@ -177,7 +177,7 @@
       "emptyHint": "In Ihrer Akte ausgelöste Meldungen erscheinen hier samt Ergebnis."
     },
     "medications": {
-      "search": "Medikamente durchsuchen",
+      "search": "Medikamente, Dosierung oder Hinweise suchen…",
       "empty": "Keine Medikamente hinterlegt",
       "emptyHint": "Alles, was Ihnen verordnet wird, erscheint hier — laufend wie abgeschlossen.",
       "column": {
@@ -194,7 +194,7 @@
       }
     },
     "reports": {
-      "search": "Befunde durchsuchen",
+      "search": "Berichte, Befunde oder Art durchsuchen…",
       "openFile": "Datei öffnen",
       "empty": "Keine Befunde hinterlegt",
       "emptyHint": "Labor-, Bildgebungs- und klinische Befunde erscheinen hier, sobald sie vorliegen."
@@ -221,7 +221,7 @@
       "blockedSub": "Verordnungen, die Ihr Team wegen einer Allergie zurückgehalten hat."
     },
     "visitations": {
-      "search": "Besuche durchsuchen",
+      "search": "Besuche, Orte oder Notizen durchsuchen…",
       "empty": "Keine Besuche erfasst",
       "emptyHint": "Jeder von Ihrem Behandlungsteam erfasste Besuch erscheint hier.",
       "column": {
@@ -233,7 +233,7 @@
       }
     },
     "activity": {
-      "search": "Verlauf durchsuchen",
+      "search": "Einträge oder Details durchsuchen…",
       "empty": "Noch nichts erfasst",
       "emptyHint": "Alles, was in Ihrer Akte abgelegt wird, erscheint hier — das Neueste zuerst."
     },
@@ -268,6 +268,10 @@
         "since": "Mitglied seit",
         "renews": "Verlängerung"
       }
+    },
+    "filter": {
+      "professional": "Nach Fachkraft filtern",
+      "allProfessionals": "Alle Fachkräfte"
     }
   }
 }

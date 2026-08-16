@@ -327,16 +327,21 @@ equal — a key missing from one bundle renders as the raw key in that language)
   and the call button are built; the demo also says "and your care angel Ophelia Gaisie is called at
   the same time", which is the part that tells the patient who actually turns up.
 
-Batch 2 — list mechanics:
+Batch 2 — list mechanics. **Done 2026-08-16**, verified against the seeded record:
 
-- `[ ]` **C11 · page size.** Pagination works; the demo pages at 8 and we page at 12/10/20/15. Settle
+- `[x]` **C11 · page size.** Pagination works; the demo pages at 8 and we page at 12/10/20/15. Settle
   on one number and apply it, so a list looks the same everywhere.
-- `[ ]` **C12 · filter by professional, not just status.** The demo's Filter spans clinician *and*
+- `[x]` **C12 · filter by professional, not just status.** The demo's Filter spans clinician *and*
   status across four screens. We have status chips on Cases and nothing elsewhere, so "what has Yaw
   Boateng seen me about?" is not askable.
-- `[ ]` **C14 · widen the placeholders to match the scope that already exists** ("Search cases,
+- `[x]` **C14 · widen the placeholders to match the scope that already exists** ("Search cases,
   symptoms, diagnoses…"), and check the other screens' scope against their own placeholder.
-- `[ ]` **C13 · avatar markup on schedules, case detail and overview** (decision 4), showing initials.
+- `[x]` **C13 · avatar markup on schedules, case detail and overview** (decision 4), showing initials.
+  Landed on schedules and the overview's next-appointments panel through a new `hpd-avatar`, which
+  also replaced the inline pattern the profile screen had. **Case detail is deliberately not among
+  them**: the demo shows the clinician there as a *card* with photo, role and "See appointments",
+  which is C5 — putting a bare avatar in the header instead would invent a placement the demo does
+  not have and then have to be undone.
 
 Batch 3 — the two features:
 

@@ -3,6 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 
 import SharedModule from 'app/shared/shared.module';
+import { AvatarComponent } from 'app/shared/ui/avatar/avatar.component';
 import { IconComponent } from 'app/shared/ui/icon/icon.component';
 import { EmptyStateComponent } from 'app/shared/ui/empty-state/empty-state.component';
 
@@ -24,7 +25,7 @@ const TABS: readonly { readonly id: ProfileTab; readonly labelKey: string }[] = 
 @Component({
     selector: 'hpd-profile',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [SharedModule, RouterLink, IconComponent, EmptyStateComponent],
+    imports: [SharedModule, RouterLink, IconComponent, EmptyStateComponent, AvatarComponent],
     templateUrl: './profile.component.html'
 })
 export default class ProfileComponent {

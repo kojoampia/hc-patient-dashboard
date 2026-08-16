@@ -100,6 +100,12 @@
     @if (nextAppointments().length) {
       @for (task of nextAppointments(); track task.id) {
         <div class="hc-drow">
+          <hpd-avatar
+            [name]="memberOf(task.attendantId).name"
+            [initials]="memberOf(task.attendantId).initials"
+            [imageUrl]="memberOf(task.attendantId).imageUrl"
+            [size]="32"
+          />
           <span class="hc-drow__date">{{ formatInstantDay(task.scheduledAt, task.schedule) }}</span>
           <span class="hc-drow__text">
             {{ task.name }}

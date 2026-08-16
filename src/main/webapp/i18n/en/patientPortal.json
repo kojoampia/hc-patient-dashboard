@@ -118,7 +118,7 @@
       "noCareTeamHint": "The professionals looking after you will be listed here."
     },
     "cases": {
-      "search": "Search cases",
+      "search": "Search cases, symptoms, diagnoses…",
       "empty": "No cases on file",
       "emptyHint": "A case is opened whenever your care team looks into something.",
       "openCase": "Open the case {{ name }}",
@@ -151,7 +151,7 @@
       "notFoundHint": "It may have been closed, or the link may be out of date."
     },
     "schedules": {
-      "search": "Search appointments",
+      "search": "Search by date, professional or appointment…",
       "upcoming": "Coming up",
       "upcomingSub": "Appointments still to attend.",
       "past": "Already attended",
@@ -168,7 +168,7 @@
       }
     },
     "emergencies": {
-      "search": "Search alerts",
+      "search": "Search alerts, detail or outcome…",
       "careLineTitle": "Need help now?",
       "careLineBlurb": "The care line is staffed around the clock and your care angel is called at the same time. If this is life-threatening, call your local emergency number first.",
       "callCareLine": "Call the care line",
@@ -177,7 +177,7 @@
       "emptyHint": "Alerts raised on your record appear here, with what came of them."
     },
     "medications": {
-      "search": "Search medications",
+      "search": "Search medicines, doses or instructions…",
       "empty": "No medications on file",
       "emptyHint": "Anything prescribed to you appears here, current and past.",
       "column": {
@@ -194,7 +194,7 @@
       }
     },
     "reports": {
-      "search": "Search reports",
+      "search": "Search reports, findings or type…",
       "openFile": "Open file",
       "empty": "No reports on file",
       "emptyHint": "Lab, imaging and clinical reports appear here once filed."
@@ -221,7 +221,7 @@
       "blockedSub": "Prescriptions your team withheld because of an allergy."
     },
     "visitations": {
-      "search": "Search visits",
+      "search": "Search visits, places or notes…",
       "empty": "No visits recorded",
       "emptyHint": "Every visit your care team logs will appear here.",
       "column": {
@@ -233,7 +233,7 @@
       }
     },
     "activity": {
-      "search": "Search the trail",
+      "search": "Search entries or their detail…",
       "empty": "Nothing logged yet",
       "emptyHint": "Everything filed on your record shows up here, newest first."
     },
@@ -268,6 +268,10 @@
         "since": "Member since",
         "renews": "Renews"
       }
+    },
+    "filter": {
+      "professional": "Filter by professional",
+      "allProfessionals": "All professionals"
     }
   }
 }

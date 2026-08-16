@@ -22,6 +22,9 @@
     (queryChange)="setQuery($event)"
   />
 
+  <hpd-person-filter [people]="careTeam()" [value]="professional()" (valueChange)="setProfessional($event)" />
+
+
   @for (option of statuses; track option) {
     <button type="button" class="hc-toggle" [class.is-on]="status() === option" (click)="setStatus(option)">
       {{ humanise(option) }}

@@ -12,7 +12,8 @@ import { CareTeamMember, PatientContextService } from '../data/patient-context.s
 import { PortalDataService } from '../data/portal-data.service';
 import { byDateDesc, formatDay, matches, pageCount, pageOf, formatInstantDay } from '../data/portal-format';
 
-const PAGE_SIZE = 15;
+/** Rows to a page. Eight, as the demo pages, and the same on every list. */
+const PAGE_SIZE = 8;
 
 /** Every visit that took place, newest first. */
 @Component({
@@ -38,7 +39,7 @@ export default class VisitationsComponent {
   readonly filtered = computed(() => {
     const needle = this.query();
     return this.visitations()
-      .filter(item => matches(needle, item.purpose, item.location, item.notes))
+      .filter(item => matches(needle, item.purpose, item.location, item.notes, formatInstantDay(item.visitedAt)))
       .sort(byDateDesc(item => item.visitedAt));
   });
 
