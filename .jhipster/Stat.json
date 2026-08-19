@@ -52,8 +52,8 @@
     {
       "fieldName": "flag",
       "fieldType": "StatFlag",
-      "fieldTypeDocumentation": "Where a stat sits against its reference band, as judged when the reading was filed.",
-      "fieldValues": "OK,WARN,DANGER"
+      "fieldValues": "OK,WARN,DANGER",
+      "fieldTypeDocumentation": "Where a stat sits against its reference band, as judged when the reading was filed."
     },
     {
       "fieldName": "note",
@@ -62,6 +62,16 @@
     {
       "fieldName": "recordedAt",
       "fieldType": "Instant"
+    },
+    {
+      "fieldName": "recordedById",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "source",
+      "fieldType": "StatSource",
+      "fieldValues": "PATIENT,PROFESSIONAL,ANGEL,DEVICE",
+      "fieldTypeDocumentation": "Who took a reading. Distinct from ActivitySource because a reading can come from a DEVICE — a cuff or a meter reporting on its own — which is not something that can write a timeline entry. ANGEL was added with care-angel delegation, for the same reason it was added there."
     },
     {
       "fieldName": "createdDate",

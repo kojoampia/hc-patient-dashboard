@@ -230,10 +230,28 @@
   display: none;
 }
 
+/* Shown only above the shell breakpoint — see the rail block at the foot of this file. */
+.hc-shell__rail-btn {
+  display: none;
+}
+
 .hc-shell__content {
   flex: 1;
   width: 100%;
-  max-width: 1240px;
+
+  /* Uncapped by default, and centred when a cap is set.
+   *
+   * This used to be a hard `max-width: 1240px` with no auto margin, which did two things at once on a
+   * wide display: it left the whole page hugging the left edge with dead space beside it, and — the
+   * complaint that actually mattered — it made wide content scroll horizontally *inside* a 1240px box
+   * on a screen with room to spare. A table that would have fitted at 1600px was being scrolled at
+   * 1240 for no reason the reader could see.
+   *
+   * `--hc-content-max` is the single place to reintroduce a cap if long-line readability ever argues
+   * for one on ultra-wide monitors; `margin-inline: auto` means it will centre when that happens
+   * rather than repeating this bug. */
+  max-width: var(--hc-content-max, none);
+  margin-inline: auto;
   padding: clamp(18px, 2.6vw, 30px) clamp(18px, 3vw, 34px) 60px;
 }
 
@@ -337,5 +355,110 @@
   .hc-shell__sidebar,
   .hc-shell__scrim {
     transition: none;
+  }
+}
+
+/* The acting-as banner. Deliberately loud: it is the only thing on screen saying that none of this is yours. */
+.hc-shell__acting-as {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 1.25rem;
+  background: #7a3b00;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.hc-shell__acting-as-switch select {
+  background: rgba(255, 255, 255, 0.12);
+  color: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 0.35rem;
+  padding: 0.15rem 0.4rem;
+}
+
+/* ============================= collapsed rail ============================= */
+
+/**
+ * The sidebar reduced to its icons.
+ *
+ * Scoped inside the desktop media query on purpose: below the shell breakpoint the sidebar is
+ * already an overlay drawer with a bottom tab bar behind it, and a rail there would be a third
+ * navigation competing with both.
+ *
+ * Everything here works by narrowing one custom property. The grid column, the sticky sidebar and
+ * the drawer all read `--hc-sidebar-w`, so the layout follows without a second source of truth.
+ */
+@media (min-width: $hc-shell-breakpoint + 1px) {
+  .hc-shell__rail-btn {
+    display: inline-grid;
+
+    /* `chev` points right. Right reads as "open this out" when collapsed, so the flip belongs on the
+       expanded state rather than the other way round.
+       
+       The host element, not the `.hpd-icon` span inside it: that span belongs to IconComponent's own
+       template and carries its encapsulation attribute, so a rule written here cannot reach it.
+       `inline-grid` because transform does nothing to a non-replaced inline element. */
+    hpd-icon {
+      display: inline-grid;
+      transition: transform 0.16s ease;
+    }
+  }
+
+  .hc-shell:not(.is-railed) .hc-shell__rail-btn hpd-icon {
+    transform: rotate(180deg);
+  }
+
+  .hc-shell.is-railed {
+    --hc-sidebar-w: var(--hc-sidebar-rail-w);
+
+    .hc-shell__sidebar {
+      padding-inline: 6px;
+      overflow: hidden;
+    }
+
+    /* The word marks, the group headings and the footer are all text; at 50px there is room for an
+       icon and nothing else. Hidden rather than shrunk, because a truncated word is worse than none. */
+    .hc-shell__brand > div,
+    .hc-shell__nav-label,
+    .hc-shell__side-foot {
+      display: none;
+    }
+
+    .hc-shell__brand {
+      justify-content: center;
+    }
+
+    .hc-shell__brand-mark {
+      width: 34px;
+      height: 34px;
+    }
+
+    .hc-shell__nav a {
+      gap: 0;
+      justify-content: center;
+      padding: 10px 0;
+
+      span {
+        display: none;
+      }
+
+      /* The count still has to be visible — an unread emergency is the one thing somebody must not
+         miss because they collapsed a menu. It rides the corner of the icon instead of following a
+         label that is no longer there. */
+      .hc-shell__badge {
+        position: absolute;
+        top: 2px;
+        right: 4px;
+        min-width: 15px;
+        height: 15px;
+        padding: 0 3px;
+        margin-left: 0;
+        font-size: 9.5px;
+      }
+    }
   }
 }

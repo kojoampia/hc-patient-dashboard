@@ -28,7 +28,9 @@
         "clinical": "Clinique",
         "account": "Compte",
         "session": "Session"
-      }
+      },
+      "collapseMenu": "Réduire le menu",
+      "expandMenu": "Développer le menu"
     },
     "title": {
       "overview": "Contexte patient",
@@ -314,7 +316,8 @@
         "about": "À propos",
         "contact": "Contact",
         "membership": "Adhésion",
-        "careTeam": "Équipe soignante"
+        "careTeam": "Équipe soignante",
+        "careAngel": "Ange gardien"
       },
       "field": {
         "birthDate": "Né(e) le",
@@ -334,6 +337,33 @@
         "status": "Statut",
         "since": "Adhérent depuis",
         "renews": "Renouvellement"
+      },
+      "careAngel": {
+        "explainer": "Un ange gardien peut consulter et mettre à jour votre dossier de santé, et agir en votre nom si vous n'en êtes jamais capable. Rien ne se produit avant son acceptation, et vous pouvez le retirer à tout moment.",
+        "none": "Aucun ange gardien",
+        "noneHint": "Personne ne peut actuellement agir en votre nom.",
+        "status": {
+          "STANDBY": "Suppléant — inactif jusqu'à activation par un clinicien",
+          "AWAITING_COUNTERSIGNATURE": "En attente de l'accord d'un second clinicien",
+          "PENDING": "En attente de son acceptation",
+          "ACTIVE": "Peut agir en votre nom",
+          "DECLINED": "Refusé",
+          "REVOKED": "Terminé"
+        },
+        "action": {
+          "revoke": "Retirer"
+        },
+        "error": {
+          "revokeFailed": "Le retrait a échoué. Réessayez."
+        }
+      },
+      "plan": {
+        "choose": "Choisir une formule",
+        "select": "Choisir",
+        "unavailable": "Les formules ne peuvent pas être affichées pour le moment. Votre dossier n'est pas affecté.",
+        "error": {
+          "failed": "Cette formule n'a pas pu être sélectionnée. Réessayez."
+        }
       }
     },
     "filter": {
@@ -368,7 +398,102 @@
       "MEDICATION": "Médicament",
       "FOOD": "Aliment",
       "ENVIRONMENTAL": "Environnement",
-      "OTHER": "Autre"
+      "OTHER": "Autre",
+      "membership": {
+        "ACTIVE": "Actif",
+        "CANCELLED": "Annulé",
+        "EXPIRED": "Expiré",
+        "PENDING": "En attente",
+        "SUSPENDED": "Suspendu"
+      }
+    },
+    "onboarding": {
+      "title": "Configurer votre dossier",
+      "heading": "Configurons votre dossier",
+      "intro": "Chaque étape est enregistrée au fur et à mesure ; vous pouvez vous arrêter et revenir.",
+      "step": {
+        "identity": "À propos de vous",
+        "careAngel": "Ange gardien",
+        "baseline": "Référence",
+        "currentState": "Votre santé",
+        "identification": "Identification"
+      },
+      "field": {
+        "firstName": "Prénom",
+        "middleNames": "Autres prénoms",
+        "lastName": "Nom",
+        "birthDate": "Date de naissance",
+        "sex": "Sexe",
+        "mobilePhone": "Téléphone mobile",
+        "phoneNumber": "Autre téléphone",
+        "address": "Où vous habitez",
+        "streetAddress": "Rue",
+        "digitalAddress": "Adresse numérique",
+        "town": "Ville",
+        "city": "Grande ville",
+        "district": "District",
+        "region": "Région",
+        "country": "Pays",
+        "phone": "Téléphone",
+        "email": "E-mail",
+        "emailConfirm": "Confirmer l'e-mail",
+        "contacts": "Quelqu'un d'autre à contacter",
+        "heightCm": "Taille (cm)",
+        "weightKg": "Poids (kg)",
+        "systolic": "Tension, supérieure",
+        "diastolic": "Tension, inférieure",
+        "heartRateBpm": "Fréquence cardiaque au repos (facultatif)",
+        "bloodSugar": "Glycémie (facultatif)",
+        "bloodGroup": "Groupe sanguin",
+        "conditions": "Affections en cours, une par ligne",
+        "noConditions": "Je n'en ai aucune",
+        "allergies": "Allergies, une par ligne",
+        "noAllergies": "Je n'en ai aucune",
+        "medications": "Médicaments que vous prenez, un par ligne",
+        "noMedications": "Je n'en prends aucun",
+        "cardType": "Type de pièce d'identité",
+        "cardNumber": "Numéro de pièce d'identité"
+      },
+      "careAngel": {
+        "explainer": "Un ange gardien peut consulter et mettre à jour votre dossier de santé, et agir en votre nom si vous n'en êtes jamais capable. Il doit accepter, et vous pouvez retirer cela à tout moment."
+      },
+      "standby": {
+        "heading": "Si vous êtes un jour incapable de décider",
+        "explainer": "Vous pouvez désigner quelqu'un à l'avance. Cette personne n'est prévenue de rien pour l'instant. Si un clinicien déclare un jour que vous ne pouvez plus décider, deux d'entre eux doivent être d'accord avant qu'elle ne soit sollicitée — et elle peut encore refuser.",
+        "consent": "Si je suis un jour incapable de décider par moi-même, un clinicien peut activer mon suppléant."
+      },
+      "action": {
+        "next": "Continuer",
+        "back": "Retour",
+        "finish": "Terminer"
+      },
+      "error": {
+        "emailMismatch": "Les deux adresses e-mail ne correspondent pas.",
+        "consentRequired": "Cochez la case de consentement pour désigner un suppléant, ou laissez ses coordonnées vides.",
+        "saveFailed": "Cela n'a pas pu être enregistré. Rien de ce que vous avez déjà répondu n'est perdu — réessayez."
+      }
+    },
+    "actingAs": {
+      "banner": "Vous consultez le dossier de {{name}}",
+      "bannerOwn": "Vous consultez votre propre dossier",
+      "switch": "Changer de dossier",
+      "chooseTitle": "Quel dossier souhaitez-vous ouvrir ?",
+      "chooseOwn": "Mon propre dossier",
+      "chooseFor": "Au nom de {{name}}"
+    },
+    "invitations": {
+      "title": "Nominations d'accompagnement",
+      "heading": "Nominations d'accompagnement",
+      "empty": "Aucune nomination en attente. Si quelqu'un vient de vous désigner, consultez le lien dans l'e-mail qui lui a été envoyé.",
+      "from": "{{name}} vous a demandé d'être son ange gardien",
+      "explainer": "En acceptant, vous pourrez consulter et mettre à jour son dossier de santé, et agir en son nom si elle n'en est un jour plus capable. Vous pouvez vous retirer à tout moment, et elle peut le retirer à tout moment.",
+      "action": {
+        "accept": "Accepter",
+        "decline": "Refuser"
+      },
+      "error": {
+        "failed": "Cela n'a pas pu être enregistré. Réessayez."
+      }
     }
   }
 }

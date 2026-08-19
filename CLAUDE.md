@@ -37,7 +37,8 @@ browser → this app (ng serve :4200, webpack proxy) → hc-patient-gateway :550
 - Always build URLs with `ApplicationConfigService.getEndpointFor(api, microservice?)` — pass `'hcpatientservice'` for microservice calls so the gateway's routing applies. Never hardcode a host, port, or `/services/...` prefix.
 - The gateway issues the JWT; `core/interceptor` attaches it. Route protection uses `UserRouteAccessService` with `data.authorities`.
 - `webpack/proxy.conf.js` forwards `/api`, `/services`, `/management`, `/v3/api-docs`, `/auth`, `/health` to **`http://localhost:5505`**, and that is where the gateway listens. These disagreed until 2026-08-03 (the gateway was on 5503); the gateway moved rather than the proxy, in every profile. Production builds same-origin (`SERVER_API_URL` empty, `<base href="/">`) and the web container's nginx does the fan-out.
-- The `Authority` enum knows only `ROLE_ADMIN` and `ROLE_USER`; no `PATIENT`/`ANGEL` role exists anywhere in the subsystem yet.
+- The `Authority` enum holds `ROLE_ADMIN`, `ROLE_USER`, `ROLE_PATIENT` and `ROLE_ANGEL`. No route guards on the last two, and that is the answer rather than an omission: an angel's authority is an `ACTIVE` care delegation the backend re-reads per request, so guarding a screen on `ROLE_ANGEL` would leave the menu entry for somebody whose delegation was revoked.
+- **`X-Acting-As`** is set by `ActingAsInterceptor` and by nothing else. A care angel opens a patient's record through it; a screen that built its own request and forgot it would silently read the wrong person's record and answer 200.
 
 ## Commands
 
@@ -76,6 +77,8 @@ src/main/webapp/app/
   features/      modal wrappers: temperature, blood pressure, heart rate, sugar, allergies, emergency
   widgets/       d3 visualizations (linechart, piechart, heatmap, treemap, histogram, tilebox, …)
   entities/      user/ plus patientMS/** generated CRUD
+  onboarding/    the five-step wizard, on the auth layout behind the signed-in guard
+  invitations/   where a nominated care angel accepts or declines
   account/ admin/ login/   standard JHipster surfaces
 ```
 
@@ -97,6 +100,19 @@ Two wiring facts that surprise people:
    "dead" — decision 2 in `patient-web.md` covers routing versus retiring them.
 
 Also: `entities/patientMS/hc-credential` and `hc-pay-option` still use the pre-rename entity names; the backend calls them `PersonalDocument` and `PaymentOption` (and hasn't generated those endpoints yet).
+
+## Onboarding, and acting for another patient (2026-08-19)
+
+`docs/onboarding.md` is the plan of record; §16 is the contract.
+
+- **`/onboarding`** is five steps on `AuthShellComponent` behind `UserRouteAccessService`, not in the portal shell. A patient there has a token but no record: the shell injects `PortalDataService` and subscribes to their emergencies on load, which would fire patient-scoped fetches for a patient who does not exist, behind a sidebar of destinations that would all be empty. Each step saves before the next, because the backend has no transaction to wrap the journey in.
+- **Two guards, not one.** `onboardingGuard` keeps an un-onboarded patient out of the portal; `onboardingCompleteGuard` keeps a finished one out of the wizard. Without the second they disagree and it is a redirect loop. The first also has a third branch that is easy to delete by accident: somebody with no record but a *pending nomination* goes to `/invitations`, not to the wizard — being a care angel does not make you a patient, and without it they are asked to create a patient record purely to answer somebody else's nomination.
+- **The acting-as banner in the shell is a safety control.** Every screen behind it is showing a record that is not the signed-in person's, and the failure it prevents is somebody reading a blood group believing it is their own. Switching records must reload `PortalDataService`, or the previous patient's data stays on screen under the new patient's name.
+
+Two things that will bite anyone touching the portal's data layer:
+
+- `PatientContextService.profile$` narrows its `catchError` to **404 only**. It used to swallow everything, which was harmless while nothing read it and is not now that a route guard does — a network blip would throw a fully onboarded patient into the wizard, and a 401 would look like a brand-new account. **Do not widen it back.**
+- `Profile.address` is an `IAddress` document, not a string. Interpolating it directly prints `[object Object]`; `formatAddress` in `portal/data/portal-format.ts` is the one way to render it.
 
 ## Constraints
 

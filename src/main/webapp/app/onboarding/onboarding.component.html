@@ -1,0 +1,276 @@
+<div class="hc-onboarding">
+  <h1 hpdTranslate="patientPortal.onboarding.heading">Let us set up your record</h1>
+  <p class="hc-onboarding__note" hpdTranslate="patientPortal.onboarding.intro">
+    Each step is saved as you go, so you can stop and come back.
+  </p>
+
+  <div class="hc-onboarding__progress" role="progressbar" [attr.aria-valuenow]="progress()" aria-valuemin="0" aria-valuemax="100">
+    <div class="hc-onboarding__progress-bar" [style.width.%]="progress()"></div>
+  </div>
+
+  <ol class="hc-onboarding__steps">
+    @for (step of steps; track step; let i = $index) {
+      <li class="hc-onboarding__step" [class.hc-onboarding__step--current]="i === stepIndex()">
+        <span [hpdTranslate]="'patientPortal.onboarding.step.' + step">{{ step }}</span>
+      </li>
+    }
+  </ol>
+
+  @if (error(); as message) {
+    <div class="alert alert-danger" role="alert"><span [hpdTranslate]="message">Something went wrong.</span></div>
+  }
+
+  <!-- Step 1 — who you are -->
+  @if (currentStep() === 'identity') {
+    <form [formGroup]="identityForm" (ngSubmit)="submit()">
+      <div class="hc-onboarding__grid">
+        <label>
+          <span hpdTranslate="patientPortal.onboarding.field.firstName">First name</span>
+          <input class="form-control" formControlName="firstName" required />
+        </label>
+        <label>
+          <span hpdTranslate="patientPortal.onboarding.field.middleNames">Middle names</span>
+          <input class="form-control" formControlName="middleNames" />
+        </label>
+        <label>
+          <span hpdTranslate="patientPortal.onboarding.field.lastName">Last name</span>
+          <input class="form-control" formControlName="lastName" required />
+        </label>
+        <label>
+          <span hpdTranslate="patientPortal.onboarding.field.birthDate">Date of birth</span>
+          <input class="form-control" type="date" formControlName="birthDate" />
+        </label>
+        <label>
+          <span hpdTranslate="patientPortal.onboarding.field.sex">Sex</span>
+          <input class="form-control" formControlName="sex" />
+        </label>
+        <label>
+          <span hpdTranslate="patientPortal.onboarding.field.mobilePhone">Mobile number</span>
+          <input class="form-control" formControlName="mobilePhone" />
+        </label>
+        <label>
+          <span hpdTranslate="patientPortal.onboarding.field.phoneNumber">Other phone</span>
+          <input class="form-control" formControlName="phoneNumber" />
+        </label>
+      </div>
+
+      <h2 hpdTranslate="patientPortal.onboarding.field.address">Where you live</h2>
+      <div class="hc-onboarding__grid">
+        <label>
+          <span hpdTranslate="patientPortal.onboarding.field.streetAddress">Street</span>
+          <input class="form-control" formControlName="streetAddress" />
+        </label>
+        <label>
+          <span hpdTranslate="patientPortal.onboarding.field.digitalAddress">Digital address</span>
+          <input class="form-control" formControlName="digitalAddress" />
+        </label>
+        <label>
+          <span hpdTranslate="patientPortal.onboarding.field.town">Town</span>
+          <input class="form-control" formControlName="town" />
+        </label>
+        <label>
+          <span hpdTranslate="patientPortal.onboarding.field.city">City</span>
+          <input class="form-control" formControlName="city" />
+        </label>
+        <label>
+          <span hpdTranslate="patientPortal.onboarding.field.district">District</span>
+          <input class="form-control" formControlName="district" />
+        </label>
+        <label>
+          <span hpdTranslate="patientPortal.onboarding.field.region">Region</span>
+          <input class="form-control" formControlName="region" />
+        </label>
+        <label>
+          <span hpdTranslate="patientPortal.onboarding.field.country">Country</span>
+          <input class="form-control" formControlName="country" />
+        </label>
+      </div>
+
+      <div class="hc-onboarding__actions">
+        <button class="btn btn-primary" type="submit" [disabled]="identityForm.invalid || saving()">
+          <span hpdTranslate="patientPortal.onboarding.action.next">Continue</span>
+        </button>
+      </div>
+    </form>
+  }
+
+  <!-- Step 2 — your care angel -->
+  @if (currentStep() === 'careAngel') {
+    <form [formGroup]="careAngelForm" (ngSubmit)="submit()">
+      <p class="hc-onboarding__note" hpdTranslate="patientPortal.onboarding.careAngel.explainer">
+        A care angel can see and update your health record, and act for you if you are ever unable to. They are asked to
+        accept, and you can withdraw this at any time.
+      </p>
+
+      <div class="hc-onboarding__grid">
+        <label>
+          <span hpdTranslate="patientPortal.onboarding.field.firstName">First name</span>
+          <input class="form-control" formControlName="firstName" required />
+        </label>
+        <label>
+          <span hpdTranslate="patientPortal.onboarding.field.lastName">Last name</span>
+          <input class="form-control" formControlName="lastName" required />
+        </label>
+        <label>
+          <span hpdTranslate="patientPortal.onboarding.field.phone">Phone</span>
+          <input class="form-control" formControlName="phone" />
+        </label>
+        <label>
+          <span hpdTranslate="patientPortal.onboarding.field.email">Email</span>
+          <input class="form-control" type="email" formControlName="email" required />
+        </label>
+        <label>
+          <span hpdTranslate="patientPortal.onboarding.field.emailConfirm">Confirm email</span>
+          <input class="form-control" type="email" formControlName="emailConfirm" required />
+        </label>
+        <label>
+          <span hpdTranslate="patientPortal.onboarding.field.contacts">Anyone else we should contact</span>
+          <input class="form-control" formControlName="contacts" />
+        </label>
+      </div>
+
+      <h2 hpdTranslate="patientPortal.onboarding.standby.heading">If you are ever unable to decide</h2>
+      <p class="hc-onboarding__note" hpdTranslate="patientPortal.onboarding.standby.explainer">
+        You can name somebody in advance. They are told nothing now. If a clinician ever declares that you cannot decide
+        for yourself, two of them must agree before this person is asked — and they can still say no.
+      </p>
+      <div class="hc-onboarding__grid">
+        <label>
+          <span hpdTranslate="patientPortal.onboarding.field.firstName">First name</span>
+          <input class="form-control" formControlName="standbyFirstName" />
+        </label>
+        <label>
+          <span hpdTranslate="patientPortal.onboarding.field.lastName">Last name</span>
+          <input class="form-control" formControlName="standbyLastName" />
+        </label>
+        <label>
+          <span hpdTranslate="patientPortal.onboarding.field.phone">Phone</span>
+          <input class="form-control" formControlName="standbyPhone" />
+        </label>
+        <label>
+          <span hpdTranslate="patientPortal.onboarding.field.email">Email</span>
+          <input class="form-control" type="email" formControlName="standbyEmail" />
+        </label>
+      </div>
+      <label>
+        <input type="checkbox" formControlName="advanceConsent" />
+        <span hpdTranslate="patientPortal.onboarding.standby.consent">
+          If I am ever unable to decide for myself, a clinician may activate my standby nominee.
+        </span>
+      </label>
+
+      <div class="hc-onboarding__actions">
+        <button class="btn btn-secondary" type="button" (click)="back()" hpdTranslate="patientPortal.onboarding.action.back">Back</button>
+        <button class="btn btn-primary" type="submit" [disabled]="careAngelForm.invalid || saving()">
+          <span hpdTranslate="patientPortal.onboarding.action.next">Continue</span>
+        </button>
+      </div>
+    </form>
+  }
+
+  <!-- Step 3 — your baseline -->
+  @if (currentStep() === 'baseline') {
+    <form [formGroup]="baselineForm" (ngSubmit)="submit()">
+      <div class="hc-onboarding__grid">
+        <label>
+          <span hpdTranslate="patientPortal.onboarding.field.heightCm">Height (cm)</span>
+          <input class="form-control" type="number" formControlName="heightCm" required />
+        </label>
+        <label>
+          <span hpdTranslate="patientPortal.onboarding.field.weightKg">Weight (kg)</span>
+          <input class="form-control" type="number" formControlName="weightKg" required />
+        </label>
+        <label>
+          <span hpdTranslate="patientPortal.onboarding.field.systolic">Blood pressure, upper</span>
+          <input class="form-control" type="number" formControlName="systolic" required />
+        </label>
+        <label>
+          <span hpdTranslate="patientPortal.onboarding.field.diastolic">Blood pressure, lower</span>
+          <input class="form-control" type="number" formControlName="diastolic" required />
+        </label>
+        <label>
+          <span hpdTranslate="patientPortal.onboarding.field.heartRateBpm">Resting heart rate (optional)</span>
+          <input class="form-control" type="number" formControlName="heartRateBpm" />
+        </label>
+        <label>
+          <span hpdTranslate="patientPortal.onboarding.field.bloodSugar">Blood sugar (optional)</span>
+          <input class="form-control" type="number" formControlName="bloodSugarMmolL" />
+        </label>
+      </div>
+
+      <div class="hc-onboarding__actions">
+        <button class="btn btn-secondary" type="button" (click)="back()" hpdTranslate="patientPortal.onboarding.action.back">Back</button>
+        <button class="btn btn-primary" type="submit" [disabled]="baselineForm.invalid || saving()">
+          <span hpdTranslate="patientPortal.onboarding.action.next">Continue</span>
+        </button>
+      </div>
+    </form>
+  }
+
+  <!-- Step 4 — your current state -->
+  @if (currentStep() === 'currentState') {
+    <form [formGroup]="currentStateForm" (ngSubmit)="submit()">
+      <label>
+        <span hpdTranslate="patientPortal.onboarding.field.bloodGroup">Blood group</span>
+        <input class="form-control" formControlName="bloodGroup" />
+      </label>
+
+      <label>
+        <span hpdTranslate="patientPortal.onboarding.field.conditions">Ongoing conditions, one per line</span>
+        <textarea class="form-control" rows="3" formControlName="conditionsText"></textarea>
+      </label>
+      <label>
+        <input type="checkbox" formControlName="noConditions" />
+        <span hpdTranslate="patientPortal.onboarding.field.noConditions">I have none</span>
+      </label>
+
+      <label>
+        <span hpdTranslate="patientPortal.onboarding.field.allergies">Allergies, one per line</span>
+        <textarea class="form-control" rows="3" formControlName="allergiesText"></textarea>
+      </label>
+      <label>
+        <input type="checkbox" formControlName="noAllergies" />
+        <span hpdTranslate="patientPortal.onboarding.field.noAllergies">I have none</span>
+      </label>
+
+      <label>
+        <span hpdTranslate="patientPortal.onboarding.field.medications">Medicines you take, one per line</span>
+        <textarea class="form-control" rows="3" formControlName="medicationsText"></textarea>
+      </label>
+      <label>
+        <input type="checkbox" formControlName="noMedications" />
+        <span hpdTranslate="patientPortal.onboarding.field.noMedications">I take none</span>
+      </label>
+
+      <div class="hc-onboarding__actions">
+        <button class="btn btn-secondary" type="button" (click)="back()" hpdTranslate="patientPortal.onboarding.action.back">Back</button>
+        <button class="btn btn-primary" type="submit" [disabled]="saving()">
+          <span hpdTranslate="patientPortal.onboarding.action.next">Continue</span>
+        </button>
+      </div>
+    </form>
+  }
+
+  <!-- Step 5 — identification -->
+  @if (currentStep() === 'identification') {
+    <form [formGroup]="identificationForm" (ngSubmit)="submit()">
+      <div class="hc-onboarding__grid">
+        <label>
+          <span hpdTranslate="patientPortal.onboarding.field.cardType">ID type</span>
+          <input class="form-control" formControlName="cardType" required />
+        </label>
+        <label>
+          <span hpdTranslate="patientPortal.onboarding.field.cardNumber">ID number</span>
+          <input class="form-control" formControlName="cardNumber" required />
+        </label>
+      </div>
+
+      <div class="hc-onboarding__actions">
+        <button class="btn btn-secondary" type="button" (click)="back()" hpdTranslate="patientPortal.onboarding.action.back">Back</button>
+        <button class="btn btn-primary" type="submit" [disabled]="identificationForm.invalid || saving()">
+          <span hpdTranslate="patientPortal.onboarding.action.finish">Finish</span>
+        </button>
+      </div>
+    </form>
+  }
+</div>

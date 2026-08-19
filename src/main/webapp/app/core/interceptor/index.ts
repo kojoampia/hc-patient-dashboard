@@ -1,5 +1,6 @@
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
+import { ActingAsInterceptor } from 'app/core/interceptor/acting-as.interceptor';
 import { AuthInterceptor } from 'app/core/interceptor/auth.interceptor';
 import { AuthExpiredInterceptor } from 'app/core/interceptor/auth-expired.interceptor';
 import { ErrorHandlerInterceptor } from 'app/core/interceptor/error-handler.interceptor';
@@ -9,6 +10,12 @@ export const httpInterceptorProviders = [
   {
     provide: HTTP_INTERCEPTORS,
     useClass: AuthInterceptor,
+    multi: true,
+  },
+  {
+    // The only place X-Acting-As is ever set. See ActingAsInterceptor for why that matters.
+    provide: HTTP_INTERCEPTORS,
+    useClass: ActingAsInterceptor,
     multi: true,
   },
   {

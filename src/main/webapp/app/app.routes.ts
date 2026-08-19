@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import { Authority } from 'app/config/authority.constants';
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
 import { errorRoute } from './layouts/error/error.route';
+import { onboardingGuard } from './onboarding/onboarding.guard';
 
 import LoginComponent from './login/login.component';
 import AuthShellComponent from './layouts/auth-shell/auth-shell.component';
@@ -44,9 +45,31 @@ const routes: Routes = [
     ],
   },
   {
+    // Onboarding needs a token but has no record to show yet, which is a state neither of the other two layouts was
+    // built for. It reuses the signed-out layout — stateless, brand on the left, form on the right — behind the
+    // signed-in guard, so the same component serves both a public and a guarded parent with no changes.
+    //
+    // Deliberately not ShellComponent: that frame injects PortalDataService and subscribes to the patient's
+    // emergencies on load, which for somebody with no record means firing patient-scoped fetches for a patient who
+    // does not exist, behind a sidebar of destinations that would all be empty.
+    path: 'onboarding',
+    component: AuthShellComponent,
+    canActivate: [UserRouteAccessService],
+    loadChildren: () => import('./onboarding/onboarding.route'),
+  },
+  {
+    // Where a nominated care angel answers. On the same guarded-but-shell-less layout as onboarding, and for the same
+    // reason: the person reading it may have no patient record of their own, and the portal would send them to the
+    // wizard rather than to the nomination they came to answer.
+    path: 'invitations',
+    component: AuthShellComponent,
+    canActivate: [UserRouteAccessService],
+    loadChildren: () => import('./invitations/invitations.route'),
+  },
+  {
     path: '',
     component: ShellComponent,
-    canActivate: [UserRouteAccessService],
+    canActivate: [UserRouteAccessService, onboardingGuard],
     children: [
       {
         path: 'admin',

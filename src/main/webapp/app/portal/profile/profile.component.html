@@ -91,7 +91,7 @@
             <div>
               <div class="hc-kv">
                 <span class="hc-kv__k" hpdTranslate="patientPortal.profile.field.address">Address</span>
-                <span class="hc-kv__v">{{ person.address ?? '—' }}</span>
+                <span class="hc-kv__v">{{ formatAddress(person.address) }}</span>
               </div>
               <div class="hc-kv">
                 <span class="hc-kv__k" hpdTranslate="patientPortal.profile.field.careAngel">Care angel</span>
@@ -120,7 +120,7 @@
                 <div class="hc-kv">
                   <span class="hc-kv__k" hpdTranslate="patientPortal.profile.field.status">Status</span>
                   <span class="hc-kv__v"
-                    ><span class="hc-pill hc-pill--ok">{{ plan.status | hpdStatus }}</span></span
+                    ><span class="hc-pill hc-pill--ok">{{ plan.status | hpdStatus: 'membership' }}</span></span
                   >
                 </div>
               </div>
@@ -148,8 +148,90 @@
               messageKey="patientPortal.profile.noMembershipHint"
             />
           }
+
+          <!--
+            Offered whether or not a plan is already held: this is also how somebody changes one. An empty list means
+            Abofonsa could not be reached, and says so quietly rather than showing an error — a patient must not meet
+            a failure page because a second product is down, which is precisely why choosing a plan was kept out of
+            the onboarding journey.
+          -->
+          @if (planError(); as message) {
+            <div class="alert alert-danger" role="alert"><span [hpdTranslate]="message">Something went wrong.</span></div>
+          }
+
+          @if (plans().length) {
+            <h3 hpdTranslate="patientPortal.profile.plan.choose">Choose a plan</h3>
+            <div class="hc-grid hc-grid--2">
+              @for (plan of plans(); track plan.id) {
+                <div class="hc-kv">
+                  <span class="hc-kv__k">{{ plan.name }}</span>
+                  <!-- Rendered, never re-formatted: the price arrives ready for this locale, and two products
+                       quoting different numbers for one tier is a mistake this subsystem has made before. -->
+                  <span class="hc-kv__v">{{ plan.priceAmount }} {{ plan.priceNote }}</span>
+                  @if (plan.forWho) {
+                    <span class="hc-kv__v">{{ plan.forWho }}</span>
+                  }
+                  <button
+                    class="btn btn-sm btn-primary"
+                    type="button"
+                    [disabled]="choosingPlan()"
+                    (click)="choosePlan(plan)"
+                    hpdTranslate="patientPortal.profile.plan.select"
+                  >
+                    Choose
+                  </button>
+                </div>
+              }
+            </div>
+          } @else {
+            <p class="hc-prose" hpdTranslate="patientPortal.profile.plan.unavailable">
+              Plans cannot be shown just now. Nothing about your record is affected.
+            </p>
+          }
         }
 
+        @case ('careAngel') {
+          @if (delegationError(); as message) {
+            <div class="alert alert-danger" role="alert"><span [hpdTranslate]="message">Something went wrong.</span></div>
+          }
+
+          <p class="hc-prose" hpdTranslate="patientPortal.profile.careAngel.explainer">
+            A care angel can see and update your health record, and act for you if you are ever unable to. Nothing happens until they
+            accept, and you can withdraw it at any time.
+          </p>
+
+          @if (delegations().length) {
+            <div class="hc-grid">
+              @for (delegation of delegations(); track delegation.id) {
+                <div class="hc-kv">
+                  <span class="hc-kv__k">{{ delegation.angelName ?? delegation.angelEmail }}</span>
+                  <span class="hc-kv__v">
+                    <!-- The state is the point of this screen: "waiting for them to accept" and "nothing was ever
+                         sent" look identical from the outside, and only one of them is worth chasing. -->
+                    <span [hpdTranslate]="'patientPortal.profile.careAngel.status.' + delegation.status">{{ delegation.status }}</span>
+                  </span>
+                  @if (delegation.status === 'ACTIVE' || delegation.status === 'PENDING' || delegation.status === 'STANDBY') {
+                    <button
+                      class="btn btn-sm btn-secondary"
+                      type="button"
+                      [disabled]="busy()"
+                      (click)="revoke(delegation)"
+                      hpdTranslate="patientPortal.profile.careAngel.action.revoke"
+                    >
+                      Withdraw
+                    </button>
+                  }
+                </div>
+              }
+            </div>
+          } @else {
+            <hpd-empty-state
+              icon="user"
+              titleKey="patientPortal.profile.careAngel.none"
+              messageKey="patientPortal.profile.careAngel.noneHint"
+            />
+          }
+        }
         @case ('careTeam') {
           @if (careTeam().length) {
             <div class="hc-grid hc-grid--2">

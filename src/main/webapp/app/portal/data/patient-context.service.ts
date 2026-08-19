@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, ReplaySubject, catchError, map, of, shareReplay, switchMap } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, ReplaySubject, catchError, map, of, shareReplay, switchMap, throwError } from 'rxjs';
 import dayjs from 'dayjs/esm';
 
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
@@ -63,9 +63,17 @@ export class PatientContextService {
         // happen here. Without it `birthDate` stays the ISO string the API sent, and every screen
         // that formats it renders blank: this is what emptied `/record` and the profile's About tab.
         map(profile => withParsedDates(profile)),
-        // A signed-in user with no profile document yet is a normal state, not an error: the
-        // screens fall back to their empty state rather than showing a failure.
-        catchError(() => of(null)),
+        // Only a 404. A signed-in user with no profile document yet is a normal state — it is what
+        // "has not onboarded" looks like — but a network blip, a 500 or an expired token are not,
+        // and mapping those to null too would be worse than useless now that the onboarding guard
+        // reads this: a transient error would throw a fully onboarded patient into the wizard, and
+        // a 401 would look like a brand-new account.
+        catchError((error: unknown) => {
+          if (error instanceof HttpErrorResponse && error.status === 404) {
+            return of(null);
+          }
+          return throwError(() => error);
+        }),
       );
     }),
     shareReplay({ bufferSize: 1, refCount: false }),

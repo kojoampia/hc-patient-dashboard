@@ -1,5 +1,6 @@
 import dayjs from 'dayjs/esm';
 import utc from 'dayjs/esm/plugin/utc';
+import { IAddress } from 'app/entities/patientMS/address/address.model';
 
 // Registered here rather than in config/dayjs.ts: that file carries a JHipster needle and is
 // regenerated, and this is the portal's own dependency. Extending twice is a no-op.
@@ -190,4 +191,27 @@ export function pageOf<T>(items: readonly T[], page: number, size: number): read
 /** Number of pages `items` occupies at `size` per page — always at least one. */
 export function pageCount(items: readonly unknown[], size: number): number {
   return Math.max(1, Math.ceil(items.length / size));
+}
+
+/**
+ * An address as one line.
+ *
+ * <p>`Profile.address` became a document when care onboarding needed a structured one, and every template that used to
+ * interpolate it would otherwise print `[object Object]` — silently, and only for patients who have an address at all.
+ * Empty parts are dropped rather than rendered as gaps, so a record with only a street still reads as a street.</p>
+ */
+export function formatAddress(address: IAddress | null | undefined): string {
+  if (!address) {
+    return '—';
+  }
+  const line = [address.streetAddress, address.town, address.city, address.district, address.region, address.country]
+    .map(part => part?.trim())
+    .filter((part): part is string => !!part)
+    .join(', ');
+  // The digital address is the one people in Ghana actually quote, so it is kept even when nothing else is filled in.
+  const digital = address.digitalAddress?.trim();
+  if (line && digital) {
+    return `${line} (${digital})`;
+  }
+  return line || digital || '—';
 }

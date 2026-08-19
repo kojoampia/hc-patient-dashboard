@@ -1,0 +1,22 @@
+.hc-invitations {
+  max-width: 40rem;
+  margin: 0 auto;
+}
+
+.hc-invitations__card {
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 0.5rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.hc-invitations__actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.hc-invitations__note {
+  font-size: 0.85rem;
+  opacity: 0.85;
+}

@@ -200,15 +200,27 @@ What is left is one broken workflow:
 
 ## Phase D — features the blueprint expects but the web app lacks
 
+> **Much of this landed on 2026-08-19** with patient onboarding and care delegation. Two traps found
+> on the way, both of which will bite anyone touching this area:
+>
+> - `PatientContextService.profile$` used to map *any* failure to "no profile". Harmless while
+>   nothing read it; not harmless once a route guard does — a network blip would have thrown a fully
+>   onboarded patient into the wizard, and a 401 would have looked like a brand-new account. It
+>   narrows to 404 now. **Do not widen it back.**
+> - `Profile.address` is a document, not a string. Anything interpolating it directly prints
+>   `[object Object]`; `formatAddress` in `portal/data/portal-format.ts` is the one way to render it.
+
 These come from the subsystem blueprint's Phase 3 and are largely blocked on backend work. The blueprint framed them as mobile screens; decide per item whether the web dashboard also needs them.
 
-- `[ ]` Subscription plan selection / display (Pear, Melon, Pawpaw) — blocked on `patient-api.md` Phase B, including the unresolved plan-price contradiction.
-- `[ ]` Onboarding wizard (basic info → identification → plan) — blocked on a unified onboarding endpoint.
+- `[x]` Subscription plan selection — built 2026-08-19, and the price contradiction is gone rather than resolved: the tiers come from Abofonsa through a gateway proxy at `/api/plans`, and `priceAmount` arrives pre-formatted for the locale. **Render it, never re-format it** — two products quoting different numbers for one tier is exactly what restating a price causes. It lives on the profile's membership tab, *not* at `/plans`, which is already the care plan (diet and exercise). Choosing writes a `Membership` with status `PENDING`: this records a choice, it does not bill for one.
+- `[x]` Onboarding wizard — built 2026-08-19. Five steps at `/onboarding`, on `AuthShellComponent` behind the signed-in guard rather than in the portal shell: a patient here has a token but no record, and the shell would fire patient-scoped fetches for a patient who does not exist, behind a sidebar of destinations that would all be empty. Each step saves before the next is shown, because the backend has no transaction to wrap the journey in. Plan selection is deliberately *not* a step (see above). See `docs/onboarding.md` §16 for the endpoint contract.
 - `[ ]` Historical telemetry views — blocked on `patient-api.md` Phase C; the current metric panels read from `Stat`. Note this means _patient_ telemetry (vitals over time), which is unrelated to the OpenTelemetry instrumentation added in 2026-08-03.
 - `[ ]` Calendar / upcoming visits — no scheduling entity exists in any backend.
 - `[ ]` Assigned professionals directory — needs a contract with the professional subsystem.
 - `[ ]` Time-bound record sharing toggles — no sharing/consent model exists.
-- `[ ]` `PATIENT`/`ANGEL` role support in the `Authority` enum and route guards — joint change tracked in `patient-gateway.md` Phase B. The enum still holds only `ROLE_ADMIN` and `ROLE_USER`, and no service in the subsystem issues the other two.
+- `[x]` `PATIENT`/`ANGEL` role support — the `Authority` enum now holds all four. No route guards on them, and that is the answer rather than an omission: an angel's authority comes from an `ACTIVE` care delegation the backend re-reads per request, so guarding a screen on `ROLE_ANGEL` would leave the menu entry for somebody whose delegation was revoked.
+- `[x]` **Acting as another patient** — a care angel opens the patient's record through an `X-Acting-As` header set by **one** interceptor and nothing else. A screen that built its own request and forgot it would silently read the wrong person's record and answer 200, which is why it is not a per-service concern. The shell shows a loud, persistent banner naming whose record is open; that is a safety control, not decoration.
+- `[x]` **Care nominations** at `/invitations`, and **delegation management** on the profile's care-angel tab — see, and withdraw, whoever may act for you.
 
 ## Phase E — demo parity
 

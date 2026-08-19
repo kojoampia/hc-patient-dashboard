@@ -15,7 +15,9 @@ export const sampleWithPartialData: IProfile = {
   phoneNumber: 'expert necessity',
   cardType: 'harsh',
   contacts: 'gall',
-  address: 'pesky affectionate molasses',
+  // A document since care onboarding needed a structured address; the sample keeps the old free text as the
+  // street so the fixtures still read like an address.
+  address: { id: 'addr-sample-1', streetAddress: 'pesky affectionate molasses' },
   team: 'qua publicise',
   imageUrl: 'wording',
   about: 'total',
@@ -37,7 +39,7 @@ export const sampleWithFullData: IProfile = {
   cardType: 'gah given minus',
   cardNumber: 'because sedately dismal',
   contacts: 'overextend self-esteem knowledgeably',
-  address: 'sweetly finance',
+  address: { id: 'addr-sample-2', streetAddress: 'sweetly finance' },
   team: 'reflate clasp',
   imageUrl: 'unless ruling',
   about: 'whoa stingy',
