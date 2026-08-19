@@ -443,6 +443,20 @@
       "chooseTitle": "Quel dossier souhaitez-vous ouvrir ?",
       "chooseOwn": "Mon propre dossier",
       "chooseFor": "Au nom de {{name}}"
+    },
+    "invitations": {
+      "title": "Nominations d'accompagnement",
+      "heading": "Nominations d'accompagnement",
+      "empty": "Aucune nomination en attente. Si quelqu'un vient de vous désigner, consultez le lien dans l'e-mail qui lui a été envoyé.",
+      "from": "{{name}} vous a demandé d'être son ange gardien",
+      "explainer": "En acceptant, vous pourrez consulter et mettre à jour son dossier de santé, et agir en son nom si elle n'en est un jour plus capable. Vous pouvez vous retirer à tout moment, et elle peut le retirer à tout moment.",
+      "action": {
+        "accept": "Accepter",
+        "decline": "Refuser"
+      },
+      "error": {
+        "failed": "Cela n'a pas pu être enregistré. Réessayez."
+      }
     }
   }
 }

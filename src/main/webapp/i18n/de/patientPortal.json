@@ -443,6 +443,20 @@
       "chooseTitle": "Welche Akte möchten Sie öffnen?",
       "chooseOwn": "Meine eigene Akte",
       "chooseFor": "Im Namen von {{name}}"
+    },
+    "invitations": {
+      "title": "Pflege-Nominierungen",
+      "heading": "Pflege-Nominierungen",
+      "empty": "Es warten keine Nominierungen. Wenn Sie gerade jemand benannt hat, prüfen Sie den Link in der versendeten E-Mail.",
+      "from": "{{name}} hat Sie gebeten, ihr Pflegeengel zu sein",
+      "explainer": "Mit der Annahme können Sie die Gesundheitsakte dieser Person einsehen und aktualisieren und für sie handeln, falls sie dazu einmal nicht in der Lage ist. Sie können jederzeit zurücktreten, und die Person kann es jederzeit widerrufen.",
+      "action": {
+        "accept": "Annehmen",
+        "decline": "Ablehnen"
+      },
+      "error": {
+        "failed": "Das konnte nicht gespeichert werden. Versuchen Sie es erneut."
+      }
     }
   }
 }

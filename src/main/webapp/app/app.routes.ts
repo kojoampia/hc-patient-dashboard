@@ -58,6 +58,15 @@ const routes: Routes = [
     loadChildren: () => import('./onboarding/onboarding.route'),
   },
   {
+    // Where a nominated care angel answers. On the same guarded-but-shell-less layout as onboarding, and for the same
+    // reason: the person reading it may have no patient record of their own, and the portal would send them to the
+    // wizard rather than to the nomination they came to answer.
+    path: 'invitations',
+    component: AuthShellComponent,
+    canActivate: [UserRouteAccessService],
+    loadChildren: () => import('./invitations/invitations.route'),
+  },
+  {
     path: '',
     component: ShellComponent,
     canActivate: [UserRouteAccessService, onboardingGuard],

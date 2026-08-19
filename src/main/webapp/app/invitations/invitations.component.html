@@ -1,0 +1,41 @@
+<div class="hc-invitations">
+  <h1 hpdTranslate="patientPortal.invitations.heading">Care nominations</h1>
+
+  @if (error(); as message) {
+    <div class="alert alert-danger" role="alert"><span [hpdTranslate]="message">Something went wrong.</span></div>
+  }
+
+  @if (invitations().length === 0) {
+    <p class="hc-invitations__note" hpdTranslate="patientPortal.invitations.empty">
+      You have no nominations waiting. If somebody has just named you, check the link in the email they were sent.
+    </p>
+  }
+
+  @for (invitation of invitations(); track invitation.id) {
+    <div class="hc-invitations__card">
+      <h2>
+        <span [hpdTranslate]="'patientPortal.invitations.from'" [translateValues]="{ name: invitation.patientName ?? invitation.patientId }">
+          A nomination
+        </span>
+      </h2>
+
+      <!--
+        Said plainly and before the buttons. Accepting grants standing access to somebody's medical record and the
+        authority to act for them; a person clicking this should not have to infer that from the word "accept".
+      -->
+      <p class="hc-invitations__note" hpdTranslate="patientPortal.invitations.explainer">
+        Accepting means you will be able to see and update their health record, and act for them if they are ever
+        unable to. You can step down at any time, and they can withdraw it at any time.
+      </p>
+
+      <div class="hc-invitations__actions">
+        <button class="btn btn-primary" type="button" [disabled]="busy()" (click)="accept(invitation)">
+          <span hpdTranslate="patientPortal.invitations.action.accept">Accept</span>
+        </button>
+        <button class="btn btn-secondary" type="button" [disabled]="busy()" (click)="decline(invitation)">
+          <span hpdTranslate="patientPortal.invitations.action.decline">Decline</span>
+        </button>
+      </div>
+    </div>
+  }
+</div>

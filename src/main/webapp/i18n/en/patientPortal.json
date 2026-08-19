@@ -443,6 +443,20 @@
       "chooseTitle": "Whose record would you like to open?",
       "chooseOwn": "My own record",
       "chooseFor": "Acting for {{name}}"
+    },
+    "invitations": {
+      "title": "Care nominations",
+      "heading": "Care nominations",
+      "empty": "You have no nominations waiting. If somebody has just named you, check the link in the email they were sent.",
+      "from": "{{name}} has asked you to be their care angel",
+      "explainer": "Accepting means you will be able to see and update their health record, and act for them if they are ever unable to. You can step down at any time, and they can withdraw it at any time.",
+      "action": {
+        "accept": "Accept",
+        "decline": "Decline"
+      },
+      "error": {
+        "failed": "That could not be saved. Try again."
+      }
     }
   }
 }

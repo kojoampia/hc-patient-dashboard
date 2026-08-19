@@ -9,7 +9,7 @@ import { LoginService } from 'app/login/login.service';
 import { IconComponent } from 'app/shared/ui/icon/icon.component';
 import { PortalDataService } from 'app/portal/data/portal-data.service';
 import { ActingAsService } from 'app/core/auth/acting-as.service';
-import { CareDelegationService } from 'app/portal/data/care-delegation.service';
+import { CareDelegationService, toActingAsChoices } from 'app/portal/data/care-delegation.service';
 import { SHELL_NAV, SHELL_TABS, ShellNavItem, navOwnerOf } from './shell-nav';
 import { DEFAULT_PAGE_TITLE, PAGE_TITLES } from './shell-titles';
 
@@ -157,7 +157,7 @@ export default class ShellComponent {
       .mine()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: choices => this.actingAsService.setAvailable(choices),
+        next: response => this.actingAsService.setAvailable(toActingAsChoices(response)),
         // A failure here must not block the portal: it means no switcher and the backend's default of "myself",
         // which is the behaviour that existed before delegation.
         error: () => this.actingAsService.setAvailable([]),

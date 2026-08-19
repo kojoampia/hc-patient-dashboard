@@ -1,8 +1,10 @@
 import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
-import { map } from 'rxjs/operators';
+import { CanActivateFn, Router, UrlTree } from '@angular/router';
+import { of } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
 
 import { ActingAsService } from 'app/core/auth/acting-as.service';
+import { CareDelegationService } from 'app/portal/data/care-delegation.service';
 import { OnboardingService } from './onboarding.service';
 
 /**
@@ -23,6 +25,7 @@ import { OnboardingService } from './onboarding.service';
 export const onboardingGuard: CanActivateFn = () => {
   const actingAsService = inject(ActingAsService);
   const onboardingService = inject(OnboardingService);
+  const careDelegationService = inject(CareDelegationService);
   const router = inject(Router);
 
   if (actingAsService.actingForSomeoneElse()) {
@@ -30,13 +33,25 @@ export const onboardingGuard: CanActivateFn = () => {
   }
 
   return onboardingService.status().pipe(
-    map(status => {
+    switchMap(status => {
       // `onboarded` is the backend's own answer, so the null-means-COMPLETE rule lives in one place rather than being
       // re-derived by every client that asks.
       if (status.onboarded) {
-        return true;
+        return of(true as boolean | UrlTree);
       }
-      return router.parseUrl('/onboarding');
+
+      // No record — but that does not always mean "start onboarding". Being a care angel does not make you a patient,
+      // and somebody who has been nominated but has not accepted yet holds only a PENDING delegation, which grants
+      // nothing and so does not show up as acting for anybody. Sending them to the wizard would ask them to create
+      // their own patient record purely to answer somebody else's nomination, and the inverse guard would then keep
+      // them there.
+      //
+      // The extra call only ever runs on the not-onboarded path, which a patient takes once.
+      return careDelegationService.mine().pipe(
+        map(response => (response.delegations ?? []).length > 0),
+        catchError(() => of(false)),
+        map(hasDelegations => router.parseUrl(hasDelegations ? '/invitations' : '/onboarding')),
+      );
     }),
   );
 };
