@@ -53,6 +53,10 @@
       "fieldType": "String"
     },
     {
+      "fieldName": "honorific",
+      "fieldType": "String"
+    },
+    {
       "fieldName": "createdDate",
       "fieldType": "LocalDate"
     },
