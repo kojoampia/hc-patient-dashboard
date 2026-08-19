@@ -314,7 +314,8 @@
         "about": "Über",
         "contact": "Kontakt",
         "membership": "Mitgliedschaft",
-        "careTeam": "Behandlungsteam"
+        "careTeam": "Behandlungsteam",
+        "careAngel": "Pflegeengel"
       },
       "field": {
         "birthDate": "Geboren",
@@ -334,6 +335,25 @@
         "status": "Status",
         "since": "Mitglied seit",
         "renews": "Verlängerung"
+      },
+      "careAngel": {
+        "explainer": "Ein Pflegeengel kann Ihre Gesundheitsakte einsehen und aktualisieren und für Sie handeln, falls Sie dazu einmal nicht in der Lage sind. Bis zur Annahme geschieht nichts, und Sie können es jederzeit widerrufen.",
+        "none": "Noch kein Pflegeengel",
+        "noneHint": "Derzeit kann niemand für Sie handeln.",
+        "status": {
+          "STANDBY": "Ersatz — ruhend, bis eine Ärztin oder ein Arzt ihn aktiviert",
+          "AWAITING_COUNTERSIGNATURE": "Wartet auf die Zustimmung einer zweiten Ärztin oder eines zweiten Arztes",
+          "PENDING": "Wartet auf die Annahme",
+          "ACTIVE": "Kann für Sie handeln",
+          "DECLINED": "Abgelehnt",
+          "REVOKED": "Beendet"
+        },
+        "action": {
+          "revoke": "Widerrufen"
+        },
+        "error": {
+          "revokeFailed": "Das konnte nicht widerrufen werden. Versuchen Sie es erneut."
+        }
       }
     },
     "filter": {

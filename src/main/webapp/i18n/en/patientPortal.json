@@ -314,7 +314,8 @@
         "about": "About",
         "contact": "Contact",
         "membership": "Membership",
-        "careTeam": "Care team"
+        "careTeam": "Care team",
+        "careAngel": "Care angel"
       },
       "field": {
         "birthDate": "Born",
@@ -334,6 +335,25 @@
         "status": "Status",
         "since": "Member since",
         "renews": "Renews"
+      },
+      "careAngel": {
+        "explainer": "A care angel can see and update your health record, and act for you if you are ever unable to. Nothing happens until they accept, and you can withdraw it at any time.",
+        "none": "No care angel yet",
+        "noneHint": "Nobody is currently able to act for you.",
+        "status": {
+          "STANDBY": "Standby — dormant until a clinician activates them",
+          "AWAITING_COUNTERSIGNATURE": "Waiting for a second clinician to agree",
+          "PENDING": "Waiting for them to accept",
+          "ACTIVE": "Can act for you",
+          "DECLINED": "Declined",
+          "REVOKED": "Ended"
+        },
+        "action": {
+          "revoke": "Withdraw"
+        },
+        "error": {
+          "revokeFailed": "That could not be withdrawn. Try again."
+        }
       }
     },
     "filter": {

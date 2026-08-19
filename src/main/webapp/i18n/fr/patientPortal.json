@@ -314,7 +314,8 @@
         "about": "À propos",
         "contact": "Contact",
         "membership": "Adhésion",
-        "careTeam": "Équipe soignante"
+        "careTeam": "Équipe soignante",
+        "careAngel": "Ange gardien"
       },
       "field": {
         "birthDate": "Né(e) le",
@@ -334,6 +335,25 @@
         "status": "Statut",
         "since": "Adhérent depuis",
         "renews": "Renouvellement"
+      },
+      "careAngel": {
+        "explainer": "Un ange gardien peut consulter et mettre à jour votre dossier de santé, et agir en votre nom si vous n'en êtes jamais capable. Rien ne se produit avant son acceptation, et vous pouvez le retirer à tout moment.",
+        "none": "Aucun ange gardien",
+        "noneHint": "Personne ne peut actuellement agir en votre nom.",
+        "status": {
+          "STANDBY": "Suppléant — inactif jusqu'à activation par un clinicien",
+          "AWAITING_COUNTERSIGNATURE": "En attente de l'accord d'un second clinicien",
+          "PENDING": "En attente de son acceptation",
+          "ACTIVE": "Peut agir en votre nom",
+          "DECLINED": "Refusé",
+          "REVOKED": "Terminé"
+        },
+        "action": {
+          "revoke": "Retirer"
+        },
+        "error": {
+          "revokeFailed": "Le retrait a échoué. Réessayez."
+        }
       }
     },
     "filter": {

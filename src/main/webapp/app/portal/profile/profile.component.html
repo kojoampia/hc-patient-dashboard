@@ -150,6 +150,44 @@
           }
         }
 
+        @case ('careAngel') {
+          @if (delegationError(); as message) {
+            <div class="alert alert-danger" role="alert"><span [hpdTranslate]="message">Something went wrong.</span></div>
+          }
+
+          <p class="hc-prose" hpdTranslate="patientPortal.profile.careAngel.explainer">
+            A care angel can see and update your health record, and act for you if you are ever unable to. Nothing
+            happens until they accept, and you can withdraw it at any time.
+          </p>
+
+          @if (delegations().length) {
+            <div class="hc-grid">
+              @for (delegation of delegations(); track delegation.id) {
+                <div class="hc-kv">
+                  <span class="hc-kv__k">{{ delegation.angelName ?? delegation.angelEmail }}</span>
+                  <span class="hc-kv__v">
+                    <!-- The state is the point of this screen: "waiting for them to accept" and "nothing was ever
+                         sent" look identical from the outside, and only one of them is worth chasing. -->
+                    <span [hpdTranslate]="'patientPortal.profile.careAngel.status.' + delegation.status">{{ delegation.status }}</span>
+                  </span>
+                  @if (delegation.status === 'ACTIVE' || delegation.status === 'PENDING' || delegation.status === 'STANDBY') {
+                    <button
+                      class="btn btn-sm btn-secondary"
+                      type="button"
+                      [disabled]="busy()"
+                      (click)="revoke(delegation)"
+                      hpdTranslate="patientPortal.profile.careAngel.action.revoke"
+                    >
+                      Withdraw
+                    </button>
+                  }
+                </div>
+              }
+            </div>
+          } @else {
+            <hpd-empty-state icon="user" titleKey="patientPortal.profile.careAngel.none" messageKey="patientPortal.profile.careAngel.noneHint" />
+          }
+        }
         @case ('careTeam') {
           @if (careTeam().length) {
             <div class="hc-grid hc-grid--2">
