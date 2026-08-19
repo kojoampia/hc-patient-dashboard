@@ -369,6 +369,80 @@
       "FOOD": "Food",
       "ENVIRONMENTAL": "Environmental",
       "OTHER": "Other"
+    },
+    "onboarding": {
+      "title": "Set up your record",
+      "heading": "Let us set up your record",
+      "intro": "Each step is saved as you go, so you can stop and come back.",
+      "step": {
+        "identity": "About you",
+        "careAngel": "Care angel",
+        "baseline": "Baseline",
+        "currentState": "Your health",
+        "identification": "Identification"
+      },
+      "field": {
+        "firstName": "First name",
+        "middleNames": "Middle names",
+        "lastName": "Last name",
+        "birthDate": "Date of birth",
+        "sex": "Sex",
+        "mobilePhone": "Mobile number",
+        "phoneNumber": "Other phone",
+        "address": "Where you live",
+        "streetAddress": "Street",
+        "digitalAddress": "Digital address",
+        "town": "Town",
+        "city": "City",
+        "district": "District",
+        "region": "Region",
+        "country": "Country",
+        "phone": "Phone",
+        "email": "Email",
+        "emailConfirm": "Confirm email",
+        "contacts": "Anyone else we should contact",
+        "heightCm": "Height (cm)",
+        "weightKg": "Weight (kg)",
+        "systolic": "Blood pressure, upper",
+        "diastolic": "Blood pressure, lower",
+        "heartRateBpm": "Resting heart rate (optional)",
+        "bloodSugar": "Blood sugar (optional)",
+        "bloodGroup": "Blood group",
+        "conditions": "Ongoing conditions, one per line",
+        "noConditions": "I have none",
+        "allergies": "Allergies, one per line",
+        "noAllergies": "I have none",
+        "medications": "Medicines you take, one per line",
+        "noMedications": "I take none",
+        "cardType": "ID type",
+        "cardNumber": "ID number"
+      },
+      "careAngel": {
+        "explainer": "A care angel can see and update your health record, and act for you if you are ever unable to. They are asked to accept, and you can withdraw this at any time."
+      },
+      "standby": {
+        "heading": "If you are ever unable to decide",
+        "explainer": "You can name somebody in advance. They are told nothing now. If a clinician ever declares that you cannot decide for yourself, two of them must agree before this person is asked — and they can still say no.",
+        "consent": "If I am ever unable to decide for myself, a clinician may activate my standby nominee."
+      },
+      "action": {
+        "next": "Continue",
+        "back": "Back",
+        "finish": "Finish"
+      },
+      "error": {
+        "emailMismatch": "The two email addresses do not match.",
+        "consentRequired": "Tick the consent box to name a standby nominee, or leave their details blank.",
+        "saveFailed": "That could not be saved. Nothing you have already answered is lost — try again."
+      }
+    },
+    "actingAs": {
+      "banner": "You are viewing {{name}}'s record",
+      "bannerOwn": "You are viewing your own record",
+      "switch": "Switch record",
+      "chooseTitle": "Whose record would you like to open?",
+      "chooseOwn": "My own record",
+      "chooseFor": "Acting for {{name}}"
     }
   }
 }

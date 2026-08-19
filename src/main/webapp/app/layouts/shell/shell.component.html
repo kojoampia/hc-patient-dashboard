@@ -1,4 +1,27 @@
 <div class="hc-shell">
+  <!--
+    Not decoration. Once a care angel can act for a patient, every screen behind this frame is showing a record that is
+    not the signed-in person's — and the failure this prevents is somebody reading a blood group or an allergy list
+    believing it is their own. It is deliberately unmissable and deliberately always present while acting for
+    somebody, rather than a badge that scrolls away.
+  -->
+  @if (actingForSomeoneElse()) {
+    <div class="hc-shell__acting-as" role="status">
+      <span [hpdTranslate]="'patientPortal.actingAs.banner'" [translateValues]="{ name: actingAsName() }">
+        You are viewing another person's record
+      </span>
+      @if (canSwitch()) {
+        <label class="hc-shell__acting-as-switch">
+          <span class="visually-hidden" hpdTranslate="patientPortal.actingAs.switch">Switch record</span>
+          <select [value]="actingAsId()" (change)="switchRecord($any($event.target).value)">
+            @for (choice of choices(); track choice.patientId) {
+              <option [value]="choice.patientId">{{ choice.name }}</option>
+            }
+          </select>
+        </label>
+      }
+    </div>
+  }
   <aside class="hc-shell__sidebar" [class.is-open]="navOpen()" id="portal-nav">
     <div class="hc-shell__brand">
       <span class="hc-shell__brand-mark" aria-hidden="true">

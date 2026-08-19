@@ -10,7 +10,7 @@ import { EmptyStateComponent } from 'app/shared/ui/empty-state/empty-state.compo
 import { PatientContextService } from '../data/patient-context.service';
 import { StatusLabelPipe } from '../data/status-label.pipe';
 import { PortalDataService } from '../data/portal-data.service';
-import { formatDay } from '../data/portal-format';
+import { formatAddress, formatDay } from '../data/portal-format';
 
 type ProfileTab = 'about' | 'contact' | 'membership' | 'careTeam';
 
@@ -35,6 +35,7 @@ export default class ProfileComponent {
   private readonly memberships = toSignal(this.data.memberships$, { initialValue: [] });
 
   readonly formatDay = formatDay;
+  readonly formatAddress = formatAddress;
   readonly tabs = TABS;
 
   readonly activeTab = signal<ProfileTab>('about');

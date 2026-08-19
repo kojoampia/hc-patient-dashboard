@@ -8,6 +8,8 @@ import { AccountService } from 'app/core/auth/account.service';
 import { LoginService } from 'app/login/login.service';
 import { IconComponent } from 'app/shared/ui/icon/icon.component';
 import { PortalDataService } from 'app/portal/data/portal-data.service';
+import { ActingAsService } from 'app/core/auth/acting-as.service';
+import { CareDelegationService } from 'app/portal/data/care-delegation.service';
 import { SHELL_NAV, SHELL_TABS, ShellNavItem, navOwnerOf } from './shell-nav';
 import { DEFAULT_PAGE_TITLE, PAGE_TITLES } from './shell-titles';
 
@@ -34,6 +36,33 @@ export default class ShellComponent {
   private readonly loginService = inject(LoginService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly data = inject(PortalDataService);
+  private readonly actingAsService = inject(ActingAsService);
+  private readonly careDelegationService = inject(CareDelegationService);
+
+  /** Drives the banner: true only when the open record belongs to somebody else. */
+  readonly actingForSomeoneElse = this.actingAsService.actingForSomeoneElse;
+  readonly actingAsName = computed(() => this.actingAsService.current()?.name ?? '');
+  readonly canSwitch = computed(() => this.actingAsService.available().length > 1);
+  readonly choices = this.actingAsService.available;
+  readonly actingAsId = computed(() => this.actingAsService.current()?.patientId ?? '');
+
+  /**
+   * Switches which record the portal is showing.
+   *
+   * <p>The reload is not optional. Every portal collection is cached per session, so without it the previous
+   * patient's record stays on screen under the new patient's name — which is the worst possible version of this
+   * feature's failure mode.</p>
+   */
+  switchRecord(patientId: string): void {
+    if (!patientId || patientId === this.actingAsId()) {
+      return;
+    }
+    this.actingAsService.select(patientId);
+    // PortalDataService.reload() re-runs PatientContextService too, so one call covers both the profile and every
+    // collection keyed off it.
+    this.data.reload();
+    void this.router.navigate(['/overview']);
+  }
 
   /** Current portal path, e.g. `cases/12` — drives both the active nav item and the title. */
   private readonly activePath = signal(this.portalPathOf(this.router.url));
@@ -120,6 +149,18 @@ export default class ShellComponent {
         this.activePath.set(path);
         // A route change on mobile has to dismiss the drawer, or the new screen opens behind it.
         this.navOpen.set(false);
+      });
+
+    // What this person may open. Auto-selects when there is only one, so somebody with just their own record never
+    // sees a choice; the switcher appears only when there is genuinely something to switch between.
+    this.careDelegationService
+      .mine()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: choices => this.actingAsService.setAvailable(choices),
+        // A failure here must not block the portal: it means no switcher and the backend's default of "myself",
+        // which is the behaviour that existed before delegation.
+        error: () => this.actingAsService.setAvailable([]),
       });
   }
 

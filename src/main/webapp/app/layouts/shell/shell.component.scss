@@ -339,3 +339,25 @@
     transition: none;
   }
 }
+
+/* The acting-as banner. Deliberately loud: it is the only thing on screen saying that none of this is yours. */
+.hc-shell__acting-as {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 1.25rem;
+  background: #7a3b00;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.hc-shell__acting-as-switch select {
+  background: rgba(255, 255, 255, 0.12);
+  color: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 0.35rem;
+  padding: 0.15rem 0.4rem;
+}
