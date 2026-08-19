@@ -20,10 +20,14 @@
   - `core`: authentication, interceptors, `ApplicationConfigService`, low-level utilities.
   - `shared`: reusable UI helpers, pipes, shared module pieces.
   - `entities`: entity models/services and CRUD UI (`entities/patientMS/**`).
+  - `onboarding`: the five-step wizard; `invitations`: where a nominated care angel accepts or declines. Both render on the auth layout behind the signed-in guard, not in the portal shell.
   - `dashboard`, `features`, `widgets`: hand-written dashboard, modal feature wrappers, visualizations.
   - `layouts`: shell/layout components.
 - Routing is standalone-style: top-level routes live in `src/main/webapp/app/app.routes.ts` (there is **no** `app-routing.module.ts`), with lazy `loadChildren` for `admin`, `account`, and `entities`. Providers live in `app.config.ts`.
 - `entities/entity.routes.ts` and `entities/entity-navbar-items.ts` are currently empty, so `entities/patientMS/**` is not reachable from the router or menu. Pair any route change with the navbar update.
+- **`X-Acting-As` is set by `ActingAsInterceptor` and by nothing else.** A care angel opens a patient's record through it; a service that sets it itself, or a request that omits it, silently reads the wrong person's record and answers 200.
+- `Profile.address` is an `IAddress` document. Interpolating it prints `[object Object]` — use `formatAddress` from `portal/data/portal-format.ts`.
+- `PatientContextService.profile$` catches **404 only**. Widening it back would make a network blip look like "this patient has no record", which a route guard now acts on.
 - `DashboardComponent` is rendered inside `HomeComponent` at `/`; it has no route of its own.
 - Build API URLs through `ApplicationConfigService.getEndpointFor(api, microservice?)` — pass `'hcpatientservice'` for microservice calls so gateway routing applies. Never hardcode hosts, ports, or `/services/...` prefixes.
 - Prefer standalone components for new code; NgModules (`shared`, `features`, `widgets`) remain for legacy grouping.
