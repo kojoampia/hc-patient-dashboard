@@ -398,7 +398,14 @@
       "MEDICATION": "Médicament",
       "FOOD": "Aliment",
       "ENVIRONMENTAL": "Environnement",
-      "OTHER": "Autre"
+      "OTHER": "Autre",
+      "membership": {
+        "ACTIVE": "Actif",
+        "CANCELLED": "Annulé",
+        "EXPIRED": "Expiré",
+        "PENDING": "En attente",
+        "SUSPENDED": "Suspendu"
+      }
     },
     "onboarding": {
       "title": "Configurer votre dossier",

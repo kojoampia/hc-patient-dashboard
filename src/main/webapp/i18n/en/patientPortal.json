@@ -398,7 +398,14 @@
       "MEDICATION": "Medication",
       "FOOD": "Food",
       "ENVIRONMENTAL": "Environmental",
-      "OTHER": "Other"
+      "OTHER": "Other",
+      "membership": {
+        "ACTIVE": "Active",
+        "CANCELLED": "Cancelled",
+        "EXPIRED": "Expired",
+        "PENDING": "Pending",
+        "SUSPENDED": "Suspended"
+      }
     },
     "onboarding": {
       "title": "Set up your record",

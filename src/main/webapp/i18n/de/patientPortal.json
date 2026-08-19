@@ -398,7 +398,14 @@
       "MEDICATION": "Medikament",
       "FOOD": "Lebensmittel",
       "ENVIRONMENTAL": "Umwelt",
-      "OTHER": "Sonstiges"
+      "OTHER": "Sonstiges",
+      "membership": {
+        "ACTIVE": "Aktiv",
+        "CANCELLED": "Storniert",
+        "EXPIRED": "Abgelaufen",
+        "PENDING": "Ausstehend",
+        "SUSPENDED": "Ausgesetzt"
+      }
     },
     "onboarding": {
       "title": "Ihre Akte einrichten",

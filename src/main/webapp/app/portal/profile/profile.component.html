@@ -120,7 +120,7 @@
                 <div class="hc-kv">
                   <span class="hc-kv__k" hpdTranslate="patientPortal.profile.field.status">Status</span>
                   <span class="hc-kv__v"
-                    ><span class="hc-pill hc-pill--ok">{{ plan.status | hpdStatus }}</span></span
+                    ><span class="hc-pill hc-pill--ok">{{ plan.status | hpdStatus: 'membership' }}</span></span
                   >
                 </div>
               </div>
@@ -196,8 +196,8 @@
           }
 
           <p class="hc-prose" hpdTranslate="patientPortal.profile.careAngel.explainer">
-            A care angel can see and update your health record, and act for you if you are ever unable to. Nothing
-            happens until they accept, and you can withdraw it at any time.
+            A care angel can see and update your health record, and act for you if you are ever unable to. Nothing happens until they
+            accept, and you can withdraw it at any time.
           </p>
 
           @if (delegations().length) {
@@ -225,7 +225,11 @@
               }
             </div>
           } @else {
-            <hpd-empty-state icon="user" titleKey="patientPortal.profile.careAngel.none" messageKey="patientPortal.profile.careAngel.noneHint" />
+            <hpd-empty-state
+              icon="user"
+              titleKey="patientPortal.profile.careAngel.none"
+              messageKey="patientPortal.profile.careAngel.noneHint"
+            />
           }
         }
         @case ('careTeam') {
