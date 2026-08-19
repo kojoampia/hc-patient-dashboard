@@ -13,6 +13,9 @@ import { CareDelegationService, toActingAsChoices } from 'app/portal/data/care-d
 import { SHELL_NAV, SHELL_TABS, ShellNavItem, navOwnerOf } from './shell-nav';
 import { DEFAULT_PAGE_TITLE, PAGE_TITLES } from './shell-titles';
 
+/** Remembers whether the sidebar was collapsed, across navigations and sessions. */
+const NAV_RAILED_KEY = 'hc-nav-railed';
+
 /** A sidebar group heading, emitted when the group changes down the nav list. */
 interface NavGroup {
   readonly labelKey: string;
@@ -98,6 +101,20 @@ export default class ShellComponent {
   /** Drawer state, only meaningful below the shell breakpoint. */
   readonly navOpen = signal(false);
 
+  /**
+   * Whether the sidebar is collapsed to its icon rail.
+   *
+   * <p>Persisted, because this is a preference about how somebody wants to work rather than a
+   * property of the page they happen to be on — collapsing it and having it spring back on the next
+   * navigation would be worse than not offering it. localStorage rather than session: unlike the
+   * acting-as choice, nothing here is about whose record is open, so it is safe to outlive the tab
+   * and there is nothing to leak to the next person at this browser.</p>
+   *
+   * <p>Only meaningful at or above the shell breakpoint. Below it the sidebar is already a drawer,
+   * and a rail would be a third state competing with the bottom tab bar.</p>
+   */
+  readonly navRailed = signal(localStorage.getItem(NAV_RAILED_KEY) === 'true');
+
   readonly tabs = this.nav.filter(item => SHELL_TABS.includes(item.path));
 
   /** The nav, pre-grouped so the template does not need a "did the group change" check. */
@@ -170,6 +187,15 @@ export default class ShellComponent {
 
   closeNav(): void {
     this.navOpen.set(false);
+  }
+
+  /** Collapses the sidebar to icons, or restores it. */
+  toggleRail(): void {
+    this.navRailed.update(railed => {
+      const next = !railed;
+      localStorage.setItem(NAV_RAILED_KEY, String(next));
+      return next;
+    });
   }
 
   /** The drawer traps the screen behind a scrim; Escape has to get out of it. */

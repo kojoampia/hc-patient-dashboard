@@ -1,4 +1,4 @@
-<div class="hc-shell">
+<div class="hc-shell" [class.is-railed]="navRailed()">
   <!--
     Not decoration. Once a care angel can act for a patient, every screen behind this frame is showing a record that is
     not the signed-in person's — and the failure this prevents is somebody reading a blood group or an allergy list
@@ -84,6 +84,24 @@
         [attr.aria-expanded]="navOpen()"
       >
         <hpd-icon name="menu" [size]="19" />
+      </button>
+
+      <!--
+        The rail toggle, and deliberately not the same control as the drawer button above. That one
+        only exists below the shell breakpoint, where the sidebar is already an overlay; this one only
+        exists above it, where the sidebar is a column that can usefully become an icon strip. One
+        button doing both would mean a control whose meaning changes with the viewport.
+      -->
+      <button
+        type="button"
+        class="hc-icon-btn hc-shell__rail-btn"
+        (click)="toggleRail()"
+        [attr.aria-label]="(navRailed() ? 'patientPortal.nav.expandMenu' : 'patientPortal.nav.collapseMenu') | translate"
+        aria-controls="portal-nav"
+        [attr.aria-expanded]="!navRailed()"
+      >
+        <!-- One icon, flipped: `chev` points right, which is "expand" when railed and "collapse" when not. -->
+        <hpd-icon name="chev" [size]="19" />
       </button>
 
       <div class="hc-grow">

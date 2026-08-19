@@ -65,6 +65,9 @@ $hc-font-sans:
 
 // ---------------------------------------------------------------- layout
 $hc-sidebar-width: 248px;
+
+/** The collapsed sidebar: wide enough for a 18px icon and its tap target, and nothing else. */
+$hc-sidebar-rail-width: 50px;
 // Below this the sidebar becomes a drawer and the bottom tab bar appears. Referenced by the
 // shell component's own media queries — keep them in step.
 $hc-shell-breakpoint: 940px;
@@ -105,6 +108,16 @@ $hc-shell-breakpoint: 940px;
 
   --hc-sans: #{$hc-font-sans};
   --hc-sidebar-w: #{$hc-sidebar-width};
+  --hc-sidebar-rail-w: #{$hc-sidebar-rail-width};
+
+  /**
+   * A cap on the portal's content column, unset on purpose.
+   *
+   * The shell centres its content when this is a length, so setting it here is the one change needed
+   * if long-line readability ever argues for a cap on an ultra-wide display. It was a hard 1240px
+   * until 2026-08-19, which made wide tables scroll inside a box narrower than the screen.
+   */
+  --hc-content-max: none;
 
   /**
    * Data-visualisation roles. These are NOT the brand colours: series colours have to hold their

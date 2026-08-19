@@ -28,7 +28,9 @@
         "clinical": "Klinisch",
         "account": "Konto",
         "session": "Sitzung"
-      }
+      },
+      "collapseMenu": "Menü einklappen",
+      "expandMenu": "Menü ausklappen"
     },
     "title": {
       "overview": "Patientenkontext",

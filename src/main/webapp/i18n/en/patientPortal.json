@@ -28,7 +28,9 @@
         "clinical": "Clinical",
         "account": "Account",
         "session": "Session"
-      }
+      },
+      "collapseMenu": "Collapse the menu",
+      "expandMenu": "Expand the menu"
     },
     "title": {
       "overview": "Patient context",
