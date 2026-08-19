@@ -354,6 +354,14 @@
         "error": {
           "revokeFailed": "That could not be withdrawn. Try again."
         }
+      },
+      "plan": {
+        "choose": "Choose a plan",
+        "select": "Choose",
+        "unavailable": "Plans cannot be shown just now. Nothing about your record is affected.",
+        "error": {
+          "failed": "That plan could not be selected. Try again."
+        }
       }
     },
     "filter": {

@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { switchMap } from 'rxjs';
+import dayjs from 'dayjs/esm';
 import { RouterLink } from '@angular/router';
 
 import SharedModule from 'app/shared/shared.module';
@@ -13,6 +14,8 @@ import { StatusLabelPipe } from '../data/status-label.pipe';
 import { PortalDataService } from '../data/portal-data.service';
 import { formatAddress, formatDay } from '../data/portal-format';
 import { CareDelegation, CareDelegationService } from '../data/care-delegation.service';
+import { MembershipPlan, MembershipPlanService } from '../data/membership-plan.service';
+import { MembershipService } from 'app/entities/patientMS/membership/service/membership.service';
 
 type ProfileTab = 'about' | 'contact' | 'careAngel' | 'membership' | 'careTeam';
 
@@ -35,6 +38,8 @@ const TABS: readonly { readonly id: ProfileTab; readonly labelKey: string }[] = 
 export default class ProfileComponent {
   private readonly context = inject(PatientContextService);
   private readonly careDelegationService = inject(CareDelegationService);
+  private readonly membershipPlanService = inject(MembershipPlanService);
+  private readonly membershipService = inject(MembershipService);
   private readonly data = inject(PortalDataService);
   private readonly memberships = toSignal(this.data.memberships$, { initialValue: [] });
 
@@ -111,4 +116,51 @@ export default class ProfileComponent {
     const all = this.memberships();
     return all.find(item => item.status?.toUpperCase() === 'ACTIVE') ?? all.at(0) ?? null;
   });
+
+  /**
+   * The tiers on offer, empty when Abofonsa cannot be reached.
+   *
+   * <p>Fetched whether or not the patient already has a plan, so the screen can also offer a change — and because an
+   * empty list is the same quiet outcome either way.</p>
+   */
+  readonly plans = toSignal(this.membershipPlanService.plans(), { initialValue: [] as readonly MembershipPlan[] });
+
+  readonly choosingPlan = signal(false);
+  readonly planError = signal<string | null>(null);
+
+  /**
+   * Records the patient's choice as a Membership.
+   *
+   * <p>This records a choice; it does not bill for one. Payment, entitlement and the subscription domain proper are a
+   * separate piece of work, and a plan chosen here is PENDING until that exists — saying ACTIVE would claim something
+   * nothing in the system has actually done.</p>
+   */
+  choosePlan(plan: MembershipPlan): void {
+    const patientId = this.profile()?.patientId ?? this.profile()?.id;
+    if (!patientId) {
+      return;
+    }
+    this.choosingPlan.set(true);
+    this.planError.set(null);
+    this.membershipService
+      .create({
+        id: null,
+        patientId,
+        plan: plan.code,
+        name: plan.name,
+        description: plan.forWho ?? null,
+        status: 'PENDING',
+        startDate: dayjs(),
+      })
+      .subscribe({
+        next: () => {
+          this.choosingPlan.set(false);
+          this.data.reload();
+        },
+        error: () => {
+          this.choosingPlan.set(false);
+          this.planError.set('patientPortal.profile.plan.error.failed');
+        },
+      });
+  }
 }

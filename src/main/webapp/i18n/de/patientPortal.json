@@ -354,6 +354,14 @@
         "error": {
           "revokeFailed": "Das konnte nicht widerrufen werden. Versuchen Sie es erneut."
         }
+      },
+      "plan": {
+        "choose": "Tarif wählen",
+        "select": "Wählen",
+        "unavailable": "Tarife können gerade nicht angezeigt werden. Ihre Akte ist davon nicht betroffen.",
+        "error": {
+          "failed": "Dieser Tarif konnte nicht ausgewählt werden. Versuchen Sie es erneut."
+        }
       }
     },
     "filter": {

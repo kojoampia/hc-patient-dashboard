@@ -354,6 +354,14 @@
         "error": {
           "revokeFailed": "Le retrait a échoué. Réessayez."
         }
+      },
+      "plan": {
+        "choose": "Choisir une formule",
+        "select": "Choisir",
+        "unavailable": "Les formules ne peuvent pas être affichées pour le moment. Votre dossier n'est pas affecté.",
+        "error": {
+          "failed": "Cette formule n'a pas pu être sélectionnée. Réessayez."
+        }
       }
     },
     "filter": {
