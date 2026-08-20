@@ -27,11 +27,11 @@ interface NavGroup {
  * plus a bottom tab bar. Every portal screen renders into its outlet.
  */
 @Component({
-    selector: 'hpd-shell',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [SharedModule, RouterOutlet, RouterLink, IconComponent],
-    templateUrl: './shell.component.html',
-    styleUrl: './shell.component.scss'
+  selector: 'hpd-shell',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [SharedModule, RouterOutlet, RouterLink, IconComponent],
+  templateUrl: './shell.component.html',
+  styleUrl: './shell.component.scss',
 })
 export default class ShellComponent {
   private readonly router = inject(Router);
@@ -48,6 +48,12 @@ export default class ShellComponent {
   readonly canSwitch = computed(() => this.actingAsService.available().length > 1);
   readonly choices = this.actingAsService.available;
   readonly actingAsId = computed(() => this.actingAsService.current()?.patientId ?? '');
+  /**
+   * Somebody with both their own record and a delegation has a decision to make, and it is not one to guess at.
+   * The service has computed this since delegation was built; until 2026-08-20 nothing rendered it, so the choice
+   * fell to whatever `sessionStorage` happened to hold.
+   */
+  readonly mustChoose = this.actingAsService.mustChoose;
 
   /**
    * Switches which record the portal is showing.

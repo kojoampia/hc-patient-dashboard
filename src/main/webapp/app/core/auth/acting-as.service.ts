@@ -1,4 +1,5 @@
 import { Injectable, computed, signal } from '@angular/core';
+import { BehaviorSubject, Observable, distinctUntilChanged, map } from 'rxjs';
 
 /** One of the records the signed-in person may open. */
 export interface ActingAsChoice {
@@ -35,6 +36,8 @@ const STORAGE_KEY = 'hc-acting-as';
 export class ActingAsService {
   private readonly choices = signal<readonly ActingAsChoice[]>([]);
   private readonly selectedId = signal<string | null>(this.restore());
+  /** Bumped by every mutator below, so {@link current$} can re-read without duplicating the state. */
+  private readonly changed$ = new BehaviorSubject<void>(undefined);
 
   /** Everything the signed-in person may open: their own record, plus each patient they act for. */
   readonly available = this.choices.asReadonly();
@@ -55,6 +58,19 @@ export class ActingAsService {
   readonly mustChoose = computed(() => this.choices().length > 1 && this.current() === null);
 
   /**
+   * The same value as {@link current}, for the data layer, which is RxJS rather than signals.
+   *
+   * <p>Deliberately not `toObservable(this.current)`. That defers the first emission to the next effect flush, and
+   * the subscriber here is the pipeline that decides *whose record the portal is showing* — it must resolve on
+   * subscribe, in the same turn, like every other stream feeding a screen. A `BehaviorSubject` bumped by the three
+   * mutators gives that; the signal stays the single source of truth and this only says "look again".</p>
+   */
+  readonly current$: Observable<ActingAsChoice | null> = this.changed$.pipe(
+    map(() => this.current()),
+    distinctUntilChanged((a, b) => a?.patientId === b?.patientId),
+  );
+
+  /**
    * Records what this person may open, and auto-selects when there is nothing to decide.
    *
    * @param choices their own record (if any) and every patient they hold an active delegation for.
@@ -69,7 +85,9 @@ export class ActingAsService {
     this.selectedId.set(null);
     if (choices.length === 1) {
       this.select(choices[0].patientId);
+      return;
     }
+    this.changed$.next();
   }
 
   select(patientId: string): void {
@@ -77,6 +95,7 @@ export class ActingAsService {
     // sessionStorage rather than localStorage: a choice about whose medical record is on screen should not outlive
     // the browser session, and certainly should not be waiting for whoever opens this browser next.
     sessionStorage.setItem(STORAGE_KEY, patientId);
+    this.changed$.next();
   }
 
   /** The header value, or null when the portal has nothing to say. */
@@ -89,6 +108,7 @@ export class ActingAsService {
     this.choices.set([]);
     this.selectedId.set(null);
     sessionStorage.removeItem(STORAGE_KEY);
+    this.changed$.next();
   }
 
   private restore(): string | null {

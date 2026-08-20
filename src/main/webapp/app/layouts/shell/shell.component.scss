@@ -372,12 +372,81 @@
   font-size: 0.9rem;
 }
 
+/**
+ * The same bar while viewing your own record: still there, because it carries the way back to the patient's record,
+ * but not shouting. Only the acting-for-somebody case is a safety warning; this one is a statement of fact.
+ */
+.hc-shell__acting-as.is-own {
+  background: #f0ebe1;
+  color: #4a4034;
+  font-weight: 500;
+}
+
 .hc-shell__acting-as-switch select {
   background: rgba(255, 255, 255, 0.12);
   color: inherit;
   border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 0.35rem;
   padding: 0.15rem 0.4rem;
+}
+
+.hc-shell__acting-as.is-own .hc-shell__acting-as-switch select {
+  background: #fff;
+  border-color: rgba(13, 48, 88, 0.25);
+}
+
+/* ======================== the whose-record-is-this dialog ======================== */
+
+/**
+ * Blocking on purpose. Every screen behind it is scoped to a patient, so there is nothing useful to show until the
+ * question is answered — and answering it by default is how somebody ends up reading the wrong person's record.
+ */
+.hc-shell__choose {
+  position: fixed;
+  inset: 0;
+  z-index: 1080;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background: rgba(13, 48, 88, 0.55);
+}
+
+.hc-shell__choose-panel {
+  width: min(28rem, 100%);
+  padding: 1.75rem;
+  border-radius: 0.75rem;
+  background: #fff;
+  box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, 0.25);
+
+  h2 {
+    margin: 0 0 1.25rem;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0d3058;
+  }
+}
+
+.hc-shell__choose-option {
+  display: block;
+  width: 100%;
+  margin-bottom: 0.6rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(13, 48, 88, 0.2);
+  border-radius: 0.5rem;
+  background: #fff;
+  color: #0d3058;
+  font-weight: 600;
+  text-align: left;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &:hover,
+  &:focus-visible {
+    border-color: #c59437;
+    background: #fdfaf3;
+  }
 }
 
 /* ============================= collapsed rail ============================= */

@@ -1,10 +1,11 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, ReplaySubject, catchError, map, of, shareReplay, switchMap, throwError } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { Observable, ReplaySubject, catchError, combineLatest, map, of, shareReplay, switchMap, throwError } from 'rxjs';
 import dayjs from 'dayjs/esm';
 
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { AccountService } from 'app/core/auth/account.service';
+import { ActingAsChoice, ActingAsService } from 'app/core/auth/acting-as.service';
 import { IProfile } from 'app/entities/patientMS/profile/profile.model';
 import { RestProfile } from 'app/entities/patientMS/profile/service/profile.service';
 import { IProfessional } from 'app/entities/patientMS/professional/professional.model';
@@ -45,37 +46,30 @@ export class PatientContextService {
   private readonly applicationConfigService = inject(ApplicationConfigService);
   private readonly accountService = inject(AccountService);
   private readonly professionalService = inject(ProfessionalService);
+  private readonly actingAsService = inject(ActingAsService);
 
   private readonly profileUrl = this.applicationConfigService.getEndpointFor('api/profiles', 'hcpatientservice');
 
   /** Bumped by reload() to re-run the shared pipelines below. */
   private readonly refresh$ = new ReplaySubject<void>(1);
 
-  readonly profile$: Observable<IProfile | null> = this.refresh$.pipe(
-    switchMap(() => this.accountService.identity()),
-    switchMap(account => {
-      if (!account?.email) {
-        return of(null);
-      }
-      return this.http.get<RestProfile>(`${this.profileUrl}/email/${encodeURIComponent(account.email)}`).pipe(
-        // This endpoint is fetched directly rather than through ProfileService, because that
-        // service has no by-email method — so the date conversion it would have applied has to
-        // happen here. Without it `birthDate` stays the ISO string the API sent, and every screen
-        // that formats it renders blank: this is what emptied `/record` and the profile's About tab.
-        map(profile => withParsedDates(profile)),
-        // Only a 404. A signed-in user with no profile document yet is a normal state — it is what
-        // "has not onboarded" looks like — but a network blip, a 500 or an expired token are not,
-        // and mapping those to null too would be worse than useless now that the onboarding guard
-        // reads this: a transient error would throw a fully onboarded patient into the wizard, and
-        // a 401 would look like a brand-new account.
-        catchError((error: unknown) => {
-          if (error instanceof HttpErrorResponse && error.status === 404) {
-            return of(null);
-          }
-          return throwError(() => error);
-        }),
-      );
-    }),
+  /**
+   * Whose record this is.
+   *
+   * <p><b>This follows the acting-as selection, and must keep doing so.</b> It used to resolve the signed-in
+   * account's email and nothing else, which made the whole delegation feature inert: a care angel who selected the
+   * patient they act for got the banner naming that patient over their *own* empty record, because every collection
+   * downstream is filtered by the `patientId` this yields. The banner said one thing and the screen showed another,
+   * and neither the unit tests nor the API-level checks could see it — the interceptor was sending the right header
+   * all along, and the server was answering correctly.</p>
+   */
+  readonly profile$: Observable<IProfile | null> = combineLatest([
+    this.refresh$,
+    // The selection arrives after `/care-delegations/mine` answers, which is later than the first fetch here; without
+    // reacting to it, an angel would need a second reload to see the record they picked.
+    this.actingAsService.current$,
+  ]).pipe(
+    switchMap(([, choice]) => this.fetchProfile(choice)),
     shareReplay({ bufferSize: 1, refCount: false }),
   );
 
@@ -129,6 +123,53 @@ export class PatientContextService {
   /** Re-fetches the profile and care team. Call after a write that changes either. */
   reload(): void {
     this.refresh$.next();
+  }
+
+  /**
+   * The record for the current selection: the patient an angel is acting for, or the signed-in person's own.
+   *
+   * <p>Two endpoints, because they answer two different questions. `/profiles/email/{email}` is the bootstrap — the
+   * only identifier a client holds before it has loaded anything is the token's email — and the server deliberately
+   * refuses it for any address but the caller's own, so it cannot serve the acting-as case. `/profiles?patientId=`
+   * goes through `PatientScope`, which resolves the `X-Acting-As` header the interceptor already sends and answers
+   * for exactly the records this caller may open. An angel with no delegation gets nothing back, not somebody
+   * else's record.</p>
+   */
+  private fetchProfile(choice: ActingAsChoice | null): Observable<IProfile | null> {
+    if (choice && !choice.own) {
+      return this.http.get<RestProfile[]>(this.profileUrl, { params: new HttpParams().set('patientId', choice.patientId) }).pipe(
+        map(profiles => (profiles.length ? withParsedDates(profiles[0]) : null)),
+        catchError((error: unknown) => this.blankOnlyOn404(error)),
+      );
+    }
+    return this.accountService.identity().pipe(
+      switchMap(account => {
+        if (!account?.email) {
+          return of(null);
+        }
+        return this.http.get<RestProfile>(`${this.profileUrl}/email/${encodeURIComponent(account.email)}`).pipe(
+          // This endpoint is fetched directly rather than through ProfileService, because that
+          // service has no by-email method — so the date conversion it would have applied has to
+          // happen here. Without it `birthDate` stays the ISO string the API sent, and every screen
+          // that formats it renders blank: this is what emptied `/record` and the profile's About tab.
+          map(profile => withParsedDates(profile)),
+          catchError((error: unknown) => this.blankOnlyOn404(error)),
+        );
+      }),
+    );
+  }
+
+  /**
+   * Only a 404. A signed-in user with no profile document yet is a normal state — it is what "has not onboarded"
+   * looks like — but a network blip, a 500 or an expired token are not, and mapping those to null too would be worse
+   * than useless now that the onboarding guard reads this: a transient error would throw a fully onboarded patient
+   * into the wizard, and a 401 would look like a brand-new account. **Do not widen this.**
+   */
+  private blankOnlyOn404(error: unknown): Observable<IProfile | null> {
+    if (error instanceof HttpErrorResponse && error.status === 404) {
+      return of(null);
+    }
+    return throwError(() => error);
   }
 }
 
