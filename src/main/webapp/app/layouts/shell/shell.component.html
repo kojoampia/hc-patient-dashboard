@@ -5,17 +5,53 @@
     believing it is their own. It is deliberately unmissable and deliberately always present while acting for
     somebody, rather than a badge that scrolls away.
   -->
-  @if (actingForSomeoneElse()) {
-    <div class="hc-shell__acting-as" role="status">
-      <span [hpdTranslate]="'patientPortal.actingAs.banner'" [translateValues]="{ name: actingAsName() }">
-        You are viewing another person's record
-      </span>
+  <!--
+    Somebody who is both a patient and a care angel is asked which record to open, rather than being placed in one.
+    The alternative is not "no dialog" — it is the portal choosing on their behalf from whatever was last stored,
+    which is what it did until 2026-08-20.
+  -->
+  @if (mustChoose()) {
+    <div class="hc-shell__choose" role="dialog" aria-modal="true" [attr.aria-label]="'patientPortal.actingAs.chooseTitle' | translate">
+      <div class="hc-shell__choose-panel">
+        <h2 hpdTranslate="patientPortal.actingAs.chooseTitle">Whose record would you like to open?</h2>
+        @for (choice of choices(); track choice.patientId) {
+          <button type="button" class="hc-shell__choose-option" (click)="switchRecord(choice.patientId)">
+            @if (choice.own) {
+              <span hpdTranslate="patientPortal.actingAs.chooseOwn">My own record</span>
+            } @else {
+              <span [hpdTranslate]="'patientPortal.actingAs.chooseFor'" [translateValues]="{ name: choice.name }">Acting for someone</span>
+            }
+          </button>
+        }
+      </div>
+    </div>
+  }
+  <!--
+    The banner is loud only when it needs to be, but the switcher is present whenever there is more than one record to
+    open — including while viewing your own. It used to live *inside* the acting-for-somebody branch, so choosing your
+    own record removed the only control that could get you back to the patient's, and the selection outlived a
+    sign-out: an angel could put themselves permanently out of reach of the record they exist to manage.
+  -->
+  @if (!mustChoose() && (canSwitch() || actingForSomeoneElse())) {
+    <div class="hc-shell__acting-as" [class.is-own]="!actingForSomeoneElse()" role="status">
+      @if (actingForSomeoneElse()) {
+        <span [hpdTranslate]="'patientPortal.actingAs.banner'" [translateValues]="{ name: actingAsName() }">
+          You are viewing another person's record
+        </span>
+      } @else {
+        <span hpdTranslate="patientPortal.actingAs.bannerOwn">You are viewing your own record</span>
+      }
       @if (canSwitch()) {
         <label class="hc-shell__acting-as-switch">
           <span class="visually-hidden" hpdTranslate="patientPortal.actingAs.switch">Switch record</span>
-          <select [value]="actingAsId()" (change)="switchRecord($any($event.target).value)">
+          <!--
+            `selected` per option, not `[value]` on the select: Angular sets the select's value property before @for
+            has created the options, the browser silently falls back to index 0, and the control then names a
+            different record from the one actually open.
+          -->
+          <select (change)="switchRecord($any($event.target).value)">
             @for (choice of choices(); track choice.patientId) {
-              <option [value]="choice.patientId">{{ choice.name }}</option>
+              <option [value]="choice.patientId" [selected]="choice.patientId === actingAsId()">{{ choice.name }}</option>
             }
           </select>
         </label>

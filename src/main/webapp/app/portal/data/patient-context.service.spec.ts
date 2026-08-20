@@ -6,6 +6,7 @@ import dayjs from 'dayjs/esm';
 
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
+import { ActingAsChoice, ActingAsService } from 'app/core/auth/acting-as.service';
 
 import { CareTeamMember, PatientContextService } from './patient-context.service';
 
@@ -60,6 +61,82 @@ describe('PatientContextService', () => {
       });
 
       httpMock.expectOne(req => req.url.includes('/api/profiles/email/')).flush('nope', { status: 404, statusText: 'Not Found' });
+    });
+  });
+
+  /**
+   * The regression these cover took the whole delegation feature down without failing anything.
+   *
+   * `profile$` resolved the signed-in account's email and nothing else, so a care angel who selected the patient
+   * they act for was shown the loud banner naming that patient over their *own* record — every collection
+   * downstream is filtered by the `patientId` this yields. The interceptor was sending `X-Acting-As` correctly and
+   * the server was answering correctly; only the client's idea of whose record it was had never moved.
+   */
+  describe('the profile when acting for another patient', () => {
+    let service: PatientContextService;
+    let actingAs: ActingAsService;
+    let httpMock: HttpTestingController;
+
+    const own: ActingAsChoice = { patientId: 'patient-ophelia', name: 'Ophelia Gaisie', own: true };
+    const delegated: ActingAsChoice = { patientId: 'patient-kojo', name: 'Kojo Ampia-Addison', own: false };
+
+    beforeEach(() => {
+      sessionStorage.clear();
+      TestBed.configureTestingModule({
+        providers: [
+          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClientTesting(),
+          { provide: AccountService, useValue: { identity: () => of({ email: 'ophelia@localhost' } as Account) } },
+        ],
+      });
+      service = TestBed.inject(PatientContextService);
+      actingAs = TestBed.inject(ActingAsService);
+      httpMock = TestBed.inject(HttpTestingController);
+    });
+
+    afterEach(() => httpMock.verify());
+
+    it('asks the server for the selected patient, not for the signed-in account', done => {
+      actingAs.setAvailable([own, delegated]);
+      actingAs.select('patient-kojo');
+
+      service.profile$.subscribe(profile => {
+        // The id every other collection is then filtered by. If this stays the angel's own, the portal shows her
+        // empty record under his name.
+        expect(profile?.patientId).toBe('patient-kojo');
+        done();
+      });
+
+      const request = httpMock.expectOne(req => req.url.endsWith('/api/profiles') && req.params.get('patientId') === 'patient-kojo');
+      request.flush([{ id: 'kojo-1', patientId: 'patient-kojo', birthDate: '1976-04-19' }]);
+    });
+
+    it('goes back to the by-email bootstrap when the selection is the angel’s own record', done => {
+      actingAs.setAvailable([own, delegated]);
+      actingAs.select('patient-ophelia');
+
+      service.profile$.subscribe(profile => {
+        expect(profile?.patientId).toBe('patient-ophelia');
+        done();
+      });
+
+      // Deliberately the email endpoint: it is the only one that answers before a patientId is known, and the server
+      // refuses it for any address but the caller's own.
+      httpMock
+        .expectOne(req => req.url.endsWith('/api/profiles/email/ophelia%40localhost'))
+        .flush({ id: 'ophelia-1', patientId: 'patient-ophelia' });
+    });
+
+    it('treats a delegation that returns nothing as no record, rather than falling back to their own', done => {
+      actingAs.setAvailable([own, delegated]);
+      actingAs.select('patient-kojo');
+
+      service.profile$.subscribe(profile => {
+        expect(profile).toBeNull();
+        done();
+      });
+
+      httpMock.expectOne(req => req.url.endsWith('/api/profiles') && req.params.has('patientId')).flush([]);
     });
   });
 
