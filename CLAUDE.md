@@ -8,11 +8,11 @@ Health Connect Patient Dashboard (`patientDashboard`) — the Angular web client
 
 |                  |                                                                                                   |
 | ---------------- | ------------------------------------------------------------------------------------------------- |
-| Framework        | Angular 17.0.6 (standalone components + some legacy NgModules)                                    |
-| Language         | TypeScript 5.2.2, RxJS 7.8                                                                        |
+| Framework        | Angular 20.3.27 (standalone components + some legacy NgModules)                                   |
+| Language         | TypeScript 5.9.3, RxJS 7.8                                                                        |
 | UI               | ng-bootstrap 16 + Bootstrap/SCSS, d3 7 for the custom widgets                                     |
 | Tests            | Jest 29 via `@angular-builders/jest` (`jest.conf.js`)                                             |
-| Build            | Angular CLI 17 + `@angular-builders/custom-webpack` (`webpack/`), output `target/classes/static/` |
+| Build            | Angular CLI 20 + `@angular-builders/custom-webpack` (`webpack/`), output `target/classes/static/` |
 | i18n             | enabled — `en`, `fr`, `de` under `src/main/webapp/i18n`                                           |
 | Dev server       | 4200 (`npm start`, HMR)                                                                           |
 | Component prefix | ESLint requires `hpd`; `angular.json` still says `jhi` and legacy `jhi-*` selectors remain        |
@@ -72,6 +72,7 @@ src/main/webapp/app/
   layouts/shell/      the portal frame — navy sidebar, sticky topbar, mobile drawer and tab bar
   layouts/auth-shell/ the signed-out split brand/form screen
   portal/        the 13 patient screens (see below) + portal/data/ — the scoped data layer
+                 portal/patient-finder/ — what an administrator gets instead of an empty overview
   home/          landing route — renders DashboardComponent
   dashboard/     dashboard component/service + metric-panel, status-panel
   features/      modal wrappers: temperature, blood pressure, heart rate, sugar, allergies, emergency
@@ -106,8 +107,11 @@ Also: `entities/patientMS/hc-credential` and `hc-pay-option` still use the pre-r
 `docs/onboarding.md` is the plan of record; §16 is the contract.
 
 - **`/onboarding`** is five steps on `AuthShellComponent` behind `UserRouteAccessService`, not in the portal shell. A patient there has a token but no record: the shell injects `PortalDataService` and subscribes to their emergencies on load, which would fire patient-scoped fetches for a patient who does not exist, behind a sidebar of destinations that would all be empty. Each step saves before the next, because the backend has no transaction to wrap the journey in.
-- **Two guards, not one.** `onboardingGuard` keeps an un-onboarded patient out of the portal; `onboardingCompleteGuard` keeps a finished one out of the wizard. Without the second they disagree and it is a redirect loop. The first also has a third branch that is easy to delete by accident: somebody with no record but a *pending nomination* goes to `/invitations`, not to the wizard — being a care angel does not make you a patient, and without it they are asked to create a patient record purely to answer somebody else's nomination.
+- **Two guards, not one.** `onboardingGuard` keeps an un-onboarded patient out of the portal; `onboardingCompleteGuard` keeps a finished one out of the wizard. Without the second they disagree and it is a redirect loop. The first also has a third branch that is easy to delete by accident: somebody with no record but a _pending nomination_ goes to `/invitations`, not to the wizard — being a care angel does not make you a patient, and without it they are asked to create a patient record purely to answer somebody else's nomination.
+- **An administrator is not a patient, and both guards say so** (2026-08-22). `ROLE_ADMIN` has no `Profile` and never will, so "not onboarded" is their steady state rather than a stage — and until this was fixed they landed on `/onboarding`. Worse than the landing page: `/admin` and `/entities` are children of the same shell-parent `onboardingGuard` is attached to, so an administrator was redirected _out of the administrative screens themselves_, which are the only place in this app a patient's record can be corrected. The rule is in both guards deliberately; adding it to one and not the other is how a pair that must agree comes to disagree.
 - **The acting-as banner in the shell is a safety control.** Every screen behind it is showing a record that is not the signed-in person's, and the failure it prevents is somebody reading a blood group believing it is their own. Switching records must reload `PortalDataService`, or the previous patient's data stays on screen under the new patient's name.
+- **The patient finder is what an administrator gets instead of that empty overview** (2026-08-22). It searches server-side through `GET /api/profiles?search=` and opens a record via `ActingAsService.open()`. Two things about it are not decoration. The chosen record is stored _whole_ in `sessionStorage`, not by id: the shell refetches delegations on every load and that response can never contain a record nobody delegated, so keeping the id alone would restore a selection naming a choice that no longer exists — banner gone, header unsent, silently back to the administrator's own empty record on every reload. And the search uses `switchMap` with `catchError` _inside_ it: `mergeMap` lets the answer for "ko" land after "kojo" and repaint the older result under the newer term, and a `catchError` on the outer pipe ends the stream so the box goes dead after one failure.
+- **Opening a record grants nothing.** The authority is the role, re-read by the backend per request. What the selection does is _narrow_ — `PatientScope` confines a caller who names a patient to that patient — and that half did not exist until `hc-patient-service` 2026-08-22. Before it, an administrator naming a patient was served every patient's records under that one patient's name.
 
 Two things that will bite anyone touching the portal's data layer:
 
@@ -117,6 +121,8 @@ Two things that will bite anyone touching the portal's data layer:
 ## Constraints
 
 - Keep `jhipster-needle-*` markers, generated entity CRUD patterns, account/admin/auth flows, and i18n key structure intact — refactor around these seams.
+- **This app does not call `/management/info`,** and must not start again (2026-08-22). `ProfileService` and `ProfileInfo` are deleted. An actuator endpoint is not part of this application's API, the response publishes the build and the active Spring profiles to anyone who asks, and it answered 401 for a signed-out visitor — which reached the global `ErrorHandler` and logged a console error on **every load of the sign-in page**, noise in the one place a real error has to be noticed. The admin monitoring screens still call `management/health` and friends, which is different: an administrator opening a monitoring page, not the app asking on every load.
+- **The dev ribbon reads `window.location.hostname`**, not the backend's profiles, and it is a weaker signal on purpose. The old one marked _which Spring profiles are running_; this one marks _which machine you are looking at_. They agree everywhere they are used today and come apart in one case — `dev` or `test` active on the production host would no longer light anything up. That case is guarded by `deploy.sh` and by `SPRING_PROFILES_ACTIVE`; this component is not part of that defence and should not be read as though it were.
 - No `any`, `Observable<any>`, or `HttpResponse<any>` in new code; type API payloads explicitly.
 - Standalone-first for new work; don't rewrite the whole app to one style in a single pass, and don't run a repo-wide `jhi-*` → `hpd-*` selector migration unless that is the task.
 - Every user-visible string needs a key in all three i18n bundles.
