@@ -33,20 +33,20 @@
     }
 
     @case ('failed') {
-      <!-- Not an empty table. "No patients exist" and "the request failed" look identical in a list and mean
-           opposite things, so the failed case says so and offers the retry. -->
+      <!-- Not an empty table. "Nobody matched" and "the request failed" look identical in a list and mean opposite
+           things, so the failed case says so and offers the retry. -->
       <hpd-empty-state icon="alert" titleKey="patientPortal.finder.failed" messageKey="patientPortal.finder.failedBlurb" />
-      <button type="button" class="hc-btn hc-btn--ghost hc-mt-16" (click)="load()" hpdTranslate="patientPortal.finder.retry">
+      <button type="button" class="hc-btn hc-btn--ghost hc-mt-16" (click)="retry()" hpdTranslate="patientPortal.finder.retry">
         Try again
       </button>
     }
 
     @case ('ready') {
-      @if (matches().length) {
-        <p class="hc-muted hc-sm">{{ 'patientPortal.finder.count' | translate: { shown: matches().length, total: profiles().length } }}</p>
+      @if (profiles().length) {
+        <p class="hc-muted hc-sm">{{ 'patientPortal.finder.count' | translate: { shown: profiles().length, total: total() } }}</p>
 
         <ul class="hc-list">
-          @for (profile of matches(); track profile.id) {
+          @for (profile of profiles(); track profile.id) {
             <li class="hc-list__row">
               <div class="hc-row hc-between hc-gap-8 hc-wrap">
                 <div>
@@ -71,11 +71,12 @@
           }
         </ul>
 
-        @if (truncated()) {
-          <!-- Said plainly rather than left implied: past this many patients the box filters a page rather than
-               searching everybody, and a filtered page looks exactly like a complete search of a small system. -->
-          <p class="hc-muted hc-sm hc-mt-16" hpdTranslate="patientPortal.finder.truncated">
-            Only the first patients loaded are searched here. Narrow the search on the server before relying on this list being complete.
+        @if (moreThanShown()) {
+          <!-- The server knows the total, so this says how many were not shown rather than guessing that the list
+               might be incomplete. Narrowing the search is a real instruction here, because the search reaches the
+               whole directory rather than a page of it. -->
+          <p class="hc-muted hc-sm hc-mt-16" hpdTranslate="patientPortal.finder.narrow">
+            More patients match than are shown. Narrow the search to find the one you want.
           </p>
         }
       } @else if (search().trim()) {

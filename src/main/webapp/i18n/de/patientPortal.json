@@ -512,7 +512,7 @@
       "noMatchBlurb": "Versuchen Sie einen Namensteil, eine E-Mail-Adresse oder eine Patienten-ID.",
       "none": "Es gibt noch keine Patientenakten",
       "noneBlurb": "Sobald ein Patient die Registrierung abschließt, erscheint er hier.",
-      "truncated": "Hier werden nur die bereits geladenen Patienten durchsucht. Verlassen Sie sich nicht darauf, dass diese Liste vollständig ist."
+      "narrow": "Es passen mehr Patienten, als angezeigt werden. Grenzen Sie die Suche ein, um die gesuchte Person zu finden."
     }
   }
 }

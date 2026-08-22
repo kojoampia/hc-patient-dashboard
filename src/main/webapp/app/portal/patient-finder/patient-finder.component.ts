@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { HttpResponse } from '@angular/common/http';
+import { Observable, catchError, debounceTime, distinctUntilChanged, map, of, switchMap, tap } from 'rxjs';
 
 import SharedModule from 'app/shared/shared.module';
 import { IconComponent } from 'app/shared/ui/icon/icon.component';
@@ -12,18 +14,25 @@ import { ProfileService } from 'app/entities/patientMS/profile/service/profile.s
 
 import { formatAddress } from '../data/portal-format';
 
+/** How many rows one search returns. A page, not a roster — the count below says how many there are in total. */
+const PAGE_SIZE = 50;
+
 /**
- * How many profiles are fetched.
+ * How long to wait after the last keystroke.
  *
- * <p>There is no search endpoint — {@code GET /api/profiles} takes paging and sorting and nothing else — so the
- * filtering below is done in the browser over what this fetches. That is honest for a subsystem of this size and
- * dishonest past it: the count is shown, and once it is reached the screen says so rather than presenting a filtered
- * view of an arbitrary page as though it were a search of everybody.</p>
+ * <p>Long enough that typing a name is one request rather than eight, short enough not to feel like lag. The
+ * in-flight request is cancelled rather than merely ignored, so this is about load rather than correctness.</p>
  */
-const FETCH_LIMIT = 500;
+const DEBOUNCE_MS = 250;
 
 /** The three states this screen can be in. `failed` matters: an empty table is not the same as a failed fetch. */
 type FinderState = 'loading' | 'ready' | 'failed';
+
+interface SearchResult {
+  readonly profiles: readonly IProfile[];
+  /** How many matched in total, which is usually more than were returned. */
+  readonly total: number;
+}
 
 /**
  * Find a patient, and open their record.
@@ -40,9 +49,6 @@ type FinderState = 'loading' | 'ready' | 'failed';
  * every request, and an administrator could already read any of these patients. What the selection does is
  * <em>narrow</em> — {@code PatientScope} confines a caller who names a patient to that patient — which is what makes
  * the portal show one record rather than every patient's records under one person's name.</p>
- *
- * <p>So the banner is not decoration. Everything behind it belongs to somebody else, and the failure it exists to
- * prevent is reading a blood group believing it is the right patient's.</p>
  */
 @Component({
   selector: 'hpd-patient-finder',
@@ -57,36 +63,46 @@ export class PatientFinderComponent {
   readonly state = signal<FinderState>('loading');
   readonly search = signal('');
   readonly profiles = signal<readonly IProfile[]>([]);
+  /** How many patients matched, as opposed to how many are on screen. */
+  readonly total = signal(0);
 
-  /** True once the fetch came back full, so the list may not be everybody. */
-  readonly truncated = computed(() => this.profiles().length >= FETCH_LIMIT);
-
-  readonly matches = computed(() => {
-    const term = this.search().trim().toLowerCase();
-    if (!term) {
-      return this.profiles();
-    }
-    return this.profiles().filter(profile => this.haystack(profile).includes(term));
-  });
+  /** True when the server has more matches than this page shows. */
+  readonly moreThanShown = computed(() => this.total() > this.profiles().length);
 
   readonly formatAddress = formatAddress;
 
   constructor() {
-    this.load();
+    toObservable(this.search)
+      .pipe(
+        map(term => term.trim()),
+        debounceTime(DEBOUNCE_MS),
+        distinctUntilChanged(),
+        // No startWith: toObservable emits the signal's current value on subscribe, so the empty term already
+        // fetches the opening list. Adding one sent the first request twice.
+        tap(() => this.state.set('loading')),
+        // switchMap and not mergeMap: the request for "ko" must not be able to land after the request for "kojo"
+        // and repaint the older answer under the newer term. That race is invisible on a fast network and routine
+        // on a slow one, and it shows one patient's row while the box says another patient's name.
+        switchMap(term => this.fetch(term)),
+        takeUntilDestroyed(),
+      )
+      .subscribe(result => {
+        if (result === null) {
+          this.state.set('failed');
+          return;
+        }
+        this.profiles.set(result.profiles);
+        this.total.set(result.total);
+        this.state.set('ready');
+      });
   }
 
-  load(): void {
-    this.state.set('loading');
-    this.profileService.query({ size: FETCH_LIMIT, sort: ['lastName,asc'] }).subscribe({
-      next: (response: HttpResponse<IProfile[]>) => {
-        this.profiles.set(response.body ?? []);
-        this.state.set('ready');
-      },
-      // Deliberately not an empty list. "No patients exist" and "the request failed" look identical in a table and
-      // mean opposite things — one is a system with no data, the other is an administrator who cannot see the data
-      // that is there.
-      error: () => this.state.set('failed'),
-    });
+  /** Re-runs the current search. Bound to the retry button on the failed state. */
+  retry(): void {
+    // Nudging the signal re-enters the pipeline above; distinctUntilChanged would swallow setting it to itself.
+    const term = this.search();
+    this.search.set(term === '' ? ' ' : '');
+    this.search.set(term);
   }
 
   /**
@@ -111,12 +127,25 @@ export class PatientFinderComponent {
     return name || profile.email || profile.patientId || profile.id;
   }
 
-  /** Everything a person might type into the box: who they are, how they are contacted, how they are keyed. */
-  private haystack(profile: IProfile): string {
-    return [profile.firstName, profile.middleNames, profile.lastName, profile.email, profile.mobilePhone, profile.patientId]
-      .filter(Boolean)
-      .join(' ')
-      .toLowerCase();
+  /** Null means the request failed, which is not the same answer as nobody matched. */
+  private fetch(term: string): Observable<SearchResult | null> {
+    const query: Record<string, unknown> = { size: PAGE_SIZE, sort: ['lastName,asc'] };
+    if (term) {
+      query['search'] = term;
+    }
+    return this.profileService.query(query).pipe(
+      map((response: HttpResponse<IProfile[]>) => {
+        const profiles = response.body ?? [];
+        // X-Total-Count is what the pagination headers call it. Falling back to the page length rather than to zero:
+        // a missing header should read as "this is all of them", not as "there are none", which would put a
+        // "showing 50 of 0" under a full table.
+        const total = Number(response.headers.get('X-Total-Count') ?? profiles.length);
+        return { profiles, total: Number.isFinite(total) ? total : profiles.length };
+      }),
+      // Deliberately not an empty list. "No patients matched" and "the request failed" look identical in a table and
+      // mean opposite things — one is an answer, the other is an administrator who cannot see the data that is there.
+      catchError(() => of(null)),
+    );
   }
 }
 

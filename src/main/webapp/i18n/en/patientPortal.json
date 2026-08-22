@@ -512,7 +512,7 @@
       "noMatchBlurb": "Try part of a name, an email address, or a patient id.",
       "none": "There are no patient records yet",
       "noneBlurb": "Once a patient completes onboarding they will appear here.",
-      "truncated": "Only the patients loaded so far are searched here. Do not rely on this list being complete."
+      "narrow": "More patients match than are shown. Narrow the search to find the one you want."
     }
   }
 }
