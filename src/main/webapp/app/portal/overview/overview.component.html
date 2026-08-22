@@ -1,159 +1,195 @@
-<section class="hc-hero">
-  <div class="hc-hero__overlay"></div>
-  <div class="hc-hero__inner">
-    <h3>
-      @if (greetingName()) {
-        {{ 'patientPortal.overview.greetingNamed' | translate: { name: greetingName() } }}
-      } @else {
-        <span hpdTranslate="patientPortal.overview.greeting">Your health, at a glance</span>
-      }
-    </h3>
-    @if (heroSummary(); as summary) {
-      <p>
-        {{
-          'patientPortal.overview.heroNext'
-            | translate: { when: summary.when, clinician: summary.clinician, open: summary.open, total: summary.total }
-        }}
-      </p>
-    } @else {
-      <p hpdTranslate="patientPortal.overview.heroBlurb">
-        Everything your care team has recorded — cases, visits, medications and reports — in one place.
-      </p>
-    }
-    <a class="hc-btn hc-btn--gold" style="margin-top: 14px" routerLink="/record">
-      <hpd-icon name="folder" [size]="16" [strokeWidth]="2.2" />
-      <span hpdTranslate="patientPortal.overview.openRecord">Open my record</span>
-    </a>
-  </div>
-</section>
-
-<div class="hc-grid hc-grid--4 hc-mt-16">
-  @for (tile of tiles(); track tile.labelKey) {
-    <a class="hc-stat" [routerLink]="tile.link">
-      <span class="hc-stat__ic" style="background: var(--hc-gold-050); color: var(--hc-gold)">
-        <hpd-icon [name]="tile.icon" [size]="18" [strokeWidth]="2" />
-      </span>
-      <b class="hc-num">{{ tile.value }}</b>
-      <span [hpdTranslate]="tile.labelKey"></span>
-    </a>
-  }
-</div>
-
-<div class="hc-sec-head hc-mt-16">
-  <div>
-    <h3 hpdTranslate="patientPortal.overview.onFile">On your file</h3>
-    <p hpdTranslate="patientPortal.overview.onFileSub">Tap any tile to open it.</p>
-  </div>
-</div>
-
-<div class="hc-grid hc-grid--4">
-  @for (tile of recordTiles(); track tile.labelKey) {
-    <a class="hc-stat" [routerLink]="tile.link">
-      <span class="hc-stat__ic" style="background: var(--hc-gold-050); color: var(--hc-gold)">
-        <hpd-icon [name]="tile.icon" [size]="18" [strokeWidth]="2" />
-      </span>
-      <b class="hc-num">{{ tile.value }}</b>
-      <span [hpdTranslate]="tile.labelKey"></span>
-    </a>
-  }
-</div>
-
-<!-- ============================= vitals ============================= -->
-<div class="hc-sec-head">
-  <div>
-    <h3 hpdTranslate="patientPortal.overview.vitals">Latest readings</h3>
-    <p hpdTranslate="patientPortal.overview.vitalsSub">The most recent measurement your care team recorded.</p>
-  </div>
-  <a class="hc-btn hc-btn--quiet hc-btn--sm" routerLink="/record">
-    <span hpdTranslate="patientPortal.action.viewRecord">Full record</span>
-    <hpd-icon name="chev" [size]="14" [strokeWidth]="2.2" />
-  </a>
-</div>
-
-@if (vitals().length) {
-  <div class="hc-grid hc-grid--4">
-    @for (vital of vitals(); track vital.key) {
-      <button
-        type="button"
-        class="hc-vital"
-        (click)="openVital(vital)"
-        [attr.aria-label]="'patientPortal.overview.viewVital' | translate: { name: vital.label }"
-      >
-        <div class="hc-row hc-between">
-          <span class="hc-vital__label">{{ vital.label }}</span>
-          <span class="hc-pill" [class]="vitalPill(vital.flag)"><span class="hc-pill__dot"></span>{{ vital.flag | hpdStatus }}</span>
-        </div>
-        <b class="hc-num"
-          >{{ vital.display }} <span class="hc-vital__unit">{{ vital.unit }}</span></b
-        >
-        @if (vital.note) {
-          <div class="hc-vital__delta hc-muted">{{ vital.note }}</div>
-        }
-        <hpd-sparkline [series]="vital.series" [label]="vital.label + ': ' + vital.display + ' ' + vital.unit" />
-      </button>
-    }
-  </div>
+<!-- An administrator has no record of their own, so every panel below would be empty for them. They get the
+     finder instead, until they open a patient — at which point this is that patient's overview, under the
+     banner that says whose it is. -->
+@if (showFinder()) {
+  <hpd-patient-finder />
 } @else {
-  <div class="hc-card">
-    <hpd-empty-state icon="heart" titleKey="patientPortal.overview.noVitals" messageKey="patientPortal.overview.noVitalsHint" />
-  </div>
-}
+  <section class="hc-hero">
+    <div class="hc-hero__overlay"></div>
+    <div class="hc-hero__inner">
+      <h3>
+        @if (greetingName()) {
+          {{ 'patientPortal.overview.greetingNamed' | translate: { name: greetingName() } }}
+        } @else {
+          <span hpdTranslate="patientPortal.overview.greeting">Your health, at a glance</span>
+        }
+      </h3>
+      @if (heroSummary(); as summary) {
+        <p>
+          {{
+            'patientPortal.overview.heroNext'
+              | translate: { when: summary.when, clinician: summary.clinician, open: summary.open, total: summary.total }
+          }}
+        </p>
+      } @else {
+        <p hpdTranslate="patientPortal.overview.heroBlurb">
+          Everything your care team has recorded — cases, visits, medications and reports — in one place.
+        </p>
+      }
+      <a class="hc-btn hc-btn--gold" style="margin-top: 14px" routerLink="/record">
+        <hpd-icon name="folder" [size]="16" [strokeWidth]="2.2" />
+        <span hpdTranslate="patientPortal.overview.openRecord">Open my record</span>
+      </a>
+    </div>
+  </section>
 
-<!-- ============================= care at a glance ============================= -->
-@if (visitTrend().length > 1 || caseDistribution().length || careTeamLoad().length) {
-  <div class="hc-sec-head">
+  <div class="hc-grid hc-grid--4 hc-mt-16">
+    @for (tile of tiles(); track tile.labelKey) {
+      <a class="hc-stat" [routerLink]="tile.link">
+        <span class="hc-stat__ic" style="background: var(--hc-gold-050); color: var(--hc-gold)">
+          <hpd-icon [name]="tile.icon" [size]="18" [strokeWidth]="2" />
+        </span>
+        <b class="hc-num">{{ tile.value }}</b>
+        <span [hpdTranslate]="tile.labelKey"></span>
+      </a>
+    }
+  </div>
+
+  <div class="hc-sec-head hc-mt-16">
     <div>
-      <h3 hpdTranslate="patientPortal.chart.glance">Care at a glance</h3>
-      <p hpdTranslate="patientPortal.chart.glanceSub">Every chart has a table view — press Table to read the numbers.</p>
+      <h3 hpdTranslate="patientPortal.overview.onFile">On your file</h3>
+      <p hpdTranslate="patientPortal.overview.onFileSub">Tap any tile to open it.</p>
     </div>
   </div>
 
-  <div class="hc-grid hc-grid--2">
-    @if (visitTrend().length > 1) {
-      <div class="hc-chart-card">
-        <div class="hc-chart-card__head">
-          <div class="hc-grow">
-            <h4 hpdTranslate="patientPortal.chart.visitsOverTime">Visits over time</h4>
-            <p hpdTranslate="patientPortal.chart.visitsOverTimeSub">Visits recorded for you, month by month.</p>
-          </div>
-          <button type="button" class="hc-toggle" [class.is-on]="showVisitsTable()" (click)="showVisitsTable.set(!showVisitsTable())">
-            <span hpdTranslate="patientPortal.chart.table">Table</span>
-          </button>
-        </div>
-
-        <div class="hc-chart-card__body">
-          <hpd-trend-chart
-            [data]="visitTrend()"
-            [unit]="'patientPortal.chart.visits' | translate"
-            labelHeadingKey="patientPortal.chart.month"
-            [wholeNumbers]="true"
-            [showTable]="showVisitsTable()"
-          />
-        </div>
-      </div>
+  <div class="hc-grid hc-grid--4">
+    @for (tile of recordTiles(); track tile.labelKey) {
+      <a class="hc-stat" [routerLink]="tile.link">
+        <span class="hc-stat__ic" style="background: var(--hc-gold-050); color: var(--hc-gold)">
+          <hpd-icon [name]="tile.icon" [size]="18" [strokeWidth]="2" />
+        </span>
+        <b class="hc-num">{{ tile.value }}</b>
+        <span [hpdTranslate]="tile.labelKey"></span>
+      </a>
     }
+  </div>
 
-    @if (caseDistribution().length) {
-      <div class="hc-chart-card">
+  <!-- ============================= vitals ============================= -->
+  <div class="hc-sec-head">
+    <div>
+      <h3 hpdTranslate="patientPortal.overview.vitals">Latest readings</h3>
+      <p hpdTranslate="patientPortal.overview.vitalsSub">The most recent measurement your care team recorded.</p>
+    </div>
+    <a class="hc-btn hc-btn--quiet hc-btn--sm" routerLink="/record">
+      <span hpdTranslate="patientPortal.action.viewRecord">Full record</span>
+      <hpd-icon name="chev" [size]="14" [strokeWidth]="2.2" />
+    </a>
+  </div>
+
+  @if (vitals().length) {
+    <div class="hc-grid hc-grid--4">
+      @for (vital of vitals(); track vital.key) {
+        <button
+          type="button"
+          class="hc-vital"
+          (click)="openVital(vital)"
+          [attr.aria-label]="'patientPortal.overview.viewVital' | translate: { name: vital.label }"
+        >
+          <div class="hc-row hc-between">
+            <span class="hc-vital__label">{{ vital.label }}</span>
+            <span class="hc-pill" [class]="vitalPill(vital.flag)"><span class="hc-pill__dot"></span>{{ vital.flag | hpdStatus }}</span>
+          </div>
+          <b class="hc-num"
+            >{{ vital.display }} <span class="hc-vital__unit">{{ vital.unit }}</span></b
+          >
+          @if (vital.note) {
+            <div class="hc-vital__delta hc-muted">{{ vital.note }}</div>
+          }
+          <hpd-sparkline [series]="vital.series" [label]="vital.label + ': ' + vital.display + ' ' + vital.unit" />
+        </button>
+      }
+    </div>
+  } @else {
+    <div class="hc-card">
+      <hpd-empty-state icon="heart" titleKey="patientPortal.overview.noVitals" messageKey="patientPortal.overview.noVitalsHint" />
+    </div>
+  }
+
+  <!-- ============================= care at a glance ============================= -->
+  @if (visitTrend().length > 1 || caseDistribution().length || careTeamLoad().length) {
+    <div class="hc-sec-head">
+      <div>
+        <h3 hpdTranslate="patientPortal.chart.glance">Care at a glance</h3>
+        <p hpdTranslate="patientPortal.chart.glanceSub">Every chart has a table view — press Table to read the numbers.</p>
+      </div>
+    </div>
+
+    <div class="hc-grid hc-grid--2">
+      @if (visitTrend().length > 1) {
+        <div class="hc-chart-card">
+          <div class="hc-chart-card__head">
+            <div class="hc-grow">
+              <h4 hpdTranslate="patientPortal.chart.visitsOverTime">Visits over time</h4>
+              <p hpdTranslate="patientPortal.chart.visitsOverTimeSub">Visits recorded for you, month by month.</p>
+            </div>
+            <button type="button" class="hc-toggle" [class.is-on]="showVisitsTable()" (click)="showVisitsTable.set(!showVisitsTable())">
+              <span hpdTranslate="patientPortal.chart.table">Table</span>
+            </button>
+          </div>
+
+          <div class="hc-chart-card__body">
+            <hpd-trend-chart
+              [data]="visitTrend()"
+              [unit]="'patientPortal.chart.visits' | translate"
+              labelHeadingKey="patientPortal.chart.month"
+              [wholeNumbers]="true"
+              [showTable]="showVisitsTable()"
+            />
+          </div>
+        </div>
+      }
+
+      @if (caseDistribution().length) {
+        <div class="hc-chart-card">
+          <div class="hc-chart-card__head">
+            <div class="hc-grow">
+              <h4 hpdTranslate="patientPortal.chart.caseDistribution">Case distribution</h4>
+              <p>{{ 'patientPortal.chart.caseDistributionSub' | translate: { total: caseTotal() } }}</p>
+            </div>
+            <button type="button" class="hc-toggle" [class.is-on]="showDistTable()" (click)="showDistTable.set(!showDistTable())">
+              <span hpdTranslate="patientPortal.chart.table">Table</span>
+            </button>
+          </div>
+
+          <div class="hc-chart-card__body">
+            <hpd-stack-bar [data]="caseDistribution()" [showTable]="showDistTable()" />
+
+            @if (!showDistTable()) {
+              <div class="hc-legend">
+                @for (segment of caseDistribution(); track segment.label; let i = $index) {
+                  <span class="hc-legend__item">
+                    <span class="hc-legend__swatch" [style.background]="'var(--hc-series-' + ((i % 3) + 1) + ')'"></span>
+                    {{ segment.label }} · {{ segment.value }}
+                  </span>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    @if (careTeamLoad().length) {
+      <div class="hc-chart-card hc-mt-16">
         <div class="hc-chart-card__head">
           <div class="hc-grow">
-            <h4 hpdTranslate="patientPortal.chart.caseDistribution">Case distribution</h4>
-            <p>{{ 'patientPortal.chart.caseDistributionSub' | translate: { total: caseTotal() } }}</p>
+            <h4 hpdTranslate="patientPortal.chart.perProfessional">Cases and visits per professional</h4>
+            <p hpdTranslate="patientPortal.chart.perProfessionalSub">Who has been involved in your care.</p>
           </div>
-          <button type="button" class="hc-toggle" [class.is-on]="showDistTable()" (click)="showDistTable.set(!showDistTable())">
+          <button type="button" class="hc-toggle" [class.is-on]="showTeamTable()" (click)="showTeamTable.set(!showTeamTable())">
             <span hpdTranslate="patientPortal.chart.table">Table</span>
           </button>
         </div>
 
         <div class="hc-chart-card__body">
-          <hpd-stack-bar [data]="caseDistribution()" [showTable]="showDistTable()" />
+          <hpd-bar-chart [data]="careTeamLoad()" [series]="seriesNames()" [showTable]="showTeamTable()" />
 
-          @if (!showDistTable()) {
+          @if (!showTeamTable()) {
             <div class="hc-legend">
-              @for (segment of caseDistribution(); track segment.label; let i = $index) {
+              @for (name of seriesNames(); track name; let i = $index) {
                 <span class="hc-legend__item">
                   <span class="hc-legend__swatch" [style.background]="'var(--hc-series-' + ((i % 3) + 1) + ')'"></span>
-                  {{ segment.label }} · {{ segment.value }}
+                  {{ name }}
                 </span>
               }
             </div>
@@ -161,192 +197,165 @@
         </div>
       </div>
     }
+  }
+
+  <!-- ============================= two columns ============================= -->
+  <div class="hc-grid hc-grid--2 hc-mt-16">
+    <hpd-panel titleKey="patientPortal.overview.nextUp" icon="cal">
+      @if (nextAppointments().length) {
+        @for (task of nextAppointments(); track task.id) {
+          <div class="hc-drow">
+            <hpd-avatar
+              [name]="memberOf(task.attendantId).name"
+              [initials]="memberOf(task.attendantId).initials"
+              [imageUrl]="memberOf(task.attendantId).imageUrl"
+              [size]="32"
+            />
+            <span class="hc-drow__date">{{ formatInstantDay(task.scheduledAt, task.schedule) }}</span>
+            <span class="hc-drow__text">
+              {{ task.name }}
+              <span class="hc-drow__sub"
+                >{{ memberOf(task.attendantId).name }}
+                @if (task.location) {
+                  · {{ task.location }}
+                }
+              </span>
+            </span>
+          </div>
+        }
+      } @else {
+        <hpd-empty-state icon="cal" titleKey="patientPortal.schedules.empty" messageKey="patientPortal.schedules.emptyHint" />
+      }
+
+      <footer hpdPanelFoot class="hc-panel__foot hc-center">
+        <a class="hc-btn hc-btn--quiet hc-btn--sm" routerLink="/schedules" hpdTranslate="patientPortal.action.seeAll">See all</a>
+      </footer>
+    </hpd-panel>
+
+    <hpd-panel titleKey="patientPortal.overview.openCases" icon="case">
+      @if (recentCases().length) {
+        @for (item of recentCases(); track item.id) {
+          <a class="hc-lrow" [routerLink]="['/case', item.id]">
+            <span class="hc-grow">
+              <span class="hc-lrow__title">{{ item.title ?? item.brief }}</span>
+              <span class="hc-lrow__sub">{{ formatInstantDay(item.openedAt) }} · {{ memberOf(item.assignedProfessionalId).name }}</span>
+            </span>
+            <span class="hc-pill" [class]="casePill(item.status)">{{ item.status | hpdStatus }}</span>
+            <hpd-icon name="chev" [size]="17" [strokeWidth]="2.2" />
+          </a>
+        }
+      } @else {
+        <hpd-empty-state icon="case" titleKey="patientPortal.cases.empty" messageKey="patientPortal.cases.emptyHint" />
+      }
+
+      <footer hpdPanelFoot class="hc-panel__foot hc-center">
+        <a class="hc-btn hc-btn--quiet hc-btn--sm" routerLink="/cases" hpdTranslate="patientPortal.action.seeAll">See all</a>
+      </footer>
+    </hpd-panel>
   </div>
 
-  @if (careTeamLoad().length) {
-    <div class="hc-chart-card hc-mt-16">
-      <div class="hc-chart-card__head">
-        <div class="hc-grow">
-          <h4 hpdTranslate="patientPortal.chart.perProfessional">Cases and visits per professional</h4>
-          <p hpdTranslate="patientPortal.chart.perProfessionalSub">Who has been involved in your care.</p>
+  <!-- ============================= activity + alert ============================= -->
+  <div class="hc-grid hc-grid--2 hc-mt-16">
+    <hpd-panel titleKey="patientPortal.overview.activity" icon="note">
+      @if (recentActivity().length) {
+        @for (entry of recentActivity(); track entry.id) {
+          <div class="hc-drow">
+            <span class="hc-drow__date">{{ formatInstantDay(entry.loggedAt, entry.createdDate) }}</span>
+            <span class="hc-drow__text">
+              {{ entry.summary }}
+              <span class="hc-drow__sub">{{ authorName(entry) }}</span>
+            </span>
+          </div>
+        }
+      } @else {
+        <hpd-empty-state icon="note" titleKey="patientPortal.activity.empty" messageKey="patientPortal.activity.emptyHint" />
+      }
+
+      <footer hpdPanelFoot class="hc-panel__foot hc-center">
+        <a class="hc-btn hc-btn--quiet hc-btn--sm" routerLink="/activity" hpdTranslate="patientPortal.action.seeAll">See all</a>
+      </footer>
+    </hpd-panel>
+
+    <hpd-panel titleKey="patientPortal.overview.lastAlert" icon="alert" [padded]="true">
+      @if (latestEmergency(); as alert) {
+        <div class="hc-row hc-between hc-gap-8">
+          <b>{{ alert.brief }}</b>
+          <span class="hc-pill hc-pill--danger">{{ alert.severity | hpdStatus }}</span>
         </div>
-        <button type="button" class="hc-toggle" [class.is-on]="showTeamTable()" (click)="showTeamTable.set(!showTeamTable())">
+        <p class="hc-muted hc-sm" style="margin: 6px 0 10px">{{ formatDayTime(alert.raisedAt) }}</p>
+        <div class="hc-prose">
+          <p>{{ alert.detail }}</p>
+          @if (alert.outcome) {
+            <p><strong hpdTranslate="patientPortal.emergencies.outcome">Outcome</strong>: {{ alert.outcome }}</p>
+          }
+        </div>
+        <a class="hc-btn hc-btn--ghost hc-btn--sm hc-mt-16" routerLink="/emergencies" hpdTranslate="patientPortal.action.seeAll">
+          See all
+        </a>
+      } @else {
+        <hpd-empty-state icon="shield" titleKey="patientPortal.emergencies.empty" messageKey="patientPortal.emergencies.emptyHint" />
+      }
+    </hpd-panel>
+  </div>
+
+  @if (selectedVital(); as vital) {
+    <hpd-modal
+      [title]="vital.label"
+      [icon]="vital.icon"
+      [tone]="vital.flag === 'OK' ? undefined : 'danger'"
+      [wide]="true"
+      (closed)="selectedVital.set(null)"
+    >
+      <div class="hc-row hc-between hc-gap-16 hc-wrap" style="margin-bottom: 6px">
+        <div>
+          <b class="hc-num" style="font-size: 30px; letter-spacing: -0.03em">{{ vital.display }}</b>
+          <span class="hc-muted" style="font-weight: 700"> {{ vital.unit }}</span>
+        </div>
+        <span class="hc-pill" [class]="vitalPill(vital.flag)"><span class="hc-pill__dot"></span>{{ vital.flag | hpdStatus }}</span>
+      </div>
+
+      <div class="hc-muted hc-sm" style="margin-bottom: 12px">
+        {{ vital.band || vital.note }}
+        @if (vital.recordedAt) {
+          ·
+          {{ 'patientPortal.overview.recordedBy' | translate: { when: formatInstantDay(vital.recordedAt), who: recorderOf(vital) } }}
+        }
+      </div>
+
+      <div class="hc-row hc-between hc-gap-8" style="margin-bottom: 8px">
+        <span class="hc-muted hc-tiny" hpdTranslate="patientPortal.overview.lastReadings">The readings behind it</span>
+        <button type="button" class="hc-toggle" [class.is-on]="showVitalTable()" (click)="showVitalTable.set(!showVitalTable())">
           <span hpdTranslate="patientPortal.chart.table">Table</span>
         </button>
       </div>
 
-      <div class="hc-chart-card__body">
-        <hpd-bar-chart [data]="careTeamLoad()" [series]="seriesNames()" [showTable]="showTeamTable()" />
-
-        @if (!showTeamTable()) {
-          <div class="hc-legend">
-            @for (name of seriesNames(); track name; let i = $index) {
-              <span class="hc-legend__item">
-                <span class="hc-legend__swatch" [style.background]="'var(--hc-series-' + ((i % 3) + 1) + ')'"></span>
-                {{ name }}
-              </span>
-            }
-          </div>
-        }
-      </div>
-    </div>
-  }
-}
-
-<!-- ============================= two columns ============================= -->
-<div class="hc-grid hc-grid--2 hc-mt-16">
-  <hpd-panel titleKey="patientPortal.overview.nextUp" icon="cal">
-    @if (nextAppointments().length) {
-      @for (task of nextAppointments(); track task.id) {
-        <div class="hc-drow">
-          <hpd-avatar
-            [name]="memberOf(task.attendantId).name"
-            [initials]="memberOf(task.attendantId).initials"
-            [imageUrl]="memberOf(task.attendantId).imageUrl"
-            [size]="32"
-          />
-          <span class="hc-drow__date">{{ formatInstantDay(task.scheduledAt, task.schedule) }}</span>
-          <span class="hc-drow__text">
-            {{ task.name }}
-            <span class="hc-drow__sub"
-              >{{ memberOf(task.attendantId).name }}
-              @if (task.location) {
-                · {{ task.location }}
-              }
-            </span>
-          </span>
-        </div>
-      }
-    } @else {
-      <hpd-empty-state icon="cal" titleKey="patientPortal.schedules.empty" messageKey="patientPortal.schedules.emptyHint" />
-    }
-
-    <footer hpdPanelFoot class="hc-panel__foot hc-center">
-      <a class="hc-btn hc-btn--quiet hc-btn--sm" routerLink="/schedules" hpdTranslate="patientPortal.action.seeAll">See all</a>
-    </footer>
-  </hpd-panel>
-
-  <hpd-panel titleKey="patientPortal.overview.openCases" icon="case">
-    @if (recentCases().length) {
-      @for (item of recentCases(); track item.id) {
-        <a class="hc-lrow" [routerLink]="['/case', item.id]">
-          <span class="hc-grow">
-            <span class="hc-lrow__title">{{ item.title ?? item.brief }}</span>
-            <span class="hc-lrow__sub">{{ formatInstantDay(item.openedAt) }} · {{ memberOf(item.assignedProfessionalId).name }}</span>
-          </span>
-          <span class="hc-pill" [class]="casePill(item.status)">{{ item.status | hpdStatus }}</span>
-          <hpd-icon name="chev" [size]="17" [strokeWidth]="2.2" />
-        </a>
-      }
-    } @else {
-      <hpd-empty-state icon="case" titleKey="patientPortal.cases.empty" messageKey="patientPortal.cases.emptyHint" />
-    }
-
-    <footer hpdPanelFoot class="hc-panel__foot hc-center">
-      <a class="hc-btn hc-btn--quiet hc-btn--sm" routerLink="/cases" hpdTranslate="patientPortal.action.seeAll">See all</a>
-    </footer>
-  </hpd-panel>
-</div>
-
-<!-- ============================= activity + alert ============================= -->
-<div class="hc-grid hc-grid--2 hc-mt-16">
-  <hpd-panel titleKey="patientPortal.overview.activity" icon="note">
-    @if (recentActivity().length) {
-      @for (entry of recentActivity(); track entry.id) {
-        <div class="hc-drow">
-          <span class="hc-drow__date">{{ formatInstantDay(entry.loggedAt, entry.createdDate) }}</span>
-          <span class="hc-drow__text">
-            {{ entry.summary }}
-            <span class="hc-drow__sub">{{ authorName(entry) }}</span>
-          </span>
-        </div>
-      }
-    } @else {
-      <hpd-empty-state icon="note" titleKey="patientPortal.activity.empty" messageKey="patientPortal.activity.emptyHint" />
-    }
-
-    <footer hpdPanelFoot class="hc-panel__foot hc-center">
-      <a class="hc-btn hc-btn--quiet hc-btn--sm" routerLink="/activity" hpdTranslate="patientPortal.action.seeAll">See all</a>
-    </footer>
-  </hpd-panel>
-
-  <hpd-panel titleKey="patientPortal.overview.lastAlert" icon="alert" [padded]="true">
-    @if (latestEmergency(); as alert) {
-      <div class="hc-row hc-between hc-gap-8">
-        <b>{{ alert.brief }}</b>
-        <span class="hc-pill hc-pill--danger">{{ alert.severity | hpdStatus }}</span>
-      </div>
-      <p class="hc-muted hc-sm" style="margin: 6px 0 10px">{{ formatDayTime(alert.raisedAt) }}</p>
-      <div class="hc-prose">
-        <p>{{ alert.detail }}</p>
-        @if (alert.outcome) {
-          <p><strong hpdTranslate="patientPortal.emergencies.outcome">Outcome</strong>: {{ alert.outcome }}</p>
-        }
-      </div>
-      <a class="hc-btn hc-btn--ghost hc-btn--sm hc-mt-16" routerLink="/emergencies" hpdTranslate="patientPortal.action.seeAll"> See all </a>
-    } @else {
-      <hpd-empty-state icon="shield" titleKey="patientPortal.emergencies.empty" messageKey="patientPortal.emergencies.emptyHint" />
-    }
-  </hpd-panel>
-</div>
-
-@if (selectedVital(); as vital) {
-  <hpd-modal
-    [title]="vital.label"
-    [icon]="vital.icon"
-    [tone]="vital.flag === 'OK' ? undefined : 'danger'"
-    [wide]="true"
-    (closed)="selectedVital.set(null)"
-  >
-    <div class="hc-row hc-between hc-gap-16 hc-wrap" style="margin-bottom: 6px">
-      <div>
-        <b class="hc-num" style="font-size: 30px; letter-spacing: -0.03em">{{ vital.display }}</b>
-        <span class="hc-muted" style="font-weight: 700"> {{ vital.unit }}</span>
-      </div>
-      <span class="hc-pill" [class]="vitalPill(vital.flag)"><span class="hc-pill__dot"></span>{{ vital.flag | hpdStatus }}</span>
-    </div>
-
-    <div class="hc-muted hc-sm" style="margin-bottom: 12px">
-      {{ vital.band || vital.note }}
-      @if (vital.recordedAt) {
-        ·
-        {{ 'patientPortal.overview.recordedBy' | translate: { when: formatInstantDay(vital.recordedAt), who: recorderOf(vital) } }}
-      }
-    </div>
-
-    <div class="hc-row hc-between hc-gap-8" style="margin-bottom: 8px">
-      <span class="hc-muted hc-tiny" hpdTranslate="patientPortal.overview.lastReadings">The readings behind it</span>
-      <button type="button" class="hc-toggle" [class.is-on]="showVitalTable()" (click)="showVitalTable.set(!showVitalTable())">
-        <span hpdTranslate="patientPortal.chart.table">Table</span>
-      </button>
-    </div>
-
-    @if (showVitalTable()) {
-      <table class="hc-viz-tbl">
-        <thead>
-          <tr>
-            <th hpdTranslate="patientPortal.chart.when">When</th>
-            <th class="hc-right">{{ vital.unit }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (row of vital.history; track row.when) {
+      @if (showVitalTable()) {
+        <table class="hc-viz-tbl">
+          <thead>
             <tr>
-              <td>{{ row.when }}</td>
-              <td class="hc-right hc-num">{{ row.value }}</td>
+              <th hpdTranslate="patientPortal.chart.when">When</th>
+              <th class="hc-right">{{ vital.unit }}</th>
             </tr>
-          }
-        </tbody>
-      </table>
-    } @else {
-      <hpd-trend-chart [data]="vital.trend" [unit]="vital.unit" />
-    }
+          </thead>
+          <tbody>
+            @for (row of vital.history; track row.when) {
+              <tr>
+                <td>{{ row.when }}</td>
+                <td class="hc-right hc-num">{{ row.value }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      } @else {
+        <hpd-trend-chart [data]="vital.trend" [unit]="vital.unit" />
+      }
 
-    <footer class="hc-modal__foot">
-      <a class="hc-btn hc-btn--ghost" routerLink="/record" hpdTranslate="patientPortal.action.viewRecord">Full record</a>
-      <button type="button" class="hc-btn hc-btn--primary" (click)="selectedVital.set(null)" hpdTranslate="patientPortal.action.close">
-        Close
-      </button>
-    </footer>
-  </hpd-modal>
+      <footer class="hc-modal__foot">
+        <a class="hc-btn hc-btn--ghost" routerLink="/record" hpdTranslate="patientPortal.action.viewRecord">Full record</a>
+        <button type="button" class="hc-btn hc-btn--primary" (click)="selectedVital.set(null)" hpdTranslate="patientPortal.action.close">
+          Close
+        </button>
+      </footer>
+    </hpd-modal>
+  }
 }

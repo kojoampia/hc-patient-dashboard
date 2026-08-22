@@ -15,6 +15,11 @@ import { StackBarComponent, StackSegment } from 'app/shared/ui/charts/stack-bar.
 import { BarChartComponent, BarRow } from 'app/shared/ui/charts/bar-chart.component';
 import { ModalComponent } from 'app/shared/ui/modal/modal.component';
 
+import { AccountService } from 'app/core/auth/account.service';
+import { ActingAsService } from 'app/core/auth/acting-as.service';
+import { Authority } from 'app/config/authority.constants';
+
+import { PatientFinderComponent } from '../patient-finder/patient-finder.component';
 import { CareTeamMember, PatientContextService } from '../data/patient-context.service';
 import { StatusLabelPipe } from '../data/status-label.pipe';
 import { PortalDataService } from '../data/portal-data.service';
@@ -62,6 +67,7 @@ const STATUS_KEY = (status: string): string => `patientPortal.status.${status}`;
     AvatarComponent,
     ModalComponent,
     StatusLabelPipe,
+    PatientFinderComponent,
   ],
   templateUrl: './overview.component.html',
 })
@@ -69,6 +75,20 @@ export default class OverviewComponent {
   private readonly context = inject(PatientContextService);
   private readonly data = inject(PortalDataService);
   private readonly translate = inject(TranslateService);
+  private readonly accountService = inject(AccountService);
+  private readonly actingAsService = inject(ActingAsService);
+
+  /**
+   * Whether to offer the patient finder instead of the patient's own summary.
+   *
+   * <p>An administrator has no {@code Profile}, so every panel below is empty for them and stays empty. The moment
+   * they open somebody's record this turns false and the ordinary overview takes over — showing that patient, under
+   * the banner that says whose it is.</p>
+   *
+   * <p>Keyed on there being no record open rather than on the role alone: an administrator who has chosen a patient
+   * wants the portal, not the search they have already done.</p>
+   */
+  readonly showFinder = computed(() => this.accountService.hasAnyAuthority(Authority.ADMIN) && this.actingAsService.current() === null);
   private readonly careTeamById = toSignal(this.context.careTeamById$, { initialValue: new Map<string, CareTeamMember>() });
 
   private readonly cases = toSignal(this.data.cases$, { initialValue: [] });

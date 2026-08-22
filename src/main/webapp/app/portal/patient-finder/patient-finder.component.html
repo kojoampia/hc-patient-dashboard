@@ -1,0 +1,88 @@
+<section class="hc-card hc-card-pad">
+  <div class="hc-row hc-gap-12">
+    <span class="hc-stat__ic">
+      <hpd-icon name="shield" [size]="18" [strokeWidth]="2" />
+    </span>
+    <div>
+      <b hpdTranslate="patientPortal.finder.title">Find a patient</b>
+      <p class="hc-muted hc-sm" style="margin: 4px 0 0" hpdTranslate="patientPortal.finder.blurb">
+        You have no record of your own. Open a patient's record to see the portal as they see it — everything you do while it is open is
+        recorded against your own account.
+      </p>
+    </div>
+  </div>
+</section>
+
+<hpd-panel titleKey="patientPortal.finder.panel" icon="user" [padded]="true" class="hc-mt-16">
+  <label class="hc-field">
+    <span class="hc-field__label" hpdTranslate="patientPortal.finder.search">Search</span>
+    <input
+      type="search"
+      class="hc-input"
+      autocomplete="off"
+      [ngModel]="search()"
+      (ngModelChange)="search.set($event)"
+      [attr.placeholder]="'patientPortal.finder.searchPlaceholder' | translate"
+      [attr.aria-label]="'patientPortal.finder.search' | translate"
+    />
+  </label>
+
+  @switch (state()) {
+    @case ('loading') {
+      <p class="hc-muted hc-sm" hpdTranslate="patientPortal.finder.loading">Loading patients…</p>
+    }
+
+    @case ('failed') {
+      <!-- Not an empty table. "No patients exist" and "the request failed" look identical in a list and mean
+           opposite things, so the failed case says so and offers the retry. -->
+      <hpd-empty-state icon="alert" titleKey="patientPortal.finder.failed" messageKey="patientPortal.finder.failedBlurb" />
+      <button type="button" class="hc-btn hc-btn--ghost hc-mt-16" (click)="load()" hpdTranslate="patientPortal.finder.retry">
+        Try again
+      </button>
+    }
+
+    @case ('ready') {
+      @if (matches().length) {
+        <p class="hc-muted hc-sm">{{ 'patientPortal.finder.count' | translate: { shown: matches().length, total: profiles().length } }}</p>
+
+        <ul class="hc-list">
+          @for (profile of matches(); track profile.id) {
+            <li class="hc-list__row">
+              <div class="hc-row hc-between hc-gap-8 hc-wrap">
+                <div>
+                  <b>{{ nameOf(profile) }}</b>
+                  <p class="hc-muted hc-sm" style="margin: 2px 0 0">
+                    {{ profile.email }}
+                    @if (profile.mobilePhone) {
+                      · {{ profile.mobilePhone }}
+                    }
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  class="hc-btn hc-btn--primary"
+                  (click)="open(profile)"
+                  [attr.aria-label]="'patientPortal.finder.openNamed' | translate: { name: nameOf(profile) }"
+                >
+                  <span hpdTranslate="patientPortal.finder.open">Open record</span>
+                </button>
+              </div>
+            </li>
+          }
+        </ul>
+
+        @if (truncated()) {
+          <!-- Said plainly rather than left implied: past this many patients the box filters a page rather than
+               searching everybody, and a filtered page looks exactly like a complete search of a small system. -->
+          <p class="hc-muted hc-sm hc-mt-16" hpdTranslate="patientPortal.finder.truncated">
+            Only the first patients loaded are searched here. Narrow the search on the server before relying on this list being complete.
+          </p>
+        }
+      } @else if (search().trim()) {
+        <hpd-empty-state icon="inbox" titleKey="patientPortal.finder.noMatch" messageKey="patientPortal.finder.noMatchBlurb" />
+      } @else {
+        <hpd-empty-state icon="inbox" titleKey="patientPortal.finder.none" messageKey="patientPortal.finder.noneBlurb" />
+      }
+    }
+  }
+</hpd-panel>

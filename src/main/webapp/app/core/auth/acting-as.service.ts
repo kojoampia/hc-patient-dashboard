@@ -11,6 +11,16 @@ export interface ActingAsChoice {
 }
 
 const STORAGE_KEY = 'hc-acting-as';
+/**
+ * The record an administrator opened by searching, rather than by holding a delegation.
+ *
+ * <p>Stored whole rather than by id, and this is not tidiness. The delegation list is refetched on every shell load,
+ * so on a reload it is the only thing that would rebuild the choices — and it will never contain a record nobody
+ * delegated. Keeping the id alone would restore a selection naming a choice that no longer exists, which reads as
+ * "nothing is open" while the id sits in storage: the banner disappears and the header stops being sent, so the
+ * portal quietly reverts to showing the administrator's own empty record.</p>
+ */
+const ADOPTED_KEY = 'hc-acting-as-opened';
 
 /**
  * Which patient's record the portal is currently showing.
@@ -34,17 +44,28 @@ const STORAGE_KEY = 'hc-acting-as';
  */
 @Injectable({ providedIn: 'root' })
 export class ActingAsService {
-  private readonly choices = signal<readonly ActingAsChoice[]>([]);
+  private readonly delegated = signal<readonly ActingAsChoice[]>([]);
+  /** A record opened by searching for it rather than by holding a delegation. See {@link open}. */
+  private readonly adopted = signal<ActingAsChoice | null>(this.restoreAdopted());
   private readonly selectedId = signal<string | null>(this.restore());
   /** Bumped by every mutator below, so {@link current$} can re-read without duplicating the state. */
   private readonly changed$ = new BehaviorSubject<void>(undefined);
 
-  /** Everything the signed-in person may open: their own record, plus each patient they act for. */
-  readonly available = this.choices.asReadonly();
+  /** Everything the signed-in person may open: their own record, each patient they act for, and any they opened. */
+  readonly available = computed<readonly ActingAsChoice[]>(() => {
+    const delegated = this.delegated();
+    const adopted = this.adopted();
+    // A delegation for the same patient wins: it carries the name the switcher already showed, and duplicating the
+    // row would offer the same record twice.
+    if (!adopted || delegated.some(choice => choice.patientId === adopted.patientId)) {
+      return delegated;
+    }
+    return [...delegated, adopted];
+  });
 
   readonly current = computed<ActingAsChoice | null>(() => {
     const id = this.selectedId();
-    const all = this.choices();
+    const all = this.available();
     return all.find(choice => choice.patientId === id) ?? null;
   });
 
@@ -55,7 +76,7 @@ export class ActingAsService {
   });
 
   /** Whether a choice is even needed. One option is not a decision. */
-  readonly mustChoose = computed(() => this.choices().length > 1 && this.current() === null);
+  readonly mustChoose = computed(() => this.available().length > 1 && this.current() === null);
 
   /**
    * The same value as {@link current}, for the data layer, which is RxJS rather than signals.
@@ -76,18 +97,38 @@ export class ActingAsService {
    * @param choices their own record (if any) and every patient they hold an active delegation for.
    */
   setAvailable(choices: readonly ActingAsChoice[]): void {
-    this.choices.set(choices);
+    this.delegated.set(choices);
+    // Validated against `available`, not against the argument. The shell refetches delegations on every load and an
+    // opened record is in neither that response nor this argument, so checking the argument would clear a selection
+    // that is perfectly valid — on every reload, for exactly the records this service was extended to hold.
+    const all = this.available();
     const remembered = this.selectedId();
-    if (remembered && choices.some(choice => choice.patientId === remembered)) {
+    if (remembered && all.some(choice => choice.patientId === remembered)) {
+      this.changed$.next();
       return;
     }
     // A delegation the person no longer holds must not survive in local storage as a selection.
     this.selectedId.set(null);
-    if (choices.length === 1) {
-      this.select(choices[0].patientId);
+    if (all.length === 1) {
+      this.select(all[0].patientId);
       return;
     }
     this.changed$.next();
+  }
+
+  /**
+   * Opens a record the caller found rather than one they were given.
+   *
+   * <p>For an administrator, who holds no delegations and so has nothing to switch between. The authority is the
+   * role and the backend re-checks it per request exactly as it re-checks a delegation; this only records which
+   * record is on screen, and the banner then says so.</p>
+   *
+   * @param choice the patient to open, named as the banner should name them.
+   */
+  open(choice: ActingAsChoice): void {
+    this.adopted.set(choice);
+    sessionStorage.setItem(ADOPTED_KEY, JSON.stringify(choice));
+    this.select(choice.patientId);
   }
 
   select(patientId: string): void {
@@ -105,13 +146,32 @@ export class ActingAsService {
 
   /** Cleared on sign-out: the next person at this browser must not inherit a selection. */
   clear(): void {
-    this.choices.set([]);
+    this.delegated.set([]);
+    this.adopted.set(null);
     this.selectedId.set(null);
     sessionStorage.removeItem(STORAGE_KEY);
+    sessionStorage.removeItem(ADOPTED_KEY);
     this.changed$.next();
   }
 
   private restore(): string | null {
     return sessionStorage.getItem(STORAGE_KEY);
+  }
+
+  private restoreAdopted(): ActingAsChoice | null {
+    const stored = sessionStorage.getItem(ADOPTED_KEY);
+    if (!stored) {
+      return null;
+    }
+    try {
+      const parsed = JSON.parse(stored) as Partial<ActingAsChoice>;
+      // Anything in storage is untrusted input by the time it is read back — a half-written value would otherwise
+      // become a choice with an undefined patientId, which the interceptor would send as the header.
+      return typeof parsed.patientId === 'string' && typeof parsed.name === 'string'
+        ? { patientId: parsed.patientId, name: parsed.name, own: false }
+        : null;
+    } catch {
+      return null;
+    }
   }
 }

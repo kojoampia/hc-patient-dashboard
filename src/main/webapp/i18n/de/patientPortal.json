@@ -494,6 +494,25 @@
       "error": {
         "failed": "Das konnte nicht gespeichert werden. Versuchen Sie es erneut."
       }
+    },
+    "finder": {
+      "title": "Patient finden",
+      "blurb": "Sie haben keine eigene Akte. Öffnen Sie die Akte einer Patientin oder eines Patienten, um das Portal so zu sehen wie sie — alles, was Sie dabei tun, wird Ihrem eigenen Konto zugeordnet.",
+      "panel": "Patienten",
+      "search": "Suchen",
+      "searchPlaceholder": "Name, E-Mail, Telefon oder Patienten-ID",
+      "loading": "Patienten werden geladen…",
+      "count": "{{ shown }} von {{ total }} angezeigt",
+      "open": "Akte öffnen",
+      "openNamed": "Akte von {{ name }} öffnen",
+      "failed": "Die Patientenliste konnte nicht geladen werden",
+      "failedBlurb": "Das ist eine fehlgeschlagene Anfrage, kein leeres System. Versuchen Sie es erneut und prüfen Sie die Erreichbarkeit des Dienstes, falls es weiterhin fehlschlägt.",
+      "retry": "Erneut versuchen",
+      "noMatch": "Kein Patient passt zu dieser Suche",
+      "noMatchBlurb": "Versuchen Sie einen Namensteil, eine E-Mail-Adresse oder eine Patienten-ID.",
+      "none": "Es gibt noch keine Patientenakten",
+      "noneBlurb": "Sobald ein Patient die Registrierung abschließt, erscheint er hier.",
+      "truncated": "Hier werden nur die bereits geladenen Patienten durchsucht. Verlassen Sie sich nicht darauf, dass diese Liste vollständig ist."
     }
   }
 }
