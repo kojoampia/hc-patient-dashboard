@@ -494,6 +494,25 @@
       "error": {
         "failed": "That could not be saved. Try again."
       }
+    },
+    "finder": {
+      "title": "Find a patient",
+      "blurb": "You have no record of your own. Open a patient's record to see the portal as they see it — everything you do while it is open is recorded against your own account.",
+      "panel": "Patients",
+      "search": "Search",
+      "searchPlaceholder": "Name, email, phone or patient id",
+      "loading": "Loading patients…",
+      "count": "Showing {{ shown }} of {{ total }}",
+      "open": "Open record",
+      "openNamed": "Open the record of {{ name }}",
+      "failed": "The patient list could not be loaded",
+      "failedBlurb": "This is a failed request, not an empty system. Try again, and check the service is reachable if it keeps failing.",
+      "retry": "Try again",
+      "noMatch": "No patient matches that search",
+      "noMatchBlurb": "Try part of a name, an email address, or a patient id.",
+      "none": "There are no patient records yet",
+      "noneBlurb": "Once a patient completes onboarding they will appear here.",
+      "truncated": "Only the patients loaded so far are searched here. Do not rely on this list being complete."
     }
   }
 }

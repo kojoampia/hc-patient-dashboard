@@ -494,6 +494,25 @@
       "error": {
         "failed": "Cela n'a pas pu être enregistré. Réessayez."
       }
+    },
+    "finder": {
+      "title": "Trouver un patient",
+      "blurb": "Vous n'avez pas de dossier personnel. Ouvrez le dossier d'un patient pour voir le portail comme il le voit — tout ce que vous faites pendant qu'il est ouvert est enregistré sur votre propre compte.",
+      "panel": "Patients",
+      "search": "Rechercher",
+      "searchPlaceholder": "Nom, e-mail, téléphone ou identifiant patient",
+      "loading": "Chargement des patients…",
+      "count": "{{ shown }} sur {{ total }} affichés",
+      "open": "Ouvrir le dossier",
+      "openNamed": "Ouvrir le dossier de {{ name }}",
+      "failed": "La liste des patients n'a pas pu être chargée",
+      "failedBlurb": "Il s'agit d'une requête en échec, pas d'un système vide. Réessayez, et vérifiez que le service est joignable si l'échec persiste.",
+      "retry": "Réessayer",
+      "noMatch": "Aucun patient ne correspond à cette recherche",
+      "noMatchBlurb": "Essayez une partie d'un nom, une adresse e-mail ou un identifiant patient.",
+      "none": "Il n'y a encore aucun dossier patient",
+      "noneBlurb": "Dès qu'un patient termine son inscription, il apparaîtra ici.",
+      "truncated": "Seuls les patients déjà chargés sont recherchés ici. Ne considérez pas cette liste comme complète."
     }
   }
 }
