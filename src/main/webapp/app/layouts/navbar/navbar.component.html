@@ -339,14 +339,16 @@
                 <span hpdTranslate="global.menu.admin.logs">Logs</span>
               </a>
             </li>
-            @if (openAPIEnabled) {
-              <li>
-                <a class="dropdown-item text-info" routerLink="/admin/docs" routerLinkActive="active" (click)="collapseNavbar()">
-                  <fa-icon icon="book" [fixedWidth]="true"></fa-icon>
-                  <span hpdTranslate="global.menu.admin.apidocs">API</span>
-                </a>
-              </li>
-            }
+            <!-- Was gated on `openAPIEnabled`, which came from the active Spring profiles in GET /management/info.
+                 That call is gone, so the item is shown unconditionally: it already sits inside the admin-only
+                 dropdown, and when the backend has api-docs disabled the route simply has nothing to show. Guessing
+                 the backend's configuration from the browser is what the removed call was doing. -->
+            <li>
+              <a class="dropdown-item text-info" routerLink="/admin/docs" routerLinkActive="active" (click)="collapseNavbar()">
+                <fa-icon icon="book" [fixedWidth]="true"></fa-icon>
+                <span hpdTranslate="global.menu.admin.apidocs">API</span>
+              </a>
+            </li>
             <!-- jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here -->
           </ul>
         </li>
