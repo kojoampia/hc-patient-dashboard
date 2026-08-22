@@ -6,10 +6,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { ProfileInfo } from 'app/layouts/profiles/profile-info.model';
 import { Account } from 'app/core/auth/account.model';
 import { AccountService } from 'app/core/auth/account.service';
-import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { LoginService } from 'app/login/login.service';
 
 import NavbarComponent from './navbar.component';
@@ -19,7 +17,6 @@ describe('Navbar Component', () => {
   let comp: NavbarComponent;
   let fixture: ComponentFixture<NavbarComponent>;
   let accountService: AccountService;
-  let profileService: ProfileService;
   const account: Account = {
     activated: true,
     authorities: [],
@@ -33,9 +30,9 @@ describe('Navbar Component', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-    imports: [NavbarComponent, RouterTestingModule.withRoutes([]), TranslateModule.forRoot()],
-    providers: [LoginService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-})
+      imports: [NavbarComponent, RouterTestingModule.withRoutes([]), TranslateModule.forRoot()],
+      providers: [LoginService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
+    })
       .overrideTemplate(NavbarComponent, '')
       .compileComponents();
   }));
@@ -44,19 +41,11 @@ describe('Navbar Component', () => {
     fixture = TestBed.createComponent(NavbarComponent);
     comp = fixture.componentInstance;
     accountService = TestBed.inject(AccountService);
-    profileService = TestBed.inject(ProfileService);
   });
 
-  it('Should call profileService.getProfileInfo on init', () => {
-    // GIVEN
-    jest.spyOn(profileService, 'getProfileInfo').mockReturnValue(of(new ProfileInfo()));
-
-    // WHEN
-    comp.ngOnInit();
-
-    // THEN
-    expect(profileService.getProfileInfo).toHaveBeenCalled();
-  });
+  // The navbar used to fetch GET /management/info on init purely to decide whether to show one admin menu item.
+  // That call is gone, and there is nothing left here to assert about it — the item is shown unconditionally inside
+  // a dropdown that is already admin-only.
 
   it('Should hold current authenticated user in variable account', () => {
     // WHEN
