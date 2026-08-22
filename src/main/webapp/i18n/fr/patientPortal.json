@@ -512,7 +512,7 @@
       "noMatchBlurb": "Essayez une partie d'un nom, une adresse e-mail ou un identifiant patient.",
       "none": "Il n'y a encore aucun dossier patient",
       "noneBlurb": "Dès qu'un patient termine son inscription, il apparaîtra ici.",
-      "truncated": "Seuls les patients déjà chargés sont recherchés ici. Ne considérez pas cette liste comme complète."
+      "narrow": "Plus de patients correspondent que ceux affichés. Affinez la recherche pour trouver celui que vous cherchez."
     }
   }
 }
