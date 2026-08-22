@@ -11,6 +11,49 @@ Status legend: `[x]` done · `[~]` partial / diverges from plan · `[ ]` not sta
 
 ## What changed since the last baseline
 
+### The administrator's portal, and what an empty screen was hiding (2026-08-22)
+
+- `[x]` **An administrator is no longer sent to the onboarding wizard.** `onboardingGuard` asked a
+  patient-shaped question — _is there a record here yet_ — and for `ROLE_ADMIN` every answer to it is
+  wrong. The reported symptom was the landing page; the worse half was that `/admin` and `/entities`
+  hang off the same shell-parent the guard is attached to, so an administrator was redirected **out of
+  the administrative screens themselves** — the only place in this app a patient's record can be
+  corrected, unreachable by the only role permitted to use it. Fixed in both guards, because a pair
+  that must agree is exactly where a rule added to one and not the other goes wrong.
+- `[x]` **`portal/patient-finder/`** replaces that empty overview: search the directory, open a
+  record, and the ordinary portal takes over under the acting-as banner.
+- `[x]` **Server-side search.** It first filtered up to 500 profiles in the browser, because
+  `GET /api/profiles` took paging and sorting and nothing else. Quality held 453 by the time it
+  shipped — one bulk load from the point where the box filters a page while looking exactly like a
+  complete search of a small system. `?search=` landed in the api and this now sends it.
+- `[x]` **`ActingAsService` learned about a record that was found rather than delegated**, stored
+  whole rather than by id. The shell refetches delegations on every load and that response can never
+  contain a record nobody delegated, so an id alone would restore a selection naming a choice that no
+  longer exists — banner gone, header unsent, silently back to the administrator's own empty record.
+  On every reload.
+- `[~]` Opening a record grants nothing on its own; it _narrows_. That half did not exist until
+  `hc-patient-service` shipped it the same day. Before it, an administrator naming a patient was
+  served every patient's records under that one patient's name — 200 throughout.
+
+### `/management/info` is no longer called (2026-08-22)
+
+- `[x]` `ProfileService` and `ProfileInfo` deleted; the ribbon reads `window.location.hostname` and
+  the admin menu's API-docs item is unconditional. An actuator endpoint is not part of this
+  application's API, it publishes the build and active profiles to anyone who asks, and it answered
+  401 for a signed-out visitor — reaching the global `ErrorHandler` and logging a console error on
+  every load of the sign-in page.
+- `[~]` The replacement is a **weaker signal, deliberately**: the old ribbon marked which Spring
+  profiles were running, this one marks which machine you are looking at. `dev` or `test` on the
+  production host would no longer light anything up; that case is guarded by `deploy.sh` and by
+  `SPRING_PROFILES_ACTIVE`, and this component is no longer part of that defence.
+
+That console error is worth keeping in mind beyond its own fix. It is what made a healthy deploy look
+broken during the 2026-08-22 release: a stale token in a browser produced the 401, which suppressed
+the ribbon and logged an error, and the two together read exactly like a regression in the image
+about to go to production.
+
+### Earlier
+
 Two things moved the ground under this plan, and most of the edits below follow from them:
 
 - **Deployment left this repo.** `d5f0bfe` deleted `Dockerfile`, `nginx.conf`, `docker-compose.yml`, `docker-compose-prod.yml`, `.dockerignore` and the `docker:*:tag` / `deploy:*` npm scripts. They live in `hc-patient/deploy/` (repo `kojoampia/hc-patient-ci`), which builds all three subsystem images and ships them. Phase C was almost entirely about those files; it is rewritten below rather than carried forward.
@@ -41,7 +84,7 @@ the repo has taken and it settles several items below.
   declaring `jhi-*`, so the two halves no longer compiled together. All 139 affected files were
   migrated. This also cleared the 161 pre-existing lint errors that came from the same mismatch.
 - **Lint is clean.** `npm run lint` reports zero problems, down from 172. Getting there needed one
-  config change: `member-ordering` now expects private instance fields *before* public ones, because
+  config change: `member-ordering` now expects private instance fields _before_ public ones, because
   class field initialisers run before constructor parameter properties are assigned — so a public
   field derived from an `inject()`ed service only works if the service is declared above it.
 - **Entity model extended.** See `hc-patient-service/patient.jdl`, now the model of record for both
@@ -54,13 +97,13 @@ the repo has taken and it settles several items below.
 ## Open decisions
 
 1. **What should CI do?** The registry question is settled — `docker.jojoaddison.net` is authoritative, and `deploy/` pushes there. But `.github/workflows/docker-publish.yml` still tries to build and publish to GHCR, and **has failed on every push since 2026-07-30** (see Phase C). The image is now built from `deploy/docker/web.Dockerfile` with a named build context this repo cannot reproduce alone, so CI cannot simply be repointed. Decide between: retire the workflow entirely, or replace image publishing with what a client repo actually needs — `lint`, `test`, `webapp:prod`. Recommended: the latter, since `npm test` is not gated anywhere today.
-2. **Mobile app baseline.** The blueprint calls for a fresh Angular 19+ Ionic workspace in the separate (currently empty) `hc-patient-app` repo. Decide whether it starts there or reuses this app's Angular 17 baseline and shared models. Tracked here only as a boundary note — the work itself belongs in that repo.
+2. ~~**Mobile app baseline.**~~ Settled, and the question was stale when written: it named Angular 17 long after this app had moved to 20. `hc-patient-app` is no longer empty — an Ionic 9 / Angular 20 / Capacitor 8 app was ported from this repo at `12e418c` and merged 2026-08-21. `mobile/patient-mobile.md` is its plan of record. Nothing here blocks on it.
 
 Resolved since the last baseline, kept so the numbering change is traceable:
 
 - ~~**Dev API port.**~~ Settled 2026-08-03: the **gateway moved to 5505**, matching what
   `webpack/proxy.conf.js` and `webpack/environment.js` already targeted, so `npm start` reaches it
-  with no further configuration. The move is across *every* profile — `application-dev.yml`,
+  with no further configuration. The move is across _every_ profile — `application-dev.yml`,
   `application-prod.yml`, the Jib container port, `.yo-rc.json`, `package.json` — plus `deploy/`'s
   nginx upstreams, compose port map, Dockerfile `EXPOSE` and both health checks, so there is one
   port for the whole subsystem rather than a dev/prod split waiting to be tripped over.
@@ -78,7 +121,7 @@ Resolved since the last baseline, kept so the numbering change is traceable:
 
 ## Baseline — already in place
 
-- `[x]` Angular 17 app (standalone + legacy NgModules), JHipster 8.1.0 client-only scaffold, i18n for `en`/`fr`/`de`.
+- `[x]` Angular 20 app (standalone + legacy NgModules), JHipster 8.1.0 client-only scaffold, i18n for `en`/`fr`/`de`. Was Angular 17 at the last baseline; the guide's stack table said 17 until 2026-08-23.
 - `[x]` Auth against the gateway with interceptor-based JWT attachment, `UserRouteAccessService` guards, account and admin surfaces.
 - `[x]` Dashboard rendered by `HomeComponent` at `/`, with `metric-panel` and `status-panel`.
 - `[x]` Modal feature views: temperature, blood pressure, heart rate, sugar, allergies, emergency.
@@ -116,13 +159,13 @@ Resolved since the last baseline, kept so the numbering change is traceable:
 ## Phase A — wiring and correctness
 
 - `[x]` **An expired token no longer locks you out.** Settled 2026-08-16. `auth.interceptor.ts`
-  attached the stored token to *every* same-origin request, `/api/authenticate` included. Spring
+  attached the stored token to _every_ same-origin request, `/api/authenticate` included. Spring
   Security's bearer filter runs **before** authorization, so a present-but-expired token fails the
   request outright and `permitAll` never gets a say: sign-in answered 401 for a reason that had
   nothing to do with the credentials typed into it, and because the stored token was what caused the
   failure, trying again did the same. Clearing site data by hand was the only way back in — and the
   trigger is ordinary, a token expiring while the tab is closed. The interceptor now skips the
-  endpoints whose job is to *get* you a token, matched against the gateway's own `permitAll` list;
+  endpoints whose job is to _get_ you a token, matched against the gateway's own `permitAll` list;
   keep the two in step. Found from a real 401 report, and it cost this repo's own verification loop
   three ports before it was fixed.
 
@@ -203,7 +246,7 @@ What is left is one broken workflow:
 > **Much of this landed on 2026-08-19** with patient onboarding and care delegation. Two traps found
 > on the way, both of which will bite anyone touching this area:
 >
-> - `PatientContextService.profile$` used to map *any* failure to "no profile". Harmless while
+> - `PatientContextService.profile$` used to map _any_ failure to "no profile". Harmless while
 >   nothing read it; not harmless once a route guard does — a network blip would have thrown a fully
 >   onboarded patient into the wizard, and a 401 would have looked like a brand-new account. It
 >   narrows to 404 now. **Do not widen it back.**
@@ -212,8 +255,8 @@ What is left is one broken workflow:
 
 These come from the subsystem blueprint's Phase 3 and are largely blocked on backend work. The blueprint framed them as mobile screens; decide per item whether the web dashboard also needs them.
 
-- `[x]` Subscription plan selection — built 2026-08-19, and the price contradiction is gone rather than resolved: the tiers come from Abofonsa through a gateway proxy at `/api/plans`, and `priceAmount` arrives pre-formatted for the locale. **Render it, never re-format it** — two products quoting different numbers for one tier is exactly what restating a price causes. It lives on the profile's membership tab, *not* at `/plans`, which is already the care plan (diet and exercise). Choosing writes a `Membership` with status `PENDING`: this records a choice, it does not bill for one.
-- `[x]` Onboarding wizard — built 2026-08-19. Five steps at `/onboarding`, on `AuthShellComponent` behind the signed-in guard rather than in the portal shell: a patient here has a token but no record, and the shell would fire patient-scoped fetches for a patient who does not exist, behind a sidebar of destinations that would all be empty. Each step saves before the next is shown, because the backend has no transaction to wrap the journey in. Plan selection is deliberately *not* a step (see above). See `docs/onboarding.md` §16 for the endpoint contract.
+- `[x]` Subscription plan selection — built 2026-08-19, and the price contradiction is gone rather than resolved: the tiers come from Abofonsa through a gateway proxy at `/api/plans`, and `priceAmount` arrives pre-formatted for the locale. **Render it, never re-format it** — two products quoting different numbers for one tier is exactly what restating a price causes. It lives on the profile's membership tab, _not_ at `/plans`, which is already the care plan (diet and exercise). Choosing writes a `Membership` with status `PENDING`: this records a choice, it does not bill for one.
+- `[x]` Onboarding wizard — built 2026-08-19. Five steps at `/onboarding`, on `AuthShellComponent` behind the signed-in guard rather than in the portal shell: a patient here has a token but no record, and the shell would fire patient-scoped fetches for a patient who does not exist, behind a sidebar of destinations that would all be empty. Each step saves before the next is shown, because the backend has no transaction to wrap the journey in. Plan selection is deliberately _not_ a step (see above). See `docs/onboarding.md` §16 for the endpoint contract.
 - `[ ]` Historical telemetry views — blocked on `patient-api.md` Phase C; the current metric panels read from `Stat`. Note this means _patient_ telemetry (vitals over time), which is unrelated to the OpenTelemetry instrumentation added in 2026-08-03.
 - `[ ]` Calendar / upcoming visits — no scheduling entity exists in any backend.
 - `[ ]` Assigned professionals directory — needs a contract with the professional subsystem.
@@ -258,7 +301,7 @@ over exactly what changed, and anything built for E2–E4 should arrive with its
 - `[x]` **A2 · every time renders in the reader's timezone.** Instants are stored UTC and formatted
   with the browser's offset (`formatDayTime()`, `portal-format.ts:15`). Ghana keeps UTC year round, so
   every appointment, alert and log entry is wrong for any reader outside it — +2h from Berlin, and the
-  kidney-stone alert moves from *30 Apr 11:05 PM* to **01 May 01:05 AM**, i.e. onto the wrong day. A
+  kidney-stone alert moves from _30 Apr 11:05 PM_ to **01 May 01:05 AM**, i.e. onto the wrong day. A
   record that reports the wrong date for an emergency is worse than one that reports none. Decide
   whether the portal renders in the record's zone (Africa/Accra) or the reader's, then apply it in the
   one formatter.
@@ -269,7 +312,7 @@ over exactly what changed, and anything built for E2–E4 should arrive with its
   search screens (cases, emergencies, visitations, activity).
 - `[x]` **A5 · a patient's own note is credited to "Care team"** on case detail, while `/activity`
   renders the same record as "You". Whose words a record carries is not cosmetic.
-  **One instance was missed and fixed 2026-08-16**: the overview's *Recent activity* panel still read
+  **One instance was missed and fixed 2026-08-16**: the overview's _Recent activity_ panel still read
   `authorId` alone, so the note the patient wrote themselves was filed under "Care team" there while
   `/record` and `/activity` said "You" about the very same record. Found by reading the deployed
   quality stack rather than by a test — the two panels sit two screens apart and nothing compares
@@ -288,7 +331,7 @@ over exactly what changed, and anything built for E2–E4 should arrive with its
   activity, linking to both screens — the demo's own route to them, in a simpler form than the panel
   expanders. They were unreachable because the page they live on was throwing (A1), not because the
   route was missing. Fixing A1 restored it; verified by clicking through to `/visitations`. Adding
-  sidebar entries would have *diverged* from the mockup, whose ten nav items are exactly the ten this
+  sidebar entries would have _diverged_ from the mockup, whose ten nav items are exactly the ten this
   portal has — the record is deliberately the way in. C2 still stands on its own for the panels and
   their pagination.
 - `[x]` **B2 · the Emergencies badge is never set.** The demo carries a red `4` — the only number in
@@ -298,7 +341,7 @@ over exactly what changed, and anything built for E2–E4 should arrive with its
   which is where the interface's own comment said it should come from — "a signal … so the sidebar
   tracks live data without the nav config having to know where that data comes from". The count is
   fetched in the frame rather than on the Emergencies screen because its job is to be visible from
-  the screens that are *not* it; the fetch is shared, so the screens that show alerts anyway cost
+  the screens that are _not_ it; the fetch is shared, so the screens that show alerts anyway cost
   nothing extra.
 
 ### E3 — in the demo, not yet built
@@ -308,14 +351,14 @@ overstated.** The audit was screenshot-driven, and things below the fold or hidd
 read as missing. Corrections first, because a backlog that overstates the work is as expensive as one
 that misses it:
 
-| Item | Audited as | Actually |
-| --- | --- | --- |
-| C3 | care-line banner absent | **Built** — red banner, blurb and a working `tel:` button. The screenshot was scrolled past it. Only the care angel's name is missing from the blurb |
-| C11 | "renders whole lists" | **Implemented** on five screens through `shared/ui/pager`. Page sizes are 12/10/20/15 against the demo's 8, so the seeded record mostly fits one page and no pager appears |
-| C14 | search may be narrower | Case search already matches title, brief, **diagnosis, symptoms** and number. Only the placeholder undersells it |
-| C13 | avatars absent | Rendered on **profile** for the patient and the care team; absent on schedules, case detail and overview. The seed carries no `imageUrl`, so initials show regardless |
-| C1 | "the d3 `widgets/` library is unused" | Misleading. `shared/ui/charts` (sparkline, trend-chart) is newer and already used by the record page; `widgets/` is the legacy layer |
-| C2 | "the page has to be built" | It exists — identity, vitals with trend and reading history, recent visits, recent activity, care team. Three panels and the header actions are what is missing |
+| Item | Audited as                            | Actually                                                                                                                                                                   |
+| ---- | ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| C3   | care-line banner absent               | **Built** — red banner, blurb and a working `tel:` button. The screenshot was scrolled past it. Only the care angel's name is missing from the blurb                       |
+| C11  | "renders whole lists"                 | **Implemented** on five screens through `shared/ui/pager`. Page sizes are 12/10/20/15 against the demo's 8, so the seeded record mostly fits one page and no pager appears |
+| C14  | search may be narrower                | Case search already matches title, brief, **diagnosis, symptoms** and number. Only the placeholder undersells it                                                           |
+| C13  | avatars absent                        | Rendered on **profile** for the patient and the care team; absent on schedules, case detail and overview. The seed carries no `imageUrl`, so initials show regardless      |
+| C1   | "the d3 `widgets/` library is unused" | Misleading. `shared/ui/charts` (sparkline, trend-chart) is newer and already used by the record page; `widgets/` is the legacy layer                                       |
+| C2   | "the page has to be built"            | It exists — identity, vitals with trend and reading history, recent visits, recent activity, care team. Three panels and the header actions are what is missing            |
 
 #### Decisions taken 2026-08-16
 
@@ -328,7 +371,7 @@ Asked and answered rather than assumed, because each changes what gets built:
    vitals-forward layout and the care-team panel rather than flattening to the demo's six equal
    panels. Coverage matches; the arrangement stays as it is, because it reads better.
 3. **The overview shows both tile rows**: the portal's activity counts (open cases, upcoming visits,
-   active medications, reports) *and* the demo's record counts (emergencies, allergies, diet,
+   active medications, reports) _and_ the demo's record counts (emergencies, allergies, diet,
    exercise). They answer different questions and both are wanted.
 4. **Avatar markup goes on schedules, case detail and overview, but no photographs go into the
    seed** — they render the same initials circle the profile screen already uses. The mockup's base64
@@ -359,7 +402,7 @@ Batch 2 — list mechanics. **Done 2026-08-16**, verified against the seeded rec
 
 - `[x]` **C11 · page size.** Pagination works; the demo pages at 8 and we page at 12/10/20/15. Settle
   on one number and apply it, so a list looks the same everywhere.
-- `[x]` **C12 · filter by professional, not just status.** The demo's Filter spans clinician *and*
+- `[x]` **C12 · filter by professional, not just status.** The demo's Filter spans clinician _and_
   status across four screens. We have status chips on Cases and nothing elsewhere, so "what has Yaw
   Boateng seen me about?" is not askable.
 - `[x]` **C14 · widen the placeholders to match the scope that already exists** ("Search cases,
@@ -367,7 +410,7 @@ Batch 2 — list mechanics. **Done 2026-08-16**, verified against the seeded rec
 - `[x]` **C13 · avatar markup on schedules, case detail and overview** (decision 4), showing initials.
   Landed on schedules and the overview's next-appointments panel through a new `hpd-avatar`, which
   also replaced the inline pattern the profile screen had. **Case detail is deliberately not among
-  them**: the demo shows the clinician there as a *card* with photo, role and "See appointments",
+  them**: the demo shows the clinician there as a _card_ with photo, role and "See appointments",
   which is C5 — putting a bare avatar in the header instead would invent a placement the demo does
   not have and then have to be undone.
 
@@ -377,7 +420,7 @@ Batch 3 — the two features. **Done 2026-08-16**, verified against the seeded r
   paginated, plus the Print/Close header. **+ Add activity** and **↑ Upload report** are C10.
   Five list panels now sit under **On this record** — cases, visitations, activity trail,
   medications, reports — each paging the whole collection three rows at a time, with an expander in
-  its head to the full screen. Visits and activity used to preview six rows behind a *See all*; with
+  its head to the full screen. Visits and activity used to preview six rows behind a _See all_; with
   five panels side by side a preview leaves no way to reach the seventh row without leaving the
   page, so they page like the rest. Rows that belong to a case open it. Two things came out of
   building it: `.hc-drow__sub` carried a top margin with no `display`, so the secondary text ran on
@@ -406,7 +449,7 @@ Batch 3 — the two features. **Done 2026-08-16**, verified against the seeded r
 5. **The portal gets its own dialog** — `hpd-modal` in `shared/ui`, built on the portal's `hc-`
    CSS rather than on `NgbModal`. ng-bootstrap stays where it already is: the account, admin and
    entity screens. `.modal` is a Bootstrap class, and opening one inside an `hc-` screen means
-   styling *around* `.modal-dialog`, `.modal-content` and their z-index rather than with them.
+   styling _around_ `.modal-dialog`, `.modal-content` and their z-index rather than with them.
 6. **Log activity writes for real** — `POST /api/activity-logs` with `source: PATIENT`, then a
    reload of the shared data. The api gates `/api/**` on `authenticated()` only, so a signed-in
    patient may file against their own record; nothing needed changing on the backend for this.
@@ -421,18 +464,18 @@ Batch 4 — **C5, C8, the A5 leftover and D1 done 2026-08-16**; C10 still blocke
   for sending to somebody who is not on the portal.
 - `[x]` **C8 · detail views for vitals, appointments, alerts, medicines and reports.** **Three of
   the five were already covered, and building all five would have added a click that changes
-  nothing** — the audit counted the demo's *table rows*, and this portal renders three of those
+  nothing** — the audit counted the demo's _table rows_, and this portal renders three of those
   lists as cards that already carry the whole record:
 
-  | Row | Was it terminal? | Built? |
-  | --- | --- | --- |
-  | Medications | yes — a table row | **yes**: the withheld reason is the one sentence this screen most needs |
-  | Vitals, on the overview | yes — a static tile with an unlabelled sparkline | **yes**: band, full-size trend, and the readings as a table |
-  | Appointments, attended | yes — a table row | **yes**: adds the clinician card and the case |
-  | Reports | no — the card carries summary, author, case and Open file | no |
-  | Emergencies | no — the card carries detail, outcome and who attended | no |
-  | Appointments, upcoming | no — the card carries clinician, place and case | no |
-  | Vitals, on the record | no — the tile already drives the trend chart beside it | no |
+  | Row                     | Was it terminal?                                          | Built?                                                                  |
+  | ----------------------- | --------------------------------------------------------- | ----------------------------------------------------------------------- |
+  | Medications             | yes — a table row                                         | **yes**: the withheld reason is the one sentence this screen most needs |
+  | Vitals, on the overview | yes — a static tile with an unlabelled sparkline          | **yes**: band, full-size trend, and the readings as a table             |
+  | Appointments, attended  | yes — a table row                                         | **yes**: adds the clinician card and the case                           |
+  | Reports                 | no — the card carries summary, author, case and Open file | no                                                                      |
+  | Emergencies             | no — the card carries detail, outcome and who attended    | no                                                                      |
+  | Appointments, upcoming  | no — the card carries clinician, place and case           | no                                                                      |
+  | Vitals, on the record   | no — the tile already drives the trend chart beside it    | no                                                                      |
 
 - `[x]` **C10 · Upload a report**, with **+ Add activity** (C2) and **Log activity** (C5) — the demo's
   position that the record belongs to the patient. ~~blocked on an api decision~~ **Unblocked and
@@ -440,26 +483,26 @@ Batch 4 — **C5, C8, the A5 leftover and D1 done 2026-08-16**; C10 still blocke
   serves them back through `PatientScope` so a file is visible exactly when its report is. The
   portal creates the report first and attaches the file second — the api's shape, and the better
   failure: an upload that dies halfway leaves a report to retry against rather than nothing. PDF,
-  JPEG, PNG and HEIC up to 10 MB, decided from the *bytes* rather than the filename.
+  JPEG, PNG and HEIC up to 10 MB, decided from the _bytes_ rather than the filename.
   **Opening the file needed a second fix, found by deploying it.** "Open file" was a plain
   `<a href>`, and a browser navigation carries no Authorization header — so following it produced a
-  401 error page for every uploaded file. Nothing had revealed it before, because every *seeded*
+  401 error page for every uploaded file. Nothing had revealed it before, because every _seeded_
   report has an empty `url` and the button had never been pressed against a real file. It now
   fetches through the interceptor and opens the result as a blob, with the tab opened inside the
   click itself so a popup blocker still trusts it.
 
 ### E4 — wording, vocabulary and seed data
 
-- `[x]` **D1 · status vocabulary drifted** toward the enum names: *In treatment → Treatment*, *Taking
-  now → Active*, *Attended → Completed*, *Urgent → High*, *Awaiting confirmation → Pending*. The
-  severity one matters most; *Urgent* is what a person reads on an emergency.
+- `[x]` **D1 · status vocabulary drifted** toward the enum names: _In treatment → Treatment_, _Taking
+  now → Active_, _Attended → Completed_, _Urgent → High_, _Awaiting confirmation → Pending_. The
+  severity one matters most; _Urgent_ is what a person reads on an emergency.
   Fixed 2026-08-16 by an `hpdStatus` pipe over a `patientPortal.status.*` map, replacing `humanise`
   on twenty pills across ten screens — the enum values are unique across the domains the portal
   renders, so one flat map covers cases, medications, appointments, emergencies, allergies and
   vitals. Anything the backend adds later falls back to sentence case rather than rendering a raw
   translation key. It also caught a pair nobody had listed: vitals read **Ok** and **Warn**, where
-  the demo reads *In range* and *Watch*.
-- `[ ]` **D2 · "What was reported" / "What was found"** replace the demo's *Symptoms* / *Diagnosis*.
+  the demo reads _In range_ and _Watch_.
+- `[ ]` **D2 · "What was reported" / "What was found"** replace the demo's _Symptoms_ / _Diagnosis_.
   This reads as an improvement on the demo rather than drift from it — make it a decision and apply it
   everywhere, rather than leaving two documents disagreeing.
 - `[x]` **D3 · honorifics dropped** ("Dr. Grace Mensah" → "Grace Mensah"). ~~The seed stores the
@@ -468,7 +511,7 @@ Batch 4 — **C5, C8, the A5 leftover and D1 done 2026-08-16**; C10 still blocke
   it appears everywhere a clinician is named, without every screen having to remember a second
   field. The mockup gives an honorific to exactly one of the six people, and the seed does the same:
   guessing "Dr." onto a physiotherapist would be the very mistake this item is about. Note the
-  api redacts professionals for non-staff callers by *whitelist*, so the field had to be named there
+  api redacts professionals for non-staff callers by _whitelist_, so the field had to be named there
   too or a patient would never have seen it.
 - `[x]` **D4 · sign-in asks for a username, not an email.** ~~The demo signs in with `kojo@jac.net` and
   offers **Continue with care card**~~ — **decided 2026-08-16: authentication is exclusively by
@@ -476,7 +519,7 @@ Batch 4 — **C5, C8, the A5 leftover and D1 done 2026-08-16**; C10 still blocke
   right as it stands.
 
   That closes the care card with it. "Continue with care card" is a second credential, and the
-  number it would accept is printed on a physical card *and* displayed on the profile screen — a
+  number it would accept is printed on a physical card _and_ displayed on the profile screen — a
   credential a patient shows to a receptionist and carries in a wallet is not one that should open
   a record. It stays what it is: a field on the record, never a way in.
 
@@ -486,8 +529,9 @@ Batch 4 — **C5, C8, the A5 leftover and D1 done 2026-08-16**; C10 still blocke
 
   One consequence worth carrying forward: **registration is open**, so a login is obtainable by
   anyone with an email address. That is exactly the exposure `PatientScope` in the api was written
-  against, and it is why cross-patient access has to stay a thing a *role* grants rather than a check
+  against, and it is why cross-patient access has to stay a thing a _role_ grants rather than a check
   somebody remembers to write.
+
 - `[x]` **D5 · vitals carry no attribution.** Demo: "Recorded 24 July 2026 by Ophelia Gaisie."
   `Stat` gained `source` and `recordedById`, mirroring `ActivityLog`, so a reading the patient took
   at home reads "you" through the attribution rule the portal already had. **Half the seeded
@@ -503,8 +547,8 @@ Batch 4 — **C5, C8, the A5 leftover and D1 done 2026-08-16**; C10 still blocke
   beyond the demo; it needs a date and a description that adds something. Seed-side, as D6.
 - `[ ]` **D8 · the sidebar drops the patient's location** ("Patient · Accra, GH" → "Patient"), which is
   already on the record.
-- `[ ]` **D9 · the sign-in counters are inherited, not computed.** Both show *12 cases · 41 visits · 6
-  professionals · 24/7*; twelve and six match the record, forty-one does not (eighteen are seeded).
+- `[ ]` **D9 · the sign-in counters are inherited, not computed.** Both show _12 cases · 41 visits · 6
+  professionals · 24/7_; twelve and six match the record, forty-one does not (eighteen are seeded).
   They read as live numbers on a page nobody has signed into. Decide whether they are marketing copy or
   a figure, and make them honest either way.
 
