@@ -61,3 +61,55 @@
     <hpd-empty-state icon="case" titleKey="patientPortal.cases.empty" messageKey="patientPortal.cases.emptyHint" />
   </div>
 }
+
+@if (archived().length) {
+  <!-- Below the working list and collapsed, because the working list answers "what is happening to
+       me" and an archived case does not. Shown at all because the api excluding archived cases by
+       default is right for a clinician's queue and wrong for a patient's own history. -->
+  <section class="hc-card hc-card-pad hc-mt-16">
+    <button
+      type="button"
+      class="hc-row hc-between hc-gap-8"
+      style="width: 100%; background: none; border: 0; padding: 0; cursor: pointer"
+      [attr.aria-expanded]="archivedOpen()"
+      (click)="archivedOpen.set(!archivedOpen())"
+    >
+      <span class="hc-row hc-gap-8">
+        <hpd-icon name="folder" [size]="18" [strokeWidth]="2" />
+        <b>{{ 'patientPortal.cases.archived.title' | translate: { count: archived().length } }}</b>
+      </span>
+      <hpd-icon [name]="archivedOpen() ? 'up' : 'down'" [size]="16" [strokeWidth]="2.2" />
+    </button>
+
+    @if (archivedOpen()) {
+      <p class="hc-muted hc-sm hc-mt-16" hpdTranslate="patientPortal.cases.archived.hint">
+        A member of your care team retired these from the active list. They stay on your record.
+      </p>
+
+      <ul class="hc-list hc-mt-16">
+        @for (item of archived(); track item.id) {
+          <li class="hc-list__row">
+            <div class="hc-row hc-between hc-gap-8 hc-wrap">
+              <div>
+                <b>{{ item.title ?? item.brief }}</b>
+                <p class="hc-muted hc-sm" style="margin: 2px 0 0">
+                  {{
+                    'patientPortal.cases.archived.stamp'
+                      | translate: { when: formatInstantDay(item.archivedAt), who: item.archivedById ?? '—' }
+                  }}
+                </p>
+              </div>
+              <a
+                class="hc-icon-btn hc-icon-btn--sm"
+                [routerLink]="['/case', item.id]"
+                [attr.aria-label]="'patientPortal.cases.openCase' | translate: { name: item.title ?? item.brief }"
+              >
+                <hpd-icon name="chev" [size]="16" [strokeWidth]="2.2" />
+              </a>
+            </div>
+          </li>
+        }
+      </ul>
+    }
+  </section>
+}

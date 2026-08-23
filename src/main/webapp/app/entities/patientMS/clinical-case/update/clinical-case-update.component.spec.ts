@@ -24,19 +24,19 @@ describe('ClinicalCase Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [RouterTestingModule.withRoutes([]), ClinicalCaseUpdateComponent],
-    providers: [
+      imports: [RouterTestingModule.withRoutes([]), ClinicalCaseUpdateComponent],
+      providers: [
         FormBuilder,
         {
-            provide: ActivatedRoute,
-            useValue: {
-                params: from([{}]),
-            },
+          provide: ActivatedRoute,
+          useValue: {
+            params: from([{}]),
+          },
         },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
-    ]
-})
+      ],
+    })
       .overrideTemplate(ClinicalCaseUpdateComponent, '')
       .compileComponents();
 

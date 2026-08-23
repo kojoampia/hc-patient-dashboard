@@ -11,6 +11,7 @@ const requireRestSample: RestClinicalCase = {
   ...sampleWithRequiredData,
   openedAt: sampleWithRequiredData.openedAt?.toJSON(),
   closedAt: sampleWithRequiredData.closedAt?.toJSON(),
+  archivedAt: sampleWithRequiredData.archivedAt?.toJSON(),
 };
 
 describe('ClinicalCase Service', () => {
@@ -20,9 +21,9 @@ describe('ClinicalCase Service', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [],
-    providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-});
+      imports: [],
+      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
+    });
     expectedResult = null;
     service = TestBed.inject(ClinicalCaseService);
     httpMock = TestBed.inject(HttpTestingController);

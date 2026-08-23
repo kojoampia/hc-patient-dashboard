@@ -41,11 +41,13 @@ export const SHELL_NAV: readonly ShellNavItem[] = [
     groupKey: 'patientPortal.nav.group.health',
   },
   { path: 'emergencies', labelKey: 'patientPortal.nav.emergencies', icon: 'alert', groupKey: 'patientPortal.nav.group.health' },
+  { path: 'visitations', labelKey: 'patientPortal.nav.visitations', icon: 'pin', groupKey: 'patientPortal.nav.group.health' },
   { path: 'cases', labelKey: 'patientPortal.nav.cases', icon: 'case', groupKey: 'patientPortal.nav.group.clinical' },
   { path: 'medications', labelKey: 'patientPortal.nav.medications', icon: 'pill', groupKey: 'patientPortal.nav.group.clinical' },
   { path: 'reports', labelKey: 'patientPortal.nav.reports', icon: 'report', groupKey: 'patientPortal.nav.group.clinical' },
   { path: 'plans', labelKey: 'patientPortal.nav.plans', icon: 'leaf', groupKey: 'patientPortal.nav.group.clinical' },
   { path: 'allergies', labelKey: 'patientPortal.nav.allergies', icon: 'shield', groupKey: 'patientPortal.nav.group.clinical' },
+  { path: 'activity', labelKey: 'patientPortal.nav.activity', icon: 'clock', groupKey: 'patientPortal.nav.group.account' },
   { path: 'profile', labelKey: 'patientPortal.nav.profile', icon: 'user', groupKey: 'patientPortal.nav.group.account' },
 ];
 

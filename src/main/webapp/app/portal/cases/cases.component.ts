@@ -41,6 +41,19 @@ export default class CasesComponent {
 
   private readonly cases = toSignal(this.data.cases$, { initialValue: [] });
 
+  /**
+   * Cases a professional retired, newest first.
+   *
+   * Kept out of the list above rather than filtered into it: the working list answers "what is
+   * happening to me", and an archived case is not. It is shown at all because the api excluding
+   * them by default is right for a clinician's queue and wrong for a patient's own history — their
+   * case did not stop having happened, and a patient who remembers one should be able to find it.
+   */
+  readonly archived = toSignal(this.data.archivedCases$, { initialValue: [] });
+
+  /** Collapsed by default. Nobody opens this screen to read what is finished. */
+  readonly archivedOpen = signal(false);
+
   /** The people who can be filtered by, in the order the care team is listed. */
   readonly careTeam = toSignal(this.context.careTeam$, { initialValue: [] as readonly CareTeamMember[] });
   readonly formatDay = formatDay;
