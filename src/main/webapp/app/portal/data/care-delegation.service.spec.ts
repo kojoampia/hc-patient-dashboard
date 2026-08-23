@@ -77,15 +77,17 @@ describe('CareDelegationService', () => {
       done();
     });
 
-    httpMock.expectOne(request => request.url.endsWith('/mine')).flush({
-      email: 'kofi@example.test',
-      self: {},
-      delegations: [
-        delegation({ id: 'waiting', status: 'PENDING' }),
-        delegation({ id: 'accepted', status: 'ACTIVE' }),
-        delegation({ id: 'declined', status: 'DECLINED' }),
-      ],
-    });
+    httpMock
+      .expectOne(request => request.url.endsWith('/mine'))
+      .flush({
+        email: 'kofi@example.test',
+        self: {},
+        delegations: [
+          delegation({ id: 'waiting', status: 'PENDING' }),
+          delegation({ id: 'accepted', status: 'ACTIVE' }),
+          delegation({ id: 'declined', status: 'DECLINED' }),
+        ],
+      });
   });
 
   it('ends a delegation without deleting it', done => {

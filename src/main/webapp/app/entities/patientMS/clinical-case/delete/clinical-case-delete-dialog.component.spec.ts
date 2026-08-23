@@ -18,9 +18,9 @@ describe('ClinicalCase Management Delete Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [ClinicalCaseDeleteDialogComponent],
-    providers: [NgbActiveModal, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-})
+      imports: [ClinicalCaseDeleteDialogComponent],
+      providers: [NgbActiveModal, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
+    })
       .overrideTemplate(ClinicalCaseDeleteDialogComponent, '')
       .compileComponents();
     fixture = TestBed.createComponent(ClinicalCaseDeleteDialogComponent);

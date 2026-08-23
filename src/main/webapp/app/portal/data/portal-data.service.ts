@@ -15,6 +15,8 @@ import { IStat } from 'app/entities/patientMS/stat/stat.model';
 import { ITask } from 'app/entities/patientMS/task/task.model';
 import { IVisitation } from 'app/entities/patientMS/visitation/visitation.model';
 
+import { byDateDesc } from './portal-format';
+
 import { ActivityLogService } from 'app/entities/patientMS/activity-log/service/activity-log.service';
 import { AllergyService } from 'app/entities/patientMS/allergy/service/allergy.service';
 import { CarePlanItemService } from 'app/entities/patientMS/care-plan-item/service/care-plan-item.service';
@@ -47,7 +49,28 @@ interface PatientScoped {
 export class PortalDataService {
   private readonly context = inject(PatientContextService);
 
-  readonly cases$ = this.scoped<IClinicalCase>(inject(ClinicalCaseService));
+  /**
+   * Every case, archived or not — one request, split three ways below.
+   *
+   * The api excludes archived cases from `GET /api/clinical-cases` unless asked, which is right for
+   * a clinician's queue and wrong for a patient's own history: their case did not stop having
+   * happened. Asking for everything once and filtering here costs nothing extra and keeps the three
+   * views consistent with each other.
+   */
+  private readonly allCases$ = this.scoped<IClinicalCase>(inject(ClinicalCaseService), { includeArchived: true });
+
+  /** The working list: what is still live. Every screen that counts or lists cases reads this. */
+  readonly cases$ = this.allCases$.pipe(
+    map(cases => cases.filter(item => !item.archivedAt)),
+    shareReplay({ bufferSize: 1, refCount: false }),
+  );
+
+  /** What a professional retired, newest first. Shown collapsed rather than mixed into the list. */
+  readonly archivedCases$ = this.allCases$.pipe(
+    map(cases => cases.filter(item => item.archivedAt).sort(byDateDesc(item => item.archivedAt))),
+    shareReplay({ bufferSize: 1, refCount: false }),
+  );
+
   readonly vitals$ = this.scoped<IStat>(inject(StatService));
   readonly medications$ = this.scoped<IMedication>(inject(MedicationService));
   readonly reports$ = this.scoped<IReport>(inject(ReportService));
@@ -60,8 +83,14 @@ export class PortalDataService {
   readonly conditions$ = this.scoped<ICondition>(inject(ConditionService));
   readonly memberships$ = this.scoped<IMembership>(inject(MembershipService));
 
-  /** Cases indexed by id, so a medication or report can name the case it belongs to. */
-  readonly casesById$: Observable<ReadonlyMap<string, IClinicalCase>> = this.cases$.pipe(
+  /**
+   * Cases indexed by id, so a medication or report can name the case it belongs to.
+   *
+   * Built from every case rather than only the live ones, and that is the fix for something the
+   * api's archiving default quietly broke: a report attached to a case a clinician later archived
+   * would find nothing here and render with its case name missing.
+   */
+  readonly casesById$: Observable<ReadonlyMap<string, IClinicalCase>> = this.allCases$.pipe(
     map(cases => new Map(cases.map(item => [item.id, item]))),
     shareReplay({ bufferSize: 1, refCount: false }),
   );
@@ -79,13 +108,16 @@ export class PortalDataService {
    * returns everything, and the portal must not show one patient another's records because a
    * backend was behind.
    */
-  private scoped<T extends PatientScoped>(service: { query(req?: unknown): Observable<HttpResponse<T[]>> }): Observable<readonly T[]> {
+  private scoped<T extends PatientScoped>(
+    service: { query(req?: unknown): Observable<HttpResponse<T[]>> },
+    extraParams: Record<string, unknown> = {},
+  ): Observable<readonly T[]> {
     return combineLatest([this.context.patientId$]).pipe(
       switchMap(([patientId]) => {
         if (!patientId) {
           return of([] as T[]);
         }
-        return service.query({ patientId }).pipe(
+        return service.query({ patientId, ...extraParams }).pipe(
           map(response => (response.body ?? []).filter(item => item.patientId === patientId)),
           // One failed collection must not blank the whole screen; the list renders empty.
           catchError(() => of([] as T[])),
