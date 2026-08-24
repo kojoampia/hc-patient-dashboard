@@ -79,6 +79,45 @@ describe('onboardingGuard', () => {
     });
   });
 
+  /**
+   * The blank portal root, reduced to its mechanism.
+   *
+   * `canActivate: [UserRouteAccessService, onboardingGuard]` does not run in sequence — Angular subscribes every
+   * guard at once (`prioritizedGuardValue`) and takes the first-declared answer that is not `true`. So this guard
+   * fires its request even when the caller is not signed in, and with an expired token it got a 401 at the same
+   * moment the auth guard did. The auth guard handles its own; this one errored, and an erroring guard aborts the
+   * navigation: URL unchanged, outlet empty, one line in the console.
+   *
+   * Whichever 401 landed first decided the outcome, which is why it read as intermittent and why it was never
+   * specific to `/`.
+   */
+  it('does not error when the status call fails, so a dead navigation cannot blank the portal', done => {
+    onboardingService.status.mockReturnValue(throwError(() => ({ status: 401 })));
+
+    run().subscribe({
+      next(result: boolean | UrlTree) {
+        // true, not a redirect: this guard is not the authority on whether somebody may be here.
+        // UserRouteAccessService is declared first, and its false outranks this true.
+        expect(result).toBe(true);
+        done();
+      },
+      error() {
+        done.fail('the guard errored — this is the defect, and it aborts the navigation');
+      },
+    });
+  });
+
+  it('lets a valid session through when the status call merely fails', done => {
+    // A network blip rather than an expired session: the same answer, and deliberately so — it must not throw a
+    // fully onboarded patient at a wizard they do not need.
+    onboardingService.status.mockReturnValue(throwError(() => ({ status: 0 })));
+
+    run().subscribe((result: boolean | UrlTree) => {
+      expect(result).toBe(true);
+      done();
+    });
+  });
+
   it('never asks the backend when already acting for somebody', () => {
     actingAsService.setAvailable([{ patientId: 'p9', name: 'Ama', own: false }]);
 
@@ -168,5 +207,20 @@ describe('onboardingCompleteGuard', () => {
     expect(TestBed.inject(Router).serializeUrl(result)).toBe('/overview');
     expect(onboardingService.status).not.toHaveBeenCalled();
     done();
+  });
+
+  /** The same hazard on the inverse guard — it races UserRouteAccessService on /onboarding in exactly the same way. */
+  it('does not error when the status call fails', done => {
+    onboardingService.status.mockReturnValue(throwError(() => ({ status: 401 })));
+
+    run().subscribe({
+      next(result: boolean | UrlTree) {
+        expect(result).toBe(true);
+        done();
+      },
+      error() {
+        done.fail('the guard errored — an erroring guard aborts the navigation');
+      },
+    });
   });
 });
