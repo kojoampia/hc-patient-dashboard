@@ -78,17 +78,6 @@ export default class OverviewComponent {
   private readonly accountService = inject(AccountService);
   private readonly actingAsService = inject(ActingAsService);
 
-  /**
-   * Whether to offer the patient finder instead of the patient's own summary.
-   *
-   * <p>An administrator has no {@code Profile}, so every panel below is empty for them and stays empty. The moment
-   * they open somebody's record this turns false and the ordinary overview takes over — showing that patient, under
-   * the banner that says whose it is.</p>
-   *
-   * <p>Keyed on there being no record open rather than on the role alone: an administrator who has chosen a patient
-   * wants the portal, not the search they have already done.</p>
-   */
-  readonly showFinder = computed(() => this.accountService.hasAnyAuthority(Authority.ADMIN) && this.actingAsService.current() === null);
   private readonly careTeamById = toSignal(this.context.careTeamById$, { initialValue: new Map<string, CareTeamMember>() });
 
   private readonly cases = toSignal(this.data.cases$, { initialValue: [] });
@@ -102,6 +91,18 @@ export default class OverviewComponent {
   private readonly carePlan = toSignal(this.data.carePlan$, { initialValue: [] });
   private readonly visitations = toSignal(this.data.visitations$, { initialValue: [] });
   private readonly careTeam = toSignal(this.context.careTeam$, { initialValue: [] as readonly CareTeamMember[] });
+
+  /**
+   * Whether to offer the patient finder instead of the patient's own summary.
+   *
+   * <p>An administrator has no {@code Profile}, so every panel below is empty for them and stays empty. The moment
+   * they open somebody's record this turns false and the ordinary overview takes over — showing that patient, under
+   * the banner that says whose it is.</p>
+   *
+   * <p>Keyed on there being no record open rather than on the role alone: an administrator who has chosen a patient
+   * wants the portal, not the search they have already done.</p>
+   */
+  readonly showFinder = computed(() => this.accountService.hasAnyAuthority(Authority.ADMIN) && this.actingAsService.current() === null);
 
   readonly formatDay = formatDay;
   readonly formatInstantDay = formatInstantDay;

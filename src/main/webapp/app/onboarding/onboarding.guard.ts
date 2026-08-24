@@ -70,7 +70,7 @@ export const onboardingGuard: CanActivateFn = () => {
       //
       // The extra call only ever runs on the not-onboarded path, which a patient takes once.
       return careDelegationService.mine().pipe(
-        map(response => (response.delegations ?? []).length > 0),
+        map(response => response.delegations.length > 0),
         catchError(() => of(false)),
         map(hasDelegations => router.parseUrl(hasDelegations ? '/invitations' : '/onboarding')),
       );

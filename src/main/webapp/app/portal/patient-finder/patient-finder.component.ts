@@ -124,6 +124,9 @@ export class PatientFinderComponent {
     const name = [profile.firstName, profile.lastName].filter(Boolean).join(' ').trim();
     // Never the raw id as a last resort: a row saying "664f…" is not a person, and the email is the one field the
     // record is looked up by, so it is always the more useful of the two.
+    // `||` and not `??`: a profile with an empty name must fall through to the email, and `??` would
+    // stop at the empty string and label the row with nothing at all.
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return name || profile.email || profile.patientId || profile.id;
   }
 

@@ -213,5 +213,8 @@ export function formatAddress(address: IAddress | null | undefined): string {
   if (line && digital) {
     return `${line} (${digital})`;
   }
+  // `||` and not `??`, deliberately: the fallback exists for an EMPTY address line, which `??` would
+  // return as-is and render as a blank cell. Both operands are strings that are meaningfully empty.
+  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
   return line || digital || '—';
 }

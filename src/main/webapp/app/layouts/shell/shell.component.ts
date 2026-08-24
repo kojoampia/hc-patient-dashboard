@@ -42,37 +42,6 @@ export default class ShellComponent {
   private readonly actingAsService = inject(ActingAsService);
   private readonly careDelegationService = inject(CareDelegationService);
 
-  /** Drives the banner: true only when the open record belongs to somebody else. */
-  readonly actingForSomeoneElse = this.actingAsService.actingForSomeoneElse;
-  readonly actingAsName = computed(() => this.actingAsService.current()?.name ?? '');
-  readonly canSwitch = computed(() => this.actingAsService.available().length > 1);
-  readonly choices = this.actingAsService.available;
-  readonly actingAsId = computed(() => this.actingAsService.current()?.patientId ?? '');
-  /**
-   * Somebody with both their own record and a delegation has a decision to make, and it is not one to guess at.
-   * The service has computed this since delegation was built; until 2026-08-20 nothing rendered it, so the choice
-   * fell to whatever `sessionStorage` happened to hold.
-   */
-  readonly mustChoose = this.actingAsService.mustChoose;
-
-  /**
-   * Switches which record the portal is showing.
-   *
-   * <p>The reload is not optional. Every portal collection is cached per session, so without it the previous
-   * patient's record stays on screen under the new patient's name — which is the worst possible version of this
-   * feature's failure mode.</p>
-   */
-  switchRecord(patientId: string): void {
-    if (!patientId || patientId === this.actingAsId()) {
-      return;
-    }
-    this.actingAsService.select(patientId);
-    // PortalDataService.reload() re-runs PatientContextService too, so one call covers both the profile and every
-    // collection keyed off it.
-    this.data.reload();
-    void this.router.navigate(['/overview']);
-  }
-
   /** Current portal path, e.g. `cases/12` — drives both the active nav item and the title. */
   private readonly activePath = signal(this.portalPathOf(this.router.url));
 
@@ -101,6 +70,19 @@ export default class ShellComponent {
     const badge = this.badges[item.path];
     return badge ? { ...item, badge } : item;
   });
+
+  /** Drives the banner: true only when the open record belongs to somebody else. */
+  readonly actingForSomeoneElse = this.actingAsService.actingForSomeoneElse;
+  readonly actingAsName = computed(() => this.actingAsService.current()?.name ?? '');
+  readonly canSwitch = computed(() => this.actingAsService.available().length > 1);
+  readonly choices = this.actingAsService.available;
+  readonly actingAsId = computed(() => this.actingAsService.current()?.patientId ?? '');
+  /**
+   * Somebody with both their own record and a delegation has a decision to make, and it is not one to guess at.
+   * The service has computed this since delegation was built; until 2026-08-20 nothing rendered it, so the choice
+   * fell to whatever `sessionStorage` happened to hold.
+   */
+  readonly mustChoose = this.actingAsService.mustChoose;
 
   readonly account = toSignal(this.accountService.getAuthenticationState(), { initialValue: null });
 
@@ -185,6 +167,24 @@ export default class ShellComponent {
         // which is the behaviour that existed before delegation.
         error: () => this.actingAsService.setAvailable([]),
       });
+  }
+
+  /**
+   * Switches which record the portal is showing.
+   *
+   * <p>The reload is not optional. Every portal collection is cached per session, so without it the previous
+   * patient's record stays on screen under the new patient's name — which is the worst possible version of this
+   * feature's failure mode.</p>
+   */
+  switchRecord(patientId: string): void {
+    if (!patientId || patientId === this.actingAsId()) {
+      return;
+    }
+    this.actingAsService.select(patientId);
+    // PortalDataService.reload() re-runs PatientContextService too, so one call covers both the profile and every
+    // collection keyed off it.
+    this.data.reload();
+    void this.router.navigate(['/overview']);
   }
 
   openNav(): void {
