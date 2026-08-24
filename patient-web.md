@@ -197,7 +197,15 @@ Measured on 2026-08-03 with `npx ng test`: **all 146 suites and 681 tests pass**
 `npm test` **still fails**, in its `pretest` lint step rather than on parse errors:
 
 - `[x]` ESLint could not parse _any_ file, because `parserOptions.project` pointed at `src/test/javascript/cypress/tsconfig.json`, which was never committed — 456 identical parse errors. That entry is gone and the un-runnable Cypress skeleton is in `.eslintignore` (with a comment saying to restore both when Cypress comes back); both come back with the Cypress decision above.
-- `[ ]` Underneath sit **172 problems — 161 errors and 11 warnings — across 77 files**, none of them new (2026-07-30: 160 across 76). By rule: 73 selector-prefix (68 `component-selector` + 5 `directive-selector`, `jhi-*` where ESLint wants `hpd`), 22 `no-console`, 20 `member-ordering`, 15 empty lifecycle methods, 12 missing return types, 11 `use-lifecycle-interface`, and 19 assorted `@typescript-eslint` rules (`prefer-nullish-coalescing`, `no-unnecessary-condition`, `ban-types`, `no-unsafe-return`, …). The selector ones are Phase B territory — a repo-wide rename is deliberately not something to do in passing. Decide per group whether to fix the code or relax the rule, then gate `npm test` in CI (decision 3).
+- `[x]` **Cleared 2026-08-24: lint is clean, and `npm test` runs for the first time.** The backlog had
+  fallen to 48 errors; all are fixed rather than suppressed, except two `prefer-nullish-coalescing`
+  sites where `||` is deliberate and `??` would be a defect — those carry a disable and the reason
+  (the fallback exists for an _empty string_, which `??` passes straight through, so a profile with
+  a blank name would have rendered as a blank row). Lint now runs as its own CI step: the `pretest`
+  hook was the only thing that ever ran it and CI called `npx ng test` directly, so lint was
+  enforced nowhere — and because the hook fails before Jest starts, `npm test` exited 1 having
+  tested nothing.
+- `[x]` ~~Underneath sit **172 problems — 161 errors and 11 warnings — across 77 files**, none of them new (2026-07-30: 160 across 76). By rule:~~ 73 selector-prefix (68 `component-selector` + 5 `directive-selector`, `jhi-*` where ESLint wants `hpd`), 22 `no-console`, 20 `member-ordering`, 15 empty lifecycle methods, 12 missing return types, 11 `use-lifecycle-interface`, and 19 assorted `@typescript-eslint` rules (`prefer-nullish-coalescing`, `no-unnecessary-condition`, `ban-types`, `no-unsafe-return`, …). The selector ones are Phase B territory — a repo-wide rename is deliberately not something to do in passing. Decide per group whether to fix the code or relax the rule, then gate `npm test` in CI (decision 3).
 
 ## Phase B — refactoring
 

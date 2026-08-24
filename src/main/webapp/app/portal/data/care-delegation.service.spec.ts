@@ -91,7 +91,9 @@ describe('CareDelegationService', () => {
   });
 
   it('ends a delegation without deleting it', done => {
-    service.revoke('d1').subscribe(() => done());
+    service.revoke('d1').subscribe(() => {
+      done();
+    });
 
     // A POST to /revoke rather than a DELETE, because the record of who could act and between which dates is the
     // point — revoking sets a status.

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import SharedModule from 'app/shared/shared.module';
 import { PatientContextService } from 'app/portal/data/patient-context.service';
 import { LAST_STEP, ONBOARDING_STEPS, OnboardingService } from './onboarding.service';
+import { OnboardingCareAngel, OnboardingCurrentState, OnboardingIdentity } from './onboarding.model';
 
 /** The five steps, in the order they are asked and the order the backend numbers them. */
 const STEP_KEYS = ['identity', 'careAngel', 'baseline', 'currentState', 'identification'] as const;
@@ -106,6 +107,9 @@ export default class OnboardingComponent {
     cardNumber: ['', [Validators.required]],
   });
 
+  protected readonly lastStep = LAST_STEP;
+  protected readonly stepNumbers = ONBOARDING_STEPS;
+
   /** Resumes at the step the backend recorded, so a returning patient does not re-answer what they already have. */
   constructor() {
     this.onboardingService.status().subscribe(status => {
@@ -189,7 +193,7 @@ export default class OnboardingComponent {
     });
   }
 
-  private identityPayload() {
+  private identityPayload(): OnboardingIdentity {
     const value = this.identityForm.getRawValue();
     return {
       firstName: value.firstName,
@@ -211,7 +215,7 @@ export default class OnboardingComponent {
     };
   }
 
-  private careAngelPayload() {
+  private careAngelPayload(): OnboardingCareAngel {
     const value = this.careAngelForm.getRawValue();
     const standbyEmail = value.standbyEmail.trim();
     return {
@@ -241,7 +245,7 @@ export default class OnboardingComponent {
    * group that is neither answered nor declared empty — "I have no allergies" and "I have not said" being different
    * clinical statements.</p>
    */
-  private currentStatePayload() {
+  private currentStatePayload(): OnboardingCurrentState {
     const value = this.currentStateForm.getRawValue();
     const lines = (text: string): string[] =>
       text
@@ -258,7 +262,4 @@ export default class OnboardingComponent {
       noMedications: value.noMedications,
     };
   }
-
-  protected readonly lastStep = LAST_STEP;
-  protected readonly stepNumbers = ONBOARDING_STEPS;
 }

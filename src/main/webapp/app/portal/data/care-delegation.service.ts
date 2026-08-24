@@ -36,11 +36,11 @@ export interface MineResponse {
  */
 export function toActingAsChoices(response: MineResponse): ActingAsChoice[] {
   const choices: ActingAsChoice[] = [];
-  if (response.self?.patientId) {
+  if (response.self.patientId) {
     const name = [response.self.firstName, response.self.lastName].filter(Boolean).join(' ').trim();
     choices.push({ patientId: response.self.patientId, name: name || response.email, own: true });
   }
-  for (const delegation of response.delegations ?? []) {
+  for (const delegation of response.delegations) {
     if (delegation.status === 'ACTIVE') {
       // The patient's name, never the angel's: this label is how somebody tells whose record they are about to open.
       choices.push({ patientId: delegation.patientId, name: delegation.patientName ?? delegation.patientId, own: false });
@@ -68,7 +68,7 @@ export class CareDelegationService {
 
   /** Nominations waiting on this person's answer. */
   myInvitations(): Observable<readonly CareDelegation[]> {
-    return this.mine().pipe(map(response => (response.delegations ?? []).filter(delegation => delegation.status === 'PENDING')));
+    return this.mine().pipe(map(response => response.delegations.filter(delegation => delegation.status === 'PENDING')));
   }
 
   /** The delegations over the signed-in patient's own record, for the portal's delegation screen. */

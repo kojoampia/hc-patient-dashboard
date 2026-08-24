@@ -55,6 +55,14 @@ jobs:
       - name: Build production bundle
         run: npm run webapp:prod
 
+      # Lint runs here as its own step rather than through `npm test`'s pretest hook. Until 2026-08-24
+      # the hook was the only thing that ever ran it and CI called `npx ng test` directly, so lint was
+      # enforced nowhere -- 48 errors had accumulated, and because the hook fails before Jest starts,
+      # `npm test` exited 1 having tested nothing. A style error must not be able to masquerade as a
+      # test failure, and a test command must not be the only place style is checked.
+      - name: Lint
+        run: npm run lint
+
       - name: Run unit tests
         run: npx ng test --coverage=false
 

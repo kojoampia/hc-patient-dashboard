@@ -42,6 +42,8 @@ export default class ProfileComponent {
   private readonly membershipService = inject(MembershipService);
   private readonly data = inject(PortalDataService);
   private readonly memberships = toSignal(this.data.memberships$, { initialValue: [] });
+  /** Bumped after a revocation so the list re-reads rather than showing what was true a moment ago. */
+  private readonly delegationRefresh = signal(0);
 
   readonly formatDay = formatDay;
   readonly formatAddress = formatAddress;
@@ -49,8 +51,6 @@ export default class ProfileComponent {
 
   readonly activeTab = signal<ProfileTab>('about');
 
-  /** Bumped after a revocation so the list re-reads rather than showing what was true a moment ago. */
-  private readonly delegationRefresh = signal(0);
   readonly busy = signal(false);
   readonly delegationError = signal<string | null>(null);
 
@@ -87,6 +87,23 @@ export default class ProfileComponent {
   });
 
   /** The membership currently in force, preferring an explicitly active one. */
+  readonly membership = computed(() => {
+    const all = this.memberships();
+    return all.find(item => item.status?.toUpperCase() === 'ACTIVE') ?? all.at(0) ?? null;
+  });
+
+  /**
+   * The tiers on offer, empty when Abofonsa cannot be reached.
+   *
+   * <p>Fetched whether or not the patient already has a plan, so the screen can also offer a change — and because an
+   * empty list is the same quiet outcome either way.</p>
+   */
+  readonly plans = toSignal(this.membershipPlanService.plans(), { initialValue: [] as readonly MembershipPlan[] });
+
+  readonly choosingPlan = signal(false);
+
+  readonly planError = signal<string | null>(null);
+
   /**
    * Ends a delegation.
    *
@@ -111,22 +128,6 @@ export default class ProfileComponent {
       },
     });
   }
-
-  readonly membership = computed(() => {
-    const all = this.memberships();
-    return all.find(item => item.status?.toUpperCase() === 'ACTIVE') ?? all.at(0) ?? null;
-  });
-
-  /**
-   * The tiers on offer, empty when Abofonsa cannot be reached.
-   *
-   * <p>Fetched whether or not the patient already has a plan, so the screen can also offer a change — and because an
-   * empty list is the same quiet outcome either way.</p>
-   */
-  readonly plans = toSignal(this.membershipPlanService.plans(), { initialValue: [] as readonly MembershipPlan[] });
-
-  readonly choosingPlan = signal(false);
-  readonly planError = signal<string | null>(null);
 
   /**
    * Records the patient's choice as a Membership.
