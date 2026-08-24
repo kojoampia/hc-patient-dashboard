@@ -75,6 +75,31 @@ export const onboardingGuard: CanActivateFn = () => {
         map(hasDelegations => router.parseUrl(hasDelegations ? '/invitations' : '/onboarding')),
       );
     }),
+    /**
+     * <b>This guard must never error, and the reason is not obvious.</b>
+     *
+     * <p>`canActivate: [UserRouteAccessService, onboardingGuard]` does NOT run in sequence. Angular resolves a
+     * route's guards with `prioritizedGuardValue()`: every one of them is subscribed at once, and the answer taken
+     * is the first-declared that is not `true`. So this guard fires its request even on loads where the caller is
+     * not signed in at all and `UserRouteAccessService` is already on its way to returning false.</p>
+     *
+     * <p>With an expired token both guards then get a 401 at the same moment. The auth guard handles its own —
+     * `identity()` catches and answers null, and it redirects to /login. This one did not, so the 401 from
+     * `status()` errored the guard, and an erroring guard aborts the navigation outright: the URL stays where it
+     * was, the outlet renders nothing, and the only trace is one line in the console. A blank page, on the portal
+     * root, for anyone whose session had simply expired.</p>
+     *
+     * <p>It presented as intermittent because it is a race — whichever 401 arrives first decides whether the
+     * navigation is cancelled cleanly by the auth guard or killed by this one. That also means it was never
+     * specific to `/`; every route under the shell had it.</p>
+     *
+     * <p>`true` rather than a redirect is the right answer to a failure here. This guard is not the authority on
+     * whether somebody may be in the portal — `UserRouteAccessService` is, it is declared first, and its `false`
+     * outranks this `true`. When the session IS valid and the status call merely failed, letting them through is
+     * the same call the mobile fork makes for the same reason: a network blip must not throw a fully onboarded
+     * patient at a wizard they do not need.</p>
+     */
+    catchError(() => of(true as boolean | UrlTree)),
   );
 };
 
@@ -105,5 +130,10 @@ export const onboardingCompleteGuard: CanActivateFn = () => {
     return router.parseUrl('/overview');
   }
 
-  return onboardingService.status().pipe(map(status => (status.onboarded ? router.parseUrl('/overview') : true)));
+  return onboardingService.status().pipe(
+    map(status => (status.onboarded ? router.parseUrl('/overview') : true)),
+    // Same hazard, same reason — see the note on the guard above. This one guards /onboarding, which carries
+    // UserRouteAccessService alongside it and so races it in exactly the same way.
+    catchError(() => of(true as boolean | UrlTree)),
+  );
 };
