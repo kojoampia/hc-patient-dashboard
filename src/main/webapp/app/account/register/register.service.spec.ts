@@ -60,7 +60,9 @@ describe('RegisterService Service', () => {
       });
 
       // THEN
-      expect(testRequest.request.body).toEqual({ email, langKey, login, password });
+      // source is part of the posted body now: null when nobody said where the family came from, which the
+      // gateway stores as-is rather than defaulting.
+      expect(testRequest.request.body).toEqual({ email, langKey, login, password, source: null });
     });
   });
 });

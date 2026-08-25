@@ -2,6 +2,7 @@ jest.mock('app/core/auth/account.service');
 
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpErrorResponse, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
@@ -25,7 +26,10 @@ describe('RegisterComponent username look-ahead', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TranslateModule.forRoot(), RegisterComponent],
-      providers: [FormBuilder, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
+      providers: [
+      // RegisterComponent reads the handoff query string on init, so it needs a route even where this spec does
+      // not care about one. No parameters: the default is "nobody said where they came from".
+      { provide: ActivatedRoute, useValue: { snapshot: { queryParamMap: convertToParamMap({}) } } },FormBuilder, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
     })
       .overrideTemplate(RegisterComponent, '')
       .compileComponents();
