@@ -1,0 +1,19 @@
+{
+  "login": {
+    "title": "Iniciar sesión",
+    "form": {
+      "password": "Contraseña",
+      "password.placeholder": "Su contraseña",
+      "rememberme": "No cerrar sesión",
+      "button": "Iniciar sesión"
+    },
+    "messages": {
+      "error": {
+        "authentication": "<strong>¡No se ha podido iniciar sesión!</strong> Compruebe sus credenciales e inténtelo de nuevo."
+      }
+    },
+    "password": {
+      "forgot": "¿Ha olvidado su contraseña?"
+    }
+  }
+}

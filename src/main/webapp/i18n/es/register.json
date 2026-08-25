@@ -1,0 +1,28 @@
+{
+  "register": {
+    "title": "Registro",
+    "form": {
+      "button": "Registrarse"
+    },
+    "messages": {
+      "validate": {
+        "login": {
+          "required": "El nombre de usuario es obligatorio.",
+          "minlength": "El nombre de usuario debe tener al menos 1 carácter.",
+          "maxlength": "El nombre de usuario no puede superar los 50 caracteres.",
+          "pattern": "El nombre de usuario no es válido.",
+          "checking": "Comprobando disponibilidad…",
+          "available": "Este nombre de usuario está disponible.",
+          "taken": "Este nombre de usuario ya está en uso.",
+          "suggestions": "Disponibles en su lugar:"
+        }
+      },
+      "success": "<strong>¡Registro guardado!</strong> Consulte su correo electrónico para confirmarlo.",
+      "error": {
+        "fail": "<strong>¡El registro ha fallado!</strong> Vuelva a intentarlo más tarde.",
+        "userexists": "<strong>¡Ese nombre de usuario ya está registrado!</strong> Elija otro.",
+        "emailexists": "<strong>¡Ese correo electrónico ya está en uso!</strong> Elija otro."
+      }
+    }
+  }
+}

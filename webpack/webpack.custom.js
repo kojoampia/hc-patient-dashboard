@@ -144,6 +144,11 @@ module.exports = async (config, options, targetOptions) => {
           { pattern: './src/main/webapp/i18n/en/*.json', fileName: './i18n/en.json' },
           { pattern: './src/main/webapp/i18n/fr/*.json', fileName: './i18n/fr.json' },
           { pattern: './src/main/webapp/i18n/de/*.json', fileName: './i18n/de.json' },
+          // Spanish is added incrementally rather than in one pass -- a locale may ship incomplete because
+          // ngx-translate falls back to English per key (see translation-fallback.spec.ts). Without this line the
+          // bundle is never produced at all and `es` degrades to English wholesale, which looks identical to a
+          // translation that simply has not been done yet.
+          { pattern: './src/main/webapp/i18n/es/*.json', fileName: './i18n/es.json' },
           // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array
         ],
       },
