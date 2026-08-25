@@ -1,0 +1,131 @@
+<div class="hc-rec-head">
+  <div class="hc-grow">
+    <div class="hc-rec-head__who" hpdTranslate="patientPortal.deleteAccount.title">Delete your record</div>
+  </div>
+
+  <a class="hc-btn hc-btn--ghost hc-btn--sm" routerLink="/portal/profile">
+    <hpd-icon name="chev" [size]="15" />
+    <span hpdTranslate="patientPortal.action.viewProfile">Profile</span>
+  </a>
+</div>
+
+@if (actingForSomeoneElse()) {
+  <!--
+    An angel acts FOR a patient, and that is not a mandate to end their record. The server refuses
+    this too — offering the control and letting it fail would read as a broken app.
+  -->
+  <div class="hc-card hc-card-pad hc-mt-16">
+    <hpd-icon name="user" [size]="24" />
+    <h2 class="hc-h3" hpdTranslate="patientPortal.deleteAccount.angel.title">Not available while acting for someone</h2>
+    <p class="hc-muted" hpdTranslate="patientPortal.deleteAccount.angel.body">
+      You are viewing another person's record. Only they can ask for it to be deleted.
+    </p>
+  </div>
+} @else if (isLoading()) {
+  <div class="hc-card hc-card-pad hc-mt-16">
+    <p class="hc-muted" hpdTranslate="patientPortal.deleteAccount.loading">Checking your account…</p>
+  </div>
+} @else if (isFailed()) {
+  <div class="hc-card hc-card-pad hc-mt-16">
+    <p hpdTranslate="patientPortal.deleteAccount.error.load">We could not check whether you have a deletion request open.</p>
+    <button type="button" class="hc-btn hc-btn--ghost hc-btn--sm" (click)="reload()">
+      <span hpdTranslate="patientPortal.deleteAccount.retry">Try again</span>
+    </button>
+  </div>
+} @else if (pending(); as open) {
+  <!-- A request is already running. The date is the promise, so it is the largest thing here. -->
+  <div class="hc-card hc-card-pad hc-mt-16 hc-card--warn">
+    <hpd-icon name="clock" [size]="24" />
+    <h2 class="hc-h3" hpdTranslate="patientPortal.deleteAccount.pending.title">Your record is scheduled for deletion</h2>
+    <p>{{ 'patientPortal.deleteAccount.pending.body' | translate: { date: formatInstantDay(open.dueAt) } }}</p>
+    <p class="hc-muted hc-sm">
+      {{ 'patientPortal.deleteAccount.pending.requested' | translate: { date: formatInstantDay(open.requestedAt) } }}
+    </p>
+
+    @if (actionError(); as err) {
+      <div class="hc-alert hc-alert--danger" role="alert">{{ err | translate }}</div>
+    }
+
+    <button type="button" class="hc-btn hc-btn--primary" [disabled]="busy()" (click)="cancelRequest()">
+      <span hpdTranslate="patientPortal.deleteAccount.pending.keep">Keep my record after all</span>
+    </button>
+    <p class="hc-muted hc-sm" hpdTranslate="patientPortal.deleteAccount.pending.keepHint">
+      You can change your mind at any time until the deletion is carried out.
+    </p>
+  </div>
+} @else if (confirming()) {
+  <!--
+    The second step. Differently worded from the first on purpose: "Request deletion" and
+    "Yes, delete my record" cannot be confused for one another.
+  -->
+  <div class="hc-card hc-card-pad hc-mt-16 hc-card--danger">
+    <h2 class="hc-h3" hpdTranslate="patientPortal.deleteAccount.confirm.title">Delete your record?</h2>
+    <p hpdTranslate="patientPortal.deleteAccount.confirm.body">
+      This asks us to erase your health record. It cannot be undone once carried out.
+    </p>
+
+    <ul class="hc-prose">
+      <li hpdTranslate="patientPortal.deleteAccount.confirm.item.record">Your profile, conditions, medications and allergies</li>
+      <li hpdTranslate="patientPortal.deleteAccount.confirm.item.clinical">Your cases, reports, care plans and visits</li>
+      <li hpdTranslate="patientPortal.deleteAccount.confirm.item.delegations">Anyone's permission to act for you</li>
+    </ul>
+
+    <p class="hc-muted" hpdTranslate="patientPortal.deleteAccount.confirm.window">
+      Your record will be deleted within 14 days of this request. You can withdraw it at any time before then.
+    </p>
+
+    <label class="hc-field">
+      <span class="hc-field__label" hpdTranslate="patientPortal.deleteAccount.confirm.reasonLabel">Why are you leaving? (optional)</span>
+      <textarea
+        class="hc-input"
+        rows="3"
+        maxlength="500"
+        [placeholder]="'patientPortal.deleteAccount.confirm.reasonPlaceholder' | translate"
+        [ngModel]="reason()"
+        (ngModelChange)="reason.set($event)"
+      ></textarea>
+    </label>
+
+    @if (actionError(); as err) {
+      <div class="hc-alert hc-alert--danger" role="alert">{{ err | translate }}</div>
+    }
+
+    <!--
+      Keeping the record is the PRIMARY button and the destructive one is the quiet ghost beside
+      it. The reflex is the opposite — a big red Delete — and it is wrong here: the two outcomes
+      are not equally recoverable, so they must not be equally easy to hit.
+    -->
+    <div class="hc-row hc-gap-8">
+      <button type="button" class="hc-btn hc-btn--primary" [disabled]="busy()" (click)="abandon()">
+        <span hpdTranslate="patientPortal.deleteAccount.confirm.keep">Keep my record</span>
+      </button>
+      <button type="button" class="hc-btn hc-btn--ghost hc-btn--danger" [disabled]="busy()" (click)="confirm()">
+        <span hpdTranslate="patientPortal.deleteAccount.confirm.proceed">Yes, delete my record</span>
+      </button>
+    </div>
+  </div>
+} @else {
+  <div class="hc-card hc-card-pad hc-mt-16">
+    <h2 class="hc-h3" hpdTranslate="patientPortal.deleteAccount.intro.title">Delete your record</h2>
+    <p hpdTranslate="patientPortal.deleteAccount.intro.body">
+      You can ask us to delete your health record and everything in it. We carry it out within 14 days, and you can withdraw the request at
+      any point before then.
+    </p>
+    <p class="hc-muted" hpdTranslate="patientPortal.deleteAccount.intro.review">
+      An administrator carries out the deletion, so that nothing is erased by a single tap.
+    </p>
+
+    @if (actionError(); as err) {
+      <div class="hc-alert hc-alert--danger" role="alert">{{ err | translate }}</div>
+    }
+
+    <div class="hc-row hc-gap-8">
+      <button type="button" class="hc-btn hc-btn--ghost hc-btn--danger" (click)="startConfirm()">
+        <span hpdTranslate="patientPortal.deleteAccount.intro.request">Request deletion</span>
+      </button>
+      <a class="hc-btn hc-btn--ghost" [href]="policyUrl" target="_blank" rel="noopener noreferrer">
+        <span hpdTranslate="patientPortal.deleteAccount.intro.policy">Read the privacy policy</span>
+      </a>
+    </div>
+  </div>
+}

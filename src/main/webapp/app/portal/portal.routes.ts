@@ -73,6 +73,20 @@ const routes: Routes = [
     title: 'patientPortal.title.profile',
     loadComponent: () => import('./profile/profile.component'),
   },
+  /*
+   * Deliberately not a sidebar entry — it is reached from the profile screen, which is. A
+   * destructive path has no business sitting in the nav beside "Activity", and `NAV_OWNER` maps it
+   * back to `profile` so the sidebar stays lit on the entry the patient came from.
+   *
+   * Parity with hc-patient-app's `/tabs/delete-account`, which came first: the mobile app needed it
+   * for Google Play's account-deletion requirement, and somebody who uses both clients should find
+   * the same thing in both.
+   */
+  {
+    path: 'delete-account',
+    title: 'patientPortal.deleteAccount.title',
+    loadComponent: () => import('./account/account-deletion.component'),
+  },
 ];
 
 export default routes;

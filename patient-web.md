@@ -11,6 +11,33 @@ Status legend: `[x]` done · `[~]` partial / diverges from plan · `[ ]` not sta
 
 ## What changed since the last baseline
 
+### The patient handoff contract, honoured (2026-08-25)
+
+`web.abofonsa.com` links families straight to `/account/register?locale=…&src=…` from its landing page.
+`register.component.ts` took no `ActivatedRoute` and read no query string, so **both parameters were dropped on
+the floor**: a family who read the offer in French got an English form, and nobody could say whether the offer
+converted. `docs/patient-handoff-contract.md` carries the contract and the response.
+
+- `[x]` **`locale` is read and degrades rather than validating.** A supported locale starts the form in that
+  language and — because the form submits `translateService.currentLang` as `langKey` — is stored on the
+  account. Unknown, misspelled or absent leaves the language untouched, because people share these links with
+  the query string mangled and a broken parameter must never cost somebody a working form.
+- `[x]` **`src` is allow-listed here and enforced at the gateway.** The browser copy keeps an ordinary visitor's
+  URL honest and is worth nothing as a defence: `/api/register` is public, so anybody can post anything
+  without going near the form. The cost is stated rather than hidden — **a surface nobody has agreed to loses
+  its attribution silently.**
+- `[x]` **`/account/register` is pinned** by `register.route.spec.ts`, asserting the path _and_ the component.
+  A rename would otherwise answer 200 and serve the shell while the sending site's button led nowhere.
+- `[x]` **Spanish, account path only.** The contract advertised `es` and this app served three languages, so a
+  Spanish reader had been landing in English since the link went up. Clinical bundles are deliberately last
+  and behind clinical review.
+- `[x]` **German and French gaps closed** — de was missing ten keys, fr one. Found while scoping this.
+- `[ ]` **The clinical Spanish bundles** — `patientPortal.json` and `patientMs*`, 1030 keys. Needs a
+  Spanish-speaking clinician, not a faster translator.
+- `[ ]` **Pricing agreement.** Plan selection renders `priceAmount` verbatim from the Abofonsa plans API while
+  the landing page pitches the first month free. This side authors no pricing; somebody who owns both has to
+  confirm they agree.
+
 ### The administrator's portal, and what an empty screen was hiding (2026-08-22)
 
 - `[x]` **An administrator is no longer sent to the onboarding wizard.** `onboardingGuard` asked a
@@ -121,7 +148,7 @@ Resolved since the last baseline, kept so the numbering change is traceable:
 
 ## Baseline — already in place
 
-- `[x]` Angular 20 app (standalone + legacy NgModules), JHipster 8.1.0 client-only scaffold, i18n for `en`/`fr`/`de`. Was Angular 17 at the last baseline; the guide's stack table said 17 until 2026-08-23.
+- `[x]` Angular 20 app (standalone + legacy NgModules), JHipster 8.1.0 client-only scaffold, i18n for `en`/`fr`/`de`, plus a partial `es` (2026-08-25). Was Angular 17 at the last baseline; the guide's stack table said 17 until 2026-08-23.
 - `[x]` Auth against the gateway with interceptor-based JWT attachment, `UserRouteAccessService` guards, account and admin surfaces.
 - `[x]` Dashboard rendered by `HomeComponent` at `/`, with `metric-panel` and `status-panel`.
 - `[x]` Modal feature views: temperature, blood pressure, heart rate, sugar, allergies, emergency.
@@ -389,7 +416,16 @@ Asked and answered rather than assumed, because each changes what gets built:
 
 Batch 1 — the record's own counts and copy. **Done 2026-08-16**, verified against the seeded record
 from `npm start` over a tunnel; every string added to `en`, `fr` and `de` (209 keys each, checked
-equal — a key missing from one bundle renders as the raw key in that language):
+equal — see the correction below):
+
+> **That parenthesis was wrong, and it is corrected here because it is load-bearing.** A key missing from one
+> bundle does **not** render as the raw key. `translation.module.ts` calls `setDefaultLang('en')`, so
+> ngx-translate falls back to the English string; the `translation-not-found[key]` marker only appears when
+> English lacks the key too. Verified 2026-08-25 and pinned by `config/translation-fallback.spec.ts`.
+>
+> Keeping the bundles equal is still right. What was wrong was the stakes — it made a fourth language look like
+> an all-or-nothing 1221-key sweep, when a locale can in fact ship in tranches and degrade to English in between.
+> Spanish was added that way as a direct result.
 
 - `[x]` **C6 · both tile rows on the overview** (decision 3), the demo's row linking through under
   "Tap any tile to open it".

@@ -257,6 +257,18 @@
       }
     </div>
   </div>
+
+  <!--
+    Outside the tab panel on purpose, so it is reachable whichever tab is open. It is a link to a
+    REQUEST, not a delete affordance: the patient service reserves erasure to ROLE_ADMIN, and this
+    screen has never offered one. Parity with hc-patient-app, where Google Play requires the same
+    path to exist inside the app.
+  -->
+  <div class="hc-mt-16">
+    <a class="hc-btn hc-btn--ghost hc-btn--sm" routerLink="/portal/delete-account">
+      <span hpdTranslate="patientPortal.deleteAccount.link">Delete your record</span>
+    </a>
+  </div>
 } @else {
   <div class="hc-card">
     <hpd-empty-state icon="user" titleKey="patientPortal.profile.noProfile" messageKey="patientPortal.profile.noProfileHint" />
