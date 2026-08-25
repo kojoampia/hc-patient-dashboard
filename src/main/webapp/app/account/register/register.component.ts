@@ -1,12 +1,14 @@
-import { Component, AfterViewInit, ElementRef, ViewChild, signal } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { AbstractControl, FormGroup, FormControl, ValidationErrors, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable, of, timer } from 'rxjs';
 import { catchError, first, map, switchMap, tap } from 'rxjs/operators';
 
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/config/error.constants';
+import { LANGUAGES } from 'app/config/language.constants';
+import { handoffSource } from './handoff';
 import SharedModule from 'app/shared/shared.module';
 import PasswordStrengthBarComponent from '../password/password-strength-bar/password-strength-bar.component';
 import { RegisterService } from './register.service';
@@ -19,7 +21,17 @@ export const USERNAME_CHECK_DEBOUNCE_MS = 400;
     imports: [SharedModule, RouterModule, FormsModule, ReactiveFormsModule, PasswordStrengthBarComponent],
     templateUrl: './register.component.html'
 })
-export default class RegisterComponent implements AfterViewInit {
+export default class RegisterComponent implements AfterViewInit, OnInit {
+  private readonly route = inject(ActivatedRoute);
+
+  /**
+   * Where this family came from, when the sending surface said so.
+   *
+   * <p>Carried to the gateway on the registration payload and stored on the account, because a funnel nobody can
+   * join is an offer nobody can end. Allow-listed rather than passed through — see {@link handoffSource}.</p>
+   */
+  private source: string | null = null;
+
   @ViewChild('login', { static: false })
   login?: ElementRef;
 
@@ -99,6 +111,34 @@ export default class RegisterComponent implements AfterViewInit {
     this.registerForm.controls.login.markAsDirty();
   }
 
+  /**
+   * Honours the two parameters `web.abofonsa.com` sends with the handoff link.
+   *
+   * <p>`?locale=` is the language the family was reading when they pressed the button. Landing them on a form in
+   * a language they did not choose is the whole failure this prevents, and it is invisible from this side —
+   * nothing errors, the form simply arrives in English.</p>
+   *
+   * <p><strong>It degrades rather than validating.</strong> An unknown, misspelled or absent locale leaves the
+   * language exactly as it was, because people bookmark and share these links with the query string mangled and a
+   * broken parameter must never cost somebody a working registration form.</p>
+   *
+   * <p>Nothing is read from the query string beyond these two. The sending contract states that no personal data
+   * is in the link and none may ever be added; reading only what is named is how this side keeps that true even
+   * if the other side forgets.</p>
+   */
+  ngOnInit(): void {
+    const params = this.route.snapshot.queryParamMap;
+
+    const locale = params.get('locale');
+    if (locale !== null && LANGUAGES.includes(locale)) {
+      // Also sets what the form submits: the payload below sends translateService.currentLang, so the account is
+      // created in the language they were reading rather than the one they happened to land in.
+      this.translateService.use(locale);
+    }
+
+    this.source = handoffSource(params.get('src'));
+  }
+
   register(): void {
     this.doNotMatch.set(false);
     this.error.set(false);
@@ -111,7 +151,7 @@ export default class RegisterComponent implements AfterViewInit {
     } else {
       const { login, email } = this.registerForm.getRawValue();
       this.registerService
-        .save({ login, email, password, langKey: this.translateService.currentLang })
+        .save({ login, email, password, langKey: this.translateService.currentLang, source: this.source })
         .subscribe({ next: () => this.success.set(true), error: response => this.processError(response) });
     }
   }
