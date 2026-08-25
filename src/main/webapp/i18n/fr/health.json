@@ -25,7 +25,8 @@
     "status": {
       "UNKNOWN": "INCONNU",
       "UP": "DISPONIBLE",
-      "DOWN": "HORS SERVICE"
+      "DOWN": "HORS SERVICE",
+      "OUT_OF_SERVICE": "OUT_OF_SERVICE"
     }
   }
 }
