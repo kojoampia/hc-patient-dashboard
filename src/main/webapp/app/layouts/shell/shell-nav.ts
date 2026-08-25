@@ -62,6 +62,9 @@ export const NAV_OWNER: Readonly<Record<string, string | undefined>> = {
   cases: 'cases',
   visitations: 'record',
   activity: 'record',
+  // Not a nav entry of its own — see portal.routes.ts. Without this the sidebar would light nothing
+  // while the patient is on a screen that plainly belongs to their account.
+  'delete-account': 'profile',
 };
 
 /** Resolves the sidebar entry that should read as active for a given portal path. */

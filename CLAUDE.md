@@ -13,7 +13,7 @@ Health Connect Patient Dashboard (`patientDashboard`) — the Angular web client
 | UI               | ng-bootstrap 16 + Bootstrap/SCSS, d3 7 for the custom widgets                                     |
 | Tests            | Jest 29 via `@angular-builders/jest` (`jest.conf.js`)                                             |
 | Build            | Angular CLI 20 + `@angular-builders/custom-webpack` (`webpack/`), output `target/classes/static/` |
-| i18n             | enabled — `en`, `fr`, `de` under `src/main/webapp/i18n`                                           |
+| i18n             | enabled — `en`, `fr`, `de`, and `es` (partial) under `src/main/webapp/i18n`                       |
 | Dev server       | 4200 (`npm start`, HMR)                                                                           |
 | Component prefix | ESLint requires `hpd`; `angular.json` still says `jhi` and legacy `jhi-*` selectors remain        |
 
@@ -125,7 +125,13 @@ Two things that will bite anyone touching the portal's data layer:
 - **The dev ribbon reads `window.location.hostname`**, not the backend's profiles, and it is a weaker signal on purpose. The old one marked _which Spring profiles are running_; this one marks _which machine you are looking at_. They agree everywhere they are used today and come apart in one case — `dev` or `test` active on the production host would no longer light anything up. That case is guarded by `deploy.sh` and by `SPRING_PROFILES_ACTIVE`; this component is not part of that defence and should not be read as though it were.
 - No `any`, `Observable<any>`, or `HttpResponse<any>` in new code; type API payloads explicitly.
 - Standalone-first for new work; don't rewrite the whole app to one style in a single pass, and don't run a repo-wide `jhi-*` → `hpd-*` selector migration unless that is the task.
-- Every user-visible string needs a key in all three i18n bundles.
+- Every user-visible string needs a key in `en`, `fr` and `de`. **A missing key falls back to English**, it does
+  not render the raw key — `setDefaultLang('en')` means ngx-translate consults English before it reaches
+  `MissingTranslationHandlerImpl`, whose `translation-not-found[key]` marker is the _second_ fallback and appears
+  only when English lacks the key too. Pinned by `config/translation-fallback.spec.ts`.
+- `es` is deliberately incomplete: the account path only. The clinical bundles wait on review by a Spanish-speaking
+  clinician, and until then those screens show English. Adding a locale means a line in `LANGUAGES` **and** one in
+  `webpack.custom.js` — without the second no bundle is produced and the language degrades wholesale.
 - Indentation is 2 spaces everywhere (`.editorconfig` root `indent_size = 2`; its `[*.md]` section only disables trailing-whitespace trimming), and lint-staged runs Prettier on commit.
 - Cypress is configured in `.yo-rc.json` with a skeleton under `src/test/javascript/cypress/`, but it is not installed and has no npm script — e2e cannot run today.
 - This repo no longer packages or deploys itself: `nginx.conf`, the Dockerfile, `docker-compose*.yml` and the `docker:*:tag`/`deploy:*` scripts moved to `hc-patient/deploy/` (repo `kojoampia/hc-patient-ci`). Change the image, its nginx config, or the deploy there, not here. The generated `src/main/docker/*.yml` helpers stay — they are local dev services, not deployment.
