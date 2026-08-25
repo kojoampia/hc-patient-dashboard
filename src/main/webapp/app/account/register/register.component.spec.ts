@@ -173,12 +173,23 @@ describe('RegisterComponent', () => {
     });
 
     it('leaves the language alone when the locale is one we do not serve', () => {
-      // The contract sends es, de, fr and en; this app serves three of those. An unsupported locale must be
-      // ignored rather than attempted.
+      // `it` rather than a language we might plausibly add. This test used `es` until Spanish was added hours
+      // later, at which point it failed on main having passed on both branches -- the assertion had quietly
+      // encoded "es is not served" as though it were a property of the code rather than a fact of the moment.
+      // Pick something the contract does not send and nobody is proposing.
       const translate = TestBed.inject(TranslateService);
       const before = translate.currentLang;
-      startWith({ locale: 'es' });
+      startWith({ locale: 'it' });
       expect(TestBed.inject(TranslateService).currentLang).toBe(before);
+    });
+
+    it('serves every locale the sending contract advertises', () => {
+      // The other half, and the one that would have caught the gap for a Spanish reader far sooner: the contract
+      // names en, es, fr and de, and this asserts we honour all four rather than silently dropping one.
+      for (const locale of ['en', 'es', 'fr', 'de']) {
+        startWith({ locale });
+        expect(TestBed.inject(TranslateService).currentLang).toBe(locale);
+      }
     });
 
     it('survives a mangled query string rather than erroring', () => {
