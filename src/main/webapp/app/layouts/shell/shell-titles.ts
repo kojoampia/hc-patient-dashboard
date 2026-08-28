@@ -5,9 +5,19 @@ export interface PageTitle {
 }
 
 /**
- * Keyed by the first path segment. Screens reached from a parent — `case`, `visitations`,
- * `activity` — appear here too, so their title is their own even though the sidebar keeps the
- * parent lit.
+ * Keyed by the first path segment.
+ *
+ * <p>The crumb names where the screen sits, and there are exactly two cases. A screen that is in the
+ * sidebar takes its own `groupKey` from `SHELL_NAV` — "Health", "Clinical", "Account". A screen reached
+ * from a parent takes the parent's nav label instead, so `case` reads "Cases ▸ Case", which is the only
+ * entry of that kind today.</p>
+ *
+ * <p><b>The two must not be mixed up, and were until 2026-08-28:</b> `visitations` and `activity` carried
+ * `nav.record`, from when they were reached from the record screen and had no sidebar entry of their own.
+ * They have had entries since, so the breadcrumb said "Record" while the sidebar lit something else — the
+ * same stale assumption that had `NAV_OWNER` pointing their highlight at `record`. Note the two do not
+ * land in the same group: `visitations` is under Health, `activity` under Account. `shell-nav.spec.ts`
+ * fails if a screen that is in the sidebar breadcrumbs to another sidebar entry.</p>
  */
 /** Shown for any path with no entry of its own, and for the portal root. */
 export const DEFAULT_PAGE_TITLE: PageTitle = {
@@ -26,7 +36,7 @@ export const PAGE_TITLES: Readonly<Record<string, PageTitle | undefined>> = {
   reports: { crumbKey: 'patientPortal.nav.group.clinical', titleKey: 'patientPortal.title.reports' },
   plans: { crumbKey: 'patientPortal.nav.group.clinical', titleKey: 'patientPortal.title.plans' },
   allergies: { crumbKey: 'patientPortal.nav.group.clinical', titleKey: 'patientPortal.title.allergies' },
-  visitations: { crumbKey: 'patientPortal.nav.record', titleKey: 'patientPortal.title.visitations' },
-  activity: { crumbKey: 'patientPortal.nav.record', titleKey: 'patientPortal.title.activity' },
+  visitations: { crumbKey: 'patientPortal.nav.group.health', titleKey: 'patientPortal.title.visitations' },
+  activity: { crumbKey: 'patientPortal.nav.group.account', titleKey: 'patientPortal.title.activity' },
   profile: { crumbKey: 'patientPortal.nav.group.account', titleKey: 'patientPortal.title.profile' },
 };
