@@ -11,6 +11,33 @@ Status legend: `[x]` done · `[~]` partial / diverges from plan · `[ ]` not sta
 
 ## What changed since the last baseline
 
+### The sidebar lit the wrong entry (2026-08-28)
+
+Clicking **Visitations** highlighted **My record**. So did clicking **Activity**. Three faults in one
+nine-line map, all of them in `NAV_OWNER`, and none of them breaking anything — every screen rendered
+correctly with the wrong entry lit, which is why they survived.
+
+`NAV_OWNER` exists for screens reached from a parent rather than from the nav, so a case detail keeps
+_Cases_ lit instead of leaving the whole sidebar unselected. It fails quietly in **two** directions.
+
+- `[x]` **`visitations: 'record'` and `activity: 'record'` were entries for screens that are in the nav.**
+  Both were correct when written — neither had a sidebar entry, which is precisely what Phase E, B1 below
+  recorded — and both went stale when entries were added and this map was not revisited. An entry here for
+  a nav screen does not merely do nothing; it redirects the highlight away from the thing just clicked.
+- `[x]` **`cases: 'cases'` was the wrong key and did nothing.** `cases` is a nav entry, so the fallback in
+  `navOwnerOf` already resolves it to itself. The screen the line was written for is the case _detail_,
+  routed at `case/:id`, whose head is `case` — which had no entry, so opening a case lit no part of the
+  sidebar at all. That is the exact failure the map's own comment claims to prevent. `shell-titles.ts`
+  keys the same screen `case`, and always did: two files disagreeing about the name of one thing.
+- `[x]` **`shell-nav.spec.ts` now asserts both rules** — every `SHELL_NAV` path owns itself, and every
+  routed portal screen lights a real entry. Verified by restoring the old map and watching all three
+  defects go red.
+
+`[ ]` **Open, and a judgement call rather than a defect:** `PAGE_TITLES` still gives `visitations` and
+`activity` the crumb `patientPortal.nav.record`, from the same era. They are now their own entries in the
+_health_ group, so the breadcrumb says "Record" while the sidebar says otherwise. Left alone deliberately —
+which reads better is a decision about the information architecture, not a wiring bug.
+
 ### "Delete your record" led to a 404 (2026-08-28)
 
 The account-deletion screen shipped complete on 2026-08-25 — component, `DeletionRequestService`, the intro,

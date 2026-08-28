@@ -57,11 +57,19 @@ export const SHELL_TABS: readonly string[] = ['overview', 'record', 'schedules',
 /**
  * Screens that are reached from a parent rather than from the sidebar. The sidebar highlights the
  * owner so a case detail page does not leave the whole nav looking unselected.
+ *
+ * <p><b>Only screens that are not in SHELL_NAV belong here.</b> An entry for one that is redirects the
+ * highlight away from the thing the patient just clicked — which is what `visitations` and `activity`
+ * did until 2026-08-28. Both were mapped to `record`, correctly, back when neither had a sidebar entry
+ * of its own (`patient-web.md` Phase E, B1); entries were added later and this map was not revisited.
+ * `shell-nav.spec.ts` now fails if a SHELL_NAV path appears here.</p>
  */
 export const NAV_OWNER: Readonly<Record<string, string | undefined>> = {
-  cases: 'cases',
-  visitations: 'record',
-  activity: 'record',
+  // The case *detail* screen, whose route is `case/:id`. The key is the singular head of that path:
+  // `cases` — which is what stood here — is a nav entry already, so it resolved to itself through the
+  // fallback below and this map did nothing, while the detail screen it was written for lit nothing.
+  // `shell-titles.ts` keys the same screen `case`, and always did.
+  case: 'cases',
   // Not a nav entry of its own — see portal.routes.ts. Without this the sidebar would light nothing
   // while the patient is on a screen that plainly belongs to their account.
   'delete-account': 'profile',
