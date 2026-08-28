@@ -11,6 +11,41 @@ Status legend: `[x]` done · `[~]` partial / diverges from plan · `[ ]` not sta
 
 ## What changed since the last baseline
 
+### "Delete your record" led to a 404 (2026-08-28)
+
+The account-deletion screen shipped complete on 2026-08-25 — component, `DeletionRequestService`, the intro,
+confirm and pending states, translations in all three locales, a route at `delete-account`, and a `NAV_OWNER`
+entry so the sidebar stays lit on `profile` while it is open. It was **unreachable for three days**, and so was
+the way back out of it.
+
+`portal.routes.ts` is mounted at the empty path inside the shell, so the portal's screens are `/profile`,
+`/record`, `/overview`. Two links were written with a `/portal` prefix that no route defines.
+
+- `[x]` **`profile.component.html` linked to `/portal/delete-account`.** The reported symptom: the button
+  renders, the anchor has an href, and clicking it lands on the 404 page.
+- `[x]` **`account-deletion.component.html` linked back to `/portal/profile`.** The screen was stranded at
+  both ends, which is why the first defect was never worked around by hand.
+- `[x]` **`portal-links.spec.ts` now asserts every literal `routerLink` in the portal and the shell resolves
+  against the real route config**, `loadChildren` followed and `**` deliberately excluded — with the catch-all
+  in the set, every conceivable string resolves and the test asserts nothing. Verified by reverting the fix and
+  watching it go red, which is the only thing that distinguishes a guard from a green test.
+
+**Why nothing caught it, which is the part worth keeping.** `account-deletion.component.spec.ts` passed
+throughout: it mounts the component directly and never asks the router whether anything can reach it. So did
+`ng build`, and so did every check in `quality/` — they read the running stack, and the stack was fine. Angular
+reports nothing here at all, because `routerLink` accepts any string. **A link is worse than a wrong route
+path**, which at least `register.route.spec.ts` would pin: the failure exists only for whoever clicks it.
+
+Two things this uncovered and did **not** fix:
+
+- `[ ]` **`layouts/navbar/` is dead and its links are wrong.** Generated JHipster scaffolding that nothing
+  imports — its entity links point at `/allergy`, `/address`, `/clinical-case` and the rest, which predate that
+  CRUD moving under `/entities`. Excluded from the new spec deliberately rather than silently: it would fail
+  for a reason that costs nobody anything today. Decide whether to delete it (Phase B) rather than repair it.
+- `[ ]` **Three computed links are invisible to the spec** — `[routerLink]="tile.link"` on the overview tiles
+  and `caseLink(...)` on the record screen. The sidebar's `['/', item.path]` is covered instead by asserting
+  `SHELL_NAV` and `SHELL_TABS` directly, which is where those paths actually come from.
+
 ### The patient handoff contract, honoured (2026-08-25)
 
 `web.abofonsa.com` links families straight to `/account/register?locale=…&src=…` from its landing page.
@@ -292,6 +327,7 @@ These come from the subsystem blueprint's Phase 3 and are largely blocked on bac
 
 - `[x]` Subscription plan selection — built 2026-08-19, and the price contradiction is gone rather than resolved: the tiers come from Abofonsa through a gateway proxy at `/api/plans`, and `priceAmount` arrives pre-formatted for the locale. **Render it, never re-format it** — two products quoting different numbers for one tier is exactly what restating a price causes. It lives on the profile's membership tab, _not_ at `/plans`, which is already the care plan (diet and exercise). Choosing writes a `Membership` with status `PENDING`: this records a choice, it does not bill for one.
 - `[x]` Onboarding wizard — built 2026-08-19. Five steps at `/onboarding`, on `AuthShellComponent` behind the signed-in guard rather than in the portal shell: a patient here has a token but no record, and the shell would fire patient-scoped fetches for a patient who does not exist, behind a sidebar of destinations that would all be empty. Each step saves before the next is shown, because the backend has no transaction to wrap the journey in. Plan selection is deliberately _not_ a step (see above). See `docs/onboarding.md` §16 for the endpoint contract.
+- `[ ]` **A public account-deletion page — decided 2026-08-28 that `/delete-account` does not cover it.** Google Play requires deletion to be requestable from a URL that does not need the app installed, and asked whether the portal screen answered that, the architect's answer was **no**: the portal screen is for signed-in patients, and a separate unauthenticated page is still wanted. So this is `web`'s work and not `mobile`'s, it is the only piece of _product_ left in `docs/android-publishing-steps.md`, and it is not closed by the 404 fix above. Open questions it will have to settle: what identifies the requester without a session, and how a request made that way is rate-limited — `/api/deletion-requests` is authenticated today, so nothing in `api` serves this yet either.
 - `[ ]` Historical telemetry views — blocked on `patient-api.md` Phase C; the current metric panels read from `Stat`. Note this means _patient_ telemetry (vitals over time), which is unrelated to the OpenTelemetry instrumentation added in 2026-08-03.
 - `[ ]` Calendar / upcoming visits — no scheduling entity exists in any backend.
 - `[ ]` Assigned professionals directory — needs a contract with the professional subsystem.
