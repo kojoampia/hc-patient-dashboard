@@ -1,5 +1,6 @@
 import PORTAL_ROUTES from 'app/portal/portal.routes';
 import { NAV_OWNER, SHELL_NAV, SHELL_TABS, navOwnerOf } from './shell-nav';
+import { PAGE_TITLES } from './shell-titles';
 
 /**
  * The sidebar lights the entry the patient actually clicked.
@@ -45,5 +46,23 @@ describe('the sidebar highlight', () => {
 
   it.each(SHELL_TABS)('the mobile tab %s is a sidebar entry too', tab => {
     expect(navPaths).toContain(tab);
+  });
+
+  /*
+   * The breadcrumb has the same two-cases-do-not-mix rule as the highlight, and broke the same way. A screen
+   * in the sidebar names its own group; a screen reached from a parent names the parent — `case` reads
+   * "Cases ▸ Case". `visitations` and `activity` did the second while being the first, so the crumb said
+   * "Record" while the sidebar lit something else.
+   *
+   * The assertion is deliberately narrow: crumbs must not be *another nav entry's* label. It cannot be
+   * "the crumb equals this item's groupKey", because `overview` legitimately breaks that — it is the portal
+   * root and DEFAULT_PAGE_TITLE serves every unrecognised path as well, so its crumb is "Overview" rather
+   * than the "Health" group it happens to sit in.
+   */
+  const navEntryTitles = navPaths.filter(path => path in PAGE_TITLES).map(path => [path, PAGE_TITLES[path]!.crumbKey] as const);
+  const parentCrumbs = navPaths.map(path => `patientPortal.nav.${path}`);
+
+  it.each(navEntryTitles)('%s breadcrumbs to its own group, not to another sidebar entry', (_path, crumbKey) => {
+    expect(parentCrumbs).not.toContain(crumbKey);
   });
 });

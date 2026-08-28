@@ -33,10 +33,26 @@ _Cases_ lit instead of leaving the whole sidebar unselected. It fails quietly in
   routed portal screen lights a real entry. Verified by restoring the old map and watching all three
   defects go red.
 
-`[ ]` **Open, and a judgement call rather than a defect:** `PAGE_TITLES` still gives `visitations` and
-`activity` the crumb `patientPortal.nav.record`, from the same era. They are now their own entries in the
-_health_ group, so the breadcrumb says "Record" while the sidebar says otherwise. Left alone deliberately —
-which reads better is a decision about the information architecture, not a wiring bug.
+- `[x]` **The breadcrumbs carried the same stale assumption, and were changed the same day.** `PAGE_TITLES`
+  gave `visitations` and `activity` the crumb `patientPortal.nav.record` — correct when they were reached
+  from the record screen, wrong once they had entries of their own, so the crumb said "Record" while the
+  sidebar lit something else. They take their own group now, and **the two are not the same group**:
+  `visitations` sits under _Health_, `activity` under _Account_. (An earlier note here said both were under
+  Health. They are not — `SHELL_NAV` puts `activity` in the account group beside `profile`.)
+
+  The rule is two cases that must not be mixed: a screen **in** the sidebar names its own `groupKey`; a
+  screen reached **from a parent** names the parent, which is why `case` reads "Cases ▸ Case" and is the only
+  entry of that kind. `shell-nav.spec.ts` asserts the narrow half of it — a screen in the sidebar must not
+  breadcrumb to another sidebar entry's label. Deliberately not "the crumb equals this item's `groupKey`",
+  because `overview` legitimately breaks that: it is the portal root, `DEFAULT_PAGE_TITLE` serves every
+  unrecognised path too, and its crumb is "Overview" rather than the "Health" group it happens to sit in.
+
+- `[ ]` **Open, and adjacent rather than part of this:** `delete-account` has no `PAGE_TITLES` entry, so it
+  falls through to its `NAV_OWNER` owner and the topbar reads **Account ▸ Profile** while the patient is on
+  "Delete your record". The crumb is right; the _title_ names the parent screen. Fixing it means an entry
+  keyed `delete-account` with `crumbKey: 'patientPortal.nav.profile'` and
+  `titleKey: 'patientPortal.deleteAccount.title'`, following `case`. Left alone because it changes a page
+  title rather than a breadcrumb.
 
 ### "Delete your record" led to a 404 (2026-08-28)
 
