@@ -47,12 +47,17 @@ _Cases_ lit instead of leaving the whole sidebar unselected. It fails quietly in
   because `overview` legitimately breaks that: it is the portal root, `DEFAULT_PAGE_TITLE` serves every
   unrecognised path too, and its crumb is "Overview" rather than the "Health" group it happens to sit in.
 
-- `[ ]` **Open, and adjacent rather than part of this:** `delete-account` has no `PAGE_TITLES` entry, so it
-  falls through to its `NAV_OWNER` owner and the topbar reads **Account ▸ Profile** while the patient is on
-  "Delete your record". The crumb is right; the _title_ names the parent screen. Fixing it means an entry
-  keyed `delete-account` with `crumbKey: 'patientPortal.nav.profile'` and
-  `titleKey: 'patientPortal.deleteAccount.title'`, following `case`. Left alone because it changes a page
-  title rather than a breadcrumb.
+- `[x]` **The deletion screen names itself now.** `delete-account` had no `PAGE_TITLES` entry, so it fell
+  through to its `NAV_OWNER` owner and the topbar read **Account ▸ Profile** while the patient was on
+  "Delete your record" — the crumb right by accident, the title naming a different screen. It takes the
+  `case` form: `crumbKey: 'patientPortal.nav.profile'`, `titleKey: 'patientPortal.deleteAccount.title'`, so
+  it reads **Profile ▸ Delete your record**. Both keys already existed in `en`, `fr` and `de`.
+
+  **A missing entry is not a blank title**, which is why this had to be asserted rather than noticed:
+  `activeOwnerOrExact` falls back to the owner, so the topbar was complete, plausible, and about the wrong
+  screen. `shell-nav.spec.ts` now requires every routed portal screen to have an entry — the third rule in
+  that file, after the highlight and the crumb, and all three are the same failure wearing different
+  clothes: a portal screen's relationship to the frame around it was never checked anywhere.
 
 ### "Delete your record" led to a 404 (2026-08-28)
 
