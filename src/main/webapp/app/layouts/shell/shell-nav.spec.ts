@@ -44,6 +44,15 @@ describe('the sidebar highlight', () => {
     expect(navPaths).toContain(navOwnerOf(head));
   });
 
+  /*
+   * ...and names itself in the topbar. A missing entry is not a blank title, which is why this had to be
+   * asserted rather than noticed: `activeOwnerOrExact` falls back to the screen's NAV_OWNER owner, so
+   * `delete-account` rendered "Account > Profile" — a complete, plausible topbar naming a different screen.
+   */
+  it.each(routedHeads)('/%s names itself in the topbar', head => {
+    expect(PAGE_TITLES[head]).toBeDefined();
+  });
+
   it.each(SHELL_TABS)('the mobile tab %s is a sidebar entry too', tab => {
     expect(navPaths).toContain(tab);
   });

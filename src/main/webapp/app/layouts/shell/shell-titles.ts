@@ -39,4 +39,8 @@ export const PAGE_TITLES: Readonly<Record<string, PageTitle | undefined>> = {
   visitations: { crumbKey: 'patientPortal.nav.group.health', titleKey: 'patientPortal.title.visitations' },
   activity: { crumbKey: 'patientPortal.nav.group.account', titleKey: 'patientPortal.title.activity' },
   profile: { crumbKey: 'patientPortal.nav.group.account', titleKey: 'patientPortal.title.profile' },
+  // Reached from the profile screen, so it names that parent — the same form as `case` above. Without an
+  // entry it fell through to its NAV_OWNER owner and the topbar read "Account > Profile" while the patient
+  // was on "Delete your record": the crumb happened to be right and the title named a different screen.
+  'delete-account': { crumbKey: 'patientPortal.nav.profile', titleKey: 'patientPortal.deleteAccount.title' },
 };
