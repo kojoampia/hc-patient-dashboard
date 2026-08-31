@@ -2,9 +2,9 @@
   "patientDashboardApp": {
     "MedicationStatus": {
       "null": "",
-      "ACTIVE": "ACTIVE",
-      "COMPLETED": "COMPLETED",
-      "WITHHELD": "WITHHELD"
+      "ACTIVE": "Aktiv",
+      "COMPLETED": "Abgeschlossen",
+      "WITHHELD": "Nicht gegeben"
     }
   }
 }

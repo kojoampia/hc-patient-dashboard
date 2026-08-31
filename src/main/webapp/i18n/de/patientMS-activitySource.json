@@ -2,9 +2,9 @@
   "patientDashboardApp": {
     "ActivitySource": {
       "null": "",
-      "PATIENT": "PATIENT",
-      "PROFESSIONAL": "PROFESSIONAL",
-      "SYSTEM": "SYSTEM"
+      "PATIENT": "Patient",
+      "PROFESSIONAL": "Fachkraft",
+      "SYSTEM": "System"
     }
   }
 }

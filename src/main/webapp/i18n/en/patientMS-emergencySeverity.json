@@ -2,9 +2,9 @@
   "patientDashboardApp": {
     "EmergencySeverity": {
       "null": "",
-      "LOW": "LOW",
-      "MODERATE": "MODERATE",
-      "HIGH": "HIGH"
+      "LOW": "Low",
+      "MODERATE": "Moderate",
+      "HIGH": "High"
     }
   }
 }
