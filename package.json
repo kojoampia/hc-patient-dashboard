@@ -123,7 +123,6 @@
     "@angular-eslint/eslint-plugin": "17.1.1",
     "@angular/cli": "20.3.33",
     "@angular/compiler-cli": "20.3.27",
-    "@angular/service-worker": "20.3.27",
     "@types/d3": "^7.4.3",
     "@types/hammerjs": "^2.0.45",
     "@types/jest": "29.5.11",

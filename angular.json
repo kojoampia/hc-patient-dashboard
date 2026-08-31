@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "patient-gateway": {
+    "patient-dashboard": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -15,7 +15,7 @@
       },
       "root": "",
       "sourceRoot": "src/main/webapp",
-      "prefix": "jhi",
+      "prefix": "hpd",
       "architect": {
         "build": {
           "builder": "@angular-builders/custom-webpack:browser",
@@ -26,9 +26,7 @@
             "outputPath": "target/classes/static/",
             "index": "src/main/webapp/index.html",
             "main": "src/main/webapp/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -37,22 +35,12 @@
               "src/main/webapp/manifest.webapp",
               "src/main/webapp/robots.txt"
             ],
-            "styles": [
-              "src/main/webapp/content/scss/vendor.scss",
-              "src/main/webapp/content/scss/global.scss"
-            ],
+            "styles": ["src/main/webapp/content/scss/vendor.scss", "src/main/webapp/content/scss/global.scss"],
             "stylePreprocessorOptions": {
-              "includePaths": [
-                "src/main/webapp/content/scss",
-                "node_modules"
-              ]
+              "includePaths": ["src/main/webapp/content/scss", "node_modules"]
             },
             "scripts": [],
-            "allowedCommonJsDependencies": [
-              "hammerjs",
-              "sockjs-client",
-              "webstomp-client"
-            ]
+            "allowedCommonJsDependencies": ["hammerjs", "sockjs-client", "webstomp-client"]
           },
           "configurations": {
             "production": {
@@ -70,7 +58,6 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
-              "serviceWorker": true,
               "ngswConfigPath": "ngsw-config.json",
               "budgets": [
                 {
@@ -99,15 +86,15 @@
         "serve": {
           "builder": "@angular-builders/custom-webpack:dev-server",
           "options": {
-            "buildTarget": "patient-gateway:build:development",
+            "buildTarget": "patient-dashboard:build:development",
             "port": 4200
           },
           "configurations": {
             "production": {
-              "buildTarget": "patient-gateway:build:production"
+              "buildTarget": "patient-dashboard:build:production"
             },
             "development": {
-              "buildTarget": "patient-gateway:build:development"
+              "buildTarget": "patient-dashboard:build:development"
             }
           },
           "defaultConfiguration": "development"

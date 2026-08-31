@@ -292,9 +292,21 @@ Resolved since the last baseline, kept so the numbering change is traceable:
 - `[ ]` Resolve decision 2: centralize entity route registration in `entities/entity.routes.ts` and populate `entity-navbar-items.ts` — routes and menu land together, never separately.
 - `[ ]` Rename the `hc-credential` and `hc-pay-option` areas to match the backend's `PersonalDocument` and `PaymentOption` (models, services, routes, i18n keys, specs). Coordinate with `patient-api.md` Phase A, which still has to generate those endpoints.
 - `[ ]` Generate `clinical-case` and `recommendation` screens, or record the decision not to. `api` shipped both in `519ba8f` with a full resource stack; the frontend has nothing for either, and `ClinicalCase` **replaced** `MedCase` rather than renaming it, so there is no old screen to adapt.
-- `[ ]` Reinstate Cypress or drop it: `.yo-rc.json` still lists `clientTestFrameworks: ["cypress"]` and `src/test/javascript/cypress/e2e/` exists, but the dependency and the `e2e` script are missing, so e2e cannot run.
-- `[ ]` Reconcile `angular.json` metadata: project name is still `patient-gateway` and `prefix` is `jhi` while ESLint requires `hpd`.
-- `[ ]` Decide the PWA posture — the service worker is registered with `enabled: false` in `app.config.ts`.
+- `[x]` **Cypress dropped — 2026-08-31.** `.yo-rc.json` listed it under `clientTestFrameworks` and `testFrameworks`, a skeleton of 20+ generated entity specs sat under `src/test/javascript/cypress/`, Cypress was not a dependency and no `e2e` script existed. Nothing there had ever run.
+
+  Dropped rather than reinstated, because **this subsystem already has an end-to-end story and it is better than Cypress would be**: `hc-patient-quality` runs the published images behind two nginx hops on a hostname, under production's enforced CSP, against seeded data. That is where a CSP violation, an SPA-fallback swallow or a wrong-image deploy is visible at all — and none of them is visible to a headless browser driving a dev server. Reinstating would have bought a second, weaker e2e that duplicated the unit tests.
+
+  `.github/copilot-instructions.md` described the situation accurately and is updated with the outcome.
+
+- `[x]` **`angular.json` metadata reconciled — 2026-08-31.** The project was named `patient-gateway` — the sibling backend's name, on the dashboard — and `prefix` was `jhi` while ESLint requires `hpd`. Now `patient-dashboard` and `hpd`.
+
+  Safe because the name is self-referential: the only readers were `angular.json`'s own three `buildTarget` lines. No npm script names the project, and `package.json` already used the `patientdashboard` spelling in `ci:server:await:patientdashboard`. The `prefix` governs what `ng generate` emits, so this stops the generator adding to the `jhi-*` backlog Phase B tracks; **it does not rename any existing selector**, and a repo-wide migration remains deliberately not something to do in passing.
+
+- `[x]` **PWA posture decided: no service worker — 2026-08-31.** It was registered with `enabled: false` _and_ built anyway: `serviceWorker: true` sat in the production build configuration, so `ngsw-worker.js` and `ngsw.json` were emitted into `target/classes/static` and shipped to every patient, guaranteed never to be registered. Confirmed by finding both files in the build output before changing anything, and by their absence from a clean `webapp:prod` after.
+
+  **Turning it on is a decision nobody has made, and not a small one.** A service worker caches a medical record in whatever browser it runs in; on a shared or borrowed machine that is a data-at-rest question rather than a performance one. The offline story for this product is the Capacitor app, where the record already sits behind a device lock and a biometric prompt.
+
+  Removed: the registration, the production build flag, `ngsw-config.json`, and the `@angular/service-worker` devDependency (22 lockfile lines, nothing else moved). Half a PWA cost the bundle and bought nothing.
 
 ### Test suite state
 
