@@ -117,9 +117,21 @@ converted. `docs/patient-handoff-contract.md` carries the contract and the respo
 - `[x]` **German and French gaps closed** — de was missing ten keys, fr one. Found while scoping this.
 - `[ ]` **The clinical Spanish bundles** — `patientPortal.json` and `patientMs*`, 1030 keys. Needs a
   Spanish-speaking clinician, not a faster translator.
-- `[ ]` **Pricing agreement.** Plan selection renders `priceAmount` verbatim from the Abofonsa plans API while
-  the landing page pitches the first month free. This side authors no pricing; somebody who owns both has to
-  confirm they agree.
+- `[x]` **Pricing agreement — they agree, checked 2026-08-31.** Measured on both sides rather than asked about.
+
+  `GET /api/plans` (proxied to `web.abofonsa.com/api/v1/content/plans`) returns PEAR 3,000 GHS, PAWPAW 5,000,
+  MELON 8,000, each with `priceNote: "Minimum three-month term · 30 days' notice"`, and the profile screen
+  renders `priceAmount` and `priceNote` verbatim.
+
+  The landing page's offer **explicitly defers to those same terms**: _"the free month applies to the first
+  month of any plan and to subscriptions started on or before 31 January 2027. The minimum three-month term
+  and 30 days' notice shown on each plan still apply."_ It names the exact string `priceNote` carries, which
+  is as close to a contract between two products as this gets without one being written down.
+
+  **The portal says nothing about the free month, and should not.** It is a dated acquisition promotion with
+  an expiry; rendering it here would mean this side tracking when it ends, which is the coupling "this side
+  authors no pricing" exists to avoid — and a portal still advertising a lapsed offer is worse than one that
+  never mentioned it. The portal shows the standing price; the site sells.
 
 ### The administrator's portal, and what an empty screen was hiding (2026-08-22)
 
