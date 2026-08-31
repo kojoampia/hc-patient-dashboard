@@ -2,9 +2,9 @@
   "patientDashboardApp": {
     "AllergySeverity": {
       "null": "",
-      "MILD": "MILD",
-      "MODERATE": "MODERATE",
-      "SEVERE": "SEVERE"
+      "MILD": "Leicht",
+      "MODERATE": "Mittel",
+      "SEVERE": "Schwer"
     }
   }
 }

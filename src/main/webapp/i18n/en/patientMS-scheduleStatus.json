@@ -2,10 +2,10 @@
   "patientDashboardApp": {
     "ScheduleStatus": {
       "null": "",
-      "CONFIRMED": "CONFIRMED",
-      "PENDING": "PENDING",
-      "ATTENDED": "ATTENDED",
-      "CANCELLED": "CANCELLED"
+      "CONFIRMED": "Confirmed",
+      "PENDING": "Pending",
+      "ATTENDED": "Attended",
+      "CANCELLED": "Cancelled"
     }
   }
 }

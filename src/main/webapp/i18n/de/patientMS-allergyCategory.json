@@ -2,10 +2,10 @@
   "patientDashboardApp": {
     "AllergyCategory": {
       "null": "",
-      "MEDICATION": "MEDICATION",
-      "FOOD": "FOOD",
-      "ENVIRONMENTAL": "ENVIRONMENTAL",
-      "OTHER": "OTHER"
+      "MEDICATION": "Medikament",
+      "FOOD": "Lebensmittel",
+      "ENVIRONMENTAL": "Umwelt",
+      "OTHER": "Sonstiges"
     }
   }
 }

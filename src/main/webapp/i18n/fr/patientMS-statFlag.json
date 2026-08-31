@@ -2,9 +2,9 @@
   "patientDashboardApp": {
     "StatFlag": {
       "null": "",
-      "OK": "OK",
-      "WARN": "WARN",
-      "DANGER": "DANGER"
+      "OK": "Dans la norme",
+      "WARN": "À surveiller",
+      "DANGER": "Hors norme"
     }
   }
 }
