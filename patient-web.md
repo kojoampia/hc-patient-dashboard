@@ -132,9 +132,21 @@ converted. `docs/patient-handoff-contract.md` carries the contract and the respo
 - `[x]` **German and French gaps closed** — de was missing ten keys, fr one. Found while scoping this.
 - `[ ]` **The clinical Spanish bundles** — `patientPortal.json` and `patientMs*`, 1030 keys. Needs a
   Spanish-speaking clinician, not a faster translator.
-- `[ ]` **Pricing agreement.** Plan selection renders `priceAmount` verbatim from the Abofonsa plans API while
-  the landing page pitches the first month free. This side authors no pricing; somebody who owns both has to
-  confirm they agree.
+- `[x]` **Pricing agreement — they agree, checked 2026-08-31.** Measured on both sides rather than asked about.
+
+  `GET /api/plans` (proxied to `web.abofonsa.com/api/v1/content/plans`) returns PEAR 3,000 GHS, PAWPAW 5,000,
+  MELON 8,000, each with `priceNote: "Minimum three-month term · 30 days' notice"`, and the profile screen
+  renders `priceAmount` and `priceNote` verbatim.
+
+  The landing page's offer **explicitly defers to those same terms**: _"the free month applies to the first
+  month of any plan and to subscriptions started on or before 31 January 2027. The minimum three-month term
+  and 30 days' notice shown on each plan still apply."_ It names the exact string `priceNote` carries, which
+  is as close to a contract between two products as this gets without one being written down.
+
+  **The portal says nothing about the free month, and should not.** It is a dated acquisition promotion with
+  an expiry; rendering it here would mean this side tracking when it ends, which is the coupling "this side
+  authors no pricing" exists to avoid — and a portal still advertising a lapsed offer is worse than one that
+  never mentioned it. The portal shows the standing price; the site sells.
 
 ### The administrator's portal, and what an empty screen was hiding (2026-08-22)
 
@@ -304,9 +316,17 @@ Resolved since the last baseline, kept so the numbering change is traceable:
   gateway elsewhere — `ssh -N -L 5505:127.0.0.1:15505 jacserver` and the quality stack's seeded
   record. Verified by signing in against it from `npm start`. This is what makes the rest of Phase E
   checkable locally instead of by shipping and looking.
-- `[ ]` Resolve decision 2: centralize entity route registration in `entities/entity.routes.ts` and populate `entity-navbar-items.ts` — routes and menu land together, never separately.
-- `[ ]` Rename the `hc-credential` and `hc-pay-option` areas to match the backend's `PersonalDocument` and `PaymentOption` (models, services, routes, i18n keys, specs). Coordinate with `patient-api.md` Phase A, which still has to generate those endpoints.
-- `[ ]` Generate `clinical-case` and `recommendation` screens, or record the decision not to. `api` shipped both in `519ba8f` with a full resource stack; the frontend has nothing for either, and `ClinicalCase` **replaced** `MedCase` rather than renaming it, so there is no old screen to adapt.
+- `[x]` **Decision 2 resolved — 2026-08-31.** The centralising half is done and has been: `entities/entity.routes.ts` registers all **twenty** entities and `app.routes.ts` mounts them at `/entities` behind `Authority.ADMIN`.
+
+  **The other half — "populate `entity-navbar-items.ts`" — is a no-op, and that is the answer rather than a dodge.** That array's only consumer was `layouts/navbar/navbar.component.ts`, which is deleted (branch `fix/the-links-no-spec-could-see`); once that lands, filling the array in would put entries into a component that no longer exists. The file itself stays: it is a generator needle and `entities/entity-navbar-items.ts` is where JHipster writes on regeneration.
+
+  The real question underneath it is different and worth stating separately: **should the generated entity screens appear in the portal shell's navigation?** No. They are an administrative surface carrying sixty delete dialogs over _any_ patient's records, and the shell is a patient's frame — the `ROLE_ADMIN` guard is what keeps decision 13 true. An administrator reaches them by URL, which is the right amount of friction for a screen that can edit somebody else's medication list. If that ever changes, it changes in `shell-nav.ts`, not here.
+
+- `[x]` **Renamed — already done, ticked 2026-08-31.** `entities/patientMS/` holds `personal-document` and `payment-option`; `hc-credential` and `hc-pay-option` are gone. Verified by listing the directory against the api's `domain/` package rather than by reading this entry.
+- `[x]` **Generated — already done, ticked 2026-08-31.** Both `clinical-case/` and `recommendation/` exist under `entities/patientMS/` and are routed. The frontend had not followed the api's entity changes when this was written; it has since.
+
+  What is still true of the comparison, and is not a gap: `CareDelegation` deliberately has no generated CRUD (a generic `PATCH` would let an angel set their own status to `ACTIVE`), `DeletionRequest` has its own portal screen instead, and `DutyRoster`/`Shift` are staff reference data with no patient-facing surface.
+
 - `[x]` **Cypress dropped — 2026-08-31.** `.yo-rc.json` listed it under `clientTestFrameworks` and `testFrameworks`, a skeleton of 20+ generated entity specs sat under `src/test/javascript/cypress/`, Cypress was not a dependency and no `e2e` script existed. Nothing there had ever run.
 
   Dropped rather than reinstated, because **this subsystem already has an end-to-end story and it is better than Cypress would be**: `hc-patient-quality` runs the published images behind two nginx hops on a hostname, under production's enforced CSP, against seeded data. That is where a CSP violation, an SPA-fallback swallow or a wrong-image deploy is visible at all — and none of them is visible to a headless browser driving a dev server. Reinstating would have bought a second, weaker e2e that duplicated the unit tests.
