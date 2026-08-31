@@ -17,7 +17,23 @@ import { ApplicationConfigService } from 'app/core/config/application-config.ser
  * authority the server does not grant — it would 403, and the failure would be shown to a patient
  * as a bug rather than as the refusal it is.</p>
  */
-export const PRIVACY_POLICY_URL = 'https://abofonsa.com/privacy';
+/**
+ * Where the privacy policy lives, and it is deliberately NOT `abofonsa.com/privacy`.
+ *
+ * That host is the launch-preview site (`hc-abofonsa`), whose SPA fallback answers **200 with the
+ * countdown page** for any path — measured 2026-08-31: 4,944 bytes titled "Launching 1 February".
+ * So the link a patient followed from the delete-my-record screen showed them a marketing countdown,
+ * on the one screen where they are deciding whether to erase their medical history. Nothing failed;
+ * the status was 200 and the page rendered.
+ *
+ * The policy is served by the marketing site, `web.abofonsa.com`, and is correct there: it states
+ * the fourteen-day window, names both routes into deletion, and lists what is erased.
+ *
+ * **If `abofonsa.com` ever becomes the marketing site, this moves back** — together with the twin
+ * constant in the other client and the javadoc on `DeletionRequestService.WINDOW`. Check the
+ * content-type and the title, not the status: this whole class of defect answers 200.
+ */
+export const PRIVACY_POLICY_URL = 'https://web.abofonsa.com/privacy';
 
 /** A request as the patient service reports it. */
 export interface DeletionRequest {

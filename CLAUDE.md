@@ -6,16 +6,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Health Connect Patient Dashboard (`patientDashboard`) — the Angular web client for the patient subsystem. Generated with JHipster 8.1.0 as a **client-only** app (`skipServer: true`): there are **no Java sources here** and Maven cannot build this repo.
 
-|                  |                                                                                                   |
-| ---------------- | ------------------------------------------------------------------------------------------------- |
-| Framework        | Angular 20.3.27 (standalone components + some legacy NgModules)                                   |
-| Language         | TypeScript 5.9.3, RxJS 7.8                                                                        |
-| UI               | ng-bootstrap 16 + Bootstrap/SCSS, d3 7 for the custom widgets                                     |
-| Tests            | Jest 29 via `@angular-builders/jest` (`jest.conf.js`)                                             |
-| Build            | Angular CLI 20 + `@angular-builders/custom-webpack` (`webpack/`), output `target/classes/static/` |
-| i18n             | enabled — `en`, `fr`, `de`, and `es` (partial) under `src/main/webapp/i18n`                       |
-| Dev server       | 4200 (`npm start`, HMR)                                                                           |
-| Component prefix | ESLint requires `hpd`; `angular.json` still says `jhi` and legacy `jhi-*` selectors remain        |
+|                  |                                                                                                                       |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Framework        | Angular 20.3.27 (standalone components + some legacy NgModules)                                                       |
+| Language         | TypeScript 5.9.3, RxJS 7.8                                                                                            |
+| UI               | ng-bootstrap 16 + Bootstrap/SCSS, d3 7 for the custom widgets                                                         |
+| Tests            | Jest 29 via `@angular-builders/jest` (`jest.conf.js`)                                                                 |
+| Build            | Angular CLI 20 + `@angular-builders/custom-webpack` (`webpack/`), output `target/classes/static/`                     |
+| i18n             | enabled — `en`, `fr`, `de`, and `es` (partial) under `src/main/webapp/i18n`                                           |
+| Dev server       | 4200 (`npm start`, HMR)                                                                                               |
+| Component prefix | `hpd`, in both ESLint and `angular.json` (aligned 2026-08-31). Legacy `jhi-*` selectors remain in existing components |
 
 Companion docs in this repo:
 
@@ -137,6 +137,7 @@ Two things that will bite anyone touching the portal's data layer:
   clinician, and until then those screens show English. Adding a locale means a line in `LANGUAGES` **and** one in
   `webpack.custom.js` — without the second no bundle is produced and the language degrades wholesale.
 - Indentation is 2 spaces everywhere (`.editorconfig` root `indent_size = 2`; its `[*.md]` section only disables trailing-whitespace trimming), and lint-staged runs Prettier on commit.
-- Cypress is configured in `.yo-rc.json` with a skeleton under `src/test/javascript/cypress/`, but it is not installed and has no npm script — e2e cannot run today.
+- **There is no e2e framework here, by decision** (2026-08-31). Cypress was listed in `.yo-rc.json` with a never-run skeleton under `src/test/javascript/`; both are gone. End-to-end coverage is `hc-patient-quality`, which runs the published images behind two nginx hops under production's CSP — the only place the proxy-chain defects are visible at all.
+- **No service worker, deliberately** (2026-08-31). It used to be registered with `enabled: false` while `angular.json` built one anyway, so production shipped `ngsw-worker.js` to every patient with nothing to register it. Turning one on caches a medical record in whatever browser it runs in, which is a data-at-rest decision nobody has made; the offline story is the Capacitor app.
 - This repo no longer packages or deploys itself: `nginx.conf`, the Dockerfile, `docker-compose*.yml` and the `docker:*:tag`/`deploy:*` scripts moved to `hc-patient/deploy/` (repo `kojoampia/hc-patient-ci`). Change the image, its nginx config, or the deploy there, not here. The generated `src/main/docker/*.yml` helpers stay — they are local dev services, not deployment.
 - `patient-db.log` is output from the workspace-level `start-patient.sh` helper.

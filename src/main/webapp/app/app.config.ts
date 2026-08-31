@@ -2,7 +2,6 @@ import { ApplicationConfig, ErrorHandler, LOCALE_ID, importProvidersFrom } from 
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterFeatures, TitleStrategy, provideRouter, withComponentInputBinding, withDebugTracing } from '@angular/router';
-import { ServiceWorkerModule } from '@angular/service-worker';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 import { NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
@@ -27,8 +26,16 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, ...routerFeatures),
     importProvidersFrom(BrowserModule),
     importProvidersFrom(BrowserAnimationsModule),
-    // Set this to true to enable service worker (PWA)
-    importProvidersFrom(ServiceWorkerModule.register('ngsw-worker.js', { enabled: false })),
+    // No service worker. Removed 2026-08-31 rather than left registered-but-disabled: the production
+    // build was emitting ngsw-worker.js and ngsw.json into target/classes/static and shipping them to
+    // every patient, while this line guaranteed nothing ever registered them. Half a PWA costs the
+    // bundle and buys nothing.
+    //
+    // Turning it ON is a decision nobody has made, and not a small one: a service worker caches a
+    // medical record on whatever browser it runs in, which on a shared or borrowed machine is a
+    // data-at-rest question rather than a performance one. The offline story for this product is the
+    // Capacitor app (hc-patient-app), where the record already sits behind a device lock and a
+    // biometric prompt.
     importProvidersFrom(TranslationModule),
     // HttpClientModule was removed in Angular 20. withInterceptorsFromDi() is not optional here:
     // this app registers its auth, error and notification interceptors through the HTTP_INTERCEPTORS

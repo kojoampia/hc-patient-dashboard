@@ -42,7 +42,7 @@
 - Unit tests (Jest, `pretest` runs lint): `npm test`
 - Single area: `npm test -- --test-path-pattern=dashboard` (Jest flags must be kebab-case through the Angular builder; camelCase fails with `Unknown arguments`)
 - Do **not** run `./mvnw` — no Java sources, and the Enforcer range in `pom.xml` rejects the installed JDK.
-- Cypress e2e is **not** runnable: it is listed in `.yo-rc.json` and a skeleton exists under `src/test/javascript/cypress/`, but Cypress is not installed and no `e2e` script exists.
+- There is no e2e framework in this repo, by decision (2026-08-31). The Cypress listing in `.yo-rc.json` and the never-run skeleton under `src/test/javascript/` were removed. End-to-end coverage is `hc-patient-quality`, which runs the published images behind two nginx hops under production's CSP — where the defects that only appear in a proxy chain are visible at all.
 
 ## Conventions
 
