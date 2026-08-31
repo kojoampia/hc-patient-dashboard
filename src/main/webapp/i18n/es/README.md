@@ -33,10 +33,39 @@ somebody deleting a health record should not be reading the confirmation in a la
 
 Terminology follows the warning below rather than the dictionary: _afecciones_, not _condiciones_.
 
+## What is done, third tranche (2026-08-31)
+
+The portal's **chrome** — `brand`, `nav`, `action`, `pager`, `filter`, `actingAs`. 50 keys, taking
+`patientPortal` from 30 of 446 to 84.
+
+**Chosen because it is the largest block that carries no clinical claim.** These are navigation labels,
+buttons, pagination and the acting-as banner: a wrong word here is an awkward label, not a clinical error,
+which is the line the section below draws. The clinical bundles are still untouched and still last.
+
+Terminology follows the warning below rather than the dictionary, and the two that matter here are
+`nav.emergencies` → **Urgencias**, not _Emergencias_, and `nav.record` → **Mi historial**, matching the
+`deleteAccount` tranche's _"Sí, eliminar mi historial"_ rather than introducing a second word for the same
+thing. Register is formal (_usted_) throughout, again matching what was already here.
+
+`actingAs` is in this tranche despite being chrome, and is the one part of it worth a careful read.
+**The banner is a safety control**, not decoration: every screen behind it shows a record that is not the
+signed-in person's, and the failure it prevents is somebody reading a blood group believing it is their own.
+_"Está viendo el historial de {{name}}"_ has to be unambiguous at a glance.
+
+Checked mechanically, because both of these fail silently: **no key exists in `es` that does not exist in
+`en`** (it would render for nobody and never be missed), and **every `{{placeholder}}` survives translation**
+(a lost one renders the literal `{{name}}` to a patient).
+
 ## What is not
 
-The rest of `patientPortal.json` (~385 keys) and the `patientMs*` entity bundles — the clinical screens. These are the ones
+The rest of `patientPortal.json` (~362 keys) and the `patientMs*` entity bundles — the clinical screens. These are the ones
 where a wrong word is a clinical error rather than an awkward sentence, and they are deliberately last.
+
+**A machine translation of those would be worse than leaving them in English, and the reason is the fallback
+above.** Today a Spanish reader meeting an untranslated clinical screen sees English and can tell the
+translation is absent. An unreviewed Spanish rendering of a medication name, an allergy warning or a case note
+reads as confident and correct, and nothing distinguishes it from a reviewed one. The fallback that makes
+tranches safe is exactly what makes filling them in carelessly unsafe.
 
 ## Before this is relied on
 

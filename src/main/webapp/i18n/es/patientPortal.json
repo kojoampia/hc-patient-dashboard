@@ -1,5 +1,73 @@
 {
   "patientPortal": {
+    "brand": {
+      "suffix": "BridgeCare",
+      "tagline": "Portal del paciente"
+    },
+    "nav": {
+      "aria": "Secciones del portal",
+      "ariaPrimary": "Secciones principales",
+      "openMenu": "Abrir el menú",
+      "signOut": "Cerrar sesión",
+      "roleLine": "Paciente",
+      "roleLinePlace": "Paciente · {{place}}",
+      "overview": "Resumen",
+      "record": "Mi historial",
+      "recordShort": "Historial",
+      "schedules": "Citas",
+      "schedulesShort": "Citas",
+      "emergencies": "Urgencias",
+      "cases": "Casos",
+      "medications": "Medicamentos",
+      "reports": "Informes",
+      "plans": "Dieta y ejercicio",
+      "allergies": "Alergias",
+      "profile": "Perfil",
+      "group": {
+        "overview": "Resumen",
+        "health": "Mi salud",
+        "clinical": "Clínico",
+        "account": "Cuenta",
+        "session": "Sesión"
+      },
+      "collapseMenu": "Contraer el menú",
+      "expandMenu": "Expandir el menú",
+      "visitations": "Visitas",
+      "activity": "Historial de actividad"
+    },
+    "action": {
+      "print": "Imprimir esta pantalla",
+      "careLine": "Línea de atención",
+      "seeAll": "Ver todo",
+      "viewRecord": "Historial completo",
+      "viewProfile": "Perfil",
+      "backToCases": "Todos los casos",
+      "printShort": "Imprimir",
+      "close": "Cerrar",
+      "view": "Ver",
+      "openCase": "Abrir caso",
+      "copy": "Copiar",
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "saving": "Guardando…"
+    },
+    "pager": {
+      "aria": "Paginación",
+      "prev": "Ant.",
+      "next": "Sig."
+    },
+    "filter": {
+      "professional": "Filtrar por profesional",
+      "allProfessionals": "Todos los profesionales"
+    },
+    "actingAs": {
+      "banner": "Está viendo el historial de {{name}}",
+      "bannerOwn": "Está viendo su propio historial",
+      "switch": "Cambiar de historial",
+      "chooseTitle": "¿Qué historial desea abrir?",
+      "chooseOwn": "Mi propio historial",
+      "chooseFor": "Actuando en nombre de {{name}}"
+    },
     "deleteAccount": {
       "link": "Eliminar su historial",
       "title": "Eliminar su historial",
