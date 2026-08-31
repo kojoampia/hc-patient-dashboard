@@ -436,10 +436,11 @@ These come from the subsystem blueprint's Phase 3 and are largely blocked on bac
 with a human label — and canonicalises whatever onboarding sends. Two client halves are still open, and the
 second is user-visible today.
 
-- `[ ]` **`onboarding.component.html` step 5 is a plain `<input required>`.** A patient types the ID type
-      free-hand, so "Ghana Card", "ghana card" and "GhanaCard" all arrive. The backend collapses the ones it
-      recognises, but a constrained control is what stops the problem at source. Note the component's own
-      spec already patches the enum-shaped `'GHANA_CARD'`, so the test is ahead of the markup.
+- `[ ]` **`onboarding.component.html` step 5 is a plain `<input required>`, and after the 2026-08-31 ruling it
+      should probably not be a field at all.** BridgeCare now accepts **only** the Ghana Card, so asking a patient
+      to choose from a list of one is a question with no answer to give. The ID *number* still has to be typed;
+      the ID *type* is now a label. Whatever it becomes, it must post `GHANA_CARD` — the component's own spec
+      already patches that value, so the test has been ahead of the markup all along.
 - `[ ]` **`portal/profile/profile.component.html` renders `person.cardType` raw.** A patient who picks
       Ghana Card is shown `GHANA_CARD` on their own profile. It needs the label, which means five i18n keys
       in `en`, `fr`, `de` — and `es` if the chrome tranche is extended.
@@ -449,10 +450,14 @@ so that service and clients can deploy in any order; tightening it would 400 eve
 onboarding until both clients shipped, after a journey that returned 200 the whole way. That is the `Stat`
 pagination trap, and it was designed out rather than sequenced around.
 
-**The list itself is not settled.** Which documents BridgeCare accepts is a product and compliance question
-nobody has answered, so a hard-coded dropdown here becomes a second place to change. If the list is still
-provisional when this is built, consider having the api serve it rather than duplicating it — `api`'s enum
-says at its top that adding or removing a constant must stay a one-line change, and two copies breaks that.
+**The list is settled as of 2026-08-31: the Ghana Card and nothing else.** That removes the duplication worry
+that would have come with a dropdown — there is nothing to keep in step — and replaces it with a simpler
+question about what the control should be when there is only one valid answer.
+
+**Do not "helpfully" reinstate the other options in the UI.** Passport, voter ID, NHIS and driving licence were
+removed deliberately: the national ID is mandatory and universal, and accepting alternatives makes "verified
+identification" mean two different things with no way to tell which. A client offering them would be
+re-opening a compliance decision from the front end.
 
 ## Phase E — demo parity
 
