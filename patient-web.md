@@ -86,13 +86,28 @@ path**, which at least `register.route.spec.ts` would pin: the failure exists on
 
 Two things this uncovered and did **not** fix:
 
-- `[ ]` **`layouts/navbar/` is dead and its links are wrong.** Generated JHipster scaffolding that nothing
-  imports — its entity links point at `/allergy`, `/address`, `/clinical-case` and the rest, which predate that
-  CRUD moving under `/entities`. Excluded from the new spec deliberately rather than silently: it would fail
-  for a reason that costs nobody anything today. Decide whether to delete it (Phase B) rather than repair it.
-- `[ ]` **Three computed links are invisible to the spec** — `[routerLink]="tile.link"` on the overview tiles
-  and `caseLink(...)` on the record screen. The sidebar's `['/', item.path]` is covered instead by asserting
-  `SHELL_NAV` and `SHELL_TABS` directly, which is where those paths actually come from.
+- `[x]` **`layouts/navbar/` deleted — 2026-08-31.** Generated JHipster scaffolding that nothing imported; its
+  entity links pointed at `/allergy`, `/address`, `/clinical-case` and the rest, all predating that CRUD moving
+  under `/entities`. Deleted rather than repaired, because repairing maintains a component no route renders.
+
+  The exclusion it had in `portal-links.spec.ts` was honest but was still a standing lie of a kind: **a sweep
+  that skips a directory reports on the rest of the app as though the app were the rest.** Deleting the
+  directory removed the exclusion rather than the failure. `navbar-item.model.d.ts` survives alone —
+  `entities/entity-navbar-items.ts` imports the type and is a generator needle file. The `.navbar` rules in
+  `global.scss` stay: `DashboardComponent` still uses those Bootstrap classes.
+- `[x]` **The computed links are checkable — 2026-08-31.** `[routerLink]="tile.link"` on the overview tiles and
+  `caseLink(...)` behind five rows of the record screen both carried an expression, so the destination lived in
+  a component field no test could reach without standing the whole component up.
+
+  The destinations moved to `portal/portal-destinations.ts`, where the spec reads them — **the same answer the
+  sidebar already had**, whose paths are checked by asserting `SHELL_NAV` and `SHELL_TABS` directly. Check the
+  source of the value, not the template that interpolates it. The alternative was teaching the spec to scrape
+  TypeScript, which trades a blind spot for a guess.
+
+  Eight tile destinations and `caseLink` are asserted, including that it returns `null` for a missing case:
+  `[routerLink]="null"` renders no href, so a row with no case is not a link rather than a link that goes
+  nowhere — a behaviour somebody could "tidy" into a string. **A new computed link belongs in that file**, or
+  it is invisible again.
 
 ### The patient handoff contract, honoured (2026-08-25)
 
@@ -251,7 +266,7 @@ Resolved since the last baseline, kept so the numbering change is traceable:
 - `[x]` Generated CRUD screens for the patient entities under `entities/patientMS/**` (present but unrouted — decision 2).
 - `[x]` Jest unit tests colocated with the code (146 spec files, all passing — see below).
 - `[x]` **Deployed to production** (2026-07-31) as an nginx image built and shipped by `hc-patient/deploy`. This repo builds the bundle; it no longer packages or ships it.
-- `[~]` CI exists but is **broken** — `docker-publish.yml` has failed on every push since 2026-07-30 (Phase C).
+- `[x]` **CI works and gates lint, tests and the production build** — repurposed 2026-08-24, `6d1a3c0`. `docker-publish.yml` had failed on every push from 2026-07-30 to 2026-08-03; **84 runs since, none failed** (checked 2026-08-31). This entry said "broken" for a month after it was fixed.
 - `[x]` **Browser telemetry** (2026-08-03) — `core/telemetry/` initialises the OpenTelemetry web SDK
   from `bootstrap.ts`, tracing document load, XHR and fetch, and reporting uncaught errors through a
   `TelemetryErrorHandler`. Spans POST to the same-origin `/v1/traces`, which nginx forwards to the
@@ -312,9 +327,21 @@ Resolved since the last baseline, kept so the numbering change is traceable:
 
   What is still true of the comparison, and is not a gap: `CareDelegation` deliberately has no generated CRUD (a generic `PATCH` would let an angel set their own status to `ACTIVE`), `DeletionRequest` has its own portal screen instead, and `DutyRoster`/`Shift` are staff reference data with no patient-facing surface.
 
-- `[ ]` Reinstate Cypress or drop it: `.yo-rc.json` still lists `clientTestFrameworks: ["cypress"]` and `src/test/javascript/cypress/e2e/` exists, but the dependency and the `e2e` script are missing, so e2e cannot run.
-- `[ ]` Reconcile `angular.json` metadata: project name is still `patient-gateway` and `prefix` is `jhi` while ESLint requires `hpd`.
-- `[ ]` Decide the PWA posture — the service worker is registered with `enabled: false` in `app.config.ts`.
+- `[x]` **Cypress dropped — 2026-08-31.** `.yo-rc.json` listed it under `clientTestFrameworks` and `testFrameworks`, a skeleton of 20+ generated entity specs sat under `src/test/javascript/cypress/`, Cypress was not a dependency and no `e2e` script existed. Nothing there had ever run.
+
+  Dropped rather than reinstated, because **this subsystem already has an end-to-end story and it is better than Cypress would be**: `hc-patient-quality` runs the published images behind two nginx hops on a hostname, under production's enforced CSP, against seeded data. That is where a CSP violation, an SPA-fallback swallow or a wrong-image deploy is visible at all — and none of them is visible to a headless browser driving a dev server. Reinstating would have bought a second, weaker e2e that duplicated the unit tests.
+
+  `.github/copilot-instructions.md` described the situation accurately and is updated with the outcome.
+
+- `[x]` **`angular.json` metadata reconciled — 2026-08-31.** The project was named `patient-gateway` — the sibling backend's name, on the dashboard — and `prefix` was `jhi` while ESLint requires `hpd`. Now `patient-dashboard` and `hpd`.
+
+  Safe because the name is self-referential: the only readers were `angular.json`'s own three `buildTarget` lines. No npm script names the project, and `package.json` already used the `patientdashboard` spelling in `ci:server:await:patientdashboard`. The `prefix` governs what `ng generate` emits, so this stops the generator adding to the `jhi-*` backlog Phase B tracks; **it does not rename any existing selector**, and a repo-wide migration remains deliberately not something to do in passing.
+
+- `[x]` **PWA posture decided: no service worker — 2026-08-31.** It was registered with `enabled: false` _and_ built anyway: `serviceWorker: true` sat in the production build configuration, so `ngsw-worker.js` and `ngsw.json` were emitted into `target/classes/static` and shipped to every patient, guaranteed never to be registered. Confirmed by finding both files in the build output before changing anything, and by their absence from a clean `webapp:prod` after.
+
+  **Turning it on is a decision nobody has made, and not a small one.** A service worker caches a medical record in whatever browser it runs in; on a shared or borrowed machine that is a data-at-rest question rather than a performance one. The offline story for this product is the Capacitor app, where the record already sits behind a device lock and a biometric prompt.
+
+  Removed: the registration, the production build flag, `ngsw-config.json`, and the `@angular/service-worker` devDependency (22 lockfile lines, nothing else moved). Half a PWA cost the bundle and bought nothing.
 
 ### Test suite state
 
@@ -366,16 +393,15 @@ Everything this phase used to contain was about files that are no longer here. R
 
 - `[x]` `docker-compose-prod.yml`'s invalid network key, the three-way image-name disagreement between compose and the `docker:*:tag` scripts, and the compose volume mounts pointing at nonexistent host directories on an nginx image — **all resolved by deletion** in `d5f0bfe`, not by fixing them. `hc-patient/deploy/` builds the image from `deploy/docker/web.Dockerfile` with `deploy/docker` passed as a named build context, which is also why the repo's own `.dockerignore` went away (dropping the build context from 3 GB to 148 kB).
 
-What is left is one broken workflow:
+What was left was one broken workflow, and it is fixed:
 
-1. `[ ]` **`.github/workflows/docker-publish.yml` fails on every push and has since 2026-07-30.** It builds `file: ./Dockerfile.prod`, but `ac2df38` consolidated `Dockerfile.prod` into `Dockerfile` on 2026-07-30, and `d5f0bfe` then removed `Dockerfile` too. Four consecutive failed runs; the latest (`30809635272`, 2026-08-03) dies in 24s with:
+1. `[x]` **`.github/workflows/docker-publish.yml` — repurposed 2026-08-24, closed here 2026-08-31.** It had built `file: ./Dockerfile.prod`, but `ac2df38` consolidated `Dockerfile.prod` into `Dockerfile` on 2026-07-30 and `d5f0bfe` removed `Dockerfile` too, so every run died in 24s with `open Dockerfile.prod: no such file or directory`.
 
-   ```
-   ERROR: failed to build: failed to solve: failed to read dockerfile:
-   open Dockerfile.prod: no such file or directory
-   ```
+   Resolved the second way decision 3 offered — repurposed to `lint` + `test` + `webapp:prod` rather than retired, since repointing it at the real Dockerfile was never possible: that file is in another repository and needs a build context this one does not have. **The name is now the only thing left of the original**, which its own header says out loud: _"the filename says docker-publish because that is what this workflow used to be"_.
 
-   The workflow has not been touched since 2026-05-10. Resolve with decision 3 — retire it, or repurpose it to `lint` + `test` + `webapp:prod`. Repointing it at the real Dockerfile is not an option: that file is in another repository and needs a build context this one does not have.
+   Measured 2026-08-31: **6 failures, all between 2026-07-30 and 2026-08-03, then 84 consecutive non-failures.** This entry and `Phase A` both went on calling CI broken for a month, which is longer than it was ever broken.
+
+   **Lint is a real gate now, and that is the part worth keeping.** Until `6d1a3c0` the `pretest` hook was the only thing that ran lint, and CI called `npx ng test` directly — so lint ran nowhere, which is how 48 errors accumulated. It is now its own CI step, because a style error must not be able to masquerade as a test failure and a test command must not be the only place style is checked.
 
 2. `[ ]` **Then decide whether `pom.xml` survives.** Its only remaining consumer is that workflow's version scrape (`<version>0.0.1</version>`, currently in sync with `package.json`). There are no Java sources, and its Enforcer rule fails on the installed JDK anyway. If image publishing goes, so can the pom.
 
@@ -396,10 +422,10 @@ These come from the subsystem blueprint's Phase 3 and are largely blocked on bac
 - `[x]` Subscription plan selection — built 2026-08-19, and the price contradiction is gone rather than resolved: the tiers come from Abofonsa through a gateway proxy at `/api/plans`, and `priceAmount` arrives pre-formatted for the locale. **Render it, never re-format it** — two products quoting different numbers for one tier is exactly what restating a price causes. It lives on the profile's membership tab, _not_ at `/plans`, which is already the care plan (diet and exercise). Choosing writes a `Membership` with status `PENDING`: this records a choice, it does not bill for one.
 - `[x]` Onboarding wizard — built 2026-08-19. Five steps at `/onboarding`, on `AuthShellComponent` behind the signed-in guard rather than in the portal shell: a patient here has a token but no record, and the shell would fire patient-scoped fetches for a patient who does not exist, behind a sidebar of destinations that would all be empty. Each step saves before the next is shown, because the backend has no transaction to wrap the journey in. Plan selection is deliberately _not_ a step (see above). See `docs/onboarding.md` §16 for the endpoint contract.
 - `[ ]` **A public account-deletion page — decided 2026-08-28 that `/delete-account` does not cover it.** Google Play requires deletion to be requestable from a URL that does not need the app installed, and asked whether the portal screen answered that, the architect's answer was **no**: the portal screen is for signed-in patients, and a separate unauthenticated page is still wanted. So this is `web`'s work and not `mobile`'s, it is the only piece of _product_ left in `docs/android-publishing-steps.md`, and it is not closed by the 404 fix above. Open questions it will have to settle: what identifies the requester without a session, and how a request made that way is rate-limited — `/api/deletion-requests` is authenticated today, so nothing in `api` serves this yet either.
-- `[ ]` Historical telemetry views — blocked on `patient-api.md` Phase C; the current metric panels read from `Stat`. Note this means _patient_ telemetry (vitals over time), which is unrelated to the OpenTelemetry instrumentation added in 2026-08-03.
-- `[ ]` Calendar / upcoming visits — no scheduling entity exists in any backend.
-- `[ ]` Assigned professionals directory — needs a contract with the professional subsystem.
-- `[ ]` Time-bound record sharing toggles — no sharing/consent model exists.
+- `[ ]` Historical telemetry views — genuinely blocked on `patient-api.md` Phase C, confirmed 2026-08-31: `Stat` is still the only entity, `VitalStatistic` does not exist. The current metric panels read from `Stat`. Note this means _patient_ telemetry (vitals over time), unrelated to the OpenTelemetry instrumentation added 2026-08-03. Worth carrying to whoever builds Phase C: **`Stat` is also the one collection in the api with no pagination and no natural ceiling**, so the entity that replaces it should arrive paginated rather than gain it later.
+- `[~]` Calendar / upcoming visits. **"No scheduling entity exists in any backend" was wrong when written and is very wrong now** (checked 2026-08-31): the api has `Task`, `Visitation`, `DutyRoster` and `Shift`, and this app already routes `/schedules` and `/visitations` screens that render the first two, with an "upcoming" tile on the overview linking to them. What is missing is a **calendar view** — a month grid — not a backend. That is a front-end feature with everything it needs, and it should stop being filed under "blocked on backends".
+- `[~]` Assigned professionals directory. **The assigned part exists**: `ProfessionalResource` serves both GETs to any authenticated caller as reference data, and `PatientContextService` already builds `careTeam$` from it — a patient sees the clinicians on their own record, named, on the record screen. What does not exist is a _directory_ of every professional, and before that is built somebody should say why a patient would browse one. It is not obviously a patient-facing surface, and "needs a contract with the professional subsystem" is a smaller question than "should a patient have this at all".
+- `[ ]` Time-bound record sharing toggles — genuinely blocked, and confirmed 2026-08-31. The only thing resembling consent in the api is `CareDelegation`, which is not this: it grants one named person full read and write until revoked. Time-bound sharing is a different model — a scope, a window, and an audience — and none of the three exists.
 - `[x]` `PATIENT`/`ANGEL` role support — the `Authority` enum now holds all four. No route guards on them, and that is the answer rather than an omission: an angel's authority comes from an `ACTIVE` care delegation the backend re-reads per request, so guarding a screen on `ROLE_ANGEL` would leave the menu entry for somebody whose delegation was revoked.
 - `[x]` **Acting as another patient** — a care angel opens the patient's record through an `X-Acting-As` header set by **one** interceptor and nothing else. A screen that built its own request and forgot it would silently read the wrong person's record and answer 200, which is why it is not a per-service concern. The shell shows a loud, persistent banner naming whose record is open; that is a safety control, not decoration.
 - `[x]` **Care nominations** at `/invitations`, and **delegation management** on the profile's care-angel tab — see, and withdraw, whoever may act for you.
@@ -650,9 +676,16 @@ Batch 4 — **C5, C8, the A5 leftover and D1 done 2026-08-16**; C10 still blocke
   vitals. Anything the backend adds later falls back to sentence case rather than rendering a raw
   translation key. It also caught a pair nobody had listed: vitals read **Ok** and **Warn**, where
   the demo reads _In range_ and _Watch_.
-- `[ ]` **D2 · "What was reported" / "What was found"** replace the demo's _Symptoms_ / _Diagnosis_.
-  This reads as an improvement on the demo rather than drift from it — make it a decision and apply it
-  everywhere, rather than leaving two documents disagreeing.
+- `[x]` **D2 · decided and already applied — 2026-08-31.** "What was reported" / "What was found" stand,
+  in all three locales: `Ce qui a été signalé` / `Ce qui a été constaté`, `Was berichtet wurde` /
+  `Was festgestellt wurde`. This was an improvement on the demo rather than drift from it, and the only
+  thing outstanding was saying so.
+
+  **Deliberately not applied to the generated entity CRUD.** `clinical-case-update.component.html` still
+  labels the field _Diagnosis_, and should: that screen is `ROLE_ADMIN`-only, is not in any menu, and edits
+  the raw document. An administrator correcting a record is better served by a label that matches the field
+  name in the api than by the patient-facing phrasing. "Everywhere" means everywhere a patient reads.
+
 - `[x]` **D3 · honorifics dropped** ("Dr. Grace Mensah" → "Grace Mensah"). ~~The seed stores the
   honorific; this is presentation.~~ **It did not.** `Professional.honorific` was added to the api,
   the generator now lifts it out of the mockup's own name, and `CareTeamMember.name` carries it — so
@@ -688,17 +721,45 @@ Batch 4 — **C5, C8, the A5 leftover and D1 done 2026-08-16**; C10 still blocke
   sessions at the Tema centre — a physiotherapist taking a glucose reading is not something this
   record says. Leaving those unnamed is the record being honest, and it exercises both rendering
   paths.
-- `[ ]` **D6 · case rows print their title twice.** `patient-demo-seed.json` sets `brief` to the same
-  string as `title` because the mockup has one label per case. Either give `brief` real content or stop
-  rendering it. Seed-side fix lives in `hc-patient-quality`.
-- `[ ]` **D7 · ongoing conditions show a bare `—` and repeat themselves.** The panel is an addition
-  beyond the demo; it needs a date and a description that adds something. Seed-side, as D6.
-- `[ ]` **D8 · the sidebar drops the patient's location** ("Patient · Accra, GH" → "Patient"), which is
-  already on the record.
-- `[ ]` **D9 · the sign-in counters are inherited, not computed.** Both show _12 cases · 41 visits · 6
-  professionals · 24/7_; twelve and six match the record, forty-one does not (eighteen are seeded).
-  They read as live numbers on a page nobody has signed into. Decide whether they are marketing copy or
-  a figure, and make them honest either way.
+- `[x]` **D6 · fixed 2026-08-17 in `hc-patient-quality` (`019d122`), ticked here 2026-08-31.** `brief` was
+  the same string as `title` in all twelve cases; it now summarises instead — `title` "Rising fasting blood
+  sugar", `brief` "Fasting readings creeping from 8.2 to 9.0 mmol/L over six weeks." Verified against the
+  seed and against its own history: 12/12 duplicated at `88c81e4`, 0/12 from `019d122` onward.
+
+  Worth noting for anyone re-reading this entry: **its description had gone stale in the specifics as well as
+  the status.** `brief` is now the first sentence of `symptoms`, not of `title` — which is fine, because no
+  screen renders those two together: the list shows `title` over `brief`, and the detail shows `symptoms`
+  without `brief`.
+
+- `[x]` **D7 · fixed in the same commit, ticked here 2026-08-31.** Its title says so —
+  _"a case brief that summarises, **and conditions that carry a date**"_. Both conditions gained
+  `createdDate`, and both descriptions stopped opening with their own name: _"Type-2 diabetes confirmed on
+  fasting glucose…"_ became _"Confirmed on fasting glucose…"_, which is what "repeat themselves" meant.
+- `[x]` **D8 · the sidebar carries the location again — 2026-08-31.** `place()` on `ShellComponent`, town
+  and region only, rendered through a new `nav.roleLinePlace` key in en/fr/de; falls back to the plain
+  `nav.roleLine` when there is nothing to say, rather than printing a separator with nothing after it.
+
+  **It is empty while acting for somebody else, and that is the substance of the change.** This footer names
+  the _signed-in account_ — `displayName()` reads `account`, not the open record — so appending the open
+  record's town would put one person's name directly above another person's location, a few pixels under the
+  banner that exists to say they are different. `shell-place.spec.ts` pins that case first.
+
+  Town and region, never the street: a sidebar is visible on every page, including one somebody is holding
+  up to a clinician across a desk.
+
+- `[x]` **D9 · the counters are no longer figures — 2026-08-31.** Decided: they are copy, because on this
+  page they cannot be anything else. The sign-in screen is pre-authentication; there is no session to count
+  against, and counting against a _particular_ record for an anonymous visitor is the thing to avoid rather
+  than the thing to build.
+
+  **The seed makes the point sharper than "inherited constants" did.** Counted on quality: `clinicalcase`
+  12, `professional` 6 — the two numbers on that page that matched are exactly one real patient's totals,
+  published to anyone who loads the sign-in screen. Small in magnitude and wrong in kind. The 41 that was
+  wrong (18 visitations seeded) was the only one that was not somebody's actual data.
+
+  Now `Cases · Every one on file`, `Visits · Every one logged`, `Your team · Named on your record`,
+  `24/7 · Care line`, in en/fr/de. The layout is unchanged; nothing on the page is a count. **The wording is
+  the architect's to change** — the requirement this closes is only that no figure appears there.
 
 ### Ahead of the demo — keep when closing the above
 

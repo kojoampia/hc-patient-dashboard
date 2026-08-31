@@ -4,6 +4,7 @@ import { Routes } from '@angular/router';
 
 import APP_ROUTES from 'app/app.routes';
 import { SHELL_NAV, SHELL_TABS } from 'app/layouts/shell/shell-nav';
+import { OVERVIEW_TILE_LINKS, caseLink } from './portal-destinations';
 
 /**
  * Every link the portal renders points at a route that exists.
@@ -22,13 +23,18 @@ import { SHELL_NAV, SHELL_TABS } from 'app/layouts/shell/shell-nav';
  * `routerLink` accepts any string, the anchor renders, the href looks plausible, and the failure exists only
  * for whoever clicks it.</p>
  *
- * <p><b>What this cannot see.</b> Only links whose destination is written literally in the template. Three in
- * the portal are computed — `[routerLink]="tile.link"` on the overview tiles and `caseLink(...)` on the record
- * screen — and are invisible here; the sidebar's `['/', item.path]` is covered instead by asserting SHELL_NAV
- * and SHELL_TABS directly, which is where those paths actually come from. `layouts/navbar/` is excluded
- * deliberately: it is generated JHipster scaffolding that nothing imports, and its entity links predate the
- * move of that CRUD under `/entities`, so it would fail this test for a reason that costs nobody anything
- * today.</p>
+ * <p><b>What this can see, and how the gap was closed.</b> Templates give up only the links written literally
+ * in them. Everything computed used to be invisible: the sidebar's `['/', item.path]`, `[routerLink]="tile.link"`
+ * on the overview tiles, and `caseLink(...)` behind five rows of the record screen. The sidebar was already
+ * covered by asserting SHELL_NAV and SHELL_TABS directly — checking the source of the value rather than the
+ * template that interpolates it — and as of 2026-08-31 the other two are covered the same way: their
+ * destinations live in `portal-destinations.ts`, which this spec reads. <b>A new computed link belongs there</b>,
+ * or it is invisible again.</p>
+ *
+ * <p>`layouts/navbar/` used to be excluded here, as generated scaffolding that nothing imported whose entity
+ * links predated the move of that CRUD under `/entities`. It was deleted on 2026-08-31, so there is nothing
+ * left to exclude. Only `navbar-item.model.d.ts` survives: `entities/entity-navbar-items.ts` is a generator
+ * needle file and imports the type.</p>
  */
 
 /** Templates whose links are checked: the portal screens, and the frame they render inside. */
@@ -134,5 +140,24 @@ describe('every link the portal renders', () => {
   // in shell-nav.ts rather than in the template. A typo there empties a nav entry rather than a button.
   it.each([...new Set([...SHELL_NAV.map(item => item.path), ...SHELL_TABS])])('the nav entry %s resolves to a route', path => {
     expect(paths.some(pattern => matches(pattern, `/${path}`))).toBe(true);
+  });
+
+  // The computed links, which this spec could not see until the destinations moved out of the components
+  // and into portal-destinations.ts. Same answer as the nav entries above: check the source of the value,
+  // not the template that interpolates it.
+  it.each(Object.entries(OVERVIEW_TILE_LINKS))('the overview tile %s links to %s, which resolves', (_key, link) => {
+    expect(paths.some(pattern => matches(pattern, link))).toBe(true);
+  });
+
+  it('the case link resolves, and is a link only when there is a case', () => {
+    // Five rows on the record screen call this. A wrong prefix here is five dead links at once, and
+    // `/case/:id` is exactly the shape that resolves against the ** catch-all and answers a 404.
+    expect(paths.some(pattern => matches(pattern, (caseLink('some-case-id') ?? []).join('/')))).toBe(true);
+
+    // null rather than a path, so a row with no case renders no href at all. A link that goes nowhere
+    // is worse than no link: it invites the click.
+    expect(caseLink(null)).toBeNull();
+    expect(caseLink(undefined)).toBeNull();
+    expect(caseLink('')).toBeNull();
   });
 });

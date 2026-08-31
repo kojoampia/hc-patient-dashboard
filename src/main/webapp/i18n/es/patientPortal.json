@@ -1,0 +1,48 @@
+{
+  "patientPortal": {
+    "deleteAccount": {
+      "link": "Eliminar su historial",
+      "title": "Eliminar su historial",
+      "loading": "Comprobando su cuenta…",
+      "retry": "Volver a intentarlo",
+      "intro": {
+        "title": "Eliminar su historial",
+        "body": "Puede solicitarnos que eliminemos su historial médico y todo lo que contiene. Lo llevamos a cabo en un plazo de 14 días, y puede retirar la solicitud en cualquier momento antes de esa fecha.",
+        "review": "La eliminación la realiza un administrador, de modo que nada se borra con un solo toque.",
+        "request": "Solicitar la eliminación",
+        "policy": "Leer la política de privacidad",
+        "policyHint": "La política se abre en su navegador e indica qué conservamos y durante cuánto tiempo."
+      },
+      "confirm": {
+        "title": "¿Eliminar su historial?",
+        "body": "Con esto nos solicita que borremos su historial médico. No se puede deshacer una vez realizado.",
+        "item": {
+          "record": "Su perfil, afecciones, medicamentos y alergias",
+          "clinical": "Sus casos, informes, planes de cuidados y visitas",
+          "delegations": "El permiso de cualquier persona para actuar en su nombre"
+        },
+        "window": "Su historial se eliminará en un plazo de 14 días desde esta solicitud. Puede retirarla en cualquier momento antes de entonces.",
+        "reasonLabel": "¿Por qué se marcha? (opcional)",
+        "reasonPlaceholder": "No tiene que decírnoslo.",
+        "keep": "Conservar mi historial",
+        "proceed": "Sí, eliminar mi historial"
+      },
+      "pending": {
+        "title": "Su historial está programado para eliminación",
+        "body": "Eliminaremos su historial y todo lo que contiene antes del {{date}}.",
+        "requested": "Solicitado el {{date}}",
+        "keep": "Prefiero conservar mi historial",
+        "keepHint": "Puede cambiar de opinión en cualquier momento hasta que se realice la eliminación."
+      },
+      "angel": {
+        "title": "No disponible mientras actúa en nombre de otra persona",
+        "body": "Está viendo el historial de otra persona. Solo ella puede solicitar su eliminación."
+      },
+      "error": {
+        "load": "No hemos podido comprobar si tiene una solicitud de eliminación abierta.",
+        "raise": "No hemos podido registrar su solicitud. Vuelva a intentarlo.",
+        "cancel": "No hemos podido retirar su solicitud. Vuelva a intentarlo."
+      }
+    }
+  }
+}
