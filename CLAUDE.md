@@ -47,7 +47,7 @@ npm install
 npm start                                    # dev server :4200 with HMR
 npm test                                     # Jest + coverage (pretest runs lint)
 npm test -- --test-path-pattern=dashboard    # one area — Jest flags must be kebab-case here
-npx ng test --coverage=false                 # skips the pretest lint step, which currently fails
+npx ng test --coverage=false                 # same tests, without the pretest lint step or coverage
 npm run lint | npm run lint:fix
 npm run webapp:build:dev | npm run webapp:prod
 npm run prettier:check | npm run prettier:format
@@ -57,7 +57,11 @@ Do **not** run `./mvnw` here: there is nothing to compile. `pom.xml` used to set
 
 Angular CLI rejects camelCase Jest flags (`--testPathPattern` → `Unknown arguments`), so pass kebab-case through `ng test`. Calling `npx jest` directly does not work: `jest.conf.js` carries no transform, since the Angular preset comes from the builder.
 
-`npx ng test` passes (146 suites, 681 tests, ~110s). `npm test` runs ESLint first and still fails there on 172 pre-existing problems — 161 errors and 11 warnings across 77 files, mostly `jhi-*` selectors against the `hpd` rule — so prefer `npx ng test` while working. `patient-web.md` Phase A tracks the remainder; don't read those lint errors as something you caused. Note CI gates nothing today: the only workflow has been failing since 2026-07-30 (`patient-web.md` Phase C).
+**`npm test` works, and lint is clean.** 222 suites / 1229 tests (2026-08-31); `npm run lint` reports zero problems. Both statements were the opposite until 2026-08-24 and this entry said so for a week after they changed — it described 172 pre-existing lint problems and told you to prefer `npx ng test` to get past them. `6d1a3c0` fixed all 48 that remained by then, rather than suppressing them, and made lint its own CI step.
+
+Two things from that worth carrying. **A failing `pretest` hook makes a test command that tests nothing and exits 1** — indistinguishable, from the exit code, from a test failure. And lint being enforced _only_ by that hook meant CI never ran it at all, since CI called `npx ng test` directly; that is how the 48 accumulated. `npx ng test` is still the quicker inner loop, but it is no longer a way round anything.
+
+CI does gate: `docker-publish.yml` runs lint, tests and `webapp:prod`. It failed on every push between 2026-07-30 and 2026-08-03 and has not failed since — 84 runs, checked 2026-08-31. **The filename is vestigial**: the workflow no longer publishes anything, and says so in its own header.
 
 ## Layout
 
