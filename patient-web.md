@@ -430,6 +430,30 @@ These come from the subsystem blueprint's Phase 3 and are largely blocked on bac
 - `[x]` **Acting as another patient** — a care angel opens the patient's record through an `X-Acting-As` header set by **one** interceptor and nothing else. A screen that built its own request and forgot it would silently read the wrong person's record and answer 200, which is why it is not a per-service concern. The shell shows a loud, persistent banner naming whose record is open; that is a safety control, not decoration.
 - `[x]` **Care nominations** at `/invitations`, and **delegation management** on the profile's care-angel tab — see, and withdraw, whoever may act for you.
 
+### Identification is a dropdown on the backend and a free-text box here (2026-08-31)
+
+`api` gained `IdentificationType` — `GHANA_CARD`, `PASSPORT`, `VOTER_ID`, `NHIS`, `DRIVERS_LICENCE`, each
+with a human label — and canonicalises whatever onboarding sends. Two client halves are still open, and the
+second is user-visible today.
+
+- `[ ]` **`onboarding.component.html` step 5 is a plain `<input required>`.** A patient types the ID type
+      free-hand, so "Ghana Card", "ghana card" and "GhanaCard" all arrive. The backend collapses the ones it
+      recognises, but a constrained control is what stops the problem at source. Note the component's own
+      spec already patches the enum-shaped `'GHANA_CARD'`, so the test is ahead of the markup.
+- `[ ]` **`portal/profile/profile.component.html` renders `person.cardType` raw.** A patient who picks
+      Ghana Card is shown `GHANA_CARD` on their own profile. It needs the label, which means five i18n keys
+      in `en`, `fr`, `de` — and `es` if the chrome tranche is extended.
+
+**Do not make the api reject unknown values to force this.** `canonicalise()` deliberately never rejects,
+so that service and clients can deploy in any order; tightening it would 400 every patient finishing
+onboarding until both clients shipped, after a journey that returned 200 the whole way. That is the `Stat`
+pagination trap, and it was designed out rather than sequenced around.
+
+**The list itself is not settled.** Which documents BridgeCare accepts is a product and compliance question
+nobody has answered, so a hard-coded dropdown here becomes a second place to change. If the list is still
+provisional when this is built, consider having the api serve it rather than duplicating it — `api`'s enum
+says at its top that adding or removing a constant must stay a one-line change, and two copies breaks that.
+
 ## Phase E — demo parity
 
 `patient-web-demo.html` is the design the portal was rebuilt against, and it is still the target: it is
