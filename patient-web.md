@@ -289,9 +289,17 @@ Resolved since the last baseline, kept so the numbering change is traceable:
   gateway elsewhere — `ssh -N -L 5505:127.0.0.1:15505 jacserver` and the quality stack's seeded
   record. Verified by signing in against it from `npm start`. This is what makes the rest of Phase E
   checkable locally instead of by shipping and looking.
-- `[ ]` Resolve decision 2: centralize entity route registration in `entities/entity.routes.ts` and populate `entity-navbar-items.ts` — routes and menu land together, never separately.
-- `[ ]` Rename the `hc-credential` and `hc-pay-option` areas to match the backend's `PersonalDocument` and `PaymentOption` (models, services, routes, i18n keys, specs). Coordinate with `patient-api.md` Phase A, which still has to generate those endpoints.
-- `[ ]` Generate `clinical-case` and `recommendation` screens, or record the decision not to. `api` shipped both in `519ba8f` with a full resource stack; the frontend has nothing for either, and `ClinicalCase` **replaced** `MedCase` rather than renaming it, so there is no old screen to adapt.
+- `[x]` **Decision 2 resolved — 2026-08-31.** The centralising half is done and has been: `entities/entity.routes.ts` registers all **twenty** entities and `app.routes.ts` mounts them at `/entities` behind `Authority.ADMIN`.
+
+  **The other half — "populate `entity-navbar-items.ts`" — is a no-op, and that is the answer rather than a dodge.** That array's only consumer was `layouts/navbar/navbar.component.ts`, which is deleted (branch `fix/the-links-no-spec-could-see`); once that lands, filling the array in would put entries into a component that no longer exists. The file itself stays: it is a generator needle and `entities/entity-navbar-items.ts` is where JHipster writes on regeneration.
+
+  The real question underneath it is different and worth stating separately: **should the generated entity screens appear in the portal shell's navigation?** No. They are an administrative surface carrying sixty delete dialogs over _any_ patient's records, and the shell is a patient's frame — the `ROLE_ADMIN` guard is what keeps decision 13 true. An administrator reaches them by URL, which is the right amount of friction for a screen that can edit somebody else's medication list. If that ever changes, it changes in `shell-nav.ts`, not here.
+
+- `[x]` **Renamed — already done, ticked 2026-08-31.** `entities/patientMS/` holds `personal-document` and `payment-option`; `hc-credential` and `hc-pay-option` are gone. Verified by listing the directory against the api's `domain/` package rather than by reading this entry.
+- `[x]` **Generated — already done, ticked 2026-08-31.** Both `clinical-case/` and `recommendation/` exist under `entities/patientMS/` and are routed. The frontend had not followed the api's entity changes when this was written; it has since.
+
+  What is still true of the comparison, and is not a gap: `CareDelegation` deliberately has no generated CRUD (a generic `PATCH` would let an angel set their own status to `ACTIVE`), `DeletionRequest` has its own portal screen instead, and `DutyRoster`/`Shift` are staff reference data with no patient-facing surface.
+
 - `[ ]` Reinstate Cypress or drop it: `.yo-rc.json` still lists `clientTestFrameworks: ["cypress"]` and `src/test/javascript/cypress/e2e/` exists, but the dependency and the `e2e` script are missing, so e2e cannot run.
 - `[ ]` Reconcile `angular.json` metadata: project name is still `patient-gateway` and `prefix` is `jhi` while ESLint requires `hpd`.
 - `[ ]` Decide the PWA posture — the service worker is registered with `enabled: false` in `app.config.ts`.
