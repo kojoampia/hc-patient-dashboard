@@ -10,6 +10,7 @@
       "openMenu": "Menü öffnen",
       "signOut": "Abmelden",
       "roleLine": "Patient",
+      "roleLinePlace": "Patient · {{place}}",
       "overview": "Übersicht",
       "record": "Meine Akte",
       "recordShort": "Akte",
@@ -73,13 +74,13 @@
       "signInLede": "Zugang zu Ihrer persönlichen Gesundheitsakte.",
       "or": "oder",
       "stat": {
-        "cases": "Erfasste Fälle",
-        "casesValue": "12",
-        "visits": "Erfasste Besuche",
-        "visitsValue": "41",
-        "team": "Fachkräfte",
-        "teamValue": "6",
-        "careLine": "Notfallnummer",
+        "cases": "Alle dokumentiert",
+        "casesValue": "Fälle",
+        "visits": "Alle erfasst",
+        "visitsValue": "Besuche",
+        "team": "In Ihrer Akte benannt",
+        "teamValue": "Ihr Team",
+        "careLine": "Pflege-Hotline",
         "careLineValue": "24/7"
       }
     },

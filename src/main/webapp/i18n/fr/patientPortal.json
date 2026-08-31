@@ -10,6 +10,7 @@
       "openMenu": "Ouvrir le menu",
       "signOut": "Se déconnecter",
       "roleLine": "Patient",
+      "roleLinePlace": "Patient · {{place}}",
       "overview": "Vue d'ensemble",
       "record": "Mon dossier",
       "recordShort": "Dossier",
@@ -73,12 +74,12 @@
       "signInLede": "Accédez à votre dossier de santé personnel.",
       "or": "ou",
       "stat": {
-        "cases": "Dossiers enregistrés",
-        "casesValue": "12",
-        "visits": "Visites consignées",
-        "visitsValue": "41",
-        "team": "Professionnels",
-        "teamValue": "6",
+        "cases": "Tous consignés",
+        "casesValue": "Dossiers",
+        "visits": "Toutes enregistrées",
+        "visitsValue": "Visites",
+        "team": "Nommée dans votre dossier",
+        "teamValue": "Votre équipe",
         "careLine": "Ligne d'assistance",
         "careLineValue": "24/7"
       }

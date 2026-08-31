@@ -99,7 +99,13 @@
         <span class="hc-monogram hc-monogram--gold hc-shell__side-avatar">{{ initials() }}</span>
         <span class="hc-grow">
           <span class="hc-shell__side-name hc-trunc">{{ displayName() }}</span>
-          <span class="hc-shell__side-sub hc-trunc" hpdTranslate="patientPortal.nav.roleLine">Patient</span>
+          @if (place()) {
+            <span class="hc-shell__side-sub hc-trunc" hpdTranslate="patientPortal.nav.roleLinePlace" [translateValues]="{ place: place() }"
+              >Patient</span
+            >
+          } @else {
+            <span class="hc-shell__side-sub hc-trunc" hpdTranslate="patientPortal.nav.roleLine">Patient</span>
+          }
         </span>
       </a>
     </div>

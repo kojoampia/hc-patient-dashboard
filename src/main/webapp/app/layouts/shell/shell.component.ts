@@ -10,6 +10,7 @@ import { IconComponent } from 'app/shared/ui/icon/icon.component';
 import { PortalDataService } from 'app/portal/data/portal-data.service';
 import { ActingAsService } from 'app/core/auth/acting-as.service';
 import { CareDelegationService, toActingAsChoices } from 'app/portal/data/care-delegation.service';
+import { PatientContextService } from 'app/portal/data/patient-context.service';
 import { SHELL_NAV, SHELL_TABS, ShellNavItem, navOwnerOf } from './shell-nav';
 import { DEFAULT_PAGE_TITLE, PAGE_TITLES } from './shell-titles';
 
@@ -41,6 +42,7 @@ export default class ShellComponent {
   private readonly data = inject(PortalDataService);
   private readonly actingAsService = inject(ActingAsService);
   private readonly careDelegationService = inject(CareDelegationService);
+  private readonly context = inject(PatientContextService);
 
   /** Current portal path, e.g. `cases/12` — drives both the active nav item and the title. */
   private readonly activePath = signal(this.portalPathOf(this.router.url));
@@ -54,6 +56,7 @@ export default class ShellComponent {
    * that do not pay for a single collection to keep one number honest everywhere.
    */
   private readonly emergencies = toSignal(this.data.emergencies$, { initialValue: [] });
+  private readonly profile = toSignal(this.context.profile$, { initialValue: null });
 
   /**
    * Counts per nav path, for the paths that have one. A signal each, so the sidebar tracks the data
@@ -128,6 +131,35 @@ export default class ShellComponent {
     }
     const full = [account.firstName, account.lastName].filter(Boolean).join(' ').trim();
     return full || account.login;
+  });
+
+  /**
+   * Where the patient is, for the line under their name — "Patient · Accra, GH".
+   *
+   * Empty when there is nothing to say, and the template falls back to a plain "Patient" rather than
+   * rendering a separator with nothing after it.
+   *
+   * **Empty while acting for somebody else, deliberately.** This footer names the SIGNED-IN account —
+   * `displayName()` reads `account`, not the open record — so appending the open record's town would
+   * put one person's name above another person's location, in the one component whose job is to keep
+   * those two straight. The banner exists a few lines up for exactly that confusion; this must not
+   * quietly undo it.
+   *
+   * Town and region only, never the street. A sidebar is not an address, and this is a corner of the
+   * screen that is visible on every page including a shared one.
+   */
+  readonly place = computed(() => {
+    if (this.actingForSomeoneElse()) {
+      return '';
+    }
+    const address = this.profile()?.address;
+    if (!address) {
+      return '';
+    }
+    return [address.town, address.region]
+      .map(part => part?.trim())
+      .filter((part): part is string => !!part)
+      .join(', ');
   });
 
   readonly initials = computed(() => {
