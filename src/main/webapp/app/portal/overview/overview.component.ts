@@ -22,6 +22,7 @@ import { Authority } from 'app/config/authority.constants';
 import { PatientFinderComponent } from '../patient-finder/patient-finder.component';
 import { CareTeamMember, PatientContextService } from '../data/patient-context.service';
 import { StatusLabelPipe } from '../data/status-label.pipe';
+import { OVERVIEW_TILE_LINKS } from '../portal-destinations';
 import { PortalDataService } from '../data/portal-data.service';
 import { VitalSummary, summariseVitals } from '../data/vitals';
 import { byDateAsc, byDateDesc, formatDay, formatDayTime, humanise, formatInstantDay, monthlyCounts } from '../data/portal-format';
@@ -118,15 +119,15 @@ export default class OverviewComponent {
   readonly openCases = computed(() => this.cases().filter(item => item.status !== 'CLOSED'));
 
   readonly tiles = computed(() => [
-    { icon: 'case' as const, value: this.openCases().length, labelKey: 'patientPortal.overview.tile.openCases', link: '/cases' },
-    { icon: 'cal' as const, value: this.upcoming().length, labelKey: 'patientPortal.overview.tile.upcoming', link: '/schedules' },
+    { icon: 'case' as const, value: this.openCases().length, labelKey: 'patientPortal.overview.tile.openCases', link: OVERVIEW_TILE_LINKS.openCases },
+    { icon: 'cal' as const, value: this.upcoming().length, labelKey: 'patientPortal.overview.tile.upcoming', link: OVERVIEW_TILE_LINKS.upcoming },
     {
       icon: 'pill' as const,
       value: this.medications().filter(m => m.status === 'ACTIVE').length,
       labelKey: 'patientPortal.overview.tile.activeMeds',
-      link: '/medications',
+      link: OVERVIEW_TILE_LINKS.activeMeds,
     },
-    { icon: 'report' as const, value: this.reports().length, labelKey: 'patientPortal.overview.tile.reports', link: '/reports' },
+    { icon: 'report' as const, value: this.reports().length, labelKey: 'patientPortal.overview.tile.reports', link: OVERVIEW_TILE_LINKS.reports },
   ]);
 
   /**
@@ -142,20 +143,20 @@ export default class OverviewComponent {
       icon: 'alert' as const,
       value: this.emergencies().length,
       labelKey: 'patientPortal.overview.tile.emergencies',
-      link: '/emergencies',
+      link: OVERVIEW_TILE_LINKS.emergencies,
     },
-    { icon: 'shield' as const, value: this.allergies().length, labelKey: 'patientPortal.overview.tile.allergies', link: '/allergies' },
+    { icon: 'shield' as const, value: this.allergies().length, labelKey: 'patientPortal.overview.tile.allergies', link: OVERVIEW_TILE_LINKS.allergies },
     {
       icon: 'leaf' as const,
       value: this.carePlan().filter(item => item.planType === 'DIET').length,
       labelKey: 'patientPortal.overview.tile.diet',
-      link: '/plans',
+      link: OVERVIEW_TILE_LINKS.diet,
     },
     {
       icon: 'run' as const,
       value: this.carePlan().filter(item => item.planType === 'EXERCISE').length,
       labelKey: 'patientPortal.overview.tile.exercise',
-      link: '/plans',
+      link: OVERVIEW_TILE_LINKS.exercise,
     },
   ]);
 

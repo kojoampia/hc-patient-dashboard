@@ -15,6 +15,7 @@ import { StatusLabelPipe } from '../data/status-label.pipe';
 import { PortalDataService } from '../data/portal-data.service';
 import { VitalSummary, summariseVitals } from '../data/vitals';
 import { byDateDesc, formatDay, formatInstantDay, pageCount, pageOf } from '../data/portal-format';
+import { caseLink as caseRoute } from '../portal-destinations';
 
 /**
  * Rows a record panel shows at once.
@@ -133,7 +134,10 @@ export default class RecordComponent {
    * case to open is not a link, rather than a link that goes nowhere.
    */
   caseLink(caseId: string | null | undefined): string[] | null {
-    return caseId ? ['/case', caseId] : null;
+    // Delegates rather than builds. The destination lives in portal-destinations.ts so that
+    // portal-links.spec.ts can resolve it against the real route config — it cannot see an
+    // expression in a template, and this method is behind five of them on this screen alone.
+    return caseRoute(caseId);
   }
 
   /**

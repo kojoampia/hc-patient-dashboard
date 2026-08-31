@@ -86,13 +86,28 @@ path**, which at least `register.route.spec.ts` would pin: the failure exists on
 
 Two things this uncovered and did **not** fix:
 
-- `[ ]` **`layouts/navbar/` is dead and its links are wrong.** Generated JHipster scaffolding that nothing
-  imports — its entity links point at `/allergy`, `/address`, `/clinical-case` and the rest, which predate that
-  CRUD moving under `/entities`. Excluded from the new spec deliberately rather than silently: it would fail
-  for a reason that costs nobody anything today. Decide whether to delete it (Phase B) rather than repair it.
-- `[ ]` **Three computed links are invisible to the spec** — `[routerLink]="tile.link"` on the overview tiles
-  and `caseLink(...)` on the record screen. The sidebar's `['/', item.path]` is covered instead by asserting
-  `SHELL_NAV` and `SHELL_TABS` directly, which is where those paths actually come from.
+- `[x]` **`layouts/navbar/` deleted — 2026-08-31.** Generated JHipster scaffolding that nothing imported; its
+  entity links pointed at `/allergy`, `/address`, `/clinical-case` and the rest, all predating that CRUD moving
+  under `/entities`. Deleted rather than repaired, because repairing maintains a component no route renders.
+
+  The exclusion it had in `portal-links.spec.ts` was honest but was still a standing lie of a kind: **a sweep
+  that skips a directory reports on the rest of the app as though the app were the rest.** Deleting the
+  directory removed the exclusion rather than the failure. `navbar-item.model.d.ts` survives alone —
+  `entities/entity-navbar-items.ts` imports the type and is a generator needle file. The `.navbar` rules in
+  `global.scss` stay: `DashboardComponent` still uses those Bootstrap classes.
+- `[x]` **The computed links are checkable — 2026-08-31.** `[routerLink]="tile.link"` on the overview tiles and
+  `caseLink(...)` behind five rows of the record screen both carried an expression, so the destination lived in
+  a component field no test could reach without standing the whole component up.
+
+  The destinations moved to `portal/portal-destinations.ts`, where the spec reads them — **the same answer the
+  sidebar already had**, whose paths are checked by asserting `SHELL_NAV` and `SHELL_TABS` directly. Check the
+  source of the value, not the template that interpolates it. The alternative was teaching the spec to scrape
+  TypeScript, which trades a blind spot for a guess.
+
+  Eight tile destinations and `caseLink` are asserted, including that it returns `null` for a missing case:
+  `[routerLink]="null"` renders no href, so a row with no case is not a link rather than a link that goes
+  nowhere — a behaviour somebody could "tidy" into a string. **A new computed link belongs in that file**, or
+  it is invisible again.
 
 ### The patient handoff contract, honoured (2026-08-25)
 
