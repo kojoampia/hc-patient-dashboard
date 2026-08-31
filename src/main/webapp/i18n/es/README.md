@@ -1,4 +1,19 @@
-# Spanish — partial, and safe to be partial
+# Spanish — and NOBODY WHO SPEAKS IT HAS READ ANY OF THIS
+
+> **No Spanish speaker, clinical or otherwise, has reviewed a single string in this directory.** That
+> includes the clinical screens: medication names, allergy warnings, case notes and the onboarding
+> questions about your health. It was translated carefully and by one non-native process, which is not the
+> same thing and is not a substitute for review.
+>
+> **Why that matters more now than it did on 2026-08-30.** Until the clinical bundles landed, a Spanish
+> reader meeting an untranslated screen saw English and could tell the translation was missing. Confident
+> Spanish removes that signal: there is nothing on screen to distinguish a reviewed string from an
+> unreviewed one. The per-key fallback that makes partial bundles safe is exactly what made filling them in
+> a decision rather than a chore, and it was taken deliberately on 2026-08-31 rather than by drift.
+>
+> A Spanish-speaking clinician reading `patientPortal.json` — particularly `status`, `medications`,
+> `allergies` and `onboarding.field` — is the outstanding work.
+
 
 `web.abofonsa.com` advertises `?locale=es` on its handoff link, and this app served three languages, so a
 Spanish reader landed in English. This directory closes that, **incrementally**.
@@ -40,7 +55,8 @@ The portal's **chrome** — `brand`, `nav`, `action`, `pager`, `filter`, `acting
 
 **Chosen because it is the largest block that carries no clinical claim.** These are navigation labels,
 buttons, pagination and the acting-as banner: a wrong word here is an awkward label, not a clinical error,
-which is the line the section below draws. The clinical bundles are still untouched and still last.
+which is the line the section below draws. (This tranche left the clinical bundles untouched; the fourth,
+later the same day, did not — see below.)
 
 Terminology follows the warning below rather than the dictionary, and the two that matter here are
 `nav.emergencies` → **Urgencias**, not _Emergencias_, and `nav.record` → **Mi historial**, matching the
@@ -56,16 +72,32 @@ Checked mechanically, because both of these fail silently: **no key exists in `e
 `en`** (it would render for nobody and never be missed), and **every `{{placeholder}}` survives translation**
 (a lost one renders the literal `{{name}}` to a patient).
 
+## What is done, fourth tranche (2026-08-31) — the clinical screens
+
+**`patientPortal.json` is now complete: 446 of 446 keys.** The remaining 362 went in one pass, on an explicit
+decision to ship them unreviewed rather than wait — see the warning at the top of this file, which is the
+cost of that decision and not a disclaimer.
+
+Terminology follows the rules below rather than the dictionary. The ones that bite hardest here:
+**afección** not _condición_ (`allergies.conditions`, `onboarding.field.conditions`), **urgencias** not
+_emergencias_ (`title`, `overview.tile`, `emergencies.*`), and _stat_ meaning a vital sign — rendered
+**constantes vitales** and **mediciones**, never anything implying urgency.
+
+Register and vocabulary follow the three earlier tranches rather than starting again: formal _usted_,
+**historial** for record, **ángel de cuidado** for care angel, **en nombre de** for acting on somebody's
+behalf, **equipo de atención** for care team.
+
+Checked mechanically, because all three fail silently: **446/446 coverage**, **no key in `es` that does not
+exist in `en`**, and **every `{{placeholder}}` preserved** — including the mixed `{{ name }}` and `{{count}}`
+spacings, which differ between keys and had to be matched individually. Three strings are identical to
+English on purpose: `brand.suffix` (BridgeCare), `auth.stat.careLineValue` (24/7) and
+`profile.field.plan` (_Plan_ is the same word).
+
 ## What is not
 
-The rest of `patientPortal.json` (~362 keys) and the `patientMs*` entity bundles — the clinical screens. These are the ones
-where a wrong word is a clinical error rather than an awkward sentence, and they are deliberately last.
-
-**A machine translation of those would be worse than leaving them in English, and the reason is the fallback
-above.** Today a Spanish reader meeting an untranslated clinical screen sees English and can tell the
-translation is absent. An unreviewed Spanish rendering of a medication name, an allergy warning or a case note
-reads as confident and correct, and nothing distinguishes it from a reviewed one. The fallback that makes
-tranches safe is exactly what makes filling them in carelessly unsafe.
+The `patientMs*` entity bundles — 40 files, the generated CRUD screens. Lower priority than the portal for a
+reason worth stating: `app.routes.ts` mounts them behind `Authority.ADMIN`, so a wrong word there reaches an
+administrator rather than a patient.
 
 ## Before this is relied on
 
