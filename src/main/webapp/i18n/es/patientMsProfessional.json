@@ -1,0 +1,37 @@
+{
+  "patientDashboardApp": {
+    "patientMsProfessional": {
+      "home": {
+        "title": "Profesionales",
+        "refreshListLabel": "Actualizar lista",
+        "createLabel": "Crear Profesional",
+        "createOrEditLabel": "Crear o editar Profesional",
+        "notFound": "No se han encontrado Profesionales"
+      },
+      "created": "Se ha creado Profesional con el identificador {{ param }}",
+      "updated": "Se ha actualizado Profesional con el identificador {{ param }}",
+      "deleted": "Se ha eliminado Profesional con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que desea eliminar Profesional {{ id }}?"
+      },
+      "detail": {
+        "title": "Profesional"
+      },
+      "id": "Id",
+      "firstName": "Nombre",
+      "lastName": "Apellidos",
+      "role": "Función",
+      "specialty": "Especialidad",
+      "email": "Correo electrónico",
+      "phoneNumber": "Número de teléfono",
+      "imageUrl": "URL de la imagen",
+      "initials": "Iniciales",
+      "location": "Ubicación",
+      "teamId": "Id del equipo",
+      "createdDate": "Fecha de creación",
+      "modifiedDate": "Fecha de modificación",
+      "createdBy": "Creado por",
+      "modifiedBy": "Modificado por"
+    }
+  }
+}

@@ -35,6 +35,21 @@
       "visitations": "Visitas",
       "activity": "Historial de actividad"
     },
+    "title": {
+      "overview": "Contexto del paciente",
+      "record": "Mi historial",
+      "schedules": "Citas",
+      "emergencies": "Urgencias",
+      "cases": "Casos",
+      "case": "Detalle del caso",
+      "medications": "Medicamentos",
+      "reports": "Informes",
+      "plans": "Plan de dieta y ejercicio",
+      "allergies": "Alergias",
+      "visitations": "Visitas",
+      "activity": "Historial de actividad",
+      "profile": "Perfil"
+    },
     "action": {
       "print": "Imprimir esta pantalla",
       "careLine": "Línea de atención",
@@ -51,14 +66,420 @@
       "save": "Guardar",
       "saving": "Guardando…"
     },
+    "auth": {
+      "eyebrow": "Abofonsa BridgeCare · Portal del paciente",
+      "headlineLead": "Todo su historial de salud,",
+      "headlineAccent": "en un solo lugar y con calma.",
+      "blurb": "Cada caso, visita, medicamento e informe que registra su equipo de atención: visible para usted, en lenguaje claro, dondequiera que esté.",
+      "signInLede": "Acceda a su historial médico personal.",
+      "or": "o",
+      "stat": {
+        "cases": "Todos los registrados",
+        "casesValue": "Casos",
+        "visits": "Todas registradas",
+        "visitsValue": "Visitas",
+        "team": "Nombrados en su historial",
+        "teamValue": "Su equipo",
+        "careLine": "Línea de atención",
+        "careLineValue": "24/7"
+      }
+    },
     "pager": {
       "aria": "Paginación",
       "prev": "Ant.",
       "next": "Sig."
     },
+    "chart": {
+      "table": "Tabla",
+      "when": "Cuándo",
+      "glance": "Atención de un vistazo",
+      "glanceSub": "Cada gráfico tiene vista de tabla: pulse Tabla para leer los números.",
+      "visitsOverTime": "Visitas a lo largo del tiempo",
+      "visitsOverTimeSub": "Visitas registradas para usted, mes a mes.",
+      "caseDistribution": "Distribución de casos",
+      "caseDistributionSub": "Cómo están hoy sus {{ total }} casos.",
+      "perProfessional": "Casos y visitas por profesional",
+      "perProfessionalSub": "Quién ha participado en su atención.",
+      "month": "Mes",
+      "cases": "Casos",
+      "visits": "Visitas",
+      "status": "Estado",
+      "count": "Casos",
+      "share": "Proporción",
+      "who": "Profesional",
+      "case": "Caso"
+    },
+    "overview": {
+      "greeting": "Su salud, de un vistazo",
+      "greetingNamed": "Hola {{ name }}",
+      "heroBlurb": "Todo lo que ha registrado su equipo de atención — casos, visitas, medicamentos e informes — en un solo lugar.",
+      "vitals": "Últimas mediciones",
+      "vitalsSub": "La medición más reciente registrada por su equipo de atención.",
+      "noVitals": "Todavía no hay mediciones",
+      "noVitalsHint": "Las constantes vitales aparecen aquí cuando su equipo de atención las registra.",
+      "nextUp": "Próximamente",
+      "openCases": "Casos recientes",
+      "activity": "Actividad reciente",
+      "lastAlert": "Aviso más reciente",
+      "tile": {
+        "openCases": "Casos abiertos",
+        "upcoming": "Próximas visitas",
+        "activeMeds": "Medicamentos activos",
+        "reports": "Informes archivados",
+        "emergencies": "Urgencias",
+        "allergies": "Alergias",
+        "diet": "Plan de dieta",
+        "exercise": "Plan de ejercicio"
+      },
+      "heroNext": "Su próxima cita es {{ when }} con {{ clinician }}. {{ open }} de sus {{ total }} casos siguen activos.",
+      "openRecord": "Abrir mi historial",
+      "onFile": "En su expediente",
+      "onFileSub": "Pulse cualquier tarjeta para abrirla.",
+      "viewVital": "Ver {{ name }} en detalle",
+      "lastReadings": "Las mediciones que hay detrás",
+      "recordedBy": "registrado el {{ when }} por {{ who }}",
+      "recordedByYou": "usted"
+    },
+    "record": {
+      "vitals": "Constantes vitales",
+      "vitalsSub": "Elija una medición para ver cómo ha evolucionado.",
+      "history": "Historial de mediciones",
+      "visits": "Visitas",
+      "activity": "Historial de actividad",
+      "careTeam": "Su equipo de atención",
+      "noCareTeam": "No hay equipo de atención registrado",
+      "noCareTeamHint": "Aquí aparecerán los profesionales que le atienden.",
+      "cases": "Casos",
+      "medications": "Medicamentos",
+      "reports": "Informes",
+      "lists": "En este historial",
+      "listsSub": "Tres a la vez: pase páginas aquí o abra la lista completa.",
+      "openAll": {
+        "cases": "Abrir todos los casos",
+        "visits": "Abrir todas las visitas",
+        "activity": "Abrir el historial de actividad completo",
+        "medications": "Abrir todos los medicamentos",
+        "reports": "Abrir todos los informes"
+      }
+    },
+    "cases": {
+      "search": "Buscar casos, síntomas, diagnósticos…",
+      "empty": "No hay casos registrados",
+      "emptyHint": "Se abre un caso cada vez que su equipo de atención investiga algo.",
+      "openCase": "Abrir el caso {{ name }}",
+      "column": {
+        "number": "N.º",
+        "title": "Caso",
+        "opened": "Abierto",
+        "clinician": "Profesional clínico",
+        "status": "Estado",
+        "open": "Abrir"
+      },
+      "archived": {
+        "title": "Archivados ({{count}})",
+        "hint": "Un miembro de su equipo de atención los retiró de la lista activa. Permanecen en su historial.",
+        "stamp": "Archivado el {{when}} por {{who}}"
+      }
+    },
+    "case": {
+      "openedOn": "Abierto el {{ date }}",
+      "symptoms": "Lo que se comunicó",
+      "noSymptoms": "No se registraron síntomas para este caso.",
+      "diagnosis": "Lo que se encontró",
+      "noDiagnosis": "Todavía no se ha registrado ningún diagnóstico.",
+      "recommendations": "Recomendaciones",
+      "noRecommendations": "No hay recomendaciones registradas para este caso.",
+      "visits": "Visitas",
+      "noVisits": "No hay visitas registradas en este caso",
+      "medications": "Medicamentos",
+      "noMedications": "No hay medicamentos recetados para este caso",
+      "reports": "Informes",
+      "noReports": "No hay informes archivados en este caso",
+      "timeline": "Cronología",
+      "noTimeline": "No se ha registrado nada en este caso",
+      "notFound": "Caso no encontrado",
+      "notFoundHint": "Es posible que se haya cerrado o que el enlace esté obsoleto.",
+      "logActivity": "Registrar actividad",
+      "logActivityBlurb": "Añada algo que haya notado: un síntoma, una dosis olvidada, cómo ha dormido. Se archiva en este caso y su equipo de atención lo ve.",
+      "noteTitle": "Título del evento",
+      "noteTitleHint": "p. ej. Mareo al levantarse",
+      "noteDetail": "Qué ocurrió",
+      "noteDetailHint": "Cuándo empezó, cuánto duró, si algo ayudó…",
+      "noteFailed": "Su nota no se ha guardado. Compruebe la conexión y vuelva a intentarlo: lo que escribió sigue aquí.",
+      "filedUnder": "Todo lo archivado en el caso {{ number }}",
+      "filedUnderSub": "Sus propias notas también aparecen aquí.",
+      "seeAppointments": "Ver citas"
+    },
+    "schedules": {
+      "search": "Buscar por fecha, profesional o cita…",
+      "upcoming": "Próximamente",
+      "upcomingSub": "Citas pendientes de asistir.",
+      "past": "Ya atendidas",
+      "pastSub": "Citas que ya han pasado.",
+      "empty": "No hay nada programado",
+      "emptyHint": "Las nuevas citas aparecen aquí a medida que su equipo de atención las reserva.",
+      "emptyPast": "Todavía no hay citas pasadas",
+      "column": {
+        "when": "Cuándo",
+        "what": "Cita",
+        "who": "Con",
+        "where": "Dónde",
+        "status": "Estado"
+      },
+      "viewOne": "Ver {{ name }}",
+      "detail": "Cita"
+    },
+    "emergencies": {
+      "search": "Buscar avisos, detalle o resultado…",
+      "careLineTitle": "¿Necesita ayuda ahora?",
+      "careLineBlurb": "La línea de atención está disponible las 24 horas y se avisa a su ángel de cuidado al mismo tiempo. Si corre peligro la vida, llame primero al número de urgencias de su localidad.",
+      "callCareLine": "Llamar a la línea de atención",
+      "outcome": "Resultado",
+      "empty": "No hay urgencias registradas",
+      "emptyHint": "Los avisos registrados en su historial aparecen aquí, junto con lo que ocurrió después."
+    },
+    "medications": {
+      "search": "Buscar medicamentos, dosis o instrucciones…",
+      "empty": "No hay medicamentos registrados",
+      "emptyHint": "Todo lo que se le recete aparece aquí, actual y pasado.",
+      "column": {
+        "started": "Inicio",
+        "name": "Medicamento",
+        "dosage": "Cómo tomarlo",
+        "prescriber": "Recetado por",
+        "status": "Estado"
+      },
+      "count": {
+        "active": "Tomando ahora",
+        "completed": "Tratamientos completados",
+        "withheld": "Suspendido — alergia"
+      },
+      "viewOne": "Ver {{ name }}",
+      "withheldTitle": "Suspendido.",
+      "withheldBody": "No se administró debido a una alergia registrada en su expediente."
+    },
+    "reports": {
+      "search": "Buscar informes, hallazgos o tipo…",
+      "openFile": "Abrir archivo",
+      "empty": "No hay informes registrados",
+      "emptyHint": "Los informes de laboratorio, imagen y clínicos aparecen aquí una vez archivados.",
+      "upload": "Subir un informe",
+      "uploading": "Subiendo…",
+      "uploadBlurb": "Un resultado que le entregaron en papel, o un PDF de una clínica. Su equipo de atención lo ve en su historial.",
+      "file": "El archivo",
+      "fileHint": "PDF o fotografía, hasta 10 MB.",
+      "name": "Qué es",
+      "nameHint": "p. ej. Resultados de HbA1c, 12 de agosto",
+      "attachCase": "Adjuntar a un caso (opcional)",
+      "noCase": "No relacionado con ningún caso",
+      "tooLarge": "Ese archivo supera los 10 MB. Una fotografía tomada con menor resolución cabrá.",
+      "uploadFailed": "Su informe no se ha subido. Compruebe la conexión y vuelva a intentarlo: lo que escribió sigue aquí.",
+      "opening": "Abriendo…"
+    },
+    "plans": {
+      "diet": "Plan de dieta",
+      "exercise": "Plan de ejercicio",
+      "progress": "{{ done }} de {{ total }} completados",
+      "emptyDiet": "Todavía no hay plan de dieta",
+      "emptyExercise": "Todavía no hay plan de ejercicio",
+      "emptyHint": "Su equipo de atención puede crear uno en su próxima cita."
+    },
+    "allergies": {
+      "category": "Tipo",
+      "reaction": "Reacción",
+      "noted": "Registrada",
+      "conditions": "Afecciones activas",
+      "noConditions": "No hay afecciones registradas",
+      "empty": "No hay alergias registradas",
+      "emptyHint": "Informe a su equipo de atención de cualquier reacción para que quede registrada aquí.",
+      "onRecord": "{{ count }} alergias en su historial",
+      "onRecordBlurb": "Todo profesional que abre su contexto ve este panel primero, y las recetas se bloquean en función de él.",
+      "blocked": "Bloqueado por este historial",
+      "blockedSub": "Recetas que su equipo suspendió a causa de una alergia."
+    },
+    "visitations": {
+      "search": "Buscar visitas, lugares o notas…",
+      "empty": "No hay visitas registradas",
+      "emptyHint": "Cada visita que registre su equipo de atención aparecerá aquí.",
+      "column": {
+        "when": "Cuándo",
+        "purpose": "Motivo",
+        "who": "Atendido por",
+        "where": "Dónde",
+        "case": "Caso"
+      }
+    },
+    "activity": {
+      "search": "Buscar entradas o su detalle…",
+      "empty": "Todavía no hay nada registrado",
+      "emptyHint": "Todo lo que se archiva en su historial aparece aquí, lo más reciente primero."
+    },
+    "profile": {
+      "editAccount": "Ajustes de la cuenta",
+      "noProfile": "No hay perfil registrado",
+      "noProfileHint": "Su equipo de atención lo crea cuando usted se registra.",
+      "noMembership": "No hay membresía registrada",
+      "noMembershipHint": "Hable con su equipo de atención para unirse a un plan.",
+      "tab": {
+        "about": "Datos",
+        "contact": "Contacto",
+        "membership": "Membresía",
+        "careTeam": "Equipo de atención",
+        "careAngel": "Ángel de cuidado"
+      },
+      "field": {
+        "birthDate": "Nacimiento",
+        "sex": "Sexo",
+        "bloodGroup": "Grupo sanguíneo",
+        "cardType": "Documento",
+        "cardNumber": "Número de documento",
+        "social": "Redes sociales",
+        "email": "Correo electrónico",
+        "mobile": "Móvil",
+        "phone": "Teléfono",
+        "address": "Dirección",
+        "careAngel": "Ángel de cuidado",
+        "careAngelPhone": "Teléfono del ángel",
+        "plan": "Plan",
+        "memberNumber": "Número de socio",
+        "status": "Estado",
+        "since": "Socio desde",
+        "renews": "Se renueva"
+      },
+      "careAngel": {
+        "explainer": "Un ángel de cuidado puede ver y actualizar su historial de salud, y actuar en su nombre si alguna vez usted no puede. No ocurre nada hasta que esa persona lo acepte, y puede retirarlo en cualquier momento.",
+        "none": "Todavía no hay ángel de cuidado",
+        "noneHint": "Actualmente nadie puede actuar en su nombre.",
+        "status": {
+          "STANDBY": "En espera: inactivo hasta que un profesional clínico lo active",
+          "AWAITING_COUNTERSIGNATURE": "Pendiente de que un segundo profesional clínico lo confirme",
+          "PENDING": "Pendiente de que esa persona lo acepte",
+          "ACTIVE": "Puede actuar en su nombre",
+          "DECLINED": "Rechazado",
+          "REVOKED": "Finalizado"
+        },
+        "action": {
+          "revoke": "Retirar"
+        },
+        "error": {
+          "revokeFailed": "No se ha podido retirar. Vuelva a intentarlo."
+        }
+      },
+      "plan": {
+        "choose": "Elegir un plan",
+        "select": "Elegir",
+        "unavailable": "Los planes no se pueden mostrar ahora mismo. Su historial no se ve afectado en modo alguno.",
+        "error": {
+          "failed": "No se ha podido seleccionar ese plan. Vuelva a intentarlo."
+        }
+      }
+    },
     "filter": {
       "professional": "Filtrar por profesional",
       "allProfessionals": "Todos los profesionales"
+    },
+    "status": {
+      "URGENT": "Urgente",
+      "OPEN": "Abierto",
+      "TREATMENT": "En tratamiento",
+      "CLOSED": "Cerrado",
+      "ACTIVE": "Tomando ahora",
+      "COMPLETED": "Completado",
+      "WITHHELD": "Suspendido",
+      "CONFIRMED": "Confirmada",
+      "PENDING": "Pendiente de confirmación",
+      "ATTENDED": "Atendida",
+      "CANCELLED": "Cancelada",
+      "LOW": "Baja",
+      "MODERATE": "Moderada",
+      "HIGH": "Urgente",
+      "RAISED": "Notificada",
+      "ACKNOWLEDGED": "Recibida",
+      "RESOLVED": "Resuelta",
+      "MILD": "Leve",
+      "SEVERE": "Grave",
+      "OK": "En rango",
+      "WARN": "Vigilar",
+      "DANGER": "Fuera de rango",
+      "DIET": "Dieta",
+      "EXERCISE": "Ejercicio",
+      "MEDICATION": "Medicamento",
+      "FOOD": "Alimentos",
+      "ENVIRONMENTAL": "Ambiental",
+      "OTHER": "Otros",
+      "membership": {
+        "ACTIVE": "Activa",
+        "CANCELLED": "Cancelada",
+        "EXPIRED": "Caducada",
+        "PENDING": "Pendiente",
+        "SUSPENDED": "Suspendida"
+      }
+    },
+    "onboarding": {
+      "title": "Configurar su historial",
+      "heading": "Vamos a configurar su historial",
+      "intro": "Cada paso se guarda sobre la marcha, así que puede parar y volver más tarde.",
+      "step": {
+        "identity": "Sobre usted",
+        "careAngel": "Ángel de cuidado",
+        "baseline": "Datos de partida",
+        "currentState": "Su salud",
+        "identification": "Identificación"
+      },
+      "field": {
+        "firstName": "Nombre",
+        "middleNames": "Otros nombres",
+        "lastName": "Apellidos",
+        "birthDate": "Fecha de nacimiento",
+        "sex": "Sexo",
+        "mobilePhone": "Número de móvil",
+        "phoneNumber": "Otro teléfono",
+        "address": "Dónde vive",
+        "streetAddress": "Calle",
+        "digitalAddress": "Dirección digital",
+        "town": "Población",
+        "city": "Ciudad",
+        "district": "Distrito",
+        "region": "Región",
+        "country": "País",
+        "phone": "Teléfono",
+        "email": "Correo electrónico",
+        "emailConfirm": "Confirmar correo electrónico",
+        "contacts": "Alguien más con quien debamos contactar",
+        "heightCm": "Estatura (cm)",
+        "weightKg": "Peso (kg)",
+        "systolic": "Tensión arterial, máxima",
+        "diastolic": "Tensión arterial, mínima",
+        "heartRateBpm": "Frecuencia cardíaca en reposo (opcional)",
+        "bloodSugar": "Glucemia (opcional)",
+        "bloodGroup": "Grupo sanguíneo",
+        "conditions": "Afecciones activas, una por línea",
+        "noConditions": "No tengo ninguna",
+        "allergies": "Alergias, una por línea",
+        "noAllergies": "No tengo ninguna",
+        "medications": "Medicamentos que toma, uno por línea",
+        "noMedications": "No tomo ninguno",
+        "cardType": "Tipo de documento",
+        "cardNumber": "Número de documento"
+      },
+      "careAngel": {
+        "explainer": "Un ángel de cuidado puede ver y actualizar su historial de salud, y actuar en su nombre si alguna vez usted no puede. Se le pide que lo acepte, y usted puede retirarlo en cualquier momento."
+      },
+      "standby": {
+        "heading": "Si alguna vez usted no puede decidir",
+        "explainer": "Puede nombrar a alguien por adelantado. Ahora no se le comunica nada. Si algún día un profesional clínico declara que usted no puede decidir por sí mismo, dos de ellos deben estar de acuerdo antes de que se pregunte a esa persona, y esa persona todavía puede negarse.",
+        "consent": "Si alguna vez no puedo decidir por mí mismo, un profesional clínico podrá activar a mi persona designada en espera."
+      },
+      "action": {
+        "next": "Continuar",
+        "back": "Atrás",
+        "finish": "Finalizar"
+      },
+      "error": {
+        "emailMismatch": "Las dos direcciones de correo electrónico no coinciden.",
+        "consentRequired": "Marque la casilla de consentimiento para designar a una persona en espera, o deje sus datos en blanco.",
+        "saveFailed": "No se ha podido guardar. No se pierde nada de lo que ya haya respondido: vuelva a intentarlo."
+      }
     },
     "actingAs": {
       "banner": "Está viendo el historial de {{name}}",
@@ -67,6 +488,39 @@
       "chooseTitle": "¿Qué historial desea abrir?",
       "chooseOwn": "Mi propio historial",
       "chooseFor": "Actuando en nombre de {{name}}"
+    },
+    "invitations": {
+      "title": "Nominaciones de cuidado",
+      "heading": "Nominaciones de cuidado",
+      "empty": "No tiene nominaciones pendientes. Si alguien acaba de nombrarle, revise el enlace del correo que se le envió.",
+      "from": "{{name}} le ha pedido que sea su ángel de cuidado",
+      "explainer": "Aceptar significa que podrá ver y actualizar el historial de salud de esa persona, y actuar en su nombre si alguna vez no puede hacerlo. Puede renunciar en cualquier momento, y esa persona puede retirarlo en cualquier momento.",
+      "action": {
+        "accept": "Aceptar",
+        "decline": "Rechazar"
+      },
+      "error": {
+        "failed": "No se ha podido guardar. Vuelva a intentarlo."
+      }
+    },
+    "finder": {
+      "title": "Buscar un paciente",
+      "blurb": "Usted no tiene un historial propio. Abra el historial de un paciente para ver el portal como lo ve esa persona: todo lo que haga mientras esté abierto se registra en su propia cuenta.",
+      "panel": "Pacientes",
+      "search": "Buscar",
+      "searchPlaceholder": "Nombre, correo electrónico, teléfono o id de paciente",
+      "loading": "Cargando pacientes…",
+      "count": "Mostrando {{ shown }} de {{ total }}",
+      "open": "Abrir historial",
+      "openNamed": "Abrir el historial de {{ name }}",
+      "failed": "No se ha podido cargar la lista de pacientes",
+      "failedBlurb": "Se trata de una petición fallida, no de un sistema vacío. Vuelva a intentarlo y compruebe que el servicio es accesible si sigue fallando.",
+      "retry": "Volver a intentarlo",
+      "noMatch": "Ningún paciente coincide con esa búsqueda",
+      "noMatchBlurb": "Pruebe con parte de un nombre, una dirección de correo o un id de paciente.",
+      "none": "Todavía no hay historiales de pacientes",
+      "noneBlurb": "Cuando un paciente complete la incorporación aparecerá aquí.",
+      "narrow": "Hay más pacientes que coinciden de los que se muestran. Afine la búsqueda para encontrar el que busca."
     },
     "deleteAccount": {
       "link": "Eliminar su historial",

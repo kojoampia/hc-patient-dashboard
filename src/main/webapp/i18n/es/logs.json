@@ -1,0 +1,11 @@
+{
+  "logs": {
+    "title": "Registros",
+    "nbloggers": "Hay {{ total }} registradores.",
+    "filter": "Filtrar",
+    "table": {
+      "name": "Nombre",
+      "level": "Nivel"
+    }
+  }
+}

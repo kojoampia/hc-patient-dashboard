@@ -1,0 +1,11 @@
+{
+  "patientDashboardApp": {
+    "CaseStatus": {
+      "null": "",
+      "URGENT": "Urgente",
+      "OPEN": "Abierto",
+      "TREATMENT": "En tratamiento",
+      "CLOSED": "Cerrado"
+    }
+  }
+}

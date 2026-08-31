@@ -1,0 +1,36 @@
+{
+  "patientDashboardApp": {
+    "patientMsReport": {
+      "home": {
+        "title": "Informes",
+        "refreshListLabel": "Actualizar lista",
+        "createLabel": "Crear Informe",
+        "createOrEditLabel": "Crear o editar Informe",
+        "notFound": "No se han encontrado Informes"
+      },
+      "created": "Se ha creado Informe con el identificador {{ param }}",
+      "updated": "Se ha actualizado Informe con el identificador {{ param }}",
+      "deleted": "Se ha eliminado Informe con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que desea eliminar Informe {{ id }}?"
+      },
+      "detail": {
+        "title": "Informe"
+      },
+      "id": "Id",
+      "category": "Categoría",
+      "description": "Descripción",
+      "summary": "Resumen",
+      "name": "Nombre",
+      "url": "URL",
+      "patientId": "Id del paciente",
+      "caseId": "Id del caso",
+      "authorId": "Id del autor",
+      "reportDate": "Fecha del informe",
+      "createdDate": "Fecha de creación",
+      "modifiedDate": "Fecha de modificación",
+      "createdBy": "Creado por",
+      "modifiedBy": "Modificado por"
+    }
+  }
+}

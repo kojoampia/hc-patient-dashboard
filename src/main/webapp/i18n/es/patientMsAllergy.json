@@ -1,0 +1,34 @@
+{
+  "patientDashboardApp": {
+    "patientMsAllergy": {
+      "home": {
+        "title": "Alergias",
+        "refreshListLabel": "Actualizar lista",
+        "createLabel": "Crear Alergia",
+        "createOrEditLabel": "Crear o editar Alergia",
+        "notFound": "No se han encontrado Alergias"
+      },
+      "created": "Se ha creado Alergia con el identificador {{ param }}",
+      "updated": "Se ha actualizado Alergia con el identificador {{ param }}",
+      "deleted": "Se ha eliminado Alergia con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que desea eliminar Alergia {{ id }}?"
+      },
+      "detail": {
+        "title": "Alergia"
+      },
+      "id": "Id",
+      "patientId": "Id del paciente",
+      "name": "Nombre",
+      "category": "Categoría",
+      "severity": "Gravedad",
+      "reaction": "Reacción",
+      "notedOn": "Registrado el",
+      "notedById": "Id de quien lo registró",
+      "createdDate": "Fecha de creación",
+      "modifiedDate": "Fecha de modificación",
+      "createdBy": "Creado por",
+      "modifiedBy": "Modificado por"
+    }
+  }
+}

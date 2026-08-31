@@ -1,0 +1,29 @@
+{
+  "patientDashboardApp": {
+    "patientMsPersonalDocument": {
+      "home": {
+        "title": "Documentos personales",
+        "refreshListLabel": "Actualizar lista",
+        "createLabel": "Crear Documento personal",
+        "createOrEditLabel": "Crear o editar Documento personal",
+        "notFound": "No se han encontrado Documentos personales"
+      },
+      "created": "Se ha creado Documento personal con el identificador {{ param }}",
+      "updated": "Se ha actualizado Documento personal con el identificador {{ param }}",
+      "deleted": "Se ha eliminado Documento personal con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que desea eliminar Documento personal {{ id }}?"
+      },
+      "detail": {
+        "title": "Documento personal"
+      },
+      "id": "Id",
+      "name": "Nombre",
+      "category": "Categoría",
+      "url": "URL",
+      "patientId": "Id del paciente",
+      "issuedOn": "Expedido el",
+      "expiresOn": "Caduca el"
+    }
+  }
+}

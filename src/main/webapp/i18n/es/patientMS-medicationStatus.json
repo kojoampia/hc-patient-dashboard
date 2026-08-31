@@ -1,0 +1,10 @@
+{
+  "patientDashboardApp": {
+    "MedicationStatus": {
+      "null": "",
+      "ACTIVE": "Activo",
+      "COMPLETED": "Completado",
+      "WITHHELD": "Suspendido"
+    }
+  }
+}

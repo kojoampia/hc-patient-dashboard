@@ -1,0 +1,34 @@
+{
+  "patientDashboardApp": {
+    "patientMsVisitation": {
+      "home": {
+        "title": "Visitas",
+        "refreshListLabel": "Actualizar lista",
+        "createLabel": "Crear Visita",
+        "createOrEditLabel": "Crear o editar Visita",
+        "notFound": "No se han encontrado Visitas"
+      },
+      "created": "Se ha creado Visita con el identificador {{ param }}",
+      "updated": "Se ha actualizado Visita con el identificador {{ param }}",
+      "deleted": "Se ha eliminado Visita con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que desea eliminar Visita {{ id }}?"
+      },
+      "detail": {
+        "title": "Visita"
+      },
+      "id": "Id",
+      "patientId": "Id del paciente",
+      "caseId": "Id del caso",
+      "professionalId": "Id del profesional",
+      "visitedAt": "Visitado el",
+      "purpose": "Motivo",
+      "location": "Ubicación",
+      "notes": "Notas",
+      "createdDate": "Fecha de creación",
+      "modifiedDate": "Fecha de modificación",
+      "createdBy": "Creado por",
+      "modifiedBy": "Modificado por"
+    }
+  }
+}

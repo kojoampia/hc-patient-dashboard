@@ -1,0 +1,31 @@
+{
+  "patientDashboardApp": {
+    "patientMsCarePlanItem": {
+      "home": {
+        "title": "Elementos del plan de cuidados",
+        "refreshListLabel": "Actualizar lista",
+        "createLabel": "Crear Elemento del plan de cuidados",
+        "createOrEditLabel": "Crear o editar Elemento del plan de cuidados",
+        "notFound": "No se han encontrado Elementos del plan de cuidados"
+      },
+      "created": "Se ha creado Elemento del plan de cuidados con el identificador {{ param }}",
+      "updated": "Se ha actualizado Elemento del plan de cuidados con el identificador {{ param }}",
+      "deleted": "Se ha eliminado Elemento del plan de cuidados con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que desea eliminar Elemento del plan de cuidados {{ id }}?"
+      },
+      "detail": "Detalle",
+      "id": "Id",
+      "patientId": "Id del paciente",
+      "planType": "Tipo de plan",
+      "label": "Etiqueta",
+      "cadence": "Frecuencia",
+      "completed": "Completado",
+      "sortOrder": "Orden",
+      "createdDate": "Fecha de creación",
+      "modifiedDate": "Fecha de modificación",
+      "createdBy": "Creado por",
+      "modifiedBy": "Modificado por"
+    }
+  }
+}

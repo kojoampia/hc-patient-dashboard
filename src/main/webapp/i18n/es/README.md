@@ -1,4 +1,19 @@
-# Spanish — partial, and safe to be partial
+# Spanish — and NOBODY WHO SPEAKS IT HAS READ ANY OF THIS
+
+> **No Spanish speaker, clinical or otherwise, has reviewed a single string in this directory.** That
+> includes the clinical screens: medication names, allergy warnings, case notes and the onboarding
+> questions about your health. It was translated carefully and by one non-native process, which is not the
+> same thing and is not a substitute for review.
+>
+> **Why that matters more now than it did on 2026-08-30.** Until the clinical bundles landed, a Spanish
+> reader meeting an untranslated screen saw English and could tell the translation was missing. Confident
+> Spanish removes that signal: there is nothing on screen to distinguish a reviewed string from an
+> unreviewed one. The per-key fallback that makes partial bundles safe is exactly what made filling them in
+> a decision rather than a chore, and it was taken deliberately on 2026-08-31 rather than by drift.
+>
+> A Spanish-speaking clinician reading `patientPortal.json` — particularly `status`, `medications`,
+> `allergies` and `onboarding.field` — is the outstanding work.
+
 
 `web.abofonsa.com` advertises `?locale=es` on its handoff link, and this app served three languages, so a
 Spanish reader landed in English. This directory closes that, **incrementally**.
@@ -40,7 +55,8 @@ The portal's **chrome** — `brand`, `nav`, `action`, `pager`, `filter`, `acting
 
 **Chosen because it is the largest block that carries no clinical claim.** These are navigation labels,
 buttons, pagination and the acting-as banner: a wrong word here is an awkward label, not a clinical error,
-which is the line the section below draws. The clinical bundles are still untouched and still last.
+which is the line the section below draws. (This tranche left the clinical bundles untouched; the fourth,
+later the same day, did not — see below.)
 
 Terminology follows the warning below rather than the dictionary, and the two that matter here are
 `nav.emergencies` → **Urgencias**, not _Emergencias_, and `nav.record` → **Mi historial**, matching the
@@ -56,16 +72,57 @@ Checked mechanically, because both of these fail silently: **no key exists in `e
 `en`** (it would render for nobody and never be missed), and **every `{{placeholder}}` survives translation**
 (a lost one renders the literal `{{name}}` to a patient).
 
-## What is not
+## What is done, fourth tranche (2026-08-31) — the clinical screens
 
-The rest of `patientPortal.json` (~362 keys) and the `patientMs*` entity bundles — the clinical screens. These are the ones
-where a wrong word is a clinical error rather than an awkward sentence, and they are deliberately last.
+**`patientPortal.json` is now complete: 446 of 446 keys.** The remaining 362 went in one pass, on an explicit
+decision to ship them unreviewed rather than wait — see the warning at the top of this file, which is the
+cost of that decision and not a disclaimer.
 
-**A machine translation of those would be worse than leaving them in English, and the reason is the fallback
-above.** Today a Spanish reader meeting an untranslated clinical screen sees English and can tell the
-translation is absent. An unreviewed Spanish rendering of a medication name, an allergy warning or a case note
-reads as confident and correct, and nothing distinguishes it from a reviewed one. The fallback that makes
-tranches safe is exactly what makes filling them in carelessly unsafe.
+Terminology follows the rules below rather than the dictionary. The ones that bite hardest here:
+**afección** not _condición_ (`allergies.conditions`, `onboarding.field.conditions`), **urgencias** not
+_emergencias_ (`title`, `overview.tile`, `emergencies.*`), and _stat_ meaning a vital sign — rendered
+**constantes vitales** and **mediciones**, never anything implying urgency.
+
+Register and vocabulary follow the three earlier tranches rather than starting again: formal _usted_,
+**historial** for record, **ángel de cuidado** for care angel, **en nombre de** for acting on somebody's
+behalf, **equipo de atención** for care team.
+
+Checked mechanically, because all three fail silently: **446/446 coverage**, **no key in `es` that does not
+exist in `en`**, and **every `{{placeholder}}` preserved** — including the mixed `{{ name }}` and `{{count}}`
+spacings, which differ between keys and had to be matched individually. Three strings are identical to
+English on purpose: `brand.suffix` (BridgeCare), `auth.stat.careLineValue` (24/7) and
+`profile.field.plan` (_Plan_ is the same word).
+
+## What is done, fifth tranche (2026-08-31) — everything else
+
+**All 48 bundles now exist. There are no untranslated files left.** The remaining 40 in one pass: 11 enum
+bundles, 20 generated entity bundles, and 9 JHipster admin screens.
+
+**The entity bundles were generated from a shared dictionary rather than translated file by file, and that was
+the safer choice, not the lazy one.** 109 distinct field labels repeat across 20 files — `Created Date`,
+`Patient Id`, `Modified By` and so on. Translating them by hand is precisely how the same field comes to
+render two different ways in two screens. The generator asserts that every English string is covered rather
+than passing unknown ones through silently.
+
+**Two things found while doing it, both recorded rather than smoothed over.**
+
+The English enum bundles are *themselves* untranslated: `en/patientMS-allergySeverity.json` maps `"MILD"` to
+the literal `"MILD"`, so an English-speaking administrator reads `WITHHELD` and `SEVERE` today. After this,
+**Spanish reads better than English on those screens**, which is an odd state for a product and is worth a
+decision rather than a discovery. The same is true of `health.status.*` (`UP`, `DOWN`).
+
+And in three entity bundles — `ActivityLog`, `CarePlanItem`, `Emergency` — `detail` is a plain field *label*,
+not the `{title: …}` object every other bundle has. Treating them alike dropped the label and invented a key
+nothing reads. The verification caught it; a spot check would not have.
+
+**Where the enum bundles deliberately differ from the portal.** `patientPortal.status` renders some constants
+in patient-facing language — `ACTIVE` as *Tomando ahora*, `HIGH` as *Urgente* — while the enum bundles are the
+administrator's raw view and use *Activo* and *Alta*. English makes the same distinction; the Spanish mirrors
+it rather than flattening it.
+
+Checked across all 48: **zero missing keys, zero orphans, zero placeholder mismatches, every file valid JSON.**
+`es` is declared in `webpack.custom.js` as a glob over this directory, so new files here are picked up with no
+build change — the trap noted below applies to adding a *locale*, not a file.
 
 ## Before this is relied on
 
