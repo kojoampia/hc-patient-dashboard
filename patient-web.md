@@ -254,7 +254,7 @@ Resolved since the last baseline, kept so the numbering change is traceable:
 - `[x]` Generated CRUD screens for the patient entities under `entities/patientMS/**` (present but unrouted — decision 2).
 - `[x]` Jest unit tests colocated with the code (146 spec files, all passing — see below).
 - `[x]` **Deployed to production** (2026-07-31) as an nginx image built and shipped by `hc-patient/deploy`. This repo builds the bundle; it no longer packages or ships it.
-- `[~]` CI exists but is **broken** — `docker-publish.yml` has failed on every push since 2026-07-30 (Phase C).
+- `[x]` **CI works and gates lint, tests and the production build** — repurposed 2026-08-24, `6d1a3c0`. `docker-publish.yml` had failed on every push from 2026-07-30 to 2026-08-03; **84 runs since, none failed** (checked 2026-08-31). This entry said "broken" for a month after it was fixed.
 - `[x]` **Browser telemetry** (2026-08-03) — `core/telemetry/` initialises the OpenTelemetry web SDK
   from `bootstrap.ts`, tracing document load, XHR and fetch, and reporting uncaught errors through a
   `TelemetryErrorHandler`. Spans POST to the same-origin `/v1/traces`, which nginx forwards to the
@@ -361,16 +361,15 @@ Everything this phase used to contain was about files that are no longer here. R
 
 - `[x]` `docker-compose-prod.yml`'s invalid network key, the three-way image-name disagreement between compose and the `docker:*:tag` scripts, and the compose volume mounts pointing at nonexistent host directories on an nginx image — **all resolved by deletion** in `d5f0bfe`, not by fixing them. `hc-patient/deploy/` builds the image from `deploy/docker/web.Dockerfile` with `deploy/docker` passed as a named build context, which is also why the repo's own `.dockerignore` went away (dropping the build context from 3 GB to 148 kB).
 
-What is left is one broken workflow:
+What was left was one broken workflow, and it is fixed:
 
-1. `[ ]` **`.github/workflows/docker-publish.yml` fails on every push and has since 2026-07-30.** It builds `file: ./Dockerfile.prod`, but `ac2df38` consolidated `Dockerfile.prod` into `Dockerfile` on 2026-07-30, and `d5f0bfe` then removed `Dockerfile` too. Four consecutive failed runs; the latest (`30809635272`, 2026-08-03) dies in 24s with:
+1. `[x]` **`.github/workflows/docker-publish.yml` — repurposed 2026-08-24, closed here 2026-08-31.** It had built `file: ./Dockerfile.prod`, but `ac2df38` consolidated `Dockerfile.prod` into `Dockerfile` on 2026-07-30 and `d5f0bfe` removed `Dockerfile` too, so every run died in 24s with `open Dockerfile.prod: no such file or directory`.
 
-   ```
-   ERROR: failed to build: failed to solve: failed to read dockerfile:
-   open Dockerfile.prod: no such file or directory
-   ```
+   Resolved the second way decision 3 offered — repurposed to `lint` + `test` + `webapp:prod` rather than retired, since repointing it at the real Dockerfile was never possible: that file is in another repository and needs a build context this one does not have. **The name is now the only thing left of the original**, which its own header says out loud: _"the filename says docker-publish because that is what this workflow used to be"_.
 
-   The workflow has not been touched since 2026-05-10. Resolve with decision 3 — retire it, or repurpose it to `lint` + `test` + `webapp:prod`. Repointing it at the real Dockerfile is not an option: that file is in another repository and needs a build context this one does not have.
+   Measured 2026-08-31: **6 failures, all between 2026-07-30 and 2026-08-03, then 84 consecutive non-failures.** This entry and `Phase A` both went on calling CI broken for a month, which is longer than it was ever broken.
+
+   **Lint is a real gate now, and that is the part worth keeping.** Until `6d1a3c0` the `pretest` hook was the only thing that ran lint, and CI called `npx ng test` directly — so lint ran nowhere, which is how 48 errors accumulated. It is now its own CI step, because a style error must not be able to masquerade as a test failure and a test command must not be the only place style is checked.
 
 2. `[ ]` **Then decide whether `pom.xml` survives.** Its only remaining consumer is that workflow's version scrape (`<version>0.0.1</version>`, currently in sync with `package.json`). There are no Java sources, and its Enforcer rule fails on the installed JDK anyway. If image publishing goes, so can the pom.
 
