@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Observable, catchError, combineLatest, map, of, shareReplay, switchMap } from 'rxjs';
+import { Observable, catchError, combineLatest, forkJoin, map, of, shareReplay, switchMap } from 'rxjs';
 
 import { IActivityLog } from 'app/entities/patientMS/activity-log/activity-log.model';
 import { IAllergy } from 'app/entities/patientMS/allergy/allergy.model';
@@ -36,6 +36,24 @@ import { PatientContextService } from './patient-context.service';
 interface PatientScoped {
   patientId?: string | null;
 }
+
+/**
+ * Rows per request when reading a collection in full.
+ *
+ * Larger than the server's default of 20 so that one patient's record is usually one request, and
+ * small enough that it is still a page rather than "give me everything" — the point of the change
+ * is to stop pretending a collection is bounded, not to pick a bigger number and hope.
+ */
+const PAGE_SIZE = 100;
+
+/**
+ * A stop, so a wrong `X-Total-Count` costs one slow screen rather than a browser tab.
+ *
+ * 20 pages is 2,000 rows of a single collection for a single patient. Reaching it means either the
+ * header is wrong or this data no longer belongs in a fetch-everything portal, and both are
+ * findings rather than something to page quietly past.
+ */
+const MAX_PAGES = 20;
 
 /**
  * Every collection the portal reads, already narrowed to the signed-in patient.
@@ -117,13 +135,62 @@ export class PortalDataService {
         if (!patientId) {
           return of([] as T[]);
         }
-        return service.query({ patientId, ...extraParams }).pipe(
-          map(response => (response.body ?? []).filter(item => item.patientId === patientId)),
+        return this.everyPage<T>(service, { patientId, ...extraParams }).pipe(
+          map(rows => rows.filter(item => item.patientId === patientId)),
           // One failed collection must not blank the whole screen; the list renders empty.
           catchError(() => of([] as T[])),
         );
       }),
       shareReplay({ bufferSize: 1, refCount: false }),
+    );
+  }
+
+  /**
+   * Fetches a collection in full, however many pages the server splits it into.
+   *
+   * **This method exists because the portal was reading the first page and calling it the record.**
+   * Six of the twelve collections above are paginated server-side — cases, reports, medications,
+   * visitations, schedules and activity — and this service asked for none of them by page. Spring
+   * answers a request with no `size` using its own default of 20, so a patient with 21 visits saw
+   * 20, with a 200, no error, and no console line. Measured on the quality stack 2026-08-31:
+   * `GET /api/reports` returns `X-Total-Count: 11` and honours `?size=3` by returning three.
+   *
+   * It had not bitten yet only because the seeded records are all under twenty — which is a
+   * property of the fixtures, not of the design. Vital signs cross it in a fortnight.
+   *
+   * The shape is deliberate. **Read the total from `X-Total-Count` rather than paging until a short
+   * page arrives**: a short page is also what an unpaginated endpoint returns, and `stats` is
+   * unpaginated today, so "stop when the page is short" would have been correct for the wrong
+   * reason and would break the day `stats` gains a `Pageable`. An endpoint that sends no
+   * `X-Total-Count` is answering in full, and one request is the whole answer.
+   *
+   * Page 0 is fetched first because its header is what says how many more are needed; the rest go
+   * out together rather than in sequence, since they do not depend on each other.
+   */
+  private everyPage<T>(
+    service: { query(req?: unknown): Observable<HttpResponse<T[]>> },
+    params: Record<string, unknown>,
+  ): Observable<T[]> {
+    return service.query({ ...params, page: 0, size: PAGE_SIZE }).pipe(
+      switchMap(first => {
+        const rows = first.body ?? [];
+        const total = Number(first.headers.get('X-Total-Count') ?? rows.length);
+
+        // No header, or everything already in hand.
+        if (!Number.isFinite(total) || total <= rows.length) {
+          return of(rows);
+        }
+
+        const pages = Math.min(Math.ceil(total / PAGE_SIZE), MAX_PAGES);
+        if (pages <= 1) {
+          return of(rows);
+        }
+
+        const rest = Array.from({ length: pages - 1 }, (_unused, index) =>
+          service.query({ ...params, page: index + 1, size: PAGE_SIZE }).pipe(map(response => response.body ?? [])),
+        );
+        return forkJoin(rest).pipe(map(later => rows.concat(...later)));
+      }),
     );
   }
 }
