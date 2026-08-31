@@ -630,9 +630,16 @@ Batch 4 — **C5, C8, the A5 leftover and D1 done 2026-08-16**; C10 still blocke
   vitals. Anything the backend adds later falls back to sentence case rather than rendering a raw
   translation key. It also caught a pair nobody had listed: vitals read **Ok** and **Warn**, where
   the demo reads _In range_ and _Watch_.
-- `[ ]` **D2 · "What was reported" / "What was found"** replace the demo's _Symptoms_ / _Diagnosis_.
-  This reads as an improvement on the demo rather than drift from it — make it a decision and apply it
-  everywhere, rather than leaving two documents disagreeing.
+- `[x]` **D2 · decided and already applied — 2026-08-31.** "What was reported" / "What was found" stand,
+  in all three locales: `Ce qui a été signalé` / `Ce qui a été constaté`, `Was berichtet wurde` /
+  `Was festgestellt wurde`. This was an improvement on the demo rather than drift from it, and the only
+  thing outstanding was saying so.
+
+  **Deliberately not applied to the generated entity CRUD.** `clinical-case-update.component.html` still
+  labels the field _Diagnosis_, and should: that screen is `ROLE_ADMIN`-only, is not in any menu, and edits
+  the raw document. An administrator correcting a record is better served by a label that matches the field
+  name in the api than by the patient-facing phrasing. "Everywhere" means everywhere a patient reads.
+
 - `[x]` **D3 · honorifics dropped** ("Dr. Grace Mensah" → "Grace Mensah"). ~~The seed stores the
   honorific; this is presentation.~~ **It did not.** `Professional.honorific` was added to the api,
   the generator now lifts it out of the mockup's own name, and `CareTeamMember.name` carries it — so
@@ -668,17 +675,45 @@ Batch 4 — **C5, C8, the A5 leftover and D1 done 2026-08-16**; C10 still blocke
   sessions at the Tema centre — a physiotherapist taking a glucose reading is not something this
   record says. Leaving those unnamed is the record being honest, and it exercises both rendering
   paths.
-- `[ ]` **D6 · case rows print their title twice.** `patient-demo-seed.json` sets `brief` to the same
-  string as `title` because the mockup has one label per case. Either give `brief` real content or stop
-  rendering it. Seed-side fix lives in `hc-patient-quality`.
-- `[ ]` **D7 · ongoing conditions show a bare `—` and repeat themselves.** The panel is an addition
-  beyond the demo; it needs a date and a description that adds something. Seed-side, as D6.
-- `[ ]` **D8 · the sidebar drops the patient's location** ("Patient · Accra, GH" → "Patient"), which is
-  already on the record.
-- `[ ]` **D9 · the sign-in counters are inherited, not computed.** Both show _12 cases · 41 visits · 6
-  professionals · 24/7_; twelve and six match the record, forty-one does not (eighteen are seeded).
-  They read as live numbers on a page nobody has signed into. Decide whether they are marketing copy or
-  a figure, and make them honest either way.
+- `[x]` **D6 · fixed 2026-08-17 in `hc-patient-quality` (`019d122`), ticked here 2026-08-31.** `brief` was
+  the same string as `title` in all twelve cases; it now summarises instead — `title` "Rising fasting blood
+  sugar", `brief` "Fasting readings creeping from 8.2 to 9.0 mmol/L over six weeks." Verified against the
+  seed and against its own history: 12/12 duplicated at `88c81e4`, 0/12 from `019d122` onward.
+
+  Worth noting for anyone re-reading this entry: **its description had gone stale in the specifics as well as
+  the status.** `brief` is now the first sentence of `symptoms`, not of `title` — which is fine, because no
+  screen renders those two together: the list shows `title` over `brief`, and the detail shows `symptoms`
+  without `brief`.
+
+- `[x]` **D7 · fixed in the same commit, ticked here 2026-08-31.** Its title says so —
+  _"a case brief that summarises, **and conditions that carry a date**"_. Both conditions gained
+  `createdDate`, and both descriptions stopped opening with their own name: _"Type-2 diabetes confirmed on
+  fasting glucose…"_ became _"Confirmed on fasting glucose…"_, which is what "repeat themselves" meant.
+- `[x]` **D8 · the sidebar carries the location again — 2026-08-31.** `place()` on `ShellComponent`, town
+  and region only, rendered through a new `nav.roleLinePlace` key in en/fr/de; falls back to the plain
+  `nav.roleLine` when there is nothing to say, rather than printing a separator with nothing after it.
+
+  **It is empty while acting for somebody else, and that is the substance of the change.** This footer names
+  the _signed-in account_ — `displayName()` reads `account`, not the open record — so appending the open
+  record's town would put one person's name directly above another person's location, a few pixels under the
+  banner that exists to say they are different. `shell-place.spec.ts` pins that case first.
+
+  Town and region, never the street: a sidebar is visible on every page, including one somebody is holding
+  up to a clinician across a desk.
+
+- `[x]` **D9 · the counters are no longer figures — 2026-08-31.** Decided: they are copy, because on this
+  page they cannot be anything else. The sign-in screen is pre-authentication; there is no session to count
+  against, and counting against a _particular_ record for an anonymous visitor is the thing to avoid rather
+  than the thing to build.
+
+  **The seed makes the point sharper than "inherited constants" did.** Counted on quality: `clinicalcase`
+  12, `professional` 6 — the two numbers on that page that matched are exactly one real patient's totals,
+  published to anyone who loads the sign-in screen. Small in magnitude and wrong in kind. The 41 that was
+  wrong (18 visitations seeded) was the only one that was not somebody's actual data.
+
+  Now `Cases · Every one on file`, `Visits · Every one logged`, `Your team · Named on your record`,
+  `24/7 · Care line`, in en/fr/de. The layout is unchanged; nothing on the page is a count. **The wording is
+  the architect's to change** — the requirement this closes is only that no figure appears there.
 
 ### Ahead of the demo — keep when closing the above
 

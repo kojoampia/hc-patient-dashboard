@@ -10,6 +10,7 @@
       "openMenu": "Open the menu",
       "signOut": "Sign out",
       "roleLine": "Patient",
+      "roleLinePlace": "Patient · {{place}}",
       "overview": "Overview",
       "record": "My record",
       "recordShort": "Record",
@@ -73,12 +74,12 @@
       "signInLede": "Access your personal health record.",
       "or": "or",
       "stat": {
-        "cases": "Cases on file",
-        "casesValue": "12",
-        "visits": "Visits logged",
-        "visitsValue": "41",
-        "team": "Professionals",
-        "teamValue": "6",
+        "cases": "Every one on file",
+        "casesValue": "Cases",
+        "visits": "Every one logged",
+        "visitsValue": "Visits",
+        "team": "Named on your record",
+        "teamValue": "Your team",
         "careLine": "Care line",
         "careLineValue": "24/7"
       }
