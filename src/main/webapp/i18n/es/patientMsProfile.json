@@ -1,0 +1,44 @@
+{
+  "patientDashboardApp": {
+    "patientMsProfile": {
+      "home": {
+        "title": "Perfiles",
+        "refreshListLabel": "Actualizar lista",
+        "createLabel": "Crear Perfil",
+        "createOrEditLabel": "Crear o editar Perfil",
+        "notFound": "No se han encontrado Perfiles"
+      },
+      "created": "Se ha creado Perfil con el identificador {{ param }}",
+      "updated": "Se ha actualizado Perfil con el identificador {{ param }}",
+      "deleted": "Se ha eliminado Perfil con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que desea eliminar Perfil {{ id }}?"
+      },
+      "detail": {
+        "title": "Perfil"
+      },
+      "id": "Id",
+      "patientId": "Id del paciente",
+      "firstName": "Nombre",
+      "middleNames": "Otros nombres",
+      "lastName": "Apellidos",
+      "membership": "Membresía",
+      "birthDate": "Fecha de nacimiento",
+      "sex": "Sexo",
+      "bloodGroup": "Grupo sanguíneo",
+      "mobilePhone": "Teléfono móvil",
+      "phoneNumber": "Número de teléfono",
+      "email": "Correo electrónico",
+      "cardType": "Tipo de documento",
+      "cardNumber": "Número de documento",
+      "contacts": "Contactos",
+      "address": "Dirección",
+      "team": "Equipo",
+      "imageUrl": "URL de la imagen",
+      "about": "Acerca de",
+      "socialHandle": "Usuario en redes",
+      "careAngelName": "Nombre del ángel de cuidado",
+      "careAngelPhone": "Teléfono del ángel de cuidado"
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "patientDashboardApp": {
+    "patientMsActivityLog": {
+      "home": {
+        "title": "Registros de actividad",
+        "refreshListLabel": "Actualizar lista",
+        "createLabel": "Crear Registro de actividad",
+        "createOrEditLabel": "Crear o editar Registro de actividad",
+        "notFound": "No se han encontrado Registros de actividad"
+      },
+      "created": "Se ha creado Registro de actividad con el identificador {{ param }}",
+      "updated": "Se ha actualizado Registro de actividad con el identificador {{ param }}",
+      "deleted": "Se ha eliminado Registro de actividad con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que desea eliminar Registro de actividad {{ id }}?"
+      },
+      "detail": "Detalle",
+      "id": "Id",
+      "patientId": "Id del paciente",
+      "caseId": "Id del caso",
+      "loggedAt": "Registrado el",
+      "summary": "Resumen",
+      "kind": "Tipo",
+      "source": "Origen",
+      "authorId": "Id del autor",
+      "createdDate": "Fecha de creación",
+      "createdBy": "Creado por"
+    }
+  }
+}

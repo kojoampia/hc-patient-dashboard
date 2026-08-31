@@ -1,0 +1,26 @@
+{
+  "patientDashboardApp": {
+    "patientMsPaymentOption": {
+      "home": {
+        "title": "Métodos de pago",
+        "refreshListLabel": "Actualizar lista",
+        "createLabel": "Crear Método de pago",
+        "createOrEditLabel": "Crear o editar Método de pago",
+        "notFound": "No se han encontrado Métodos de pago"
+      },
+      "created": "Se ha creado Método de pago con el identificador {{ param }}",
+      "updated": "Se ha actualizado Método de pago con el identificador {{ param }}",
+      "deleted": "Se ha eliminado Método de pago con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que desea eliminar Método de pago {{ id }}?"
+      },
+      "detail": {
+        "title": "Método de pago"
+      },
+      "id": "Id",
+      "type": "Tipo",
+      "userID": "Id de usuario",
+      "metadata": "Metadatos"
+    }
+  }
+}

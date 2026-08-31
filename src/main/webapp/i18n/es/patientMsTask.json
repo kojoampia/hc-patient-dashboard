@@ -1,0 +1,39 @@
+{
+  "patientDashboardApp": {
+    "patientMsTask": {
+      "home": {
+        "title": "Tareas",
+        "refreshListLabel": "Actualizar lista",
+        "createLabel": "Crear Tarea",
+        "createOrEditLabel": "Crear o editar Tarea",
+        "notFound": "No se han encontrado Tareas"
+      },
+      "created": "Se ha creado Tarea con el identificador {{ param }}",
+      "updated": "Se ha actualizado Tarea con el identificador {{ param }}",
+      "deleted": "Se ha eliminado Tarea con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que desea eliminar Tarea {{ id }}?"
+      },
+      "detail": {
+        "title": "Tarea"
+      },
+      "id": "Id",
+      "name": "Nombre",
+      "description": "Descripción",
+      "schedule": "Cita",
+      "scheduledAt": "Programada para",
+      "duration": "Duración",
+      "status": "Estado",
+      "location": "Ubicación",
+      "caseId": "Id del caso",
+      "attendantId": "Id del acompañante",
+      "teamId": "Id del equipo",
+      "patientId": "Id del paciente",
+      "attendant": "Acompañante",
+      "createdDate": "Fecha de creación",
+      "modifiedDate": "Fecha de modificación",
+      "createdBy": "Creado por",
+      "modifiedBy": "Modificado por"
+    }
+  }
+}

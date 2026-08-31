@@ -1,0 +1,35 @@
+{
+  "patientDashboardApp": {
+    "patientMsEmergency": {
+      "home": {
+        "title": "Urgencias",
+        "refreshListLabel": "Actualizar lista",
+        "createLabel": "Crear Urgencia",
+        "createOrEditLabel": "Crear o editar Urgencia",
+        "notFound": "No se han encontrado Urgencias"
+      },
+      "created": "Se ha creado Urgencia con el identificador {{ param }}",
+      "updated": "Se ha actualizado Urgencia con el identificador {{ param }}",
+      "deleted": "Se ha eliminado Urgencia con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que desea eliminar Urgencia {{ id }}?"
+      },
+      "detail": "Detalle",
+      "id": "Id",
+      "patientId": "Id del paciente",
+      "caseId": "Id del caso",
+      "raisedAt": "Notificada el",
+      "resolvedAt": "Resuelta el",
+      "brief": "Resumen",
+      "severity": "Gravedad",
+      "status": "Estado",
+      "outcome": "Resultado",
+      "location": "Ubicación",
+      "respondentId": "Id de quien respondió",
+      "createdDate": "Fecha de creación",
+      "modifiedDate": "Fecha de modificación",
+      "createdBy": "Creado por",
+      "modifiedBy": "Modificado por"
+    }
+  }
+}

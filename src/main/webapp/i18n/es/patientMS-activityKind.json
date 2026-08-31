@@ -1,0 +1,14 @@
+{
+  "patientDashboardApp": {
+    "ActivityKind": {
+      "null": "",
+      "CASE": "Caso",
+      "VITAL": "Constante vital",
+      "RECOMMENDATION": "Recomendación",
+      "REPORT": "Informe",
+      "VISIT": "Visita",
+      "MEDICATION": "Medicamento",
+      "NOTE": "Nota"
+    }
+  }
+}

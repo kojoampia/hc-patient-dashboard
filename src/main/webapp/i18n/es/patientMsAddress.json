@@ -1,0 +1,36 @@
+{
+  "patientDashboardApp": {
+    "patientMsAddress": {
+      "home": {
+        "title": "Direcciones",
+        "refreshListLabel": "Actualizar lista",
+        "createLabel": "Crear Dirección",
+        "createOrEditLabel": "Crear o editar Dirección",
+        "notFound": "No se han encontrado Direcciones"
+      },
+      "created": "Se ha creado Dirección con el identificador {{ param }}",
+      "updated": "Se ha actualizado Dirección con el identificador {{ param }}",
+      "deleted": "Se ha eliminado Dirección con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que desea eliminar Dirección {{ id }}?"
+      },
+      "detail": {
+        "title": "Dirección"
+      },
+      "id": "Id",
+      "digitalAddress": "Dirección digital",
+      "streetAddress": "Calle",
+      "areaCode": "Código de área",
+      "town": "Población",
+      "city": "Ciudad",
+      "district": "Distrito",
+      "state": "Estado",
+      "region": "Región",
+      "country": "País",
+      "createdDate": "Fecha de creación",
+      "modifiedDate": "Fecha de modificación",
+      "createdBy": "Creado por",
+      "modifiedBy": "Modificado por"
+    }
+  }
+}

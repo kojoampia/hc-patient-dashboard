@@ -1,0 +1,26 @@
+{
+  "patientDashboardApp": {
+    "patientMsTeam": {
+      "home": {
+        "title": "Equipos",
+        "refreshListLabel": "Actualizar lista",
+        "createLabel": "Crear Equipo",
+        "createOrEditLabel": "Crear o editar Equipo",
+        "notFound": "No se han encontrado Equipos"
+      },
+      "created": "Se ha creado Equipo con el identificador {{ param }}",
+      "updated": "Se ha actualizado Equipo con el identificador {{ param }}",
+      "deleted": "Se ha eliminado Equipo con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que desea eliminar Equipo {{ id }}?"
+      },
+      "detail": {
+        "title": "Equipo"
+      },
+      "id": "Id",
+      "name": "Nombre",
+      "description": "Descripción",
+      "contact": "Contacto"
+    }
+  }
+}

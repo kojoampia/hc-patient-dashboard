@@ -1,0 +1,37 @@
+{
+  "patientDashboardApp": {
+    "patientMsStat": {
+      "home": {
+        "title": "Constantes vitales",
+        "refreshListLabel": "Actualizar lista",
+        "createLabel": "Crear Constante vital",
+        "createOrEditLabel": "Crear o editar Constante vital",
+        "notFound": "No se han encontrado Constantes vitales"
+      },
+      "created": "Se ha creado Constante vital con el identificador {{ param }}",
+      "updated": "Se ha actualizado Constante vital con el identificador {{ param }}",
+      "deleted": "Se ha eliminado Constante vital con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que desea eliminar Constante vital {{ id }}?"
+      },
+      "detail": {
+        "title": "Constante vital"
+      },
+      "id": "Id",
+      "patientId": "Id del paciente",
+      "type": "Tipo",
+      "name": "Nombre",
+      "description": "Descripción",
+      "value": "Valor",
+      "secondaryValue": "Valor secundario",
+      "unit": "Unidad",
+      "referenceLow": "Referencia baja",
+      "referenceHigh": "Referencia alta",
+      "flag": "Indicador",
+      "note": "Nota",
+      "recordedAt": "Registrado el",
+      "createdDate": "Fecha de creación",
+      "createdBy": "Creado por"
+    }
+  }
+}

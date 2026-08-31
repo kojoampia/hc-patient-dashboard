@@ -1,0 +1,35 @@
+{
+  "patientDashboardApp": {
+    "patientMsMembership": {
+      "home": {
+        "title": "Membresías",
+        "refreshListLabel": "Actualizar lista",
+        "createLabel": "Crear Membresía",
+        "createOrEditLabel": "Crear o editar Membresía",
+        "notFound": "No se han encontrado Membresías"
+      },
+      "created": "Se ha creado Membresía con el identificador {{ param }}",
+      "updated": "Se ha actualizado Membresía con el identificador {{ param }}",
+      "deleted": "Se ha eliminado Membresía con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que desea eliminar Membresía {{ id }}?"
+      },
+      "detail": {
+        "title": "Membresía"
+      },
+      "id": "Id",
+      "patientId": "Id del paciente",
+      "name": "Nombre",
+      "description": "Descripción",
+      "status": "Estado",
+      "memberNumber": "Número de socio",
+      "plan": "Plan",
+      "startDate": "Fecha de inicio",
+      "renewalDate": "Fecha de renovación",
+      "createdDate": "Fecha de creación",
+      "modifiedDate": "Fecha de modificación",
+      "createdBy": "Creado por",
+      "modifiedBy": "Modificado por"
+    }
+  }
+}

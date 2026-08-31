@@ -1,0 +1,15 @@
+{
+  "gateway": {
+    "title": "Pasarela",
+    "routes": {
+      "title": "Rutas actuales",
+      "url": "URL",
+      "service": "Servicio",
+      "servers": "Servidores disponibles",
+      "error": "Aviso: no hay ningún servidor disponible."
+    },
+    "refresh": {
+      "button": "Actualizar"
+    }
+  }
+}

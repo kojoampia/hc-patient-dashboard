@@ -1,0 +1,35 @@
+{
+  "patientDashboardApp": {
+    "patientMsClinicalCase": {
+      "home": {
+        "title": "Casos clínicos",
+        "refreshListLabel": "Actualizar lista",
+        "createLabel": "Crear Caso clínico",
+        "createOrEditLabel": "Crear o editar Caso clínico",
+        "notFound": "No se han encontrado Casos clínicos"
+      },
+      "created": "Se ha creado Caso clínico con el identificador {{ param }}",
+      "updated": "Se ha actualizado Caso clínico con el identificador {{ param }}",
+      "deleted": "Se ha eliminado Caso clínico con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que desea eliminar Caso clínico {{ id }}?"
+      },
+      "detail": {
+        "title": "Caso clínico"
+      },
+      "id": "Id",
+      "patientId": "Id del paciente",
+      "caseNumber": "Número de caso",
+      "title": "Título",
+      "openedAt": "Abierto el",
+      "closedAt": "Cerrado el",
+      "brief": "Resumen",
+      "status": "Estado",
+      "symptoms": "Síntomas",
+      "diagnosis": "Diagnóstico",
+      "assignedProfessionalId": "Id del profesional asignado",
+      "assignedRosterId": "Id del turno asignado",
+      "recommendation": "Recomendación"
+    }
+  }
+}

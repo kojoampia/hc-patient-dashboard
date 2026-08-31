@@ -93,11 +93,36 @@ spacings, which differ between keys and had to be matched individually. Three st
 English on purpose: `brand.suffix` (BridgeCare), `auth.stat.careLineValue` (24/7) and
 `profile.field.plan` (_Plan_ is the same word).
 
-## What is not
+## What is done, fifth tranche (2026-08-31) — everything else
 
-The `patientMs*` entity bundles — 40 files, the generated CRUD screens. Lower priority than the portal for a
-reason worth stating: `app.routes.ts` mounts them behind `Authority.ADMIN`, so a wrong word there reaches an
-administrator rather than a patient.
+**All 48 bundles now exist. There are no untranslated files left.** The remaining 40 in one pass: 11 enum
+bundles, 20 generated entity bundles, and 9 JHipster admin screens.
+
+**The entity bundles were generated from a shared dictionary rather than translated file by file, and that was
+the safer choice, not the lazy one.** 109 distinct field labels repeat across 20 files — `Created Date`,
+`Patient Id`, `Modified By` and so on. Translating them by hand is precisely how the same field comes to
+render two different ways in two screens. The generator asserts that every English string is covered rather
+than passing unknown ones through silently.
+
+**Two things found while doing it, both recorded rather than smoothed over.**
+
+The English enum bundles are *themselves* untranslated: `en/patientMS-allergySeverity.json` maps `"MILD"` to
+the literal `"MILD"`, so an English-speaking administrator reads `WITHHELD` and `SEVERE` today. After this,
+**Spanish reads better than English on those screens**, which is an odd state for a product and is worth a
+decision rather than a discovery. The same is true of `health.status.*` (`UP`, `DOWN`).
+
+And in three entity bundles — `ActivityLog`, `CarePlanItem`, `Emergency` — `detail` is a plain field *label*,
+not the `{title: …}` object every other bundle has. Treating them alike dropped the label and invented a key
+nothing reads. The verification caught it; a spot check would not have.
+
+**Where the enum bundles deliberately differ from the portal.** `patientPortal.status` renders some constants
+in patient-facing language — `ACTIVE` as *Tomando ahora*, `HIGH` as *Urgente* — while the enum bundles are the
+administrator's raw view and use *Activo* and *Alta*. English makes the same distinction; the Spanish mirrors
+it rather than flattening it.
+
+Checked across all 48: **zero missing keys, zero orphans, zero placeholder mismatches, every file valid JSON.**
+`es` is declared in `webpack.custom.js` as a glob over this directory, so new files here are picked up with no
+build change — the trap noted below applies to adding a *locale*, not a file.
 
 ## Before this is relied on
 

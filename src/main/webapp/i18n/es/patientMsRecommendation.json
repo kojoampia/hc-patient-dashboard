@@ -1,0 +1,26 @@
+{
+  "patientDashboardApp": {
+    "patientMsRecommendation": {
+      "home": {
+        "title": "Recomendaciones",
+        "refreshListLabel": "Actualizar lista",
+        "createLabel": "Crear Recomendación",
+        "createOrEditLabel": "Crear o editar Recomendación",
+        "notFound": "No se han encontrado Recomendaciones"
+      },
+      "created": "Se ha creado Recomendación con el identificador {{ param }}",
+      "updated": "Se ha actualizado Recomendación con el identificador {{ param }}",
+      "deleted": "Se ha eliminado Recomendación con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que desea eliminar Recomendación {{ id }}?"
+      },
+      "detail": {
+        "title": "Recomendación"
+      },
+      "id": "Id",
+      "label": "Etiqueta",
+      "category": "Categoría",
+      "clinicalCase": "Caso clínico"
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "patientDashboardApp": {
+    "patientMsCondition": {
+      "home": {
+        "title": "Afecciones",
+        "refreshListLabel": "Actualizar lista",
+        "createLabel": "Crear Afección",
+        "createOrEditLabel": "Crear o editar Afección",
+        "notFound": "No se han encontrado Afecciones"
+      },
+      "created": "Se ha creado Afección con el identificador {{ param }}",
+      "updated": "Se ha actualizado Afección con el identificador {{ param }}",
+      "deleted": "Se ha eliminado Afección con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que desea eliminar Afección {{ id }}?"
+      },
+      "detail": {
+        "title": "Afección"
+      },
+      "id": "Id",
+      "name": "Nombre",
+      "description": "Descripción",
+      "patientId": "Id del paciente",
+      "createdDate": "Fecha de creación",
+      "modifiedDate": "Fecha de modificación",
+      "createdBy": "Creado por",
+      "modifiedBy": "Modificado por"
+    }
+  }
+}

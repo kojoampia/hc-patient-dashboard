@@ -1,0 +1,36 @@
+{
+  "patientDashboardApp": {
+    "patientMsMedication": {
+      "home": {
+        "title": "Medicamentos",
+        "refreshListLabel": "Actualizar lista",
+        "createLabel": "Crear Medicamento",
+        "createOrEditLabel": "Crear o editar Medicamento",
+        "notFound": "No se han encontrado Medicamentos"
+      },
+      "created": "Se ha creado Medicamento con el identificador {{ param }}",
+      "updated": "Se ha actualizado Medicamento con el identificador {{ param }}",
+      "deleted": "Se ha eliminado Medicamento con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que desea eliminar Medicamento {{ id }}?"
+      },
+      "detail": {
+        "title": "Medicamento"
+      },
+      "id": "Id",
+      "name": "Nombre",
+      "description": "Descripción",
+      "patientId": "Id del paciente",
+      "caseId": "Id del caso",
+      "prescription": "Receta",
+      "dosage": "Dosis",
+      "status": "Estado",
+      "startedOn": "Iniciado el",
+      "prescribedById": "Id de quien lo recetó",
+      "createdDate": "Fecha de creación",
+      "modifiedDate": "Fecha de modificación",
+      "createdBy": "Creado por",
+      "modifiedBy": "Modificado por"
+    }
+  }
+}
