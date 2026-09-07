@@ -13,7 +13,7 @@ Health Connect Patient Dashboard (`patientDashboard`) — the Angular web client
 | UI               | ng-bootstrap 16 + Bootstrap/SCSS, d3 7 for the custom widgets                                                         |
 | Tests            | Jest 29 via `@angular-builders/jest` (`jest.conf.js`)                                                                 |
 | Build            | Angular CLI 20 + `@angular-builders/custom-webpack` (`webpack/`), output `target/classes/static/`                     |
-| i18n             | enabled — `en`, `fr`, `de`, and `es` (partial) under `src/main/webapp/i18n`                                           |
+| i18n             | enabled — `en`, `fr`, `de`, `es` under `src/main/webapp/i18n`; all four carry the same 1256 keys                      |
 | Dev server       | 4200 (`npm start`, HMR)                                                                                               |
 | Component prefix | `hpd`, in both ESLint and `angular.json` (aligned 2026-08-31). Legacy `jhi-*` selectors remain in existing components |
 
@@ -129,13 +129,24 @@ Two things that will bite anyone touching the portal's data layer:
 - **The dev ribbon reads `window.location.hostname`**, not the backend's profiles, and it is a weaker signal on purpose. The old one marked _which Spring profiles are running_; this one marks _which machine you are looking at_. They agree everywhere they are used today and come apart in one case — `dev` or `test` active on the production host would no longer light anything up. That case is guarded by `deploy.sh` and by `SPRING_PROFILES_ACTIVE`; this component is not part of that defence and should not be read as though it were.
 - No `any`, `Observable<any>`, or `HttpResponse<any>` in new code; type API payloads explicitly.
 - Standalone-first for new work; don't rewrite the whole app to one style in a single pass, and don't run a repo-wide `jhi-*` → `hpd-*` selector migration unless that is the task.
-- Every user-visible string needs a key in `en`, `fr` and `de`. **A missing key falls back to English**, it does
+- Every user-visible string needs a key in **all four** locales. **A missing key falls back to English**, it does
   not render the raw key — `setDefaultLang('en')` means ngx-translate consults English before it reaches
   `MissingTranslationHandlerImpl`, whose `translation-not-found[key]` marker is the _second_ fallback and appears
   only when English lacks the key too. Pinned by `config/translation-fallback.spec.ts`.
-- `es` is deliberately incomplete: the account path only. The clinical bundles wait on review by a Spanish-speaking
-  clinician, and until then those screens show English. Adding a locale means a line in `LANGUAGES` **and** one in
-  `webpack.custom.js` — without the second no bundle is produced and the language degrades wholesale.
+- **`es` is key-complete, not reviewed** — and this entry said "deliberately incomplete: the account path only"
+  until 2026-09-07, which had been stale since the fifth tranche on 2026-08-31. All four locales carry the same
+  1256 keys, asserted by `config/i18n-keys.spec.ts`; what is outstanding is that **no Spanish speaker, clinical or
+  otherwise, has read any of it**, which `i18n/es/README.md` records at length and is a different risk from a gap:
+  confident unreviewed Spanish gives a reader nothing on screen to distinguish it from a reviewed string. Adding a
+  locale means a line in `LANGUAGES` **and** one in `webpack.custom.js` — without the second no bundle is produced
+  and the language degrades wholesale.
+- **`config/i18n-keys.spec.ts` reads the bundles against the app** (2026-09-07, `docs/backlog.md` item 13, ported
+  from `mobile`): every key the app names resolves, every `{{ placeholder }}` a string declares is supplied at the
+  call site, and the four locales stay in lockstep. It scans the `| translate: { … }` pipe and the `hpdTranslate` +
+  `[translateValues]` directive, and it merges `i18n/<locale>/*.json` **deeply**, the way the webpack build does —
+  twenty entity bundles share the `patientDashboardApp` root and a shallow merge keeps only the last. It carries a
+  `MISSING_TODAY` list of ten references that resolve in no locale, found on its first run; strike an entry off when
+  you fill the key in, because the list is asserted to be exact.
 - Indentation is 2 spaces everywhere (`.editorconfig` root `indent_size = 2`; its `[*.md]` section only disables trailing-whitespace trimming), and lint-staged runs Prettier on commit.
 - **There is no e2e framework here, by decision** (2026-08-31). Cypress was listed in `.yo-rc.json` with a never-run skeleton under `src/test/javascript/`; both are gone. End-to-end coverage is `hc-patient-quality`, which runs the published images behind two nginx hops under production's CSP — the only place the proxy-chain defects are visible at all.
 - **No service worker, deliberately** (2026-08-31). It used to be registered with `enabled: false` while `angular.json` built one anyway, so production shipped `ngsw-worker.js` to every patient with nothing to register it. Turning one on caches a medical record in whatever browser it runs in, which is a data-at-rest decision nobody has made; the offline story is the Capacitor app.

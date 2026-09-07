@@ -11,6 +11,43 @@ Status legend: `[x]` done · `[~]` partial / diverges from plan · `[ ]` not sta
 
 ## What changed since the last baseline
 
+### The bundles were never read against the app, and ten dead keys were waiting (2026-09-07)
+
+`docs/backlog.md` item 13. `mobile` gained a placeholder-parity guard when item 6 turned out to be a
+bundle string — `recorded {{ when }} by {{ who }}` — whose call sites passed `{ name }`, so patients
+read the braces. `web` had nothing equivalent: `config/translation-fallback.spec.ts` pins the fallback
+_behaviour_ and nothing here read the bundles themselves.
+
+- `[x]` **`config/i18n-keys.spec.ts`, ported from `mobile/src/app/core/i18n-keys.spec.ts`.** Four
+  assertions: every key the app names resolves in every locale; every `{{ placeholder }}` a string
+  declares is supplied where that string is used, **per locale**; the four locales stay in lockstep;
+  and the scan is asserted to have matched something, because a regex that quietly stopped matching
+  would pass every other assertion on an empty set.
+- `[x]` **Two things had to be adapted rather than copied.** `mobile` reads a merged bundle off disk;
+  here the merge is `MergeJsonWebpackPlugin`'s, at build time, so the spec merges `i18n/<locale>/*.json`
+  itself and must do it **deeply** — twenty entity bundles share the `patientDashboardApp` root and a
+  shallow merge silently keeps only the last, which reports 384 false missing keys. And two thirds of
+  the call sites here are the `hpdTranslate` + `[translateValues]` directive, not the pipe.
+- `[x]` **Verified by inversion, four ways**, because a parity check that has never been seen to fail is
+  not a guard: a renamed param at a pipe site and at a directive site each fail in all four locales; a
+  scan regex that matches nothing fails the "guards the guard" assertion rather than passing vacuously;
+  a key deleted from `fr` fails both lockstep and key-existence; and a placeholder renamed in `fr` alone
+  fails for `fr` only.
+- `[~]` **Placeholder parity was already clean — key existence was not.** 57 call sites pass params and
+  every one of them matches, in all four locales. But ten references resolve in **no** locale, English
+  included, so those screens render the `translation-not-found[…]` marker with nothing to fall back to:
+  `home.facebook`, `footer.copyright`, `global.field.drop-down-box`, `global.field.searchBy`,
+  `global.slide.learn`, `register.form.code`, the `detail.title` of the three entity bundles where
+  `detail` is a plain label rather than a `{ title: … }` object (`ActivityLog`, `CarePlanItem`,
+  `Emergency` — the anomaly `i18n/es/README.md` recorded finding), and `patientPortal.medications.detail`,
+  which is only cited by a doc comment's usage example. They are listed as `MISSING_TODAY` in the spec so
+  the guard fails on the eleventh; **filling them in is four languages' worth of copy and is not done**.
+  The list is asserted to be exact, so a key filled in without being struck off fails too.
+- `[x]` **`CLAUDE.md` corrected**: it said `es` was "deliberately incomplete: the account path only",
+  stale since the fifth Spanish tranche on 2026-08-31. All four locales carry the same 1256 keys. What is
+  outstanding for `es` is review by a Spanish speaker, which is a different risk and is recorded in
+  `i18n/es/README.md`.
+
 ### The sidebar lit the wrong entry (2026-08-28)
 
 Clicking **Visitations** highlighted **My record**. So did clicking **Activity**. Three faults in one
@@ -95,6 +132,7 @@ Two things this uncovered and did **not** fix:
   directory removed the exclusion rather than the failure. `navbar-item.model.d.ts` survives alone —
   `entities/entity-navbar-items.ts` imports the type and is a generator needle file. The `.navbar` rules in
   `global.scss` stay: `DashboardComponent` still uses those Bootstrap classes.
+
 - `[x]` **The computed links are checkable — 2026-08-31.** `[routerLink]="tile.link"` on the overview tiles and
   `caseLink(...)` behind five rows of the record screen both carried an expression, so the destination lived in
   a component field no test could reach without standing the whole component up.
@@ -437,13 +475,13 @@ with a human label — and canonicalises whatever onboarding sends. Two client h
 second is user-visible today.
 
 - `[ ]` **`onboarding.component.html` step 5 is a plain `<input required>`, and after the 2026-08-31 ruling it
-      should probably not be a field at all.** BridgeCare now accepts **only** the Ghana Card, so asking a patient
-      to choose from a list of one is a question with no answer to give. The ID *number* still has to be typed;
-      the ID *type* is now a label. Whatever it becomes, it must post `GHANA_CARD` — the component's own spec
-      already patches that value, so the test has been ahead of the markup all along.
+  should probably not be a field at all.** BridgeCare now accepts **only** the Ghana Card, so asking a patient
+  to choose from a list of one is a question with no answer to give. The ID _number_ still has to be typed;
+  the ID _type_ is now a label. Whatever it becomes, it must post `GHANA_CARD` — the component's own spec
+  already patches that value, so the test has been ahead of the markup all along.
 - `[ ]` **`portal/profile/profile.component.html` renders `person.cardType` raw.** A patient who picks
-      Ghana Card is shown `GHANA_CARD` on their own profile. It needs the label, which means five i18n keys
-      in `en`, `fr`, `de` — and `es` if the chrome tranche is extended.
+  Ghana Card is shown `GHANA_CARD` on their own profile. It needs the label, which means five i18n keys
+  in `en`, `fr`, `de` — and `es` if the chrome tranche is extended.
 
 **Do not make the api reject unknown values to force this.** `canonicalise()` deliberately never rejects,
 so that service and clients can deploy in any order; tightening it would 400 every patient finishing
