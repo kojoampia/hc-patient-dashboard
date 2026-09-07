@@ -101,9 +101,15 @@ describe('ProfileComponent — the plan chooser', () => {
   it('does not lay the chooser out as key/value rows', () => {
     render([pear, pawpaw, melon]);
 
+    // COUNT THE CARDS FIRST. Both assertions below reach the DOM through `.hc-plan`, and against the
+    // pre-fix markup there is none — so `[].every(…)` was true and `undefined?.closest(…)` was
+    // falsy, and the one test named for this regression was the one test that could not see it.
+    // Asserting the cards exist is what stops it passing on an empty result.
+    expect(cards()).toHaveLength(3);
+
     expect(cards().every(card => card.querySelector('.hc-kv') === null)).toBe(true);
     // Nor as a two-column grid: three tiers in two columns leave the third alone on a second row.
-    expect(fixture.nativeElement.querySelector('.hc-plan')?.closest('.hc-grid--2')).toBeFalsy();
+    expect(cards()[0].closest('.hc-grid')?.classList.contains('hc-grid--2')).toBe(false);
   });
 
   it('shows the currency beside the amount, both exactly as they arrived', () => {
