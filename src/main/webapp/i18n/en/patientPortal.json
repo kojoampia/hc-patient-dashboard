@@ -369,6 +369,12 @@
         "choose": "Choose a plan",
         "select": "Choose",
         "unavailable": "Plans cannot be shown just now. Nothing about your record is affected.",
+        "featured": "Most chosen",
+        "selectFor": "Choose the {{name}}",
+        "feature": {
+          "included": "Included",
+          "notIncluded": "Not included"
+        },
         "error": {
           "failed": "That plan could not be selected. Try again."
         }

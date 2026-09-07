@@ -369,6 +369,12 @@
         "choose": "Elegir un plan",
         "select": "Elegir",
         "unavailable": "Los planes no se pueden mostrar ahora mismo. Su historial no se ve afectado en modo alguno.",
+        "featured": "El más elegido",
+        "selectFor": "Elegir el {{name}}",
+        "feature": {
+          "included": "Incluido",
+          "notIncluded": "No incluido"
+        },
         "error": {
           "failed": "No se ha podido seleccionar ese plan. Vuelva a intentarlo."
         }

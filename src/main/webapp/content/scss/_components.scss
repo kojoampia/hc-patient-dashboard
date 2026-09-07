@@ -766,6 +766,121 @@ a.hc-drow[href]:hover {
   }
 }
 
+/* ============================= plan card ============================= */
+
+/**
+ * One membership tier, offered for selection.
+ *
+ * Deliberately its own block rather than `hc-card` plus utilities: the tiers are compared against
+ * each other, so the name, the price and the feature list have to sit at the same height in every
+ * card. That is a column layout with the button pushed to the bottom, which no combination of the
+ * utilities expresses. The chooser used `.hc-kv` — a one-line label/value row — until 2026-09-07,
+ * which laid the whole card out on one baseline and rendered the plan's own name as a field label.
+ */
+.hc-plan {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px;
+  background: var(--hc-card);
+  border: 1px solid var(--hc-line);
+  border-radius: var(--hc-r);
+  box-shadow: var(--hc-sh-sm);
+
+  &__head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__name {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: -0.017em;
+    color: var(--hc-navy);
+  }
+
+  /* The amount arrives pre-formatted; the currency is a separate field beside it, never merged
+     into one string here — see the note in the template. */
+  &__price {
+    display: flex;
+    gap: 6px;
+    align-items: baseline;
+    margin: 0;
+  }
+
+  &__currency {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--hc-grey);
+  }
+
+  &__amount {
+    font-size: 25px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  &__note,
+  &__for {
+    margin: 0;
+    font-size: 12.5px;
+    color: var(--hc-grey);
+  }
+
+  &__for {
+    font-size: 13px;
+    color: var(--hc-ink);
+  }
+
+  &__features {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 12px 0 0;
+    margin: 2px 0 0;
+    list-style: none;
+    border-top: 1px solid var(--hc-line);
+  }
+
+  &__feature {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    font-size: 13px;
+
+    .hpd-icon {
+      margin-top: 2px;
+      color: var(--hc-ok);
+    }
+
+    /* Not struck through: a tier that omits something is stating a fact about itself, not
+       cancelling one. Grey plus a cross is the difference, and the cross carries a label. */
+    &.is-excluded {
+      color: var(--hc-grey);
+
+      .hpd-icon {
+        color: var(--hc-grey-400);
+      }
+    }
+  }
+
+  /* Pushed to the bottom so the buttons line up across cards of unequal height. */
+  &__choose {
+    margin-top: auto;
+  }
+
+  /* `featured` is one plan out of the three. Gold border and a pill, not a bigger card — the
+     comparison only reads if the cards stay the same size. */
+  &--featured {
+    border-color: var(--hc-gold);
+    box-shadow: 0 0 0 3px var(--hc-gold-050);
+  }
+}
+
 /* ============================= record header ============================= */
 
 .hc-rec-head {

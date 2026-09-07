@@ -159,28 +159,85 @@
             <div class="alert alert-danger" role="alert"><span [hpdTranslate]="message">Something went wrong.</span></div>
           }
 
-          @if (plans().length) {
-            <h3 hpdTranslate="patientPortal.profile.plan.choose">Choose a plan</h3>
-            <div class="hc-grid hc-grid--2">
-              @for (plan of plans(); track plan.id) {
-                <div class="hc-kv">
-                  <span class="hc-kv__k">{{ plan.name }}</span>
-                  <!-- Rendered, never re-formatted: the price arrives ready for this locale, and two products
-                       quoting different numbers for one tier is a mistake this subsystem has made before. -->
-                  <span class="hc-kv__v">{{ plan.priceAmount }} {{ plan.priceNote }}</span>
-                  @if (plan.forWho) {
-                    <span class="hc-kv__v">{{ plan.forWho }}</span>
+          @if (orderedPlans().length) {
+            <div class="hc-sec-head">
+              <div><h3 hpdTranslate="patientPortal.profile.plan.choose">Choose a plan</h3></div>
+            </div>
+
+            <!-- hc-grid--auto rather than --2: three tiers in two columns orphan the third on a row of its own,
+                 and the breakpoint that would fix it is the card's width, not the viewport's. -->
+            <div class="hc-grid hc-grid--auto">
+              @for (plan of orderedPlans(); track plan.id) {
+                <article class="hc-plan" [class.hc-plan--featured]="plan.featured">
+                  <div class="hc-plan__head">
+                    <h4 class="hc-plan__name">{{ plan.name }}</h4>
+                    @if (plan.featured) {
+                      <span class="hc-pill hc-pill--gold" hpdTranslate="patientPortal.profile.plan.featured">Most chosen</span>
+                    }
+                  </div>
+
+                  @if (plan.priceAmount) {
+                    <!-- Rendered, never re-formatted: the price arrives ready for this locale, and two products
+                         quoting different numbers for one tier is a mistake this subsystem has made before. The
+                         currency is a second field the API supplies beside it — printing it is not restating the
+                         price, and until 2026-09-07 neither client printed it at all, so a patient was asked to
+                         choose between 3,000 and 8,000 of nothing in particular. No pipe, no arithmetic.
+
+                         `&ngsp;` rather than a plain space: Angular drops whitespace-only text nodes, and the
+                         flex gap below is a visual gap only — without this the price copies out, and reads to a
+                         screen reader, as "GHS3,000". -->
+                    <p class="hc-plan__price">
+                      @if (plan.priceCurrency) {
+                        <span class="hc-plan__currency">{{ plan.priceCurrency }}&ngsp;</span>
+                      }
+                      <span class="hc-plan__amount hc-num">{{ plan.priceAmount }}</span>
+                    </p>
                   }
+
+                  @if (plan.priceNote) {
+                    <p class="hc-plan__note">{{ plan.priceNote }}</p>
+                  }
+
+                  @if (plan.forWho) {
+                    <p class="hc-plan__for">{{ plan.forWho }}</p>
+                  }
+
+                  @if (plan.features?.length) {
+                    <!-- The tiers differ almost entirely here, so this is the only thing a reader has to choose on.
+                         An excluded feature is listed rather than hidden: "no doctor review" is what distinguishes
+                         PEAR from PAWPAW, and a list of only the inclusions makes every tier look the same. -->
+                    <ul class="hc-plan__features">
+                      @for (feature of plan.features; track $index) {
+                        <li class="hc-plan__feature" [class.is-excluded]="!feature.included">
+                          <hpd-icon
+                            [name]="feature.included ? 'check' : 'x'"
+                            [size]="14"
+                            [label]="
+                              (feature.included
+                                ? 'patientPortal.profile.plan.feature.included'
+                                : 'patientPortal.profile.plan.feature.notIncluded'
+                              ) | translate
+                            "
+                          />
+                          <span>{{ feature.label }}</span>
+                        </li>
+                      }
+                    </ul>
+                  }
+
+                  <!-- Named in the accessible label: three buttons all called "Choose" tell a screen reader
+                       nothing about which tier it is on. -->
                   <button
-                    class="btn btn-sm btn-primary"
+                    class="hc-btn hc-btn--primary hc-btn--sm hc-plan__choose"
                     type="button"
                     [disabled]="choosingPlan()"
+                    [attr.aria-label]="'patientPortal.profile.plan.selectFor' | translate: { name: plan.name }"
                     (click)="choosePlan(plan)"
                     hpdTranslate="patientPortal.profile.plan.select"
                   >
                     Choose
                   </button>
-                </div>
+                </article>
               }
             </div>
           } @else {

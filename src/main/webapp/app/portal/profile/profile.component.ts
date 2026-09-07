@@ -100,6 +100,23 @@ export default class ProfileComponent {
    */
   readonly plans = toSignal(this.membershipPlanService.plans(), { initialValue: [] as readonly MembershipPlan[] });
 
+  /**
+   * The tiers in the order the content API asks for them to be shown.
+   *
+   * <p>{@code displayOrder} is the other product's decision about how a price ladder reads, and it arrived unused
+   * until 2026-09-07 — the screen simply took whatever order the response happened to be in. A plan with no
+   * {@code displayOrder} sorts last rather than first, so an unordered addition on their side appends instead of
+   * silently taking the top of the ladder.</p>
+   *
+   * <p>The featured tier is <em>not</em> hoisted to the front: it sits where its order puts it and is marked in
+   * place, which is how a middle tier is meant to be recommended.</p>
+   */
+  readonly orderedPlans = computed(() =>
+    [...this.plans()].sort(
+      (left, right) => (left.displayOrder ?? Number.MAX_SAFE_INTEGER) - (right.displayOrder ?? Number.MAX_SAFE_INTEGER),
+    ),
+  );
+
   readonly choosingPlan = signal(false);
 
   readonly planError = signal<string | null>(null);
