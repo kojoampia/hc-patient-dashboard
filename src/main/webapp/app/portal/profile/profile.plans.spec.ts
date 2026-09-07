@@ -150,10 +150,19 @@ describe('ProfileComponent — the plan chooser', () => {
     expect(cards().map(card => card.classList.contains('hc-plan--featured'))).toEqual([false, true, false]);
   });
 
-  it('orders by displayOrder rather than by the order the response happened to arrive in', () => {
-    render([melon, pear, pawpaw]);
+  it('keeps response order between tiers that share a displayOrder', () => {
+    // REPURPOSED, because what was here asserted the same permutation on the same fixture as
+    // 'renders one card per tier … in displayOrder' above, one layer lower — every mutation that
+    // failed it failed that one too, and that one fails on strictly more.
+    //
+    // This is the property nothing covered. `Array#sort` is stable per ES2019 and the comparator
+    // returns 0 on a tie, so equal `displayOrder` values keep the order they arrived in. That holds
+    // today and is exactly what a secondary sort key would quietly break — and duplicate
+    // `displayOrder` values are the shape of upstream slip this whole entry exists because of.
+    const tie = plan({ id: 'plan-tie', code: 'TIE', name: 'TIE Plan', displayOrder: 1 });
+    render([tie, pear, melon]);
 
-    expect(fixture.componentInstance.orderedPlans().map(item => item.code)).toEqual(['PEAR', 'PAWPAW', 'MELON']);
+    expect(fixture.componentInstance.orderedPlans().map(item => item.code)).toEqual(['TIE', 'PEAR', 'MELON']);
   });
 
   it('sorts a tier with no displayOrder last, so an addition appends rather than taking the top', () => {

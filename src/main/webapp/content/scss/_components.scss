@@ -108,15 +108,17 @@
     grid-template-columns: repeat(4, 1fr);
   }
   &--auto {
-    // `auto-fit`, NOT `auto-fill`, and the difference is invisible until the container is wide.
-    //
-    // Both create as many 232px-minimum tracks as fit. `auto-fill` KEEPS the empty ones, so a
-    // bounded set — three membership tiers — is laid into the first three of however many fit and
-    // huddles at the left. Measured in the patient portal's content column at a 1568px viewport:
-    // 1260px yields 5 tracks, so the cards render at 239px with ~510px of dead space beside them.
-    // `auto-fit` collapses the empty tracks and the same three cards render at 409px, filling the
-    // row. Below the point where the tracks outnumber the items the two are identical, which is why
-    // a check at 1280px — where the floor happens to give exactly 3 — shows nothing wrong.
+    /*
+     * `auto-fit`, NOT `auto-fill`, and the difference is invisible until the container is wide.
+     *
+     * Both create as many 232px-minimum tracks as fit. `auto-fill` KEEPS the empty ones, so a
+     * bounded set — three membership tiers — is laid into the first three of however many fit and
+     * huddles at the left. Measured in the patient portal's content column at a 1568px viewport:
+     * 1260px yields 5 tracks, so the cards render at 239px with ~510px of dead space beside them.
+     * `auto-fit` collapses the empty tracks and the same three render at 409px, filling the row.
+     * Below the point where the tracks outnumber the items the two are identical, which is why a
+     * check at 1280px — where the floor happens to give exactly 3 — shows nothing wrong.
+     */
     grid-template-columns: repeat(auto-fit, minmax(232px, 1fr));
   }
 }
@@ -790,6 +792,21 @@ a.hc-drow[href]:hover {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  /*
+   * Capped because `hc-grid--auto` is `auto-fit`: with fewer tiers than tracks the empty tracks
+   * collapse and the remaining cards absorb the width. Three tiers at a 1260px content column come
+   * out at 409px each and this cap costs them nothing — measured. ONE tier would otherwise stretch
+   * to the full 1260px, where `__head`'s space-between throws the name and the "Most chosen" pill a
+   * thousand pixels apart, the prose runs to twice a readable measure, and `__choose`'s
+   * `margin-top: auto` strands the button in the corner of a short wide box. A one-tier response is
+   * plausible: the list belongs to another product, and item 4 is what happens when that moves.
+   *
+   * The cap belongs HERE and not on the track. `repeat(auto-fit, minmax(232px, 420px))` looks like
+   * the tidier expression of the same idea and is not: the repeat count is computed from the
+   * definite max, so at 1260px it yields two columns and drops the third tier onto a row of its own
+   * — the orphan this grid was changed to remove. Measured, tops [0, 0, 53].
+   */
+  max-width: 420px;
   padding: 18px;
   background: var(--hc-card);
   border: 1px solid var(--hc-line);
