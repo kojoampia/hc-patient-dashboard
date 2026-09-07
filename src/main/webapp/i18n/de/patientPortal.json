@@ -369,6 +369,12 @@
         "choose": "Tarif wählen",
         "select": "Wählen",
         "unavailable": "Tarife können gerade nicht angezeigt werden. Ihre Akte ist davon nicht betroffen.",
+        "featured": "Am häufigsten gewählt",
+        "selectFor": "{{name}} wählen",
+        "feature": {
+          "included": "Enthalten",
+          "notIncluded": "Nicht enthalten"
+        },
         "error": {
           "failed": "Dieser Tarif konnte nicht ausgewählt werden. Versuchen Sie es erneut."
         }

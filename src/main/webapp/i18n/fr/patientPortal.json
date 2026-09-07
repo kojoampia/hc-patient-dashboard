@@ -369,6 +369,12 @@
         "choose": "Choisir une formule",
         "select": "Choisir",
         "unavailable": "Les formules ne peuvent pas être affichées pour le moment. Votre dossier n'est pas affecté.",
+        "featured": "La plus choisie",
+        "selectFor": "Choisir : {{name}}",
+        "feature": {
+          "included": "Incluse",
+          "notIncluded": "Non incluse"
+        },
         "error": {
           "failed": "Cette formule n'a pas pu être sélectionnée. Réessayez."
         }
