@@ -89,8 +89,13 @@ describe('ProfileComponent — the plan chooser', () => {
     });
   });
 
-  it('renders one card per tier, with the name as a heading', () => {
-    render([pear, pawpaw, melon]);
+  it('renders one card per tier, with the name as a heading, in displayOrder', () => {
+    // FED OUT OF ORDER ON PURPOSE. The two sorting tests below assert on `orderedPlans()` — the
+    // component's signal — and never on the DOM, so nothing was checking that the TEMPLATE iterates
+    // the sorted signal rather than the raw one. Rendering `plans()` instead passed all ten. Feeding
+    // display order in and expecting it back out is only a tautology if the fixture is already
+    // sorted; unsorted, this is the assertion that ties `orderedPlans` to what a reader sees.
+    render([melon, pear, pawpaw]);
 
     expect(cards()).toHaveLength(3);
     expect(cards().map(card => text(card.querySelector('h4.hc-plan__name')))).toEqual(['PEAR Plan', 'PAWPAW Plan', 'MELON Plan']);

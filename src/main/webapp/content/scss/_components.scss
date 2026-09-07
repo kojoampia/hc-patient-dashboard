@@ -108,7 +108,16 @@
     grid-template-columns: repeat(4, 1fr);
   }
   &--auto {
-    grid-template-columns: repeat(auto-fill, minmax(232px, 1fr));
+    // `auto-fit`, NOT `auto-fill`, and the difference is invisible until the container is wide.
+    //
+    // Both create as many 232px-minimum tracks as fit. `auto-fill` KEEPS the empty ones, so a
+    // bounded set — three membership tiers — is laid into the first three of however many fit and
+    // huddles at the left. Measured in the patient portal's content column at a 1568px viewport:
+    // 1260px yields 5 tracks, so the cards render at 239px with ~510px of dead space beside them.
+    // `auto-fit` collapses the empty tracks and the same three cards render at 409px, filling the
+    // row. Below the point where the tracks outnumber the items the two are identical, which is why
+    // a check at 1280px — where the floor happens to give exactly 3 — shows nothing wrong.
+    grid-template-columns: repeat(auto-fit, minmax(232px, 1fr));
   }
 }
 
