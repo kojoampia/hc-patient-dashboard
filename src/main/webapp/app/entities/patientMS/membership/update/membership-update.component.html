@@ -47,7 +47,18 @@
 
         <div class="mb-3">
           <label class="form-label" hpdTranslate="patientDashboardApp.patientMsMembership.status" for="field_status">Status</label>
-          <input type="text" class="form-control" name="status" id="field_status" data-cy="status" formControlName="status" />
+          <!--
+            Labelled from patientPortal.status.membership.*, not from a patientDashboardApp.MembershipStatus.*
+            bundle of its own. Those five keys already ship in all four locales — they are what the portal's
+            hpdStatus pipe renders the patient's own membership through — and they are exactly this enum's
+            constants, so a second set would be four languages of duplicate copy that could drift from the first.
+          -->
+          <select class="form-control" name="status" formControlName="status" id="field_status" data-cy="status">
+            <option [ngValue]="null"></option>
+            @for (membershipStatus of membershipStatusValues; track $index) {
+              <option [value]="membershipStatus">{{ 'patientPortal.status.membership.' + membershipStatus | translate }}</option>
+            }
+          </select>
         </div>
 
         <div class="mb-3">

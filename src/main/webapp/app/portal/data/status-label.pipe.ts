@@ -26,13 +26,18 @@ import { humanise } from './portal-format';
  * word. Compare against the sentinel, not the key — as `AlertService` already does.</p>
  *
  * <p>**Pass a `domain` where the flat map does not apply.** The uniqueness above holds for the
- * clinical enums and not beyond them: `Membership.status` is a free `String` in `patient.jdl`, and
- * its `ACTIVE` is a subscription that is running, while `patientPortal.status.ACTIVE` is a
- * medication being taken — "Taking now". Rendering a plan as "Taking now" is a worse failure than
- * rendering nothing, because it is plausible. `{{ plan.status | hpdStatus: 'membership' }}` looks in
- * `patientPortal.status.membership.*` first and only then in the flat map. The scoped lookup is
- * upper-cased, because a free `String` arrives however the backend wrote it — the demo seed says
- * `active`. The fallback still humanises the value as it arrived.</p>
+ * clinical enums and not beyond them: `Membership.status`'s `ACTIVE` is a subscription that is
+ * running, while `patientPortal.status.ACTIVE` is a medication being taken — "Taking now".
+ * Rendering a plan as "Taking now" is a worse failure than rendering nothing, because it is
+ * plausible. `{{ plan.status | hpdStatus: 'membership' }}` looks in
+ * `patientPortal.status.membership.*` first and only then in the flat map.</p>
+ *
+ * <p>**The upper-casing is now belt and braces, and stays.** `Membership.status` was a free `String`
+ * in `patient.jdl` when this was written, and the demo seed really did say `active`; it is a
+ * `MembershipStatus` enum as of 2026-09-08, so the backend can only send a constant. Keeping the
+ * `toUpperCase` costs nothing and still covers a record written before the migration ran, or by
+ * anything that reaches the collection without going through this service. The fallback still
+ * humanises the value as it arrived.</p>
  *
  * Impure, like `TranslatePipe` itself: the label has to change when the language does, and a pure
  * pipe would hold the one it was first given.
