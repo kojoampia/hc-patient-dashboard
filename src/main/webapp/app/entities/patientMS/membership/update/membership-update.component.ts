@@ -7,6 +7,7 @@ import { finalize } from 'rxjs/operators';
 import SharedModule from 'app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { MembershipStatus } from 'app/entities/enumerations/membership-status.model';
 import { IMembership } from '../membership.model';
 import { MembershipService } from '../service/membership.service';
 import { MembershipFormService, MembershipFormGroup } from './membership-form.service';
@@ -19,6 +20,7 @@ import { MembershipFormService, MembershipFormGroup } from './membership-form.se
 export class MembershipUpdateComponent implements OnInit {
   isSaving = false;
   membership: IMembership | null = null;
+  membershipStatusValues = Object.keys(MembershipStatus);
 
   editForm: MembershipFormGroup = this.membershipFormService.createMembershipFormGroup();
 

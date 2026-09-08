@@ -31,7 +31,8 @@
           </dd>
           <dt><span hpdTranslate="patientDashboardApp.patientMsMembership.status">Status</span></dt>
           <dd>
-            <span>{{ membership.status }}</span>
+            <!-- See the update screen's select for why this bundle and not a MembershipStatus one. -->
+            <span>{{ 'patientPortal.status.membership.' + membership.status | translate }}</span>
           </dd>
           <dt><span hpdTranslate="patientDashboardApp.patientMsMembership.memberNumber">Member Number</span></dt>
           <dd>

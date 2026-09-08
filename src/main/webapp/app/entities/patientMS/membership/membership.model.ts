@@ -1,11 +1,12 @@
 import dayjs from 'dayjs/esm';
+import { MembershipStatus } from 'app/entities/enumerations/membership-status.model';
 
 export interface IMembership {
   id: string;
   patientId?: string | null;
   name?: string | null;
   description?: string | null;
-  status?: string | null;
+  status?: keyof typeof MembershipStatus | null;
   memberNumber?: string | null;
   plan?: string | null;
   startDate?: dayjs.Dayjs | null;
