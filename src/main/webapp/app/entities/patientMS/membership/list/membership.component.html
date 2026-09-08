@@ -138,7 +138,10 @@
               <td>{{ membership.patientId }}</td>
               <td>{{ membership.name }}</td>
               <td>{{ membership.description }}</td>
-              <td>{{ membership.status }}</td>
+              <!-- Same bundle as the update screen's select, for the reason given there: these five keys
+                   already ship in every locale and are exactly the enum's constants. All three surfaces of an
+                   enum-typed field render through one bundle — compare task.component.html. -->
+              <td>{{ 'patientPortal.status.membership.' + membership.status | translate }}</td>
               <td>{{ membership.memberNumber }}</td>
               <td>{{ membership.plan }}</td>
               <td>{{ membership.startDate | formatMediumDate }}</td>
