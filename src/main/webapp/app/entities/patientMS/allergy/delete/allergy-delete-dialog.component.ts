@@ -8,8 +8,8 @@ import { IAllergy } from '../allergy.model';
 import { AllergyService } from '../service/allergy.service';
 
 @Component({
-    templateUrl: './allergy-delete-dialog.component.html',
-    imports: [SharedModule, FormsModule]
+  templateUrl: './allergy-delete-dialog.component.html',
+  imports: [SharedModule, FormsModule],
 })
 export class AllergyDeleteDialogComponent {
   allergy?: IAllergy;

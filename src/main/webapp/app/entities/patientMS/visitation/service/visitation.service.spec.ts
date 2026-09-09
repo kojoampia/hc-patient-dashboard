@@ -22,9 +22,9 @@ describe('Visitation Service', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [],
-    providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-});
+      imports: [],
+      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
+    });
     expectedResult = null;
     service = TestBed.inject(VisitationService);
     httpMock = TestBed.inject(HttpTestingController);

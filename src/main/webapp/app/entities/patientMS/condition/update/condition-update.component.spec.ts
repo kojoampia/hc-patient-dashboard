@@ -21,19 +21,19 @@ describe('Condition Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [RouterTestingModule.withRoutes([]), ConditionUpdateComponent],
-    providers: [
+      imports: [RouterTestingModule.withRoutes([]), ConditionUpdateComponent],
+      providers: [
         FormBuilder,
         {
-            provide: ActivatedRoute,
-            useValue: {
-                params: from([{}]),
-            },
+          provide: ActivatedRoute,
+          useValue: {
+            params: from([{}]),
+          },
         },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
-    ]
-})
+      ],
+    })
       .overrideTemplate(ConditionUpdateComponent, '')
       .compileComponents();
 

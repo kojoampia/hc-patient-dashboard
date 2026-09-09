@@ -13,9 +13,9 @@ describe('HeartRateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [HeartRateComponent, RouterTestingModule],
-    providers: [NgbActiveModal, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-})
+      imports: [HeartRateComponent, RouterTestingModule],
+      providers: [NgbActiveModal, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
+    })
       .overrideTemplate(StatComponent, '')
       .compileComponents();
 

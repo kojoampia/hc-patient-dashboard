@@ -21,7 +21,11 @@ describe('translation fallback', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot({ missingTranslationHandler: { provide: MissingTranslationHandler, useFactory: missingTranslationHandler } })],
+      imports: [
+        TranslateModule.forRoot({
+          missingTranslationHandler: { provide: MissingTranslationHandler, useFactory: missingTranslationHandler },
+        }),
+      ],
     });
     translate = TestBed.inject(TranslateService);
     translate.setTranslation('en', { greeting: 'Hello', only: { in: { english: 'English only' } } });

@@ -8,8 +8,8 @@ import { IPaymentOption } from '../payment-option.model';
 import { PaymentOptionService } from '../service/payment-option.service';
 
 @Component({
-    templateUrl: './payment-option-delete-dialog.component.html',
-    imports: [SharedModule, FormsModule]
+  templateUrl: './payment-option-delete-dialog.component.html',
+  imports: [SharedModule, FormsModule],
 })
 export class PaymentOptionDeleteDialogComponent {
   paymentOption?: IPaymentOption;

@@ -21,19 +21,19 @@ describe('CarePlanItem Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [RouterTestingModule.withRoutes([]), CarePlanItemUpdateComponent],
-    providers: [
+      imports: [RouterTestingModule.withRoutes([]), CarePlanItemUpdateComponent],
+      providers: [
         FormBuilder,
         {
-            provide: ActivatedRoute,
-            useValue: {
-                params: from([{}]),
-            },
+          provide: ActivatedRoute,
+          useValue: {
+            params: from([{}]),
+          },
         },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
-    ]
-})
+      ],
+    })
       .overrideTemplate(CarePlanItemUpdateComponent, '')
       .compileComponents();
 

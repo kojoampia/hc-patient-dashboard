@@ -18,9 +18,9 @@ describe('ActivityLog Management Delete Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [ActivityLogDeleteDialogComponent],
-    providers: [NgbActiveModal, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-})
+      imports: [ActivityLogDeleteDialogComponent],
+      providers: [NgbActiveModal, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
+    })
       .overrideTemplate(ActivityLogDeleteDialogComponent, '')
       .compileComponents();
     fixture = TestBed.createComponent(ActivityLogDeleteDialogComponent);

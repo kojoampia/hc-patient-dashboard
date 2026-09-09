@@ -14,7 +14,6 @@
 > A Spanish-speaking clinician reading `patientPortal.json` — particularly `status`, `medications`,
 > `allergies` and `onboarding.field` — is the outstanding work.
 
-
 `web.abofonsa.com` advertises `?locale=es` on its handoff link, and this app served three languages, so a
 Spanish reader landed in English. This directory closes that, **incrementally**.
 
@@ -106,23 +105,23 @@ than passing unknown ones through silently.
 
 **Two things found while doing it, both recorded rather than smoothed over.**
 
-The English enum bundles are *themselves* untranslated: `en/patientMS-allergySeverity.json` maps `"MILD"` to
+The English enum bundles are _themselves_ untranslated: `en/patientMS-allergySeverity.json` maps `"MILD"` to
 the literal `"MILD"`, so an English-speaking administrator reads `WITHHELD` and `SEVERE` today. After this,
 **Spanish reads better than English on those screens**, which is an odd state for a product and is worth a
 decision rather than a discovery. The same is true of `health.status.*` (`UP`, `DOWN`).
 
-And in three entity bundles — `ActivityLog`, `CarePlanItem`, `Emergency` — `detail` is a plain field *label*,
+And in three entity bundles — `ActivityLog`, `CarePlanItem`, `Emergency` — `detail` is a plain field _label_,
 not the `{title: …}` object every other bundle has. Treating them alike dropped the label and invented a key
 nothing reads. The verification caught it; a spot check would not have.
 
 **Where the enum bundles deliberately differ from the portal.** `patientPortal.status` renders some constants
-in patient-facing language — `ACTIVE` as *Tomando ahora*, `HIGH` as *Urgente* — while the enum bundles are the
-administrator's raw view and use *Activo* and *Alta*. English makes the same distinction; the Spanish mirrors
+in patient-facing language — `ACTIVE` as _Tomando ahora_, `HIGH` as _Urgente_ — while the enum bundles are the
+administrator's raw view and use _Activo_ and _Alta_. English makes the same distinction; the Spanish mirrors
 it rather than flattening it.
 
 Checked across all 48: **zero missing keys, zero orphans, zero placeholder mismatches, every file valid JSON.**
 `es` is declared in `webpack.custom.js` as a glob over this directory, so new files here are picked up with no
-build change — the trap noted below applies to adding a *locale*, not a file.
+build change — the trap noted below applies to adding a _locale_, not a file.
 
 ## Before this is relied on
 

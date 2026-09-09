@@ -6,9 +6,9 @@ import SharedModule from 'app/shared/shared.module';
 import { ActivateService } from './activate.service';
 
 @Component({
-    selector: 'hpd-activate',
-    imports: [SharedModule, RouterModule],
-    templateUrl: './activate.component.html'
+  selector: 'hpd-activate',
+  imports: [SharedModule, RouterModule],
+  templateUrl: './activate.component.html',
 })
 export default class ActivateComponent implements OnInit {
   error = signal(false);
@@ -21,8 +21,8 @@ export default class ActivateComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.pipe(mergeMap(params => this.activateService.get(params.key))).subscribe({
-      next: () => (this.success.set(true)),
-      error: () => (this.error.set(true)),
+      next: () => this.success.set(true),
+      error: () => this.error.set(true),
     });
   }
 }

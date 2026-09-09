@@ -21,19 +21,19 @@ describe('Emergency Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [RouterTestingModule.withRoutes([]), EmergencyUpdateComponent],
-    providers: [
+      imports: [RouterTestingModule.withRoutes([]), EmergencyUpdateComponent],
+      providers: [
         FormBuilder,
         {
-            provide: ActivatedRoute,
-            useValue: {
-                params: from([{}]),
-            },
+          provide: ActivatedRoute,
+          useValue: {
+            params: from([{}]),
+          },
         },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
-    ]
-})
+      ],
+    })
       .overrideTemplate(EmergencyUpdateComponent, '')
       .compileComponents();
 

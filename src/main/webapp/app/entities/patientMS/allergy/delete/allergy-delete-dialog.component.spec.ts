@@ -18,9 +18,9 @@ describe('Allergy Management Delete Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [AllergyDeleteDialogComponent],
-    providers: [NgbActiveModal, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-})
+      imports: [AllergyDeleteDialogComponent],
+      providers: [NgbActiveModal, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
+    })
       .overrideTemplate(AllergyDeleteDialogComponent, '')
       .compileComponents();
     fixture = TestBed.createComponent(AllergyDeleteDialogComponent);

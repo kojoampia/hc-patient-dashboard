@@ -4,10 +4,10 @@ import { StatComponent } from 'app/entities/patientMS/stat/list/stat.component';
 import { Subject } from 'rxjs';
 
 @Component({
-    selector: 'hpd-allergy',
-    imports: [StatComponent],
-    templateUrl: './allergy.component.html',
-    styleUrl: './allergy.component.scss'
+  selector: 'hpd-allergy',
+  imports: [StatComponent],
+  templateUrl: './allergy.component.html',
+  styleUrl: './allergy.component.scss',
 })
 export class AllergyComponent implements OnDestroy {
   private destroyed$ = new Subject<boolean>();

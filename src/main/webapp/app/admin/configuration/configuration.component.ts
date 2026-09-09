@@ -7,9 +7,9 @@ import { ConfigurationService } from './configuration.service';
 import { Bean, PropertySource } from './configuration.model';
 
 @Component({
-    selector: 'hpd-configuration',
-    templateUrl: './configuration.component.html',
-    imports: [SharedModule, FormsModule, SortDirective, SortByDirective]
+  selector: 'hpd-configuration',
+  templateUrl: './configuration.component.html',
+  imports: [SharedModule, FormsModule, SortDirective, SortByDirective],
 })
 export default class ConfigurationComponent implements OnInit {
   allBeans!: Bean[];

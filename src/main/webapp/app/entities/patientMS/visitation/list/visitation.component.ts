@@ -17,19 +17,19 @@ import { EntityArrayResponseType, VisitationService } from '../service/visitatio
 import { VisitationDeleteDialogComponent } from '../delete/visitation-delete-dialog.component';
 
 @Component({
-    selector: 'hpd-visitation',
-    templateUrl: './visitation.component.html',
-    imports: [
-        RouterModule,
-        FormsModule,
-        SharedModule,
-        SortDirective,
-        SortByDirective,
-        DurationPipe,
-        FormatMediumDatetimePipe,
-        FormatMediumDatePipe,
-        ItemCountComponent,
-    ]
+  selector: 'hpd-visitation',
+  templateUrl: './visitation.component.html',
+  imports: [
+    RouterModule,
+    FormsModule,
+    SharedModule,
+    SortDirective,
+    SortByDirective,
+    DurationPipe,
+    FormatMediumDatetimePipe,
+    FormatMediumDatePipe,
+    ItemCountComponent,
+  ],
 })
 export class VisitationComponent implements OnInit {
   visitations?: IVisitation[];

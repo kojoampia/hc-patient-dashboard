@@ -18,9 +18,9 @@ describe('Professional Management Delete Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [ProfessionalDeleteDialogComponent],
-    providers: [NgbActiveModal, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-})
+      imports: [ProfessionalDeleteDialogComponent],
+      providers: [NgbActiveModal, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
+    })
       .overrideTemplate(ProfessionalDeleteDialogComponent, '')
       .compileComponents();
     fixture = TestBed.createComponent(ProfessionalDeleteDialogComponent);

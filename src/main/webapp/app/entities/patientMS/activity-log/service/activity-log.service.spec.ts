@@ -21,9 +21,9 @@ describe('ActivityLog Service', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [],
-    providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-});
+      imports: [],
+      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
+    });
     expectedResult = null;
     service = TestBed.inject(ActivityLogService);
     httpMock = TestBed.inject(HttpTestingController);

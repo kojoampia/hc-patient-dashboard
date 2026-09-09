@@ -21,19 +21,19 @@ describe('Recommendation Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [RouterTestingModule.withRoutes([]), RecommendationUpdateComponent],
-    providers: [
+      imports: [RouterTestingModule.withRoutes([]), RecommendationUpdateComponent],
+      providers: [
         FormBuilder,
         {
-            provide: ActivatedRoute,
-            useValue: {
-                params: from([{}]),
-            },
+          provide: ActivatedRoute,
+          useValue: {
+            params: from([{}]),
+          },
         },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
-    ]
-})
+      ],
+    })
       .overrideTemplate(RecommendationUpdateComponent, '')
       .compileComponents();
 

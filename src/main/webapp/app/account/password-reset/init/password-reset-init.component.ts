@@ -5,9 +5,9 @@ import SharedModule from 'app/shared/shared.module';
 import { PasswordResetInitService } from './password-reset-init.service';
 
 @Component({
-    selector: 'hpd-password-reset-init',
-    imports: [SharedModule, FormsModule, ReactiveFormsModule],
-    templateUrl: './password-reset-init.component.html'
+  selector: 'hpd-password-reset-init',
+  imports: [SharedModule, FormsModule, ReactiveFormsModule],
+  templateUrl: './password-reset-init.component.html',
 })
 export default class PasswordResetInitComponent implements AfterViewInit {
   @ViewChild('email', { static: false })
@@ -30,6 +30,6 @@ export default class PasswordResetInitComponent implements AfterViewInit {
   }
 
   requestReset(): void {
-    this.passwordResetInitService.save(this.resetRequestForm.get(['email'])!.value).subscribe(() => (this.success.set(true)));
+    this.passwordResetInitService.save(this.resetRequestForm.get(['email'])!.value).subscribe(() => this.success.set(true));
   }
 }

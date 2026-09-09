@@ -17,19 +17,25 @@ describe('RegisterComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-    imports: [TranslateModule.forRoot(), RegisterComponent],
-    providers: [
-      FormBuilder,
-      provideHttpClient(withInterceptorsFromDi()),
-      provideHttpClientTesting(),
-      {
-        provide: ActivatedRoute,
-        // A getter, not a value: the component reads the query string when it is constructed, so the stub has to
-        // answer with whatever the test set a moment ago rather than with whatever was there at configure time.
-        useValue: { snapshot: { get queryParamMap() { return convertToParamMap(queryParams); } } },
-      },
-    ]
-})
+      imports: [TranslateModule.forRoot(), RegisterComponent],
+      providers: [
+        FormBuilder,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+        {
+          provide: ActivatedRoute,
+          // A getter, not a value: the component reads the query string when it is constructed, so the stub has to
+          // answer with whatever the test set a moment ago rather than with whatever was there at configure time.
+          useValue: {
+            snapshot: {
+              get queryParamMap() {
+                return convertToParamMap(queryParams);
+              },
+            },
+          },
+        },
+      ],
+    })
       .overrideTemplate(RegisterComponent, '')
       .compileComponents();
   }));

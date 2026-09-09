@@ -18,9 +18,9 @@ describe('PaymentOption Service', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [],
-    providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-});
+      imports: [],
+      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
+    });
     expectedResult = null;
     service = TestBed.inject(PaymentOptionService);
     httpMock = TestBed.inject(HttpTestingController);
