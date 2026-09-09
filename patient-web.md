@@ -11,6 +11,58 @@ Status legend: `[x]` done · `[~]` partial / diverges from plan · `[ ]` not sta
 
 ## What changed since the last baseline
 
+### 283 files disagreed with the pinned prettier, and nothing checked (2026-09-09)
+
+`docs/backlog.md` item 20. Measured on `main` at **5555ebc**, with this repo's own
+`npm run prettier:check` on a clean tree: **283 files**, split **277 `.ts` · 3 `.html` · 2 `.json` ·
+1 `.md`**. The `.ts` are 172 generated entity CRUD and 105 hand-written. There is **no decisions log in
+this product**, so the decision is recorded here and in the commit, and nowhere else.
+
+- `[x]` **283, not 284, and the 284th is worth naming** because it is how the item's own figure was
+  built. `npm run prettier:check | grep -c '^\[warn\] '` counts prettier's summary line —
+  `[warn] Code style issues found in 283 files.` — alongside the files, and a `sed 's/.*\.//'` over it
+  yields the phantom extension-less file item 20 lists. Item 16 said 4, item 20 said 284; the number is
+  283, at that commit, on that tree.
+- `[x]` **Decision: reformat — the opposite of `mobile`'s item 16, on measured grounds.** Item 16
+  narrowed the glob because no prettier version indents inside `@if`/`@for`, so pointing the tool at 12
+  hand-indented templates could only degrade them. **That mechanism is not a version property, it is a
+  filename one**, and that correction matters more than this repo's answer: prettier infers the
+  **angular** parser for `*.component.html` and the generic **html** parser for everything else, and the
+  angular parser indents control flow correctly. Every template here is `*.component.html`; `mobile`'s
+  twelve are Ionic `*.page.html`. Forcing `--parser html` on `invitations.component.html` reproduces
+  `mobile`'s flattening exactly on a file prettier otherwise leaves alone.
+- `[x]` **So the trade here is not the trade there.** What narrowing would buy is nothing: 277 of the 283
+  are `.ts`, prettier's ordinary idiomatic output and in places an improvement — `overview.component.ts`
+  had three object literals past `printWidth` on one line beside two already expanded, and the generated
+  specs are 4-space generator output indented under nothing. Excluding `.ts` would leave prettier owning
+  2% of what it checks. Only 3 `.html` disagree, all of them attribute wrapping and text reflow at
+  `printWidth: 140`, no control flow touched.
+- `[x]` **Moving the pin is strictly worse, and was measured rather than assumed** — the mistake item 16
+  made in the other direction. Across all 277 `.ts` at this repo's settings: 2.8.8 → 456, **3.1.0 → 277**,
+  3.2.5 → 277, 3.6.2 → 283. The pin is already the best of the range and nothing reaches zero, because
+  these files were never prettier output at any version.
+- `[x]` **The reformat is semantically null, established rather than asserted.** `git diff -w` cannot see
+  the class of damage that matters — item 16's reformat destroyed a markdown table in exactly that blind
+  spot. All 283 were compared structurally against HEAD: the 277 `.ts` by TypeScript AST (node kinds plus
+  every identifier, string and numeric _value_, so a changed quote is invisible and a changed character is
+  not) with comments compared separately and whitespace-normalised; the 3 `.html` through Angular's own
+  `parseTemplate` at `preserveWhitespaces: false`, which is what the compiler does to a component
+  template; the 2 `.json` by `JSON.parse` deep equality; and `i18n/es/README.md` by hand — it gains
+  `_emphasis_` for `*emphasis*` and loses one blank line, and it carries **no table row and no pipe inside
+  a code span**, so item 16's failure mode cannot arise. Four files drop a redundant parenthesis
+  (`() => (this.success.set(true))`), which is a genuine AST change and was read by hand rather than
+  waved through. The comparison was verified by inversion: a changed string literal, a changed template
+  binding and a changed comment each make it fail.
+- `[x]` **`prettier:check` runs in CI**, first and before the build, since it is the cheapest step there by
+  two orders of magnitude. Verified by inversion: a hand-made formatting violation in one `.ts` file exits
+  1 naming that file, and reverting it exits 0.
+- `[~]` **The `.husky/pre-commit` this repo's docs assume does not exist.** `package.json` has
+  `prepare: husky install` and two `.lintstagedrc` files, and `CLAUDE.md` says "lint-staged runs Prettier
+  on commit" — but `.husky/` holds only `_/`, with no `pre-commit`, and it is untracked, so the hook runs
+  on nobody's machine. Both places a formatting pin could have been enforced were empty; CI is now one of
+  them. **The hook is left alone deliberately** — a hook that rewrites files under `git commit` is a
+  different decision from a check that refuses a push, and it is not item 20's to take.
+
 ### The bundles were never read against the app, and ten dead keys were waiting (2026-09-07)
 
 `docs/backlog.md` item 13. `mobile` gained a placeholder-parity guard when item 6 turned out to be a
@@ -441,7 +493,9 @@ What was left was one broken workflow, and it is fixed:
 
    **Lint is a real gate now, and that is the part worth keeping.** Until `6d1a3c0` the `pretest` hook was the only thing that ran lint, and CI called `npx ng test` directly — so lint ran nowhere, which is how 48 errors accumulated. It is now its own CI step, because a style error must not be able to masquerade as a test failure and a test command must not be the only place style is checked.
 
-2. `[ ]` **Then decide whether `pom.xml` survives.** Its only remaining consumer is that workflow's version scrape (`<version>0.0.1</version>`, currently in sync with `package.json`). There are no Java sources, and its Enforcer rule fails on the installed JDK anyway. If image publishing goes, so can the pom.
+2. `[x]` **`prettier:check` is a CI step too, added 2026-09-09** — `docs/backlog.md` item 20, and the entry at the top of this file explains why the answer here is the opposite of `mobile`'s. Same reasoning as lint one item above, arrived at the same way: the pin was enforced by nothing, so 283 files drifted from it with nothing to say so. The `.husky/pre-commit` this repo's docs credit with catching it does not exist.
+
+3. `[ ]` **Then decide whether `pom.xml` survives.** Its only remaining consumer is that workflow's version scrape (`<version>0.0.1</version>`, currently in sync with `package.json`). There are no Java sources, and its Enforcer rule fails on the installed JDK anyway. If image publishing goes, so can the pom.
 
 ## Phase D — features the blueprint expects but the web app lacks
 
