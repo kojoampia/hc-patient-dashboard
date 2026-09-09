@@ -26,11 +26,30 @@ this product**, so the decision is recorded here and in the commit, and nowhere 
 - `[x]` **Decision: reformat — the opposite of `mobile`'s item 16, on measured grounds.** Item 16
   narrowed the glob because no prettier version indents inside `@if`/`@for`, so pointing the tool at 12
   hand-indented templates could only degrade them. **That mechanism is not a version property, it is a
-  filename one**, and that correction matters more than this repo's answer: prettier infers the
-  **angular** parser for `*.component.html` and the generic **html** parser for everything else, and the
-  angular parser indents control flow correctly. Every template here is `*.component.html`; `mobile`'s
-  twelve are Ionic `*.page.html`. Forcing `--parser html` on `invitations.component.html` reproduces
-  `mobile`'s flattening exactly on a file prettier otherwise leaves alone.
+  filename one:** prettier infers the **angular** parser for `*.component.html` and the generic **html**
+  parser for everything else, and the angular parser indents control flow correctly. Every template here
+  is `*.component.html`; `mobile`'s are Ionic `*.page.html`. Forcing `--parser html` on this repo's
+  `invitations.component.html` reproduces `mobile`'s flattening exactly — on a file whose control flow
+  the inferred angular parser leaves alone, changing only attribute wrapping and text reflow. (That file
+  is one of the three `.html` this item reformatted, so it is a comparison between two parsers on one
+  input, not an untouched control.)
+- `[~]` **That correction does not reopen item 16, and the measurement matters more than the mechanism.**
+  Anyone reading the paragraph above will reach for a `*.page.html → angular` override in `mobile`. It
+  was measured there, read-only, at `mobile`'s checkout on 2026-09-09 with the same prettier 3.1.0 and
+  the same settings: of **29** templates, the inferred html parser rewrites **13** and forcing
+  `--parser angular` rewrites **19** — 10 in both sets, 9 that only the angular parser touches, 3 that
+  only the html parser touches. **So it is a 19-file rewrite of somebody else's repo, and it belongs to
+  `mobile`'s own item, not to this one.**
+- `[~]` **Sampling those 19 says the override would probably _help_ `mobile`, which is exactly why it
+  needs measuring rather than assuming.** Three files read: `profile.page.html` — the template item 14
+  de-indented and item 16 exists to protect — **keeps its hand-indentation** under the angular parser,
+  changing only attribute wrapping, and `tabs.page.html` and `login.page.html` are _re-indented_ from the
+  flattened state, which is the direction item 16 wanted. But one of the three carries a trap that is the
+  whole argument for measuring: prettier rewrites `{{ (item.shortLabelKey ?? item.labelKey) | translate }}`
+  to `{{ item.shortLabelKey ?? item.labelKey | translate }}`, dropping parentheses inside an
+  interpolation. It is safe — Angular's pipe operator has the lowest precedence, so the parse is
+  unchanged — but it is **a change no whitespace-blind diff can be trusted on**, and it is in a repo whose
+  templates are not covered by any equivalent of this item's AST comparison.
 - `[x]` **So the trade here is not the trade there.** What narrowing would buy is nothing: 277 of the 283
   are `.ts`, prettier's ordinary idiomatic output and in places an improvement — `overview.component.ts`
   had three object literals past `printWidth` on one line beside two already expanded, and the generated
@@ -56,12 +75,32 @@ this product**, so the decision is recorded here and in the commit, and nowhere 
 - `[x]` **`prettier:check` runs in CI**, first and before the build, since it is the cheapest step there by
   two orders of magnitude. Verified by inversion: a hand-made formatting violation in one `.ts` file exits
   1 naming that file, and reverting it exits 0.
+- `[~]` **It runs; it does not gate — and the difference is the other half of this item.** The repository's
+  single ruleset carries `pull_request`, `deletion` and `non_fast_forward` and **no
+  `required_status_checks`**, with `required_approving_review_count: 0`. A red `Check formatting` therefore
+  blocks no merge, and the author can merge their own PR past it. Closing that is a **ruleset change adding
+  `required_status_checks` for `build-and-publish`** — a repository setting, not a change any commit here
+  can make. `mobile` has the identical ruleset, so it is estate-wide rather than this repo's oversight, and
+  it is **filed separately** as its own backlog item.
+- `[~]` **The glob has a hole, and it is not empty today.** The npm script globs
+  `{,src/**/,webpack/,.blueprint/**/}*.{…}`. `src/**/` matches at **any** depth — the 18 eligible files
+  under `src/main/docker/` are checked, verified by inversion — so the prefixes genuinely missed are
+  **`.jhipster/` and `tools/`**, also verified by inversion: a deliberately broken `.jhipster/Stat.json`
+  passes `npm run prettier:check` while failing `npx prettier --check` on the same file. **`tools/brand/icon.html`
+  and `tools/brand/icon-small.html` fail the pin right now**, so the drift has not entirely stopped on the
+  day this landed. `.jhipster/*.json` (20 files) is clean today but is **regenerated wholesale by JHipster**,
+  which makes it the live vector rather than the dormant one.
+- `[ ]` **Do not close that hole by widening the glob.** `tools/brand/*.html` are not `*.component.html`, so
+  they would take the generic html parser — the flattening one, per the entries above. Whatever closes this
+  has to say what it wants those two files formatted _as_ first.
 - `[~]` **The `.husky/pre-commit` this repo's docs assume does not exist.** `package.json` has
-  `prepare: husky install` and two `.lintstagedrc` files, and `CLAUDE.md` says "lint-staged runs Prettier
+  `prepare: husky install` and two `.lintstagedrc` files, and `CLAUDE.md` said "lint-staged runs Prettier
   on commit" — but `.husky/` holds only `_/`, with no `pre-commit`, and it is untracked, so the hook runs
   on nobody's machine. Both places a formatting pin could have been enforced were empty; CI is now one of
-  them. **The hook is left alone deliberately** — a hook that rewrites files under `git commit` is a
-  different decision from a check that refuses a push, and it is not item 20's to take.
+  them. **`CLAUDE.md` has been corrected** rather than left asserting a gate that does not exist, since it
+  is the file a contributor reads first. **The hook itself is left alone deliberately** — a hook that
+  rewrites files under `git commit` is a different decision from a check that refuses a merge, and it is
+  not item 20's to take.
 
 ### The bundles were never read against the app, and ten dead keys were waiting (2026-09-07)
 
