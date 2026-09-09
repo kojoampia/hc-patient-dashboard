@@ -5,10 +5,10 @@ import { HttpServerRequests } from 'app/admin/metrics/metrics.model';
 import { filterNaN } from 'app/core/util/operators';
 
 @Component({
-    selector: 'hpd-metrics-request',
-    templateUrl: './metrics-request.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [SharedModule]
+  selector: 'hpd-metrics-request',
+  templateUrl: './metrics-request.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [SharedModule],
 })
 export class MetricsRequestComponent {
   /**

@@ -52,6 +52,20 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
+      # Formatting is checked here because nothing else checks it. The repo pins prettier 3.1.0 and
+      # 283 files disagreed with it on 5555ebc -- the drift was invisible for as long as it was,
+      # because `prepare: husky install` never produced a `.husky/pre-commit`, so the lint-staged
+      # block runs on nobody's machine and CI ran build, lint and test and never `prettier:check`.
+      # A formatting pin that nothing enforces is not a pin: the cost is not tidiness, it is that
+      # `prettier:format` run to tidy one file rewrites hundreds, and a format-on-save editor does
+      # the same to whatever it touches -- which is how a two-line change in the sibling repo came
+      # to de-indent a whole template.
+      #
+      # First, and before the build, because it is the cheapest step here by two orders of magnitude
+      # and a failure needs no build to be actionable. `npm run prettier:format` is the whole fix.
+      - name: Check formatting
+        run: npm run prettier:check
+
       - name: Build production bundle
         run: npm run webapp:prod
 

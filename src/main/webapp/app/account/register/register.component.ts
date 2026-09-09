@@ -17,9 +17,9 @@ import { RegisterService } from './register.service';
 export const USERNAME_CHECK_DEBOUNCE_MS = 400;
 
 @Component({
-    selector: 'hpd-register',
-    imports: [SharedModule, RouterModule, FormsModule, ReactiveFormsModule, PasswordStrengthBarComponent],
-    templateUrl: './register.component.html'
+  selector: 'hpd-register',
+  imports: [SharedModule, RouterModule, FormsModule, ReactiveFormsModule, PasswordStrengthBarComponent],
+  templateUrl: './register.component.html',
 })
 export default class RegisterComponent implements AfterViewInit, OnInit {
   private readonly route = inject(ActivatedRoute);

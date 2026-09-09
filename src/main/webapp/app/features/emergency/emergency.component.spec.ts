@@ -13,9 +13,9 @@ describe('EmergencyComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [EmergencyComponent, RouterTestingModule],
-    providers: [NgbActiveModal, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-})
+      imports: [EmergencyComponent, RouterTestingModule],
+      providers: [NgbActiveModal, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
+    })
       .overrideTemplate(StatComponent, '')
       .compileComponents();
 

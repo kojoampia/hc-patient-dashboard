@@ -18,9 +18,9 @@ describe('PaymentOption Management Delete Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [PaymentOptionDeleteDialogComponent],
-    providers: [NgbActiveModal, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-})
+      imports: [PaymentOptionDeleteDialogComponent],
+      providers: [NgbActiveModal, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
+    })
       .overrideTemplate(PaymentOptionDeleteDialogComponent, '')
       .compileComponents();
     fixture = TestBed.createComponent(PaymentOptionDeleteDialogComponent);

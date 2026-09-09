@@ -8,8 +8,8 @@ import { ICarePlanItem } from '../care-plan-item.model';
 import { CarePlanItemService } from '../service/care-plan-item.service';
 
 @Component({
-    templateUrl: './care-plan-item-delete-dialog.component.html',
-    imports: [SharedModule, FormsModule]
+  templateUrl: './care-plan-item-delete-dialog.component.html',
+  imports: [SharedModule, FormsModule],
 })
 export class CarePlanItemDeleteDialogComponent {
   carePlanItem?: ICarePlanItem;

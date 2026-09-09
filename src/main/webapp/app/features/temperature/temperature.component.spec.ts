@@ -13,9 +13,9 @@ describe('TemperatureComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [TemperatureComponent, RouterTestingModule],
-    providers: [NgbActiveModal, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-})
+      imports: [TemperatureComponent, RouterTestingModule],
+      providers: [NgbActiveModal, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
+    })
       .overrideTemplate(StatComponent, '')
       .compileComponents();
 

@@ -21,19 +21,19 @@ describe('ActivityLog Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [RouterTestingModule.withRoutes([]), ActivityLogUpdateComponent],
-    providers: [
+      imports: [RouterTestingModule.withRoutes([]), ActivityLogUpdateComponent],
+      providers: [
         FormBuilder,
         {
-            provide: ActivatedRoute,
-            useValue: {
-                params: from([{}]),
-            },
+          provide: ActivatedRoute,
+          useValue: {
+            params: from([{}]),
+          },
         },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
-    ]
-})
+      ],
+    })
       .overrideTemplate(ActivityLogUpdateComponent, '')
       .compileComponents();
 

@@ -18,9 +18,9 @@ describe('Recommendation Service', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [],
-    providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-});
+      imports: [],
+      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
+    });
     expectedResult = null;
     service = TestBed.inject(RecommendationService);
     httpMock = TestBed.inject(HttpTestingController);

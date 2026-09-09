@@ -14,7 +14,10 @@
   @for (invitation of invitations(); track invitation.id) {
     <div class="hc-invitations__card">
       <h2>
-        <span [hpdTranslate]="'patientPortal.invitations.from'" [translateValues]="{ name: invitation.patientName ?? invitation.patientId }">
+        <span
+          [hpdTranslate]="'patientPortal.invitations.from'"
+          [translateValues]="{ name: invitation.patientName ?? invitation.patientId }"
+        >
           A nomination
         </span>
       </h2>
@@ -24,8 +27,8 @@
         authority to act for them; a person clicking this should not have to infer that from the word "accept".
       -->
       <p class="hc-invitations__note" hpdTranslate="patientPortal.invitations.explainer">
-        Accepting means you will be able to see and update their health record, and act for them if they are ever
-        unable to. You can step down at any time, and they can withdraw it at any time.
+        Accepting means you will be able to see and update their health record, and act for them if they are ever unable to. You can step
+        down at any time, and they can withdraw it at any time.
       </p>
 
       <div class="hc-invitations__actions">

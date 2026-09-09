@@ -9,10 +9,10 @@ import SharedModule from 'app/shared/shared.module';
  * they belong to different products.
  */
 @Component({
-    selector: 'hpd-auth-shell',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [SharedModule, RouterOutlet],
-    templateUrl: './auth-shell.component.html',
-    styleUrl: './auth-shell.component.scss'
+  selector: 'hpd-auth-shell',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [SharedModule, RouterOutlet],
+  templateUrl: './auth-shell.component.html',
+  styleUrl: './auth-shell.component.scss',
 })
 export default class AuthShellComponent {}

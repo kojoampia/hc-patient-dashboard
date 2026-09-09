@@ -18,9 +18,9 @@ describe('Recommendation Management Delete Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [RecommendationDeleteDialogComponent],
-    providers: [NgbActiveModal, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-})
+      imports: [RecommendationDeleteDialogComponent],
+      providers: [NgbActiveModal, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
+    })
       .overrideTemplate(RecommendationDeleteDialogComponent, '')
       .compileComponents();
     fixture = TestBed.createComponent(RecommendationDeleteDialogComponent);

@@ -42,7 +42,9 @@
               type="text"
               class="form-control"
               [class.is-valid]="usernameAvailable"
-              [class.is-invalid]="registerForm.get('login')!.invalid && (registerForm.get('login')!.dirty || registerForm.get('login')!.touched)"
+              [class.is-invalid]="
+                registerForm.get('login')!.invalid && (registerForm.get('login')!.dirty || registerForm.get('login')!.touched)
+              "
               id="login"
               name="login"
               placeholder="{{ 'global.form.username.placeholder' | translate }}"

@@ -18,9 +18,9 @@ describe('Condition Management Delete Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [ConditionDeleteDialogComponent],
-    providers: [NgbActiveModal, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-})
+      imports: [ConditionDeleteDialogComponent],
+      providers: [NgbActiveModal, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
+    })
       .overrideTemplate(ConditionDeleteDialogComponent, '')
       .compileComponents();
     fixture = TestBed.createComponent(ConditionDeleteDialogComponent);

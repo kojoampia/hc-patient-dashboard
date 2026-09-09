@@ -13,9 +13,9 @@ describe('AllergyComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [AllergyComponent, RouterTestingModule],
-    providers: [NgbActiveModal, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-})
+      imports: [AllergyComponent, RouterTestingModule],
+      providers: [NgbActiveModal, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
+    })
       .overrideTemplate(StatComponent, '')
       .compileComponents();
 

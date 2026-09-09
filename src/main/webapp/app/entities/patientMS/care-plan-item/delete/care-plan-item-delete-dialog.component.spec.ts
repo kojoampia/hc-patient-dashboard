@@ -18,9 +18,9 @@ describe('CarePlanItem Management Delete Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [CarePlanItemDeleteDialogComponent],
-    providers: [NgbActiveModal, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-})
+      imports: [CarePlanItemDeleteDialogComponent],
+      providers: [NgbActiveModal, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
+    })
       .overrideTemplate(CarePlanItemDeleteDialogComponent, '')
       .compileComponents();
     fixture = TestBed.createComponent(CarePlanItemDeleteDialogComponent);

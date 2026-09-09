@@ -9,9 +9,9 @@ import { PasswordService } from './password.service';
 import PasswordStrengthBarComponent from './password-strength-bar/password-strength-bar.component';
 
 @Component({
-    selector: 'hpd-password',
-    imports: [SharedModule, FormsModule, ReactiveFormsModule, PasswordStrengthBarComponent],
-    templateUrl: './password.component.html'
+  selector: 'hpd-password',
+  imports: [SharedModule, FormsModule, ReactiveFormsModule, PasswordStrengthBarComponent],
+  templateUrl: './password.component.html',
 })
 export default class PasswordComponent implements OnInit {
   doNotMatch = signal(false);
@@ -49,8 +49,8 @@ export default class PasswordComponent implements OnInit {
       this.doNotMatch.set(true);
     } else {
       this.passwordService.save(newPassword, currentPassword).subscribe({
-        next: () => (this.success.set(true)),
-        error: () => (this.error.set(true)),
+        next: () => this.success.set(true),
+        error: () => this.error.set(true),
       });
     }
   }

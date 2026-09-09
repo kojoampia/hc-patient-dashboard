@@ -7,9 +7,9 @@ import SharedModule from 'app/shared/shared.module';
 import { PasswordResetFinishService } from './password-reset-finish.service';
 
 @Component({
-    selector: 'hpd-password-reset-finish',
-    imports: [SharedModule, RouterModule, FormsModule, ReactiveFormsModule, PasswordStrengthBarComponent],
-    templateUrl: './password-reset-finish.component.html'
+  selector: 'hpd-password-reset-finish',
+  imports: [SharedModule, RouterModule, FormsModule, ReactiveFormsModule, PasswordStrengthBarComponent],
+  templateUrl: './password-reset-finish.component.html',
 })
 export default class PasswordResetFinishComponent implements OnInit, AfterViewInit {
   @ViewChild('newPassword', { static: false })
@@ -62,8 +62,8 @@ export default class PasswordResetFinishComponent implements OnInit, AfterViewIn
       this.doNotMatch.set(true);
     } else {
       this.passwordResetFinishService.save(this.key, newPassword).subscribe({
-        next: () => (this.success.set(true)),
-        error: () => (this.error.set(true)),
+        next: () => this.success.set(true),
+        error: () => this.error.set(true),
       });
     }
   }

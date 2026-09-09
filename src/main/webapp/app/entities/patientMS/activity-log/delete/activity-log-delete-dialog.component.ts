@@ -8,8 +8,8 @@ import { IActivityLog } from '../activity-log.model';
 import { ActivityLogService } from '../service/activity-log.service';
 
 @Component({
-    templateUrl: './activity-log-delete-dialog.component.html',
-    imports: [SharedModule, FormsModule]
+  templateUrl: './activity-log-delete-dialog.component.html',
+  imports: [SharedModule, FormsModule],
 })
 export class ActivityLogDeleteDialogComponent {
   activityLog?: IActivityLog;

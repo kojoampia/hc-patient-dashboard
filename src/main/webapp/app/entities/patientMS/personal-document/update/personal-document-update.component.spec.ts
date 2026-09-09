@@ -21,19 +21,19 @@ describe('PersonalDocument Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [RouterTestingModule.withRoutes([]), PersonalDocumentUpdateComponent],
-    providers: [
+      imports: [RouterTestingModule.withRoutes([]), PersonalDocumentUpdateComponent],
+      providers: [
         FormBuilder,
         {
-            provide: ActivatedRoute,
-            useValue: {
-                params: from([{}]),
-            },
+          provide: ActivatedRoute,
+          useValue: {
+            params: from([{}]),
+          },
         },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
-    ]
-})
+      ],
+    })
       .overrideTemplate(PersonalDocumentUpdateComponent, '')
       .compileComponents();
 

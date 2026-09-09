@@ -18,9 +18,9 @@ describe('Emergency Management Delete Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [EmergencyDeleteDialogComponent],
-    providers: [NgbActiveModal, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-})
+      imports: [EmergencyDeleteDialogComponent],
+      providers: [NgbActiveModal, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
+    })
       .overrideTemplate(EmergencyDeleteDialogComponent, '')
       .compileComponents();
     fixture = TestBed.createComponent(EmergencyDeleteDialogComponent);

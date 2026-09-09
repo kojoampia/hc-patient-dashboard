@@ -119,15 +119,30 @@ export default class OverviewComponent {
   readonly openCases = computed(() => this.cases().filter(item => item.status !== 'CLOSED'));
 
   readonly tiles = computed(() => [
-    { icon: 'case' as const, value: this.openCases().length, labelKey: 'patientPortal.overview.tile.openCases', link: OVERVIEW_TILE_LINKS.openCases },
-    { icon: 'cal' as const, value: this.upcoming().length, labelKey: 'patientPortal.overview.tile.upcoming', link: OVERVIEW_TILE_LINKS.upcoming },
+    {
+      icon: 'case' as const,
+      value: this.openCases().length,
+      labelKey: 'patientPortal.overview.tile.openCases',
+      link: OVERVIEW_TILE_LINKS.openCases,
+    },
+    {
+      icon: 'cal' as const,
+      value: this.upcoming().length,
+      labelKey: 'patientPortal.overview.tile.upcoming',
+      link: OVERVIEW_TILE_LINKS.upcoming,
+    },
     {
       icon: 'pill' as const,
       value: this.medications().filter(m => m.status === 'ACTIVE').length,
       labelKey: 'patientPortal.overview.tile.activeMeds',
       link: OVERVIEW_TILE_LINKS.activeMeds,
     },
-    { icon: 'report' as const, value: this.reports().length, labelKey: 'patientPortal.overview.tile.reports', link: OVERVIEW_TILE_LINKS.reports },
+    {
+      icon: 'report' as const,
+      value: this.reports().length,
+      labelKey: 'patientPortal.overview.tile.reports',
+      link: OVERVIEW_TILE_LINKS.reports,
+    },
   ]);
 
   /**
@@ -145,7 +160,12 @@ export default class OverviewComponent {
       labelKey: 'patientPortal.overview.tile.emergencies',
       link: OVERVIEW_TILE_LINKS.emergencies,
     },
-    { icon: 'shield' as const, value: this.allergies().length, labelKey: 'patientPortal.overview.tile.allergies', link: OVERVIEW_TILE_LINKS.allergies },
+    {
+      icon: 'shield' as const,
+      value: this.allergies().length,
+      labelKey: 'patientPortal.overview.tile.allergies',
+      link: OVERVIEW_TILE_LINKS.allergies,
+    },
     {
       icon: 'leaf' as const,
       value: this.carePlan().filter(item => item.planType === 'DIET').length,

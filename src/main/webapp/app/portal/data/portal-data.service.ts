@@ -167,10 +167,7 @@ export class PortalDataService {
    * Page 0 is fetched first because its header is what says how many more are needed; the rest go
    * out together rather than in sequence, since they do not depend on each other.
    */
-  private everyPage<T>(
-    service: { query(req?: unknown): Observable<HttpResponse<T[]>> },
-    params: Record<string, unknown>,
-  ): Observable<T[]> {
+  private everyPage<T>(service: { query(req?: unknown): Observable<HttpResponse<T[]>> }, params: Record<string, unknown>): Observable<T[]> {
     return service.query({ ...params, page: 0, size: PAGE_SIZE }).pipe(
       switchMap(first => {
         const rows = first.body ?? [];

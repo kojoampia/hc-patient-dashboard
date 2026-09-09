@@ -27,9 +27,13 @@ describe('RegisterComponent username look-ahead', () => {
     await TestBed.configureTestingModule({
       imports: [TranslateModule.forRoot(), RegisterComponent],
       providers: [
-      // RegisterComponent reads the handoff query string on init, so it needs a route even where this spec does
-      // not care about one. No parameters: the default is "nobody said where they came from".
-      { provide: ActivatedRoute, useValue: { snapshot: { queryParamMap: convertToParamMap({}) } } },FormBuilder, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
+        // RegisterComponent reads the handoff query string on init, so it needs a route even where this spec does
+        // not care about one. No parameters: the default is "nobody said where they came from".
+        { provide: ActivatedRoute, useValue: { snapshot: { queryParamMap: convertToParamMap({}) } } },
+        FormBuilder,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+      ],
     })
       .overrideTemplate(RegisterComponent, '')
       .compileComponents();

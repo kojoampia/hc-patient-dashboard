@@ -18,9 +18,9 @@ describe('Visitation Management Delete Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [VisitationDeleteDialogComponent],
-    providers: [NgbActiveModal, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-})
+      imports: [VisitationDeleteDialogComponent],
+      providers: [NgbActiveModal, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
+    })
       .overrideTemplate(VisitationDeleteDialogComponent, '')
       .compileComponents();
     fixture = TestBed.createComponent(VisitationDeleteDialogComponent);

@@ -8,8 +8,8 @@ import { ICondition } from '../condition.model';
 import { ConditionService } from '../service/condition.service';
 
 @Component({
-    templateUrl: './condition-delete-dialog.component.html',
-    imports: [SharedModule, FormsModule]
+  templateUrl: './condition-delete-dialog.component.html',
+  imports: [SharedModule, FormsModule],
 })
 export class ConditionDeleteDialogComponent {
   condition?: ICondition;
