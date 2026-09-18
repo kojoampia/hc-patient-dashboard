@@ -11,6 +11,7 @@ import { PortalDataService } from 'app/portal/data/portal-data.service';
 import { ActingAsService } from 'app/core/auth/acting-as.service';
 import { CareDelegationService, toActingAsChoices } from 'app/portal/data/care-delegation.service';
 import { PatientContextService } from 'app/portal/data/patient-context.service';
+import { MembershipStreamService } from 'app/portal/data/membership-stream.service';
 import { SHELL_NAV, SHELL_TABS, ShellNavItem, navOwnerOf } from './shell-nav';
 import { DEFAULT_PAGE_TITLE, PAGE_TITLES } from './shell-titles';
 
@@ -43,6 +44,7 @@ export default class ShellComponent {
   private readonly actingAsService = inject(ActingAsService);
   private readonly careDelegationService = inject(CareDelegationService);
   private readonly context = inject(PatientContextService);
+  private readonly membershipStream = inject(MembershipStreamService);
 
   /** Current portal path, e.g. `cases/12` — drives both the active nav item and the title. */
   private readonly activePath = signal(this.portalPathOf(this.router.url));
@@ -199,6 +201,16 @@ export default class ShellComponent {
         // which is the behaviour that existed before delegation.
         error: () => this.actingAsService.setAvailable([]),
       });
+
+    // The patient's open line to their own membership, so a verified plan reaches the screen without a refresh
+    // (backlog item 39). The frame says only "ask again"; the re-fetch is PatientContextService's, so the portal is
+    // repainted by the same path a write already goes through.
+    //
+    // Started here because this frame is the portal, so the stream's lifetime is the portal's — and stopped on
+    // destroy for the same reason: a reader left running holds a connection open and goes on reloading a service
+    // every screen shares, failing nothing while it does.
+    this.membershipStream.start();
+    this.destroyRef.onDestroy(() => this.membershipStream.stop());
   }
 
   /**
