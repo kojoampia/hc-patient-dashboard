@@ -274,6 +274,40 @@ describe('MembershipStreamService', () => {
 
     expect(reload).not.toHaveBeenCalled();
 
+    // The same strengthening the two comment tests carry, and for the same reason: "nothing reloaded" is also what a
+    // client that died on the unknown event looks like, so the negative alone would stay green while the stream was
+    // gone. Asserting the reader still works afterwards is what tells "ignored" from "killed".
+    latest().writes(membershipFrame());
+    await settle();
+    expect(reload).toHaveBeenCalledTimes(1);
+
+    service.stop();
+  });
+
+  it('reconnects when acting on a frame throws, instead of dying where nothing can see it', async () => {
+    service.start();
+    await settle();
+    const abandoned = latest();
+
+    // reload() reaches every subscriber of the portal's shared pipelines, so a synchronous throw out of one of them
+    // arrives exactly here. Without a catch it rejects the read loop, propagates through connect(), and is lost in
+    // `void this.connect()`: no reconnect, `running` still true, and the watchdog firing once into a void a minute
+    // later. The stream would be dead for the life of the tab with nothing surfaced.
+    reload.mockImplementationOnce(() => {
+      throw new Error('a subscriber blew up');
+    });
+    abandoned.writes(membershipFrame());
+    await settle();
+
+    // The connection it walked away from is closed rather than left open beside the new one.
+    expect(abandoned.cancelled).toBe(true);
+
+    await advance(1000);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    // One on the first connect, one that threw, one on the reconnect — so the change whose handling threw is picked
+    // up anyway rather than lost with the connection.
+    expect(reload).toHaveBeenCalledTimes(3);
+
     service.stop();
   });
 

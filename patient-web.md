@@ -47,8 +47,29 @@ repo's. `portal/data/membership-stream.service.ts` reads `GET
 JSON input`. The keep-alive test **stayed green under that mutation** and was strengthened: "nothing
   reloaded" is also what a reader that died on the first byte looks like, so it now asserts a frame
   still lands afterwards.
-- `[~]` **`fakeAsync` cannot test this repo's async code and that is worth knowing beyond this item.**
-  `tsconfig.json` targets `es2022`, so `async`/`await` compiles to a native async function and zone.js
+- `[x]` **A synchronous throw out of `dispatch()` used to kill the stream permanently and silently** — review
+  finding, fixed before merge. `blocks.forEach(…)` sat outside the `try` that wraps `reader.read()`, and
+  `await this.read(…)` was unguarded, so a throw from `dispatch()` or from any subscriber `reload()`
+  reaches rejected `read()` → `connect()` → **unhandled rejection in `void this.connect()`**: no reconnect
+  scheduled, `running` still true so `start()` would not open another, and the watchdog firing once into a
+  void a minute later. Dead for the life of the tab with nothing surfaced. One catch routes it into the
+  existing reconnect path — and `reconnect()` now aborts the controller, because this is the one entry
+  that abandons a connection which is **still alive**. Pinned by _"reconnects when acting on a frame
+  throws"_; removing the catch reddens it at `expect(abandoned.cancelled).toBe(true)` and the unhandled
+  rejection then **surfaces misattributed to the next test**, which is the defect's own signature.
+- `[x]` **The last absence-shaped test was strengthened** — _"ignores an event type it does not know"_ had
+  only `reload` not-called as its pass condition, so a `dispatch()` that threw on an unknown event left it
+  green while killing the client. It now asserts a frame still lands afterwards; with that mutation planted
+  it fails on exactly the added line.
+- `[x]` **`SILENCE_TIMEOUT_MS`'s javadoc was decoratively wrong** and is corrected. It cited the quality
+  vhost's `proxy_read_timeout 60s` as a death "without a packet arriving to say so" — but that cut closes
+  the response _visibly_, and the reader sees `done` and reconnects without the timer ever being consulted.
+  The packet-less deaths are the NAT-drop and sleeping-laptop cases. The `2 beats + slack` derivation is the
+  real reason; landing on the same 60 was a coincidence dressed up as one.
+- `[x]` **`fakeAsync` cannot test this repo's async code and that is worth knowing beyond this item** —
+  now recorded in `CLAUDE.md`'s testing section, beside the other invocation traps, because the failure
+  masquerades as product defects rather than as a harness problem.
+  `tsconfig.json:19` targets `es2022`, so `async`/`await` compiles to a native async function and zone.js
   cannot follow a native `await`: under `fakeAsync` the continuation after `await fetch(...)` never runs
   inside the synchronous test body. The first draft of this suite failed **9 of 16** that way, with
   assertion messages that looked like product defects. Jest's `advanceTimersByTimeAsync` in an `async`

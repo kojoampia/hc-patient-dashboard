@@ -25,9 +25,14 @@ export const SERVER_HEARTBEAT_MS = 25_000;
  *
  * <p>Derived rather than chosen, because the only liveness signal this stream has is the heartbeat: nothing else
  * arrives on an idle line, and a membership can sit `PENDING` for as long as the back office takes. Two beats plus
- * slack, so one lost beat costs nothing and two mean something is genuinely wrong. It also lands at the 60 seconds
- * the quality vhost cuts an idle proxied response at, which is the other way this connection can die without a
- * packet arriving to say so.</p>
+ * slack, so one lost beat costs nothing and two mean something is genuinely wrong. That derivation is the whole
+ * reason for the number.</p>
+ *
+ * <p>⚠ <b>It is not the proxy's idle cut, and this javadoc said it was.</b> The quality vhost's
+ * `proxy_read_timeout 60s` closes the response <em>visibly</em> — the reader sees `done` or an error and
+ * {@link MembershipStreamService} reconnects without ever consulting this timer. The deaths this watchdog is the
+ * only defence against are the ones that arrive as nothing at all: a NAT table dropping the flow, a laptop that
+ * slept. Landing on the same 60 was a coincidence dressed up as a reason.</p>
  */
 export const SILENCE_TIMEOUT_MS = SERVER_HEARTBEAT_MS * 2 + 10_000;
 
@@ -237,11 +242,30 @@ export class MembershipStreamService {
       // Any bytes at all count as alive — a keep-alive comment is exactly as good as a frame, which is the point of
       // sending one.
       this.armSilenceWatchdog(controller);
-      buffer += decoder.decode(chunk.value, { stream: true });
-      const blocks = buffer.split(BLOCK_BOUNDARY);
-      // The last piece is whatever follows the final blank line: either empty, or a block still arriving.
-      buffer = blocks.pop() ?? '';
-      blocks.forEach(block => this.dispatch(block));
+
+      // Everything done with the bytes is inside a try, and the reason is not defensiveness.
+      //
+      // This block is the one place in the loop that runs application code — dispatch() reaches
+      // PatientContextService.reload(), and through it every subscriber of the portal's shared pipelines. A
+      // synchronous throw from any of them lands here, and without this catch it rejects read(), propagates through
+      // connect(), and dies in `void this.connect()` as an unhandled rejection: nothing schedules a reconnect,
+      // `running` stays true so start() will not open another, and the watchdog fires once into a void sixty seconds
+      // later. The stream is then dead for the life of the tab and NOTHING SAYS SO — which is exactly the failure
+      // stop()'s javadoc describes, arrived at from the other direction.
+      //
+      // Treating it as a failed connection is the right answer rather than a convenient one: the reconnect re-fetches,
+      // so the change whose handling threw is picked up anyway, and any blocks after the throwing one are re-derived
+      // from the server rather than guessed at here.
+      try {
+        buffer += decoder.decode(chunk.value, { stream: true });
+        const blocks = buffer.split(BLOCK_BOUNDARY);
+        // The last piece is whatever follows the final blank line: either empty, or a block still arriving.
+        buffer = blocks.pop() ?? '';
+        blocks.forEach(block => this.dispatch(block));
+      } catch {
+        this.reconnect(controller);
+        return;
+      }
     }
   }
 
@@ -302,6 +326,12 @@ export class MembershipStreamService {
     }
     this.clearSilenceWatchdog();
     this.controller = null;
+    // Three of the four ways in here leave nothing to close — the connection had already broken, ended, or been
+    // aborted by the watchdog. The fourth does not: a throw out of dispatch() abandons a connection that is still
+    // perfectly alive, and without this it would stay open to the gateway for the life of the tab while a second one
+    // was opened beside it. Aborting something already finished is a no-op, and the pending read this rejects comes
+    // back to the guard above and stops there.
+    controller.abort();
 
     const delayMs = RECONNECT_DELAYS_MS[this.rung];
     this.rung = Math.min(this.rung + 1, RECONNECT_DELAYS_MS.length - 1);
