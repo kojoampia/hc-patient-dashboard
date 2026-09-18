@@ -11,6 +11,79 @@ Status legend: `[x]` done · `[~]` partial / diverges from plan · `[ ]` not sta
 
 ## What changed since the last baseline
 
+### A verified plan now reaches the screen without a refresh (2026-09-18)
+
+`docs/backlog.md` item 39, **cycle 2 — the `web` client**. Cycle 1 shipped the server half (`api`
+`cd1aaa2`, flushed on connect by `216a44c`, gateway `a7db6aa`); cycle 3 is `mobile` and is not this
+repo's. `portal/data/membership-stream.service.ts` reads `GET
+/services/hcpatientservice/api/membership-events` and calls `PatientContextService.reload()`;
+`ShellComponent` starts it and stops it on destroy.
+
+- `[x]` **`fetch` with a `ReadableStream` reader, not `EventSource`.** `EventSource` cannot set request
+  headers, and the usual workaround puts a JWT carrying patient scope into nginx access logs, browser
+  history and every proxy between. Item 39 accepted hand-writing framing, reconnect, backoff and
+  liveness as the price of keeping the header, and that is what this service is.
+- `[x]` **Nothing is read out of a frame — not even parsed.** The push carries identifiers only and the
+  client re-fetches, so `data:` is never `JSON.parse`d and a payload change in the api cannot break this
+  client. The re-fetch goes back through `HttpClient`, so it carries the interceptors' `Authorization`
+  and `X-Acting-As` and is scoped like any other read. **No filtering here**: `PatientScope` decides,
+  server-side, and a second implementation in a browser would be the wrong place for it.
+- `[x]` **Re-fetch on every successful connect**, because the stream does not replay. Without it a
+  client disconnected across an activation misses it and sits on "Awaiting confirmation" — item 39's own
+  defect, back through the door of a dropped connection.
+- `[x]` **The 30-minute close is not a failure, and the rule lives in exactly one line.** The api
+  completes every stream at its maximum age to bound the visibility `PatientScope` froze at connect. The
+  first version carried a `reason: 'closed' | 'failed'` parameter for this; **mutation showed it changed
+  nothing** — with escalation made unconditional, all 16 tests stayed green, because a close can only
+  follow a connection that worked and `connect()` already resets the ladder on success. It was a second
+  filter expressing a rule enforced one method away, and its cost was making the real guard look tested.
+  Deleted; deleting `this.rung = 0` from `connect()` now reddens the close test on the _second_ close,
+  at 2000ms where 1000ms was expected.
+- `[x]` **Silence longer than two heartbeats is the only liveness signal there is**, so
+  `SILENCE_TIMEOUT_MS` is derived from the server's 25-second beat rather than chosen — two beats plus
+  slack, landing at the 60s the quality vhost cuts an idle proxied response at.
+- `[x]` **16 tests, and two of them were watched failing.** Breaking comment handling into the naive
+  reader (`JSON.parse` of a comment-only block) reddens four, naming `SyntaxError: Unexpected end of
+JSON input`. The keep-alive test **stayed green under that mutation** and was strengthened: "nothing
+  reloaded" is also what a reader that died on the first byte looks like, so it now asserts a frame
+  still lands afterwards.
+- `[x]` **A synchronous throw out of `dispatch()` used to kill the stream permanently and silently** — review
+  finding, fixed before merge. `blocks.forEach(…)` sat outside the `try` that wraps `reader.read()`, and
+  `await this.read(…)` was unguarded, so a throw from `dispatch()` or from any subscriber `reload()`
+  reaches rejected `read()` → `connect()` → **unhandled rejection in `void this.connect()`**: no reconnect
+  scheduled, `running` still true so `start()` would not open another, and the watchdog firing once into a
+  void a minute later. Dead for the life of the tab with nothing surfaced. One catch routes it into the
+  existing reconnect path — and `reconnect()` now aborts the controller, because this is the one entry
+  that abandons a connection which is **still alive**. Pinned by _"reconnects when acting on a frame
+  throws"_; removing the catch reddens it at `expect(abandoned.cancelled).toBe(true)` and the unhandled
+  rejection then **surfaces misattributed to the next test**, which is the defect's own signature.
+- `[x]` **The last absence-shaped test was strengthened** — _"ignores an event type it does not know"_ had
+  only `reload` not-called as its pass condition, so a `dispatch()` that threw on an unknown event left it
+  green while killing the client. It now asserts a frame still lands afterwards; with that mutation planted
+  it fails on exactly the added line.
+- `[x]` **`SILENCE_TIMEOUT_MS`'s javadoc was decoratively wrong** and is corrected. It cited the quality
+  vhost's `proxy_read_timeout 60s` as a death "without a packet arriving to say so" — but that cut closes
+  the response _visibly_, and the reader sees `done` and reconnects without the timer ever being consulted.
+  The packet-less deaths are the NAT-drop and sleeping-laptop cases. The `2 beats + slack` derivation is the
+  real reason; landing on the same 60 was a coincidence dressed up as one.
+- `[x]` **`fakeAsync` cannot test this repo's async code and that is worth knowing beyond this item** —
+  now recorded in `CLAUDE.md`'s testing section, beside the other invocation traps, because the failure
+  masquerades as product defects rather than as a harness problem.
+  `tsconfig.json:19` targets `es2022`, so `async`/`await` compiles to a native async function and zone.js
+  cannot follow a native `await`: under `fakeAsync` the continuation after `await fetch(...)` never runs
+  inside the synchronous test body. The first draft of this suite failed **9 of 16** that way, with
+  assertion messages that looked like product defects. Jest's `advanceTimersByTimeAsync` in an `async`
+  test is what works.
+- `[ ]` **A care angel gets no push for the patient they act for.** `X-Acting-As` is set by
+  `ActingAsInterceptor` _and by nothing else_ — a rule `acting-as.interceptor.ts` states in as many
+  words — and a `fetch` cannot go through an interceptor. So the stream is scoped to the signed-in
+  caller: an angel's own frames, and for an unrestricted caller every patient's. The failure is a
+  **missing** push, never a wrong record, because the re-fetch it triggers is scoped correctly. Left for
+  its own decision rather than settled by a service quietly setting the header.
+- `[ ]` **Not exercised end to end.** No plan was verified while a browser watched, because that needs an
+  hc-admin action against quality. What _was_ measured is the wire: `:connected\n\n:keep-alive\n\n`,
+  `200 text/event-stream`, time to first byte **0.022s** through both nginx hops, 2026-09-18.
+
 ### 283 files disagreed with the pinned prettier, and nothing checked (2026-09-09)
 
 `docs/backlog.md` item 20. Measured on `main` at **5555ebc**, with this repo's own
