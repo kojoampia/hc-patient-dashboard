@@ -586,7 +586,7 @@ Constraints that apply to all of the above:
 - Do not hardcode API base URLs, replace typed entity services with generic helpers, delete apparently unused entity modules before checking route/menu wiring, or rename selectors and translation keys broadly without updating every call site.
 - Keep feature-specific code in `dashboard`, `features`, `widgets`, or `entities` — `shared` stays for broadly reused primitives.
 - Prefer extracting typed helpers/facades over adding conditionals; preserve behavior unless the task explicitly changes UX.
-- Add or preserve characterization coverage where behavior is subtle, and verify with `npm run lint`, `npm test` (narrow with `npm test -- --test-path-pattern=<area>`), and `npm run webapp:build:dev`. Never `./mvnw` here.
+- Add or preserve characterization coverage where behavior is subtle, and verify with `npm run lint`, `npm test` (narrow with `npm test -- --test-path-pattern=<area>`), and `npm run webapp:build:dev`. There is no `./mvnw` here any more (item 70).
 - Anything touching `bootstrap.ts`, `app.config.ts`, or `core/telemetry/` gets loaded in a real browser before it ships — see the telemetry note in the baseline for why a green build and a green suite are not sufficient there.
 
 ## Phase C — CI
@@ -607,7 +607,7 @@ What was left was one broken workflow, and it is fixed:
 
 2. `[x]` **`prettier:check` is a CI step too, added 2026-09-09** — `docs/backlog.md` item 20, and the entry at the top of this file explains why the answer here is the opposite of `mobile`'s. Same reasoning as lint one item above, arrived at the same way: the pin was enforced by nothing, so 283 files drifted from it with nothing to say so. The `.husky/pre-commit` this repo's docs credit with catching it does not exist.
 
-3. `[ ]` **Then decide whether `pom.xml` survives.** Its only remaining consumer is that workflow's version scrape (`<version>0.0.1</version>`, currently in sync with `package.json`). There are no Java sources, and its Enforcer rule fails on the installed JDK anyway. If image publishing goes, so can the pom.
+3. `[x]` **Then decide whether `pom.xml` survives — decided: it does not. Deleted 2026-09-24, `docs/backlog.md` item 70.** This entry's premise had already lapsed when it was closed: the repurposed workflow scrapes no version from the pom at all (verified by reading it — zero `pom` references), so the "only remaining consumer" was gone the day item 1 above landed, and the file survived another month on a stale claim. Deleted with it: `mvnw`, `mvnw.cmd`, `npmw`, `src/test/resources/config/`, the eight `backend:*`/`app:start` scripts, and their three dead callers (`watch`, `build-watch`, `ci:backend:test` — the first two existed to pair a frontend watch with the backend serving `target/classes/static`; without a backend, `watch` was an alias for `npm start` and `build-watch` built to a directory nothing serves). `prettier-plugin-java` left `.prettierrc` and the direct devDependencies; it remains in the lockfile as `generator-jhipster`'s own transitive dependency, which is not this repo's to remove. ⚠ `angular.json`'s `outputPath: target/classes/static/` **stays**: `deploy/docker/web.Dockerfile` copies from exactly that path.
 
 ## Phase D — features the blueprint expects but the web app lacks
 
