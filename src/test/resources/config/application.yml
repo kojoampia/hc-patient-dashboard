@@ -38,24 +38,17 @@ spring:
   cloud:
     config:
       enabled: false
-    function:
-      definition: kafkaConsumer;kafkaProducer
+    # The generated function definition and its three bindings (kafkaConsumer;kafkaProducer,
+    # binding-out-0 / kafkaConsumer-in-0 -> sse-topic / kafkaProducer-out-0) were cleared on
+    # 2026-09-24 (docs/backlog.md item 62): those names exist in no service any more — the api
+    # deleted its scaffold on 2026-09-18 and the gateway's went with item 61. Nothing in this
+    # repo runs this file; it belongs to a backend scaffold with zero Java sources, which is
+    # filed separately and is deliberately not touched further here.
     stream:
       kafka:
         binder:
           replicationFactor: 1
           auto-create-topics: true
-      bindings:
-        binding-out-0:
-          content-type: text/plain
-          group: patient-gateway
-        kafkaConsumer-in-0:
-          destination: sse-topic
-          content-type: text/plain
-          group: patient-gateway
-        kafkaProducer-out-0:
-          content-type: text/plain
-          group: patient-gateway
   jackson:
     serialization:
       write-durations-as-timestamps: false
