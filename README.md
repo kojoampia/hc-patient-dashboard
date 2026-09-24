@@ -21,7 +21,7 @@ The browser never talks to the microservice directly: requests go to the gateway
 | i18n             | enabled — `en`, `fr`, `de` under `src/main/webapp/i18n`                                                               |
 | Component prefix | ESLint requires `hpd` (`jhiPrefix`); `angular.json` still says `jhi` and older components still use `jhi-*` selectors |
 
-`pom.xml`, `mvnw`, and `npmw` are leftovers from the JHipster generator. There is nothing for Maven to compile. `pom.xml` previously set `java.version` 26 against an Enforcer rule allowing only `[17,26)`, so every Maven goal failed; it now says 25 and agrees with itself, but still builds nothing. **Use npm for everything in this repo.**
+The JHipster backend scaffold — `pom.xml`, `mvnw`, `mvnw.cmd`, `npmw`, the `backend:*` npm scripts and `src/test/resources/config/` — was deleted on 2026-09-24 (`docs/backlog.md` item 70). There was never a `.java` file in this repo for it to build, and its `spring-boot.version` of 3.2.0 sat three versions behind the estate as a standing wrong answer to "what does this product run?". **Use npm for everything in this repo.** One survivor looks like Maven vestige and is not: `angular.json`'s `outputPath` of `target/classes/static/` is the exact path `deploy/docker/web.Dockerfile` copies the bundle from — do not "tidy" it.
 
 ## Project layout
 
@@ -142,7 +142,7 @@ Flags reach Jest through `@angular-builders/jest`, so they must be passed in **k
 
 > `npx ng test` is green — 146 suites, 681 tests (~110s, measured 2026-08-03). `npm test` additionally runs ESLint first and **still fails there** on 172 pre-existing problems — 161 errors and 11 warnings across 77 files, mostly `jhi-*` selectors where the config wants `hpd` — so use `npx ng test` until those are resolved. See `patient-web.md` (Phase A).
 
-There are no Spring Boot tests in this repo — ignore any generated instruction to run `./mvnw verify` here.
+There are no Spring Boot tests in this repo and no Maven wrapper any more (item 70) — ignore any generated instruction to run `./mvnw verify` here.
 
 **Cypress e2e is not runnable as checked in:** `.yo-rc.json` lists `cypress` and `src/test/javascript/cypress/e2e/` exists, but Cypress is not a dependency in `package.json` and there is no `e2e` script. Reinstate both before writing e2e specs.
 
@@ -176,7 +176,7 @@ The `src/main/docker/*.yml` files that remain here are JHipster's generated **lo
 
 It cannot simply be repointed — the real Dockerfile is in another repository and needs a build context this one does not have. `patient-web.md` (decision 3 and Phase C) tracks the choice between retiring it and repurposing it to run `lint` + `test` + `webapp:prod`. Until then, nothing in this repo is gated by CI.
 
-The version tag it scrapes from the first `<version>` in `pom.xml` (currently `0.0.1`) is the only remaining use for that file; keep it in sync with `package.json` for as long as the workflow exists.
+An earlier sentence here said the workflow scrapes its version tag from `pom.xml`'s first `<version>`, which was that file's last remaining use. The repurposed workflow reads no pom at all — verified before `pom.xml` was deleted with the rest of the backend scaffold (item 70, 2026-09-24) — and image tags come from `release.yml`, which tags by commit SHA.
 
 ## Repository docs
 

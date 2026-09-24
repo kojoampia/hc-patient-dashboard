@@ -53,7 +53,7 @@ npm run webapp:build:dev | npm run webapp:prod
 npm run prettier:check | npm run prettier:format
 ```
 
-Do **not** run `./mvnw` here: there is nothing to compile. `pom.xml` used to set `java.version` 26 against an Enforcer rule allowing only `[17,26)` — a contradiction that failed every Maven goal outright; it is now 25 and internally consistent, but the pom still builds nothing. It survives solely because CI scrapes the image version from its first `<version>`.
+There is no Maven here any more: the backend scaffold — `pom.xml`, `mvnw`, `mvnw.cmd`, `npmw`, the `backend:*` scripts, `src/test/resources/config/` — was deleted on 2026-09-24 (`docs/backlog.md` item 70). The pom's claimed reason to survive ("CI scrapes the image version from its first `<version>`") had already stopped being true when the workflow was repurposed; the current workflow reads no pom, and images are tagged by commit SHA in `release.yml`. ⚠ `angular.json`'s `outputPath: target/classes/static/` looks like the last Maven vestige and is **load-bearing** — `deploy/docker/web.Dockerfile` copies the bundle from exactly that path, and changing it would 404 the live site rather than fail a build.
 
 Angular CLI rejects camelCase Jest flags (`--testPathPattern` → `Unknown arguments`), so pass kebab-case through `ng test`. Calling `npx jest` directly does not work: `jest.conf.js` carries no transform, since the Angular preset comes from the builder.
 
